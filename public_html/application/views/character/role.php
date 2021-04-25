@@ -20,7 +20,7 @@ else
 		<br/>
 		<?= kohana::lang('global.kingdom') . ":<span class='value'> " . kohana::lang($role->region->kingdom -> get_name() ) . "</span>";?>
 		<br/>
-		<?= kohana::lang('character.nominatedon') . ":<span class='value'> " . Utility_Model::format_date($role->begin) . "</span><br/>"; ?>
+		<?= kohana::lang('character.nominatedon') . ":<span class='value'> " . Model_Utility::format_date($role->begin) . "</span><br/>"; ?>
 	</div>
 	
 	<div style='float:right'>
@@ -82,8 +82,8 @@ foreach ( $roleshistory as $r )
 	echo '<td>' . $r -> get_title( true ) . '</td>';
 	echo "<td>" . kohana::lang( $r-> region -> kingdom -> get_name( $r -> begin ) )."</td>";
 	echo "<td>" . kohana::lang( $r-> region -> name)."</td>";
-	echo "<td class='center'>".Utility_Model::format_date($r->begin)."</td>";
-	echo "<td class='center'>".( is_null( $r->end ) ? "" : Utility_Model::format_date($r->end) )."</td>";
+	echo "<td class='center'>".Model_Utility::format_date($r->begin)."</td>";
+	echo "<td class='center'>".( is_null( $r->end ) ? "" : Model_Utility::format_date($r->end) )."</td>";
 	echo "<td class='center'>".( is_null( $r->end ) ? intval( (time()-$r->begin) / ( 3600*24) ) : intval( ($r->end-$r->begin) / ( 3600*24) ) )."</td>";
 	echo "</tr>";
 	$i++;

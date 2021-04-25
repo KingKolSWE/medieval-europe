@@ -1108,13 +1108,13 @@ class Structure_Controller extends Template_Controller
 			// Tempo di crafting originale e reale
 
 			$craftableitem['originalcraftingtime'] =
-				Utility_Model::secs2hmstostring( $craftableitem['craftingtime'] * 60, 'hours' );
+				Model_Utility::secs2hmstostring( $craftableitem['craftingtime'] * 60, 'hours' );
 
 			$craftaction = new CA_Craft_Model();
 			$craftaction -> set_basetime($craftableitem['craftingtime']/60);
 			kohana::log('debug', "-> computing realtime for item: {$craftableitem['destination_item_name']}");
 			$craftableitem['realcraftingtime'] =
-				Utility_Model::secs2hmstostring( $craftaction -> get_action_time( $char ), 'hours');
+				Model_Utility::secs2hmstostring( $craftaction -> get_action_time( $char ), 'hours');
 
 			// Energia e glut richiesta
 

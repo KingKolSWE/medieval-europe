@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class User_Controller extends Template_Controller
+class Controller_User extends Controller
 {		
 	public $template = 'template/gamelayout';	
 	
@@ -14,7 +14,7 @@ class User_Controller extends Template_Controller
 	{
 		
 		// GOOGLE SSO		
-		$google = new Google_Bridge_Model();	
+		$google = new Model_GoogleBridge();
 		
 		// FACEBOOK SSO
 		//$fb = new Facebook_Bridge_Model();
@@ -60,7 +60,7 @@ class User_Controller extends Template_Controller
 			
 			if ( $post -> validate() )
 			{
-				$rc = User_Model::registerorloginuser( $post, $message );			
+				$rc = Model_User::registerorloginuser( $post, $message );
 				if ( $rc == false )
 					Session::set_flash( 'user_message', "<div class=\"error_msg\">" . $message . "</div>");										
 				else
@@ -179,7 +179,7 @@ class User_Controller extends Template_Controller
 						$body    = sprintf (Kohana::lang('user.resendvalidationtoken_emailbody'),     
 						'https://' . $this->input->server('SERVER_NAME') . "/index.php/user/activate/".$user->id."/".$user->activationtoken);				
 						$to = $post['email'];				
-						$result = Utility_Model::mail( $to, $subject, $body );	
+						$result = Model_Utility::mail( $to, $subject, $body );
 						
 						if ( $result ) 
 						{                      
@@ -274,7 +274,7 @@ class User_Controller extends Template_Controller
 					$subject = Kohana::lang('user.resendpassword_emailsubject');
 					$body    = sprintf (Kohana::lang('user.resendpassword_emailbody'), $newpassword_clr, $user->username );
 					$to      = $post['email'];					
-					$result_email = Utility_Model::mail( $to, $subject, $body );
+					$result_email = Model_Utility::mail( $to, $subject, $body );
 								
 					Session::set_flash('user_message', "<div class=\"info_msg\">".Kohana::lang('user.resendpassword_success')."</div>");         
 					
@@ -315,7 +315,7 @@ class User_Controller extends Template_Controller
 		// FACEBOOK SSO
 		//$fb = new Facebook_Bridge_Model();
 		// GOOGLE SSO		
-		$google = new Google_Bridge_Model();		
+		$google = new Model_GoogleBridge();
 
 		$message = '';				
 		$this -> template = new View('template/homepage');
@@ -378,7 +378,7 @@ class User_Controller extends Template_Controller
 						$data['ipaddress'] = $this -> input -> ip_address();
 						$data['fb_id'] = 'normal';
 						
-						$rc = User_Model::registerorloginuser( $data, $message );									
+						$rc = Model_User::registerorloginuser( $data, $message );
 						
 						if ( $rc == false )
 							Session::set_flash( 'user_message', "<div class=\"error_msg\">" . $message . "</div>");										
@@ -494,7 +494,7 @@ class User_Controller extends Template_Controller
 		$data['ipaddress'] = $this -> input -> ip_address();
 		$data['tutorialmode'] = 'Y';
 		
-		$rc = User_Model::registerorloginuser( $data, $message );									
+		$rc = Model_User::registerorloginuser( $data, $message );
 		if ( $rc == false )
 			Session::set_flash( 'user_message', "<div class=\"error_msg\">" . $message . "</div>");										
 		else
@@ -530,7 +530,7 @@ class User_Controller extends Template_Controller
 		kohana::log('debug', '-> Querying google...' );
 		//kohana::log('debug', kohana::debug($this -> input -> get()));
 		
-		$google = new Google_Bridge_Model();
+		$google = new Model_GoogleBridge();
 		$service = $google -> get_service();
 		$client = $google -> get_client();
 		
@@ -574,7 +574,7 @@ class User_Controller extends Template_Controller
 		else
 			$data['referreruser'] = null;
 		
-		$rc = User_Model::registerorloginuser( $data, $message );									
+		$rc = Model_User::registerorloginuser( $data, $message );
 		if ( $rc == false )
 		{
 
@@ -644,7 +644,7 @@ class User_Controller extends Template_Controller
 		$data['ipaddress'] = $this -> input -> ip_address();
 		$data['tutorialmode'] = 'Y';
 		
-		$rc = User_Model::registerorloginuser( $data, $message );									
+		$rc = Model_User::registerorloginuser( $data, $message );
 		if ( $rc == false )
 			Session::set_flash( 'user_message', "<div class=\"error_msg\">" . $message . "</div>");
 		else
@@ -746,7 +746,7 @@ class User_Controller extends Template_Controller
 			
 			
 
-			$rc = User_Model::registerorloginuser( $data, $message );									
+			$rc = Model_User::registerorloginuser( $data, $message );
 			
 			if ( $rc == false )
 			{

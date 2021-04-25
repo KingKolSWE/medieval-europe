@@ -19,7 +19,7 @@
 		<?php 
 			if ( !empty( $character->description))
 			{
-				echo Utility_Model::bbcode( $character -> description );
+				echo Model_Utility::bbcode( $character -> description );
 				echo "<br/>";
 				echo "<br/>";
 			}
@@ -29,7 +29,7 @@
 			if (empty( $character -> history))
 				echo kohana::lang('character.nohistoryprovided');
 			else
-				echo Utility_Model::bbcode($character->history) 
+				echo Model_Utility::bbcode($character->history)
 		?>		
 		</p>
 		
@@ -59,7 +59,7 @@ else
 		$class = ( $r % 2 ) ? 'alternaterow_1' : '';
 ?>		
 	<tr class="<?=$class;?>">
-	<td width='15%'><?= Utility_Model::format_date( $permanentevent -> timestamp ); ?></td>
+	<td width='15%'><?= Model_Utility::format_date( $permanentevent -> timestamp ); ?></td>
 	<td width='85%'><?= My_I18n_Model::translate($permanentevent -> description ) ?> </td>
 	</tr>	
 <?	

@@ -79,7 +79,7 @@ if ( $battle -> status == 'completed' and $battle -> type == 'raid'  )
 					$joinedcharacters['attack']['mercenary'], 
 					$joinedcharacters['attack']['native'], 
 					$defenders_count, 
-					Utility_Model::countdown( $timetostart )); ?>
+					Model_Utility::countdown( $timetostart )); ?>
 
 	</div>
 

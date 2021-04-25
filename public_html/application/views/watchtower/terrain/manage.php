@@ -15,7 +15,7 @@ if ( $structure -> attribute1 == 1 )
 			'param1' => $structure -> id,
 			'status' => 'running' ) ) -> find();
 			
-	$info = kohana::lang( 'structures_terrain.terrainisgrowing', 	Utility_Model::countdown($growaction -> endtime ) ); 
+	$info = kohana::lang( 'structures_terrain.terrainisgrowing', 	Model_Utility::countdown($growaction -> endtime ) );
 }
 
 if ( $structure -> attribute1 == 2 )

@@ -296,12 +296,12 @@ $(document).ready(function()
 	<td width='50%' class="right">
 		<?
 			echo kohana::lang('character.charweightcapacity') . ": <span class='value'>" . 
-				Utility_Model::number_format($char_maxweightcapacity/1000,1) . 'Kg.' . '</span>';
+				Model_Utility::number_format($char_maxweightcapacity/1000,1) . 'Kg.' . '</span>';
 		?>
 		<br/>
 		<?
 			echo kohana::lang('character.inventory_totalweight') . ": <span class='value'>" . 
-				Utility_Model::number_format(($char_transportedweight)/1000,1) . 'Kg.'. '</span>';
+				Model_Utility::number_format(($char_transportedweight)/1000,1) . 'Kg.'. '</span>';
 		?>
 		<br/>
 		<?
@@ -309,23 +309,23 @@ $(document).ready(function()
 			if ($charweightcapacity < 0 )	
 				$charweightcapacity = 0;
 			echo kohana::lang('character.charleftweightcapacity') . ": <span class='value'>" . 
-				Utility_Model::number_format($charweightcapacity,1) . 'Kg.' . '</span>';
+				Model_Utility::number_format($charweightcapacity,1) . 'Kg.' . '</span>';
 		?>		
 	</td>
 	<td width='50%' class="right">
 		<?
 			echo kohana::lang('structures.weightcapacity') . ": <span class='value'>" . 
-				Utility_Model::number_format($structure_maxweightcapacity/1000,1) . 'Kg.' . '</span>';
+				Model_Utility::number_format($structure_maxweightcapacity/1000,1) . 'Kg.' . '</span>';
 		?>
 		<br/>
 		<?
 			echo kohana::lang('structures.totalweight') . ": <span class='value'>" . 
-				Utility_Model::number_format(($structure_maxweightcapacity-$structure_weightcapacity)/1000,1) . 'Kg.'. '</span>';
+				Model_Utility::number_format(($structure_maxweightcapacity-$structure_weightcapacity)/1000,1) . 'Kg.'. '</span>';
 		?>
 		<br/>
 		<?
 			echo kohana::lang('structures.leftweightcapacity')  . ": <span class='value'>" . 
-				Utility_Model::number_format($structure_weightcapacity/1000,1) . 'Kg.'. '</span>';
+				Model_Utility::number_format($structure_weightcapacity/1000,1) . 'Kg.'. '</span>';
 		?>
 	</td>
 </tr>

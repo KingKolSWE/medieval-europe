@@ -110,7 +110,7 @@ echo form::submit( array( 'id' => 'submit', 'class' => 'button button-small', 'v
 			</td>
 			
 			<td class="center">					
-			<?= Utility_Model::format_date($group->date); ?>
+			<?= Model_Utility::format_date($group->date); ?>
 			</td>
 			</tr>
 		<?

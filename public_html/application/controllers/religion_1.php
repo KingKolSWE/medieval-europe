@@ -86,7 +86,7 @@ class Religion_1_Controller extends Template_Controller
 			$this -> index[$parent_id][] = $id;
 		}
 
-		Utility_Model::helper_displaychildnodes(NULL, 0, $this -> index, $this -> data, $output);
+		Model_Utility::helper_displaychildnodes(NULL, 0, $this -> index, $this -> data, $output);
 
 		$view -> pagination = $this -> pagination;
 		$view -> followers = $followers;

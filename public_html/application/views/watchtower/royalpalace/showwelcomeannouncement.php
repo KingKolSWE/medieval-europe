@@ -2,6 +2,6 @@
 
 <?php	echo html::image(array('src' => 'media/images/template/hruler.png')); ?>
 
-<p> <?= Utility_Model::bbcode($welcomeannouncement -> text); ?> </p>
+<p> <?= Model_Utility::bbcode($welcomeannouncement -> text); ?> </p>
 
 <br style='clear:both'/>

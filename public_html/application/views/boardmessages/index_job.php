@@ -43,8 +43,8 @@ $class = ($k % 2 == 0) ? 'alternaterow_1' : 'alternaterow_2' ;
 <td class='center'><?= $message -> id; ?></td>
 <td class='center'><?= Character_Model::create_publicprofilelink( $message -> character_id, null);?></td>
 <td class='center'><?= html::anchor('boardmessage/view/' . $message -> id, $message->title);?></td>
-<td class='center'><?= Utility_Model::format_datetime($message -> created);?></td>
-<td class='center'><?= Utility_Model::format_datetime($message -> created + $message -> validity *24*3600);?></td>
+<td class='center'><?= Model_Utility::format_datetime($message -> created);?></td>
+<td class='center'><?= Model_Utility::format_datetime($message -> created + $message -> validity *24*3600);?></td>
 </tr>
 
 <?php 

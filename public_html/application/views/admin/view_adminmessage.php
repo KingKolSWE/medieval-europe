@@ -5,19 +5,19 @@
 <br/>
 <?php echo kohana::lang('admin.postedon') ?>&nbsp;
 <b>
-<?php echo Utility_Model::format_datetime($message -> timestamp) ?>
+<?php echo Model_Utility::format_datetime($message -> timestamp) ?>
 </b>
 <br/>
 <?php echo kohana::lang('admin.timesread', $message -> read ) ?>
 <br/>
 <h5>
-<?php echo Utility_Model::bbcode($message -> summary) ?>
+<?php echo Model_Utility::bbcode($message -> summary) ?>
 </h5>
 
 <br/>
 
 <p>
-<?php echo Utility_Model::bbcode($message -> message) ?>
+<?php echo Model_Utility::bbcode($message -> message) ?>
 </p>
 
 <?

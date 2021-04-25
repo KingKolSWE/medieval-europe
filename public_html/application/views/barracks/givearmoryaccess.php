@@ -68,7 +68,7 @@ else
 	echo '<tr>';
 	echo '<td>' . $structure_grant -> character -> name . '</td>'; 
 	echo '<td>' . kohana::lang('structures.grant_' . $structure_grant -> grant ) . '</td>'; 
-	echo '<td>' . Utility_Model::format_datetime($structure_grant -> expiredate) . '</td>'; 
+	echo '<td>' . Model_Utility::format_datetime($structure_grant -> expiredate) . '</td>';
 	echo "<td class='center'>" . html::anchor('/structure/revokegrant/' . $structure -> id . '/' . $structure_grant -> character -> id . '/' . $structure_grant -> grant, kohana::lang('global.revoke' )) . '</td>';
 	echo '</tr>'; 
 }

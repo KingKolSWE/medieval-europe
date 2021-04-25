@@ -781,7 +781,7 @@ class Item_Controller extends Template_Controller
 			'send'			
 		);
 				
-		$info['time'] = Utility_Model::secs2hmstostring( $info['time'], 'hours' );
+		$info['time'] = Model_Utility::secs2hmstostring( $info['time'], 'hours' );
 		
 		echo json_encode( $info );
 	}

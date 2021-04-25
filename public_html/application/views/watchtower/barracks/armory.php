@@ -109,7 +109,7 @@ foreach ( $items['items']['all'] as $item)
 		echo "<td class='center'>".$item -> quantity . "</td>";	
 		echo "<td class='center'>".$item -> quality . "%</td>";	
 
-		echo "<td class='center'>". Utility_Model::number_format( $item -> totalweight / 1000, 1) . " Kg</td>";		
+		echo "<td class='center'>". Model_Utility::number_format( $item -> totalweight / 1000, 1) . " Kg</td>";
 		
 		echo "</tr>";
 		

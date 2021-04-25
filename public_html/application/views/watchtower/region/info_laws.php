@@ -28,19 +28,19 @@
 				<?php echo html::image(array('src' => 'media/images/template/hruler.png'));?>
 				<br/><br/>
 				<p>
-					<?php echo Utility_Model::bbcode( $law -> description); ?>
+					<?php echo Model_Utility::bbcode( $law -> description); ?>
 				</p>
 			</div>
 			<?php
 				if ( !is_null( $law -> timestamp ) )
 				{
-					echo kohana::lang('global.lawcreatedon', Utility_Model::format_datetime( $law -> timestamp ));					
+					echo kohana::lang('global.lawcreatedon', Model_Utility::format_datetime( $law -> timestamp ));
 				}
 				
 				if ( $law -> signature != '' )
 				{
 					echo "<hr style='margin:5px 0px'/>";
-					echo Utility_Model::bbcode( $law -> signature );
+					echo Model_Utility::bbcode( $law -> signature );
 				}		
 			?>		
 		</div>

@@ -42,7 +42,7 @@ if ( $chartinfo['kingdomownedregions_w']['min'][0]-> param3 != 0 )
 else
 	echo $chartinfo['kingdomownedregions_w']['min'][0]-> param2;
 ?> 
-</b><?php echo kohana::lang('regionview.stats_reachedon')?><b> <?php echo Utility_Model::format_date ( $chartinfo['kingdomownedregions_w']['max'][0]-> period , "M" ) ?> </b><br/>
+</b><?php echo kohana::lang('regionview.stats_reachedon')?><b> <?php echo Model_Utility::format_date ( $chartinfo['kingdomownedregions_w']['max'][0]-> period , "M" ) ?> </b><br/>
 
 <i><?php echo kohana::lang('regionview.stats_maxkingdomownedregions', $chartinfo['kingdomownedregions_w']['max'][0] -> param1)?>
 
@@ -52,7 +52,7 @@ if ( $chartinfo['kingdomownedregions_w']['max'][0]-> param3 != 0 )
 else
 	echo $chartinfo['kingdomownedregions_w']['max'][0]-> param2;
 ?> 
-</b><?php echo kohana::lang('regionview.stats_reachedon')?><b> <?php echo Utility_Model::format_date ( $chartinfo['kingdomownedregions_w']['max'][0]-> period , "M" ) ?> </b><br/>
+</b><?php echo kohana::lang('regionview.stats_reachedon')?><b> <?php echo Model_Utility::format_date ( $chartinfo['kingdomownedregions_w']['max'][0]-> period , "M" ) ?> </b><br/>
 </i>
 </div>
 </center>
@@ -93,7 +93,7 @@ else
 	echo $chartinfo['kingdompopulation_w']['min'][0]-> param2;
 ?> 
 
-</b><?php echo kohana::lang('regionview.stats_reachedon')?> <b> <?php echo Utility_Model::format_date ( $chartinfo['kingdompopulation_w']['max'][0]-> period , "M" ) ?> </b><br/>
+</b><?php echo kohana::lang('regionview.stats_reachedon')?> <b> <?php echo Model_Utility::format_date ( $chartinfo['kingdompopulation_w']['max'][0]-> period , "M" ) ?> </b><br/>
 
 <i><?php echo kohana::lang('regionview.stats_maxkingdompopulation', $chartinfo['kingdompopulation_w']['max'][0] -> param1)?>
 
@@ -103,7 +103,7 @@ if ( $chartinfo['kingdompopulation_w']['max'][0]-> param3 != 0 )
 else
 	echo $chartinfo['kingdompopulation_w']['max'][0]-> param2;
 ?> 
-</b><?php echo kohana::lang('regionview.stats_reachedon')?> <b> <?php echo Utility_Model::format_date ( $chartinfo['kingdompopulation_w']['max'][0]-> period , "M" ) ?> </b><br/>
+</b><?php echo kohana::lang('regionview.stats_reachedon')?> <b> <?php echo Model_Utility::format_date ( $chartinfo['kingdompopulation_w']['max'][0]-> period , "M" ) ?> </b><br/>
 </i>
 </div>
 </center>
@@ -144,7 +144,7 @@ if ( $chartinfo['kingdomheritage_w']['min'][0]-> param3 != 0 )
 else
 	echo $chartinfo['kingdomheritage_w']['min'][0]-> param2;
 ?> 
-</b><?php echo kohana::lang('regionview.stats_reachedon')?> <b> <?php echo Utility_Model::format_date ( $chartinfo['kingdomheritage_w']['max'][0]-> period , "M" ) ?> </b><br/>
+</b><?php echo kohana::lang('regionview.stats_reachedon')?> <b> <?php echo Model_Utility::format_date ( $chartinfo['kingdomheritage_w']['max'][0]-> period , "M" ) ?> </b><br/>
 <i><?php echo kohana::lang('regionview.stats_minkingdomheritage', $chartinfo['kingdomheritage_w']['min'][0] -> param1)?>
 
 <?php 
@@ -153,7 +153,7 @@ if ( $chartinfo['kingdomheritage_w']['max'][0]-> param3 != 0 )
 else
 	echo $chartinfo['kingdomheritage_w']['max'][0]-> param2;
 ?> 
-</b><?php echo kohana::lang('regionview.stats_reachedon')?> <b> <?php echo Utility_Model::format_date ( $chartinfo['kingdomheritage_w']['max'][0]-> period , "M" ) ?> </b><br/>
+</b><?php echo kohana::lang('regionview.stats_reachedon')?> <b> <?php echo Model_Utility::format_date ( $chartinfo['kingdomheritage_w']['max'][0]-> period , "M" ) ?> </b><br/>
 </i>
 </div>
 </center>
@@ -192,7 +192,7 @@ if ( $chartinfo['kingdomavgheritage_w']['min'][0]-> param3 != 0 )
 else
 	echo $chartinfo['kingdomavgheritage_w']['min'][0]-> param2;
 ?> 
-</b><?php echo kohana::lang('regionview.stats_reachedon')?> <b> <?php echo Utility_Model::format_date ( $chartinfo['kingdomavgheritage_w']['max'][0]-> period , "M" ) ?> </b><br/>
+</b><?php echo kohana::lang('regionview.stats_reachedon')?> <b> <?php echo Model_Utility::format_date ( $chartinfo['kingdomavgheritage_w']['max'][0]-> period , "M" ) ?> </b><br/>
 
 <i><?php echo kohana::lang('regionview.stats_maxkingdomavgheritage', $chartinfo['kingdomavgheritage_w']['max'][0] -> param1)?>
 <?php 
@@ -201,7 +201,7 @@ if ( $chartinfo['kingdomavgheritage_w']['max'][0]-> param3 != 0 )
 else
 	echo $chartinfo['kingdomavgheritage_w']['max'][0]-> param2;
 ?> 
-</b><?php echo kohana::lang('regionview.stats_reachedon')?> <b> <?php echo Utility_Model::format_date ( $chartinfo['kingdomavgheritage_w']['max'][0]-> period , "M" ) ?> </b><br/>
+</b><?php echo kohana::lang('regionview.stats_reachedon')?> <b> <?php echo Model_Utility::format_date ( $chartinfo['kingdomavgheritage_w']['max'][0]-> period , "M" ) ?> </b><br/>
 </i>
 </div>
 </center>

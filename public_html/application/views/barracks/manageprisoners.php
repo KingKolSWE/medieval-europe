@@ -42,9 +42,9 @@ foreach ($prisoners as $prisoner )
 	$stat = Character_Model::get_stat_d(		$prisoner -> character -> id, 'servejailtime'	);
 	
 	echo "<td class='center' >".
-		Utility_Model::format_datetime( $stat -> stat2 ) . 
+		Model_Utility::format_datetime( $stat -> stat2 ) .
 		'<br/>' . 
-		kohana::lang('structures_barracks.sentence_timeleft', Utility_Model::countdown( $stat -> stat2 )) . 
+		kohana::lang('structures_barracks.sentence_timeleft', Model_Utility::countdown( $stat -> stat2 )) .
 	"</td>";
 		
 	echo "<td class='center'>". $prisoner -> text . 

@@ -36,7 +36,7 @@ else
 kohana::lang('gameevents.subscriptionprice',
 $gameevent -> doubloons, 
 $gameevent -> silvercoins,
-Utility_Model::format_datetime( $gameevent -> subscriptionenddate)
+Model_Utility::format_datetime( $gameevent -> subscriptionenddate)
 ); ?>
 </p>
 

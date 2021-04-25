@@ -537,7 +537,7 @@ $('#toggletextmap').click(function() {
 				<br/>
 				<?= $linkedregion['travelinfo']['gluttext'];?>
 				</td>
-			<td class="center"><?= Utility_Model::secs2hmstostring(
+			<td class="center"><?= Model_Utility::secs2hmstostring(
 				$linkedregion['travelinfo']['realtraveltimespeed'], 'hours'); ?></td>
 			<td class="center"><?= $linkedregion['travelinfo']['linktravelaction'] ?></td>
 	    </tr>

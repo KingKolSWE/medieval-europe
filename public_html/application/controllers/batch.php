@@ -218,14 +218,14 @@ class Batch_Controller extends Template_Controller
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Utility_Model::initquest( $securitykey, $char_id, $questname );
+		Model_Utility::initquest( $securitykey, $char_id, $questname );
 	}
 
 	function getitemaverageprices( $securitykey=null, $period )
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Utility_Model::getitemaverageprices( $securitykey, $period );
+		Model_Utility::getitemaverageprices( $securitykey, $period );
 	}
 
 	function reduceintoxicationlevel($securitykey=null)

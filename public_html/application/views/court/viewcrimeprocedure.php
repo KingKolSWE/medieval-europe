@@ -27,7 +27,7 @@
 		<p>
 		<?php echo kohana::lang('structures_court.criminal') . ': ' . '<b>' . $criminal -> name . '</b>'; ?>
 		<br/>
-		<?php echo kohana::lang('structures_court.opendate') . ': ' . '<b>' . Utility_Model::format_datetime(
+		<?php echo kohana::lang('structures_court.opendate') . ': ' . '<b>' . Model_Utility::format_datetime(
 			$crimeprocedure -> issuedate ) . '</b>'; ?>
 		<br/>
 		<?php echo kohana::lang('global.status') . ': ' . '<b>' . kohana::lang('structures_court.status_' . $crimeprocedure -> status ). '</b>'; ?>
@@ -45,7 +45,7 @@
 		<?php 
 		echo kohana::lang('structures_court.startprison') . ': ' . '<b>';
 		if ( !is_null ($crimeprocedure -> imprisonment_start) )
-			echo Utility_Model::format_datetime(	$crimeprocedure -> imprisonment_start ); 
+			echo Model_Utility::format_datetime(	$crimeprocedure -> imprisonment_start );
 		else
 			echo '-';
 		echo '</b>';
@@ -54,14 +54,14 @@
 		<?php
 		echo kohana::lang('structures_court.endprison') . ': ' . '<b>';
 		if ( !is_null ($crimeprocedure -> imprisonment_start) )
-			echo Utility_Model::format_datetime(	$crimeprocedure -> imprisonment_end ); 
+			echo Model_Utility::format_datetime(	$crimeprocedure -> imprisonment_end );
 		else
 			echo '-';
 		echo'</b>';
 		?>
 		<br/>
 		<?php 
-		$time = Utility_Model::secs2hms( $crimeprocedure -> imprisonment_end - $crimeprocedure -> imprisonment_start);
+		$time = Model_Utility::secs2hms( $crimeprocedure -> imprisonment_end - $crimeprocedure -> imprisonment_start);
 		echo kohana::lang('structures_court.jailtime') . ': ' . '<b>' . $time[3] . '</b>'; ?>
 		<br/>
 		<?php echo kohana::lang('structures_court.freereason') . ': ' . '<b>' . $crimeprocedure -> free_reason . '</b>'; ?>

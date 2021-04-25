@@ -12,12 +12,12 @@
 		<br/><br/>
 		
 		<?php echo kohana::lang('structures_royalpalace.conquerirorder_text'	
-		, Utility_Model::format_datetime($bodycontent['expirydate'] - ( 7 * 24 * 3600 ) )
+		, Model_Utility::format_datetime($bodycontent['expirydate'] - ( 7 * 24 * 3600 ) )
 		, $bodycontent['captainname']
 		, kohana::lang( $bodycontent['regionname'])
-		, Utility_Model::format_datetime( $bodycontent['expirydate'] )
+		, Model_Utility::format_datetime( $bodycontent['expirydate'] )
 		, $bodycontent['notes']
-		, Utility_Model::bbcode($bodycontent['kingsignature']));
+		, Model_Utility::bbcode($bodycontent['kingsignature']));
 		?>	
 	</div>
 </div>

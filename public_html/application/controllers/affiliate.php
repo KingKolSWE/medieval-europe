@@ -173,7 +173,7 @@ class Affiliate_Controller extends Template_Controller
 						$user->username 
 					);
 					$to      = $post['email'];					
-					$rc = Utility_Model::mail( $to, $subject, $body );								
+					$rc = Model_Utility::mail( $to, $subject, $body );
 					if ($rc)
 						Session::set_flash('user_message', "<div class=\"alert alert-info\">A new password has been emailed.</div>");        
 					else

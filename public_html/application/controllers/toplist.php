@@ -94,7 +94,7 @@ class Toplist_Controller extends Template_Controller
 						$toplist -> id .  " and year(from_unixtime( timestamp )) = year(curdate()) " .
 						" and month(from_unixtime( timestamp )) = month(curdate() ) " ) -> as_array();				
 									
-					// La inseriamo nella lista solo se il target non è raggiunto
+					// La inseriamo nella lista solo se il target non ï¿½ raggiunto
 					
 					if ( $res[0] -> votes <= $toplist -> target ) 
 					{
@@ -109,10 +109,10 @@ class Toplist_Controller extends Template_Controller
 						$vt[$i]['id'] = $toplist -> id ; 
 						$vt[$i]['name'] = $toplist -> name ; 
 						$vt[$i]['url'] = $toplist -> url; 
-						$vt[$i]['lastvote'] = Utility_Model::format_datetime($lastvote[0] -> lastvote);
+						$vt[$i]['lastvote'] = Model_Utility::format_datetime($lastvote[0] -> lastvote);
 						$vt[$i]['lastvoteunixtime'] = $lastvote[0] -> lastvote;
 						$vt[$i]['nextvoteunixtime'] = $lastvote[0] -> lastvote + (24*3600);
-						$vt[$i]['countdown'] = Utility_Model::countdown($vt[$i]['nextvoteunixtime']);
+						$vt[$i]['countdown'] = Model_Utility::countdown($vt[$i]['nextvoteunixtime']);
 						list ( $quantity, $rewardtype) = explode( ";",  $toplist -> reward );
 						$vt[$i]['reward'] = $quantity . " " . $rewardtype; 
 						

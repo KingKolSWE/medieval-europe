@@ -497,7 +497,7 @@ class Royalpalace_Controller extends Template_Controller
 					$infomessage -> type = 'kingdom';
 					$infomessage -> title = $title;
 					$infomessage -> text = $body;
-					$infomessage -> signature = Utility_Model::bbcode($character->signature);
+					$infomessage -> signature = Model_Utility::bbcode($character->signature);
 					$infomessage -> timestamp = time();
 					$infomessage -> subtype = 'infomessage';
 					$infomessage -> save();

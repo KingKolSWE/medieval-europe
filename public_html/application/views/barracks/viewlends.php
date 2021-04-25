@@ -46,10 +46,10 @@ foreach ( $lends as $lend )
 	<tr class='<?php echo $class?>'>
 		<td class='center'><?php echo $lend -> id; ?></td>
 		<td class='center'><?php echo kohana::lang($lend -> item_name); ?></td>		
-		<td class='center' ><?php echo Utility_Model::format_datetime($lend -> lendtime) ; ?></td>
+		<td class='center' ><?php echo Model_Utility::format_datetime($lend -> lendtime) ; ?></td>
 		<td class='center' ><?php echo $lend -> lender ; ?></td>
 		<td class='center' ><?php echo $lend -> char_name ; ?></td>
-		<td class='center' ><?php echo Utility_Model::countdown($lend -> deliverytime) ; ?></td>				
+		<td class='center' ><?php echo Model_Utility::countdown($lend -> deliverytime) ; ?></td>
 	</tr>
 <?php 
 $r++;

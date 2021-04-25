@@ -55,7 +55,7 @@ $(document).ready(function()
 <br/>
 <div><?= kohana::lang('global.status');?>:   <span class='value'><?= $suggestion -> status ?></span></div>
 <br/>
-<div><?= kohana::lang('global.createddate');?>:  <span class='value'><?= Utility_Model::format_date($suggestion -> created) ?></span></div>
+<div><?= kohana::lang('global.createddate');?>:  <span class='value'><?= Model_Utility::format_date($suggestion -> created) ?></span></div>
 <br/>
 
 <div>

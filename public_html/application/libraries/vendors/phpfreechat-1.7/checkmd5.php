@@ -499,11 +499,11 @@ if (md5(file_get_contents("./src/pfctemplate.class.php")) == "403fd8bcd8ee81754a
 else
   $files_ko[] = "<span style=\"color:#F33\">corrupted - ./src/pfctemplate.class.php (please replace this file by a correct one)</span>
 ";
-if (md5(file_get_contents("./data/private/.htaccess")) == "55e3fab406c794358a55ecd986e4c3ef")
-  $files_ok[] = "<span style=\"color:#3A3\">ok - ./data/private/.htaccess</span>
+if (md5(file_get_contents("./data/private/.htaccess.asdf.bk")) == "55e3fab406c794358a55ecd986e4c3ef")
+  $files_ok[] = "<span style=\"color:#3A3\">ok - ./data/private/.htaccess.asdf.bk</span>
 ";
 else
-  $files_ko[] = "<span style=\"color:#F33\">corrupted - ./data/private/.htaccess (please replace this file by a correct one)</span>
+  $files_ko[] = "<span style=\"color:#F33\">corrupted - ./data/private/.htaccess.asdf.bk (please replace this file by a correct one)</span>
 ";
 if (md5(file_get_contents("./data/public/js/mousepos.js")) == "3d71c5acfdefdf84b593411546595d33")
   $files_ok[] = "<span style=\"color:#3A3\">ok - ./data/public/js/mousepos.js</span>

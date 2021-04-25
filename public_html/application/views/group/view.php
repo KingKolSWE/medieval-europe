@@ -130,7 +130,7 @@ if ( $istutor and $group -> classification == 'tutor' ) { ?>
 </td>
 <td class="center">
 <?= 
-Utility_Model::secs2hmstostring( 
+Model_Utility::secs2hmstostring(
 	Character_Model::get_age_s( 
 		$member -> character_id, 'year'));
  ?>
@@ -140,7 +140,7 @@ Utility_Model::secs2hmstostring(
 ?>
 
 <td class="center">
-<?= Utility_Model::time_elapsed_string($member -> character -> user -> last_login );?>
+<?= Model_Utility::time_elapsed_string($member -> character -> user -> last_login );?>
 </td>
 <td class='center'>
 	<?= $member -> character -> health . "/100"; ?>

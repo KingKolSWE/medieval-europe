@@ -21,9 +21,9 @@ $class = ($k%2==0) ? '' : 'alternaterow_1';
 <tr class='<?= $class; ?>'>
 <td class='center'><?= $gameevent->id; ?></td>
 <td class='center'><?= $gameevent->name; ?></td>
-<td class='center'><?=Utility_Model::format_datetime($gameevent->subscriptionstartdate) ?></td>
-<td class='center'><?=Utility_Model::format_datetime($gameevent->subscriptionenddate)	 ?></td>
-<td class='left'><?= Utility_Model::truncateHtml(
+<td class='center'><?=Model_Utility::format_datetime($gameevent->subscriptionstartdate) ?></td>
+<td class='center'><?=Model_Utility::format_datetime($gameevent->subscriptionenddate)	 ?></td>
+<td class='left'><?= Model_Utility::truncateHtml(
 		$gameevent->description, 
 		$length = 100, 
 		$ending = '...', 

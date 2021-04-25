@@ -51,11 +51,11 @@ class User_Model extends Auth_User_Model
 		if ( $local_user -> loaded )
 		{
 			kohana::log('debug', '-> User exists... logging in.');
-			$rc = User_Model::postchecks( $local_user, $data['ipaddress'], $message );
+			$rc = Model_User::postchecks( $local_user, $data['ipaddress'], $message );
 			if ($rc == false)
 				return false;
 			
-			$rc = User_Model::loginuser( $local_user, $data['ipaddress'], $message );
+			$rc = Model_User::loginuser( $local_user, $data['ipaddress'], $message );
 			if ($rc == false)
 				return false;
 			
@@ -63,11 +63,11 @@ class User_Model extends Auth_User_Model
 		else
 		{			
 			$newuser = null;
-			$rc = User_Model::register( $data, $newuser, $message );			
+			$rc = Model_User::register( $data, $newuser, $message );
 			if ($rc == false)
 				return false;
 			
-			$rc = User_Model::loginuser( $newuser, $data['ipaddress'], $message );
+			$rc = Model_User::loginuser( $newuser, $data['ipaddress'], $message );
 			if ($rc == false)
 				return false;
 		}
@@ -146,7 +146,7 @@ class User_Model extends Auth_User_Model
 			else
 			{
 				kohana::log('info', '-> Checking IP address for proxy...');
-				$proxyscore = User_Model::get_proxyscore($ipaddress);
+				$proxyscore = Model_User::get_proxyscore($ipaddress);
 			
 				// Se sta entrando con un proxy ed � gi� stato avvertito 3 giorni fa,
 				// si blocca l' utente.			
@@ -351,7 +351,7 @@ class User_Model extends Auth_User_Model
 						// email
 						
 						$body = 'Utenti bloccati: ' . $multi['username_1'] . ' e ' . $multi['username_2'];						
-						Utility_Model::alertadmins( 'Blocked users', $body );
+						Model_Utility::alertadmins( 'Blocked users', $body );
 					}
 				}
 			}
@@ -442,7 +442,7 @@ class User_Model extends Auth_User_Model
 		
 		//kohana::log( 'info', '-> loginuser: Setting language...');		
 		
-		User_Model::setcorrect_language( $ipaddress );
+		Model_User::setcorrect_language( $ipaddress );
 		
 		// disabilito sleep automated
 		
@@ -483,7 +483,7 @@ class User_Model extends Auth_User_Model
 		kohana::log('debug', "------- REGISTER USER START -------");
 		
 		$user = ORM::factory('user');		
-		$user -> username = User_Model::normalizeusername($data['username']);
+		$user -> username = Model_User::normalizeusername($data['username']);
 		$passwordclear = $user -> username  . '_' . substr(md5(time()),1,5);
 		$user -> password = $passwordclear;
 		$user -> email = $data['email'];
@@ -534,7 +534,7 @@ class User_Model extends Auth_User_Model
 					$user -> username, $passwordclear,
 					'https://' . $_SERVER['SERVER_NAME'] . "/index.php/user/activate/".$user -> id."/".$user->activationtoken);
 				$to      = $user -> email;
-				$result = Utility_Model::mail( $to, $subject, $body );
+				$result = Model_Utility::mail( $to, $subject, $body );
 			}
 			
 		}
@@ -602,7 +602,7 @@ class User_Model extends Auth_User_Model
 		
 		//kohana::log('info', "-> Language set to: {$language}");
 		
-		User_Model::change_language( $language );		
+		Model_User::change_language( $language );
 		
 	}
 	

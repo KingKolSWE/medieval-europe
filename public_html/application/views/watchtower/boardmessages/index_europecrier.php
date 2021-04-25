@@ -19,7 +19,7 @@ $class = ( $k % 2 ) ? '' : 'alternaterow_1';
 ?>	
 <tr class='<?php echo $class?>'>
 <td width='22%'>
-<?php echo Utility_Model::format_datetime( $message -> created ); ?>
+<?php echo Model_Utility::format_datetime( $message -> created ); ?>
 </td>
 <td class='<?php echo $message -> messageclass ?>'>
 <?php echo My_I18n_Model::translate($message -> message); ?>

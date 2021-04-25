@@ -145,7 +145,7 @@ class JQCallback_Controller extends Template_Controller
 			$this -> auto_render = false;
 			$kingdom = ORM::factory('kingdom', $this -> input -> post('id') );
 			$info = $kingdom -> get_info();
-			$info['kingmessage'] = Utility_Model::bbcode($info['kingmessage']);
+			$info['kingmessage'] = Model_Utility::bbcode($info['kingmessage']);
 			echo json_encode( $info );
       	}		
 	}
@@ -251,7 +251,7 @@ class JQCallback_Controller extends Template_Controller
 	public function bbcodepreview()
 	{		
 		$this -> auto_render = false;				
-		$preview = Utility_Model::bbcode( $this -> input -> post('text' ) );
+		$preview = Model_Utility::bbcode( $this -> input -> post('text' ) );
 		echo $preview;
 	}
 	
@@ -330,8 +330,8 @@ class JQCallback_Controller extends Template_Controller
 	{
 		$text = $this -> input -> get( 'bbcode' ); 
 		$this -> auto_render = false;		
-		$convesion = Utility_Model::bbcode( $text );				
-		echo Utility_Model::bbcode( $text );	
+		$convesion = Model_Utility::bbcode( $text );
+		echo Model_Utility::bbcode( $text );
 	}
 	
 	/*
@@ -392,7 +392,7 @@ class JQCallback_Controller extends Template_Controller
 			$html .="<br/>";
 			
 			$html .= 
-				"</span>" .	kohana::lang('global.lastlogin') . ": <span class='value'>" . Utility_Model::format_date($char->user->last_login) . '</span><br/><br/>'.
+				"</span>" .	kohana::lang('global.lastlogin') . ": <span class='value'>" . Model_Utility::format_date($char->user->last_login) . '</span><br/><br/>'.
 				html::anchor('message/write/0/new/'.$char->id, kohana::lang('global.write'), array('target' => '_new')) . '<br/>'.
 				html::anchor('character/publicprofile/'.$char->id, kohana::lang('character.profile'), array('target' => '_new'));
 			
@@ -535,7 +535,7 @@ class JQCallback_Controller extends Template_Controller
 						$html .= Kohana::lang('structures.terrain_attr0') .  "<br/><br/>";
 					break;
 				case 1:							
-					$html .= sprintf(Kohana::lang('structures.terrain_attr1'), kohana::lang($item_seeded->name), Utility_Model::countdown ($structure -> attribute3)) . '<br/><br/>';
+					$html .= sprintf(Kohana::lang('structures.terrain_attr1'), kohana::lang($item_seeded->name), Model_Utility::countdown ($structure -> attribute3)) . '<br/><br/>';
 					break;
 				case 2: 
 					if ( !is_null( $a ) )
@@ -675,7 +675,7 @@ class JQCallback_Controller extends Template_Controller
 		$this -> auto_render = false;				
 		$pb = PremiumBonus_Factory_Model::create( $this -> input -> post('name') );		
 		$info = $pb -> get_info();
-		$countdown = Utility_Model::secs2hmstostring($info['enddate']-time());
+		$countdown = Model_Utility::secs2hmstostring($info['enddate']-time());
 		$data = array(
 			'id' => $this -> input -> post('name'),
 			'originalprice' => $info['cuts'][$this -> input -> post('cut')]['price'],

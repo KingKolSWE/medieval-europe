@@ -47,8 +47,8 @@ $(document).ready(function()
 <div id="helper"><?php 
 	echo kohana::lang('structures.generic_drophelper');
 	echo kohana::lang('structures.carryingweightcapacityleft', 
-		Utility_Model::number_format( $char_transportableweight/1000) );
-	echo kohana::lang('structures.storableweight', Utility_Model::number_format( $structure_storableweight/1000));			
+		Model_Utility::number_format( $char_transportableweight/1000) );
+	echo kohana::lang('structures.storableweight', Model_Utility::number_format( $structure_storableweight/1000));
 ?>
 </div>
 
@@ -111,7 +111,7 @@ foreach ($items['items']['all'] as $item)
 		echo "<td width='5%'>". html::image(array('src' => 'media/images/items/'.$item -> tag.'.png'), 
 			array( 'class' => 'size25')) . "</td>";
 
-		// Se l'oggetto è uno scroll generico allora visualizzo il titolo al posto del
+		// Se l'oggetto ï¿½ uno scroll generico allora visualizzo il titolo al posto del
 		// nome dell'oggetto
 
 		if ( $item -> category=='scroll' && $item -> subcategory=='generic')
@@ -121,7 +121,7 @@ foreach ($items['items']['all'] as $item)
 
 		
 		echo "<td class='right'>". $item -> quantity . "</td>";	
-		echo "<td class='right'>". Utility_Model::number_format( $item -> totalweight / 1000, 1) . " Kg</td>";
+		echo "<td class='right'>". Model_Utility::number_format( $item -> totalweight / 1000, 1) . " Kg</td>";
 		
 		echo "<td class='right'>" . form::input( 
 			array( 

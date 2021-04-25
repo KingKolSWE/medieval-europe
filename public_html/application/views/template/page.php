@@ -92,7 +92,7 @@ $char = Character_Model::get_info( Session::instance()->get('char_id') );
 
 		<div id='servertime'>
 			<div class='jclock'></div>
-			<div class='currentdate'><?php echo Utility_Model::format_date( time() )?></div>
+			<div class='currentdate'><?php echo Model_Utility::format_date( time() )?></div>
 		</div>
 
 		<div id="menuh">

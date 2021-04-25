@@ -392,7 +392,7 @@ class Message_Controller extends Template_Controller
 				'body' => '',
 		);
 		
-		// controllo se l' utente è validato
+		// controllo se l' utente ï¿½ validato
 		
 		if ( $char -> user -> status != 'active' )
 		{
@@ -417,7 +417,7 @@ class Message_Controller extends Template_Controller
 
 			
 			///////////////////////////////////////////////////
-			// se l'id non è nullo, è una reply o un forward
+			// se l'id non ï¿½ nullo, ï¿½ una reply o un forward
 			///////////////////////////////////////////////////
 			
 			if ( $id != 0 )
@@ -464,7 +464,7 @@ class Message_Controller extends Template_Controller
 					"\r\n" .
 					'[messagequote]' .
 					'[b]From:[/b] ' . $sender -> name . "\r\n" . 
-					'[b]Sent on:[/b] ' . Utility_Model::format_datetime($message -> date) . "\r\n" .
+					'[b]Sent on:[/b] ' . Model_Utility::format_datetime($message -> date) . "\r\n" .
 					'[b]Sent to:[/b] ' . $recipient -> name . 
 					"\r\n" . 
 					"\r\n" .
@@ -519,7 +519,7 @@ class Message_Controller extends Template_Controller
 					url::redirect( '/message/received');				
 				}
 				
-				// se la tipologia è weddingproposal, il messaggio puÃ² essere scritto solo da un maschio ad una donna
+				// se la tipologia ï¿½ weddingproposal, il messaggio puÃ² essere scritto solo da un maschio ad una donna
 				
 				if ( $type == 'weddingproposal' )
 				{
@@ -606,7 +606,7 @@ class Message_Controller extends Template_Controller
 			url::redirect( '/message/' . $type );
 		}
 		
-		// Se il char è il destinatario e il messaggio non è stato ancora letto
+		// Se il char ï¿½ il destinatario e il messaggio non ï¿½ stato ancora letto
 		// allora aggiorno la flag read
 		
 		if (! $message -> isread )

@@ -28,7 +28,7 @@ else
 		$class = ($r % 2 == 0) ? 'alternaterow_1' : 'alternaterow_2' ; 
 		echo "<tr class='$class'>";	
 		//echo '<td>'. form::checkbox('events['.$e->id.']', true, false) . '</td>';			
-		echo "<td>".Utility_Model::format_datetime($e->timestamp)."</td>";
+		echo "<td>".Model_Utility::format_datetime($e->timestamp)."</td>";
 		echo "<td class='" . $e->eventclass . "'>".My_I18n_Model::translate( $e->description ) ."</td>";
 		echo "</tr>";
 		$r++;

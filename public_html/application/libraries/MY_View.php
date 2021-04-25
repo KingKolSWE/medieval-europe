@@ -11,7 +11,7 @@
  * @copyright  (c) 2007-2008 Kohana Team
  * @license    https://kohanaphp.com/license.html
  */
-class View extends View_Core {
+class ViewASDF extends View_Core {
 	
 	
 	/**

@@ -34,8 +34,8 @@ echo html::anchor(
 					. kohana::lang('boardmessage.messagecategory') . '<b>'
 					. kohana::lang('boardmessage.messagecategory' . $message -> category ) . '</b>, '
 					. kohana::lang('boardmessage.visibility_' . $message -> visibility ) . ', '
-					. kohana::lang('boardmessage.published', Utility_Model::format_datetime($message -> created) ) . '<br/>'			
-					. kohana::lang('boardmessage.expireson', Utility_Model::format_datetime($message -> created + $message -> validity *24*3600) ) . ', ' 
+					. kohana::lang('boardmessage.published', Model_Utility::format_datetime($message -> created) ) . '<br/>'
+					. kohana::lang('boardmessage.expireson', Model_Utility::format_datetime($message -> created + $message -> validity *24*3600) ) . ', '
 					. kohana::lang('boardmessage.starpoints', $message -> starpoints  ) . ', '
 					. kohana::lang('admin.timesread', $message -> readtimes  ) ;
 				?>			
@@ -46,7 +46,7 @@ echo html::anchor(
 			<p style='max-width:600px;word-wrap:break-word;'>
 			<?php 
 				
-				echo Utility_Model::bbcode($message -> message);		
+				echo Model_Utility::bbcode($message -> message);
 			?>
 			</p>
 		</div>

@@ -36,9 +36,9 @@
 					echo kohana::lang('global.user_id') . ': ' ."<span class='value'>" . $character->user->id  . "</span><br/>";
 					echo kohana::lang('global.character_id') . ': ' . "<span class='value'>" . $character->id  . "</span><br/>";
 					echo kohana::lang('global.referralid') . ': ' . "<span class='value'>" . $character->user_id  . "</span><br/>";
-					echo kohana::lang('character.born') . ': ' . "<span class='value'>" . Utility_Model::format_date($character->birthdate) . "</span><br/>";
+					echo kohana::lang('character.born') . ': ' . "<span class='value'>" . Model_Utility::format_date($character->birthdate) . "</span><br/>";
 					echo kohana::lang('character.birthregion') . ': ' . "<span class='value'>" .$birthregionname . "</span><br/>";
-					echo kohana::lang('global.age') . ': ' . "<span class='value'>" . Utility_Model::d2y( 
+					echo kohana::lang('global.age') . ': ' . "<span class='value'>" . Model_Utility::d2y(
 						time(), $character -> birthdate ) . "</span><br/>";
 					echo kohana::lang('character.home') . ': ' . "<span class='value'>" . kohana::lang( $home ) . "</span><br/>";
 					echo kohana::lang('character.actual_position') . ': ' . "<span class='value'>" . kohana::lang( $current_position ) . "</span><br/>";			
@@ -352,21 +352,21 @@ foreach ((array)$skills as $skill) { ?>
 <br/>
 <fieldset>
 <legend><?php echo Kohana::lang('global.description')?></legend>
-<p><?php echo Utility_Model::truncateHtml(
-		Utility_Model::bbcode( $character -> description), 250) ?></p>
+<p><?php echo Model_Utility::truncateHtml(
+		Model_Utility::bbcode( $character -> description), 250) ?></p>
 <div style='float:right'><?php echo html::anchor('/character/change_description/', kohana::lang('global.edit') )?></div>
 </fieldset>
 <br/>
 <fieldset>
 <legend><?php echo Kohana::lang('character.char_history')?></legend>
-<p><?php echo Utility_Model::truncateHtml(
-		Utility_Model::bbcode( $character -> history), 250) ?></p>
+<p><?php echo Model_Utility::truncateHtml(
+		Model_Utility::bbcode( $character -> history), 250) ?></p>
 <div style='float:right'><?php echo html::anchor('/character/change_history/', kohana::lang('global.edit') )?></div>
 </fieldset>	
 <br/>	
 <fieldset>
 <legend><?php echo Kohana::lang('character.char_signature')?></legend>
-<p><?php echo Utility_Model::bbcode( $character->signature) ?></p>
+<p><?php echo Model_Utility::bbcode( $character->signature) ?></p>
 <div style='float:right'><?php echo html::anchor('/character/change_signature/', kohana::lang('global.edit') )?></div>
 </fieldset>	
 

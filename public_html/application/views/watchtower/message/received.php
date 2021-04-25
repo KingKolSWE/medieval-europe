@@ -69,7 +69,7 @@ else
 			echo "<tr class = '$class'>";
 			echo '<td>'. form::checkbox('messages['.$message -> id.']', true, false) . '</td>';			
 			echo "<td class='center'>" . $message -> archived . "</td>";			
-			echo '<td>'. Utility_Model::format_datetime( $message -> date ) . '</td>';
+			echo '<td>'. Model_Utility::format_datetime( $message -> date ) . '</td>';
 			echo '<td>' . html::anchor('character/publicprofile/' . $message -> fromchar_id, $message->sender ).'</td>';
 		
 			echo "<td>" . html::anchor('message/view/received/'.$message->id, $message->subject).'</td>';

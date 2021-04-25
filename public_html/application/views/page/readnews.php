@@ -8,11 +8,11 @@
 <meta property="fb:app_id" content="1448064485408533"/>
 
 <h1>
-<?php echo Utility_Model::bbcode($message -> summary) ?>
+<?php echo Model_Utility::bbcode($message -> summary) ?>
 </h1>
 
 <p>
-<?php echo Utility_Model::bbcode($message -> message) ?>
+<?php echo Model_Utility::bbcode($message -> message) ?>
 </p>
 
 <div>

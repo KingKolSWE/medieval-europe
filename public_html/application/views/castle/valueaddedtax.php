@@ -47,7 +47,7 @@ foreach ( $controlledregions as $controlledregion )
 	echo "<td class='right'>" . form::input( 'neutral', $tax -> neutral, 'style="width: 30px;text-align:right"') . "</td>";
 	echo "<td class='right'>" . form::input( 'friendly', $tax -> friendly, 'style="width: 30px;text-align:right"') . "</td>";
 	echo "<td class='right'>" . form::input( 'allied', $tax -> allied, 'style="width: 30px;text-align:right"') . "</td>";
-	echo "<td class='center'>" . Utility_Model::format_datetime( $tax -> timestamp ) . "</td>";
+	echo "<td class='center'>" . Model_Utility::format_datetime( $tax -> timestamp ) . "</td>";
 	
 	echo "<td class='right' valign='middle'>" . 
 		form::submit( array (

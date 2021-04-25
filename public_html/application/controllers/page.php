@@ -181,7 +181,7 @@ class Page_Controller extends Template_Controller
 		kohana::log('info', '-> in index...');
 		
 		// GOOGLE SSO		
-		$google = new Google_Bridge_Model();
+		$google = new Model_GoogleBridge();
 		
 		// FACEBOOK SSO
 		//$fb = new Facebook_Bridge_Model();
@@ -195,7 +195,7 @@ class Page_Controller extends Template_Controller
 		{
 			
 			kohana::log('info', '-> Visitor has no language cookie, installing it.');
-			User_Model::setcorrect_language( $this -> input -> ip_address() );
+			Model_User::setcorrect_language( $this -> input -> ip_address() );
 		}
 		
 		$title = 'Medieval Europe, a Free Online Role Playing Game';		
@@ -238,7 +238,7 @@ class Page_Controller extends Template_Controller
 							
 							
 			// match captcha
-			$data = Utility_Model::get_mathcaptcha();
+			$data = Model_Utility::get_mathcaptcha();
 			Session::instance() -> set ('captchadata', $data);
 			
 			$form = array( 

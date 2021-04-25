@@ -39,7 +39,7 @@ foreach ( $crimeprocedures as $crimeprocedure )
 	echo "<td class='center'>" . html::anchor('/court/viewcrimeprocedure/' . $structure -> id . '/' . $crimeprocedure -> id,
 		$crimeprocedure -> id ) . '</td>'; 
 	echo "<td class='center'>" . $crimeprocedure -> name . '</td>'; 
-	echo "<td class='center'>" . Utility_Model::format_date($crimeprocedure -> issuedate) . '</td>'; 
+	echo "<td class='center'>" . Model_Utility::format_date($crimeprocedure -> issuedate) . '</td>';
 	echo "<td class='center'>" . kohana::lang( 'structures_court.status_' . $crimeprocedure -> status ). '</td>'; 
 	echo '<td>' . $crimeprocedure -> text . '</td>'; 
 	

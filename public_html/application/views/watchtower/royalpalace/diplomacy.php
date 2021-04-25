@@ -76,7 +76,7 @@ else
 <td class='center'><?=kohana::lang($sourcekingdom -> name);?></td>
 <td class='center'><?=kohana::lang($targetkingdom -> name);?></td>
 <td class='center'><?=kohana::lang('diplomacy.'.$proposal -> diplomacyproposal);?></td>
-<td class='center'><?=Utility_Model::countdown( $proposal -> timestamp + (48*3600));?></td>
+<td class='center'><?=Model_Utility::countdown( $proposal -> timestamp + (48*3600));?></td>
 
 <? if ($character -> region -> kingdom_id != $sourcekingdom -> id )
 {
@@ -132,7 +132,7 @@ else
 			<td class='center'><?php echo kohana::lang($kingdom -> name ) ?></td>
 			<td class='center <?php echo 'diplomacy'.$relations[$region -> kingdom_id][$kingdom -> id]['type']?>'>
 				<?php echo kohana::lang('diplomacy.' . $relations[$region -> kingdom_id][$kingdom -> id]['type'])?></td>
-			<td class='center'><?php echo Utility_Model::format_datetime($relations[$region -> kingdom_id][$kingdom -> id]['timestamp'])?></td>			
+			<td class='center'><?php echo Model_Utility::format_datetime($relations[$region -> kingdom_id][$kingdom -> id]['timestamp'])?></td>
 			<td class='center'>
 				<?php echo html::anchor(
 					'royalpalace/modifydiplomacystatus/' . $structure -> id . '/' . 

@@ -336,7 +336,7 @@ function forceCompleteAction() {
 				
 		<div id='expandlanguages' title='<?php echo $langtooltip?>'>+</div>
 		
-		<div id='jclock'><?php echo Utility_Model::format_datetime( time() ) ?></div>		
+		<div id='jclock'><?php echo Model_Utility::format_datetime( time() ) ?></div>
 		
 		<div id="menuh">
 			<span class="left">			
@@ -476,7 +476,7 @@ function forceCompleteAction() {
 				
 				<div id='admincontent'>
 					<?php						
-						echo Utility_Model::format_datetime( $adminmessage['timestamp'] )  . ' - ' . Utility_Model::bbcode( $adminmessage['summary'] )						
+						echo Model_Utility::format_datetime( $adminmessage['timestamp'] )  . ' - ' . Model_Utility::bbcode( $adminmessage['summary'] )
 					?>
 				</div>
 				<div id='adminfooter'>
@@ -512,7 +512,7 @@ function forceCompleteAction() {
 						        echo "<span class='evidence'>";
 							    echo kohana::lang('quests.speedbonus',
 									$speedbonus -> value,
-									Utility_Model::countdown($speedbonus -> stat1));
+									Model_Utility::countdown($speedbonus -> stat1));
 						        echo "</span>";
 						    }
                         ?>
@@ -558,7 +558,7 @@ function forceCompleteAction() {
 			if ( !empty($promo) and $promo -> startdate < $now and $promo -> enddate > $now ) { ?>
 			<div id='promomessage' >
 				<div id='promocountdown'><?php 
-				echo "Promo ends in " . Utility_Model::countdown( strtotime($promo -> enddate) );?></div>			
+				echo "Promo ends in " . Model_Utility::countdown( strtotime($promo -> enddate) );?></div>
 			</div>
 			<?php } ?>
 			

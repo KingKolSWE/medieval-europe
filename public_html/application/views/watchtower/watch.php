@@ -105,7 +105,7 @@ else
 			if ( $presentchar['activity'] == 'NOACTION' ) 
 				echo "-";
 			else
-				echo Utility_Model::secs2hmstostring(time() - $presentchar['activity']['starttime']);
+				echo Model_Utility::secs2hmstostring(time() - $presentchar['activity']['starttime']);
 		?>
 		
 	</tr>

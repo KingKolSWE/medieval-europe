@@ -4,7 +4,7 @@ class Language_Controller extends Controller
 {
 	public function change_language( $lang = 'en_US' )
 	{
-		User_Model::change_language( $lang );
+		Model_User::change_language( $lang );
 		url::redirect(request::referrer());
 	}
 	

@@ -118,7 +118,7 @@ $(document).ready(function(){
 <?php echo $submenu ?>
 
 <p>
-<?php echo kohana::lang('structures.carryingweightcapacityleft', Utility_Model::number_format($char_transportableweight/1000, 1 ) ); ?>
+<?php echo kohana::lang('structures.carryingweightcapacityleft', Model_Utility::number_format($char_transportableweight/1000, 1 ) ); ?>
 <br/>
 
 <?php echo kohana::lang( 'structures_market.valueaddedtaxall', 

@@ -37,7 +37,7 @@ else
 	{	
 		$class = ( $r % 2 == 0 ) ? '' : 'alternaterow_1';
 		
-		$title = Utility_Model::createitemtooltip( $item ); 
+		$title = Model_Utility::createitemtooltip( $item );
 		
 		echo "<tr class='$class'>";
 		

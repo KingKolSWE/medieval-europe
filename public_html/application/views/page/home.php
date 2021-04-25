@@ -9,7 +9,7 @@
 	);
 	*/
 	if (!empty($pixelgifsrc))
-		echo html::image($pixelgifsrc);
+		echo HTML::image($pixelgifsrc);
 
 ?>
 
@@ -21,10 +21,10 @@
 			<?php $message = Session::instance() -> get('user_message'); echo $message ?>
 		</div>
 
-		<h1 class="text-center"><?php echo kohana::lang('page-homepage.gameheader')?></h1>
+		<h1 class="text-center"><?php echo __('page-homepage.gameheader')?></h1>
 
 		<span class="lead">
-		<?php echo kohana::lang('page-homepage.burbletext'); ?>
+		<?php echo __('page-homepage.burbletext'); ?>
 		</span>
 
 	</div>
@@ -32,38 +32,36 @@
 
 <div class="row">
 	<div class="col-xs-12 col-md-4 col-md-offset-1">
-			<h4 class="text-center"><?= kohana::lang('page-homepage.signin');?></h4>
-			<?php echo form::open('/user/login') ?>
+			<h4 class="text-center"><?= __('page-homepage.signin');?></h4>
+			<?php echo Form::open('/user/login') ?>
 
 			<div class="form-group">
-				<?php echo form::input( array(
-					'name'=>'username',
-					'value' => null,
+				<?php Form::input('username',
+					null,
+					array(
 					'tabindex' => 1,
 					'id' => 'username1',
-					'placeholder' => kohana::lang('page-homepage.yourusername'),
+					'placeholder' => __('page-homepage.yourusername'),
 					'class' => 'form-control') ); ?>
 			</div>
 
 			<div class="form-group">
 
-				<?php echo form::password( array(
-					'name'=>'password',
-					'value' => null,
+				<?php echo Form::password('password', null, array(
 					'tabindex' => 2,
 					'id' => 'password',
-					'placeholder' => kohana::lang('page-homepage.yourpassword'),
+					'placeholder' => __('page-homepage.yourpassword'),
 					'class' => 'form-control') ); ?>
 			</div>
 
 			<div class="btn-group btn-group-justified">
 				<div class="col-xs-12" style="padding:0 1px">
-					<?php echo form::submit(
+					<?php echo Form::submit('signin',
+						__('page-homepage.signin'),
 						array (
-							'id' => 'signin',
 							'class' => 'btn btn-me',
 							'tabindex' => 3,
-						), kohana::lang('page-homepage.signin'));
+						));
 					?>
 				</div>
 				<div class="col-xs-6" style="padding:0 1px;color:yellow">
@@ -71,7 +69,7 @@
 				</div>
 				<div class="col-xs-6" style="padding:0 1px">
 					<?php
-						echo html::anchor(
+						echo HTML::anchor(
 							$google_login_url,
 							'Google Login',
 							array(
@@ -83,46 +81,43 @@
 				</div>
 			</div>
 
-			<?php echo form::close() ?>
+			<?php echo Form::close() ?>
 
 			<div class="form-group text-right">
 					<div class="col-xs-12 col-md-4 text-left" style="padding:0 1px">
 						<ul class="list-inline">
 							<li>
 							<?php
-								echo html::anchor('https://www.facebook.com/pages/Medieval-Europe/108773142496282',
-									html::image(
+								echo HTML::anchor('https://www.facebook.com/pages/Medieval-Europe/108773142496282',
+									HTML::image('media/images/template/fb.png',
 										array(
-											'src' => 'media/images/template/fb.png',
 											'alt' => 'Medieval Europe Facebook' )),
 									array(
-										'title' => Kohana::lang('page-homepage.fb_followus'),
+										'title' => __('page-homepage.fb_followus'),
 										'class' => 'littleicon',
 										'target' => 'new' ) );
 							?>
 							</li>
 							<li>
 							<?php
-								echo html::anchor('https://google.com/+MedievaleuropeEuGame',
-									html::image(
+								echo HTML::anchor('https://google.com/+MedievaleuropeEuGame',
+									HTML::image('media/images/template/gp.png',
 										array(
-											'src' => 'media/images/template/gp.png',
 											'alt' => 'Medieval Europe Google+' )),
 									array(
-										'title' => Kohana::lang('page-homepage.google_followus'),
+										'title' => __('page-homepage.google_followus'),
 										'class' => 'littleicon',
 										'target' => 'new'));
 							?>
 							</li>
 							<li>
 							<?php
-								echo html::anchor('https://twitter.com/Medieval_Europe',
-									html::image(
+								echo HTML::anchor('https://twitter.com/Medieval_Europe',
+									HTML::image('media/images/template/twitter.png',
 										array(
-											'src' => 'media/images/template/twitter.png',
 											'alt' => 'Medieval Europe Twitter' )),
 									array(
-										'title' => Kohana::lang('page-homepage.tw_followus'),
+										'title' => __('page-homepage.tw_followus'),
 										'class' => 'littleicon',
 										'target' => 'new' ) );
 							?>
@@ -130,9 +125,9 @@
 						</ul>
 					</div>
 					<div class="col-xs-12 col-md-8 text-right" style="padding:0 1px">
-					<?= html::anchor('/user/resendpassword', kohana::lang('user.login_resendpassword')); ?>
+					<?= HTML::anchor('/user/resendpassword', __('user.login_resendpassword')); ?>
 					<br/>
-					<?= html::anchor('/user/resendvalidationtoken', kohana::lang('user.resendvalidationtoken_pagetitle'));?>
+					<?= HTML::anchor('/user/resendvalidationtoken', __('user.resendvalidationtoken_pagetitle'));?>
 					</div>
 			</div>
 			<div class="form-group text-center">
@@ -143,15 +138,16 @@
 	<div class="col-xs-12 col-md-4 col-md-offset-1">
 	<!-- signup -->
 
-		<h4 class="text-center"><?= kohana::lang('page-homepage.signup');?></h4>
-		<?php echo form::open('/user/register') ?>
+		<h4 class="text-center"><?= __('page-homepage.signup');?></h4>
+		<?php echo Form::open('/user/register') ?>
 			<div class="form-group row">
 			<div class="col-xs-12 text-center">
-				<?= form::input( array(
-					'name'=>'username',
-					'value' => $form['username'],
+				<?= Form::input(
+				        'username',
+				        $form['username'],
+				        array(
 					'tabindex' => 5,
-					'placeholder' => kohana::lang('page-homepage.yourusername'),
+					'placeholder' => __('page-homepage.yourusername'),
 					'id' => 'username2',
 					'class' => 'form-control') );
 				?>
@@ -166,11 +162,11 @@
 
 			<div class="form-group row">
 			<div class="col-xs-12 text-center">
-				<?php echo form::input( array(
-					'name' => 'email',
-					'value' => $form['email'],
+				<?php echo Form::input( 'email',
+					$form['email'],
+					array(
 					'tabindex' => 6,
-					'placeholder' => kohana::lang('page-homepage.youremail'),
+					'placeholder' => __('page-homepage.youremail'),
 					'id' => 'email',
 					'class' => 'form-control') );
 				?>
@@ -187,11 +183,9 @@
 			<div class="form-group row">
 				<div class="col-xs-12 text-center">
 				<?php
-						echo form::input( array(
-								'name' => 'referreruser',
+						echo Form::input( 'referreruser', $form['referreruser'], array(
 								'tabindex' => 7,
-								'placeholder' => kohana::lang('page-homepage.referraluser'),
-								'value' => $form['referreruser'],
+								'placeholder' => __('page-homepage.referraluser'),
 								'id' => 'referreruser',
 								'class' => 'form-control') );
 				?>
@@ -212,25 +206,25 @@
 
 			<div class="form-group row">
 				<div class="col-xs-12">
-				<?php echo form::submit(
+				<?php echo Form::submit('signup',
+				        __('page-homepage.signup'),
 						array (
-						'id' => 'signup',
 						'class' => 'btn btn-me',
 						'onclick' => 'fbq(\'track\', \'CompleteRegistration\');',
 						'tabindex' => 7,
 						'style' => 'width:100%'
-						), kohana::lang('page-homepage.signup')); ?>
+						)); ?>
 				</div>
 			</div>
 
 			<div>
 			<small>
-				<?=
-					kohana::lang('page-homepage.tosacceptance',
-						html::anchor(
+				<?php
+					echo __('page-homepage.tosacceptance');
+						echo HTML::anchor(
 							'/page/display/terms-of-use',
-							kohana::lang('page-homepage.tos')
-						));
+							__('page-homepage.tos')
+						);
 				?>
 			</small>
 

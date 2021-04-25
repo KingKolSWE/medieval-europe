@@ -16,8 +16,8 @@ foreach ( $messages as $m )
 {	
 	$class = ($r % 2 == 0) ? '' : 'alternaterow_1' ; 
 	echo "<tr class=\"$class\">";	
-	echo "<td>" . Utility_Model::format_datetime ($m -> timestamp) . "</td>";
-	echo "<td>" . Utility_model::bbcode($m -> summary) . "</td>";
+	echo "<td>" . Model_Utility::format_datetime ($m -> timestamp) . "</td>";
+	echo "<td>" . Model_Utility::bbcode($m -> summary) . "</td>";
 	echo "<td class='right'>" . $m -> read . "</td>";
 	echo "<td class='center'>" . html::anchor('admin/read_adminmessage/' . $m -> id, kohana::lang('global.read') ) . "</td>";
 	echo "</tr>";

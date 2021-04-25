@@ -511,7 +511,7 @@ function create_banner( $char_id, $language = 'en_US' )
 		// avatar image
 
 		imagecopymerge($image, $avatar_img, 3, 20, 0, 0, 75, 75, 100);
-		Utility_Model::imagecopymerge_alpha($image, $kingdomtmp_img, 266, 4, 0, 0, 30, 36, 0);
+		Model_Utility::imagecopymerge_alpha($image, $kingdomtmp_img, 266, 4, 0, 0, 30, 36, 0);
 
 		$y+=12;
 
@@ -534,7 +534,7 @@ function create_banner( $char_id, $language = 'en_US' )
 		imagettftext($image, 8, 0, 81, $y, $fontcolor_red, $fontfile_bold, $role_title);
 
 		$y += 12;
-		$age = Utility_Model::d2y( time(), $char -> birthdate );
+		$age = Model_Utility::d2y( time(), $char -> birthdate );
 
 		//$age = Utility_Model::s2ydhms( time() - $char -> birthdate );
 		//kohana::log('debug', 'age: ' . kohana::debug( $age ));
@@ -569,7 +569,7 @@ function create_banner( $char_id, $language = 'en_US' )
 				ImageAlphaBlending($newimage, false);
 				ImageSaveAlpha($newimage, false);
 				imagecopyresized($newimage, $badge_img, 0, 0, 0, 0, 20, 20, 40, 40);
-				Utility_Model::imagecopymerge_alpha($image, $newimage, $bdx, $y, 0, 0, 20, 20, 0);$bdx += 20;
+				Model_Utility::imagecopymerge_alpha($image, $newimage, $bdx, $y, 0, 0, 20, 20, 0);$bdx += 20;
 			}
 		}
 
@@ -985,7 +985,7 @@ function create_banner( $char_id, $language = 'en_US' )
 		AND    r.name = 'admin'");
 
 		foreach( $res as $row )
-			Utility_Model::mail( $row -> email, 'ME Alert: ' . $subject, $text, $attachment );
+			Model_Utility::mail( $row -> email, 'ME Alert: ' . $subject, $text, $attachment );
 
 		return;
 	}
@@ -1002,7 +1002,7 @@ function create_banner( $char_id, $language = 'en_US' )
 		AND    r.id >= 98");
 
 		foreach( $res as $row )
-			Utility_Model::mail( $row -> email, 'ME Alert: ' . $subject, $text );
+			Model_Utility::mail( $row -> email, 'ME Alert: ' . $subject, $text );
 
 		return;
 	}
@@ -1216,7 +1216,7 @@ function create_banner( $char_id, $language = 'en_US' )
 
 				}
 
-				$output .= Utility_Model::helper_displaychildnodes(
+				$output .= Model_Utility::helper_displaychildnodes(
 					$id, $level + 1, $index, $data, 	$output);
 			}
 		}
@@ -1274,9 +1274,9 @@ function create_banner( $char_id, $language = 'en_US' )
 			{
 				kohana::log('debug', 'nowhere?: ' . strpos($user -> email, 'nowhere.com'));
 				if (strpos($user -> email, 'nowhere.com') !== false)
-					$rc = Utility_Model::send_fb_notification( $user -> fb_id, $subject, $url);
+					$rc = Model_Utility::send_fb_notification( $user -> fb_id, $subject, $url);
 				else
-					$rc = Utility_Model::mail( $user -> email, $subject, $text);
+					$rc = Model_Utility::mail( $user -> email, $subject, $text);
 			}
 		}
 

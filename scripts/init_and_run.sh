@@ -2,12 +2,12 @@
 set -x
 
 cd /var/www/medieval-europe/public_html/application/libraries/vendors/PHPMailer
-php /usr/bin/composer require league/oauth2-google
+php /usr/local/bin/composer require league/oauth2-google
 
 cd /var/www/medieval-europe/public_html/application/models
-php /usr/bin/composer require league/oauth2-google
+php /usr/local/bin/composer require league/oauth2-google
 
-sleep 10
+sleep 1
 
 echo 'sql_mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"' >> /etc/mysql/mysql.conf.d/mysqld.cnf
 

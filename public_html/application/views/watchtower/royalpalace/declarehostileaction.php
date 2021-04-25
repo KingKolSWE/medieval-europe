@@ -44,7 +44,7 @@
 			array('target' => 'new') ); 
 			?>
 		</td>
-	<td class='center'><?= Utility_model::format_datetime($kingdomwar['war']->start); ?></td>
+	<td class='center'><?= Model_Utility::format_datetime($kingdomwar['war']->start); ?></td>
 	<td class='center'>
 		<? 
 		if ($kingdomwar['war']->source_kingdom_id == $structure -> region -> kingdom_id )

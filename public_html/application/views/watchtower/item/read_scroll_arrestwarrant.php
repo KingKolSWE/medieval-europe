@@ -14,7 +14,7 @@
 	<br/><br/>
 	<?php echo kohana::lang('structures_court.arrestwarrant_text'	
 	, $bodycontent['location'] 
-	, Utility_Model::format_datetime( $bodycontent['document_date'] )	
+	, Model_Utility::format_datetime( $bodycontent['document_date'] )
 	, $bodycontent['targetname'] 
 	, $bodycontent['text']
 	, $bodycontent['trialurl']

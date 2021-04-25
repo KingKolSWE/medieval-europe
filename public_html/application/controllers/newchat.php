@@ -58,7 +58,7 @@ class Newchat_Controller extends Template_Controller {
 		$params["debug"] = false;
 		$params["nickmeta"] = array( 
 			'Kingdom' => kohana::lang($char -> region -> kingdom -> name),
-			'Age' => Utility_Model::d2y(time(), $char -> get_age()));		
+			'Age' => Model_Utility::d2y(time(), $char -> get_age()));
 		$params["nickmeta_private"] = array( 'ip' );						
 		$params["display_pfc_logo"] = false;
 		$params["clock"] = false;

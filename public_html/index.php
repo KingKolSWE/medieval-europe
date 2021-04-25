@@ -1,120 +1,123 @@
 <?php
+
 /**
- * This file acts as the "front controller" to your application. You can
- * configure your application, modules, and system directories here.
- * PHP error_reporting level may also be changed.
- *
- * @see http://kohanaphp.com
+ * The directory in which your application specific resources are located.
+ * The application directory must contain the bootstrap.php file.
  */
+$application = 'application';
 
 /**
- * Define the website environment status. When this flag is set to TRUE, some
- * module demonstration controllers will result in 404 errors. For more information
- * about this option, read the documentation about deploying Kohana.
- *
- * @see http://docs.kohanaphp.com/installation/deployment
+ * The directory in which your modules are located.
  */
-
-define('IN_PRODUCTION', TRUE);
+$modules = 'modules';
 
 /**
- * Website application directory. This directory should contain your application
- * configuration, controllers, models, views, and other resources.
- *
- * This path can be absolute or relative to this file.
+ * The directory in which the KO7 resources are located. The system
+ * directory must contain the classes/KO7.php file.
  */
-$kohana_application = 'application';
+$system = 'system';
 
 /**
- * Kohana modules directory. This directory should contain all the modules used
- * by your application. Modules are enabled and disabled by the application
- * configuration file.
- *
- * This path can be absolute or relative to this file.
+ * The directory in which the KO7 public files are located. The public
+ * directory contains for example the index.php and .htaccess.asdf.bk files.
  */
-$kohana_modules = 'modules';
+$public = 'public';
 
 /**
- * Kohana system directory. This directory should contain the core/ directory,
- * and the resources you included in your download of Kohana.
- *
- * This path can be absolute or relative to this file.
- */
-$kohana_system = 'system';
-
-/**
- * Test to make sure that Kohana is running on PHP 5.2 or newer. Once you are
- * sure that your environment is compatible with Kohana, you can comment this
- * line out. When running an application on a new server, uncomment this line
- * to check the PHP version quickly.
- */
-version_compare(PHP_VERSION, '5.2', '<') and exit('Kohana requires PHP 5.2 or newer.');
-
-/**
- * Set the error reporting level. Unless you have a special need, E_ALL is a
- * good level for error reporting.
- */
-error_reporting(E_ALL & ~(E_STRICT ^ E_DEPRECATED));
-
-/**
- * Turning off display_errors will effectively disable Kohana error display
- * and logging. You can turn off Kohana errors in application/config/config.php
- */
-ini_set('display_errors', TRUE);
-
-/**
- * If you rename all of your .php files to a different extension, set the new
- * extension here. This option can left to .php, even if this file has a
- * different extension.
+ * The default extension of resource files. If you change this, all resources
+ * must be renamed to use the new extension.
  */
 define('EXT', '.php');
 
-//
-// DO NOT EDIT BELOW THIS LINE, UNLESS YOU FULLY UNDERSTAND THE IMPLICATIONS.
-// ----------------------------------------------------------------------------
-// $Id: index.php 3915 2009-01-20 20:52:20Z zombor $
-//
+/**
+ * Set the PHP error reporting level. If you set this in php.ini, you remove this.
+ * @link http://www.php.net/manual/errorfunc.configuration#ini.error-reporting
+ *
+ * When developing your application, it is highly recommended to enable notices
+ * and warnings. Enable them by using: E_ALL
+ *
+ * In a production environment, it is safe to ignore notices. Disable them by
+ * using: E_ALL & ~E_NOTICE
+ *
+ * When using a legacy application, it is recommended to disable deprecated
+ * notices. Disable with: E_ALL & ~E_DEPRECATED
+ */
+error_reporting(E_ALL);
 
-$kohana_pathinfo = pathinfo(__FILE__);
-// Define the front controller name and docroot
-define('DOCROOT', $kohana_pathinfo['dirname'].DIRECTORY_SEPARATOR);
-define('KOHANA',  $kohana_pathinfo['basename']);
+/**
+ * End of standard configuration! Changing any of the code below should only be
+ * attempted by those with a working knowledge of KO7 internals.
+ */
 
-// If the front controller is a symlink, change to the real docroot
-is_link(KOHANA) and chdir(dirname(realpath(__FILE__)));
+// Set the full path to the docroot
+define('DOCROOT', dirname(__DIR__).DIRECTORY_SEPARATOR);
 
-// If kohana folders are relative paths, make them absolute.
-$kohana_application = file_exists($kohana_application) ? $kohana_application : DOCROOT.$kohana_application;
-$kohana_modules = file_exists($kohana_modules) ? $kohana_modules : DOCROOT.$kohana_modules;
-$kohana_system = file_exists($kohana_system) ? $kohana_system : DOCROOT.$kohana_system;
+// Make the application relative to the docroot, for symlink'd index.php
+if ( ! is_dir($application) && is_dir(DOCROOT.$application))
+	$application = DOCROOT.$application;
 
-// Define application and system paths
-define('APPPATH', str_replace('\\', '/', realpath($kohana_application)).'/');
-define('MODPATH', str_replace('\\', '/', realpath($kohana_modules)).'/');
-define('SYSPATH', str_replace('\\', '/', realpath($kohana_system)).'/');
+// Make the modules relative to the docroot, for symlink'd index.php
+if ( ! is_dir($modules) && is_dir(DOCROOT.$modules))
+	$modules = DOCROOT.$modules;
 
-// Clean up
-unset($kohana_application, $kohana_modules, $kohana_system);
+// Make the system relative to the docroot, for symlink'd index.php
+if ( ! is_dir($system) && is_dir(DOCROOT.$system))
+	$system = DOCROOT.$system;
 
-if (file_exists(DOCROOT.'install'.EXT))
+// Make the public relative to the docroot, for symlink'd index.php
+if ( ! is_dir($public) && is_dir(DOCROOT.$public))
+	$public = DOCROOT.$public;
+
+// Define the absolute paths for configured directories
+define('APPPATH', realpath($application).DIRECTORY_SEPARATOR);
+define('MODPATH', realpath($modules).DIRECTORY_SEPARATOR);
+define('SYSPATH', realpath($system).DIRECTORY_SEPARATOR);
+define('PUBPATH', realpath($public).DIRECTORY_SEPARATOR);
+
+// Clean up the configuration vars
+unset($application, $modules, $system, $public);
+
+if (file_exists('install'.EXT))
 {
+	// Load the installation check
+	return include 'install'.EXT;
+}
 
-	// Load the installation tests
-	include DOCROOT.'install'.EXT;
+/**
+ * Define the start time of the application, used for profiling.
+ */
+if ( ! defined('KO7_START_TIME'))
+{
+	define('KO7_START_TIME', microtime(TRUE));
+}
+
+/**
+ * Define the memory usage at the start of the application, used for profiling.
+ */
+if ( ! defined('KO7_START_MEMORY'))
+{
+	define('KO7_START_MEMORY', memory_get_usage());
+}
+
+// Bootstrap the application
+echo APPPATH.'bootstrap'.EXT;
+require APPPATH.'bootstrap'.EXT;
+
+if (PHP_SAPI === 'cli') // Try and load minion
+{
+	class_exists('Minion_Task') OR die('Please enable the Minion module for CLI support.');
+	set_exception_handler(['Minion_Exception', 'handler']);
+
+	Minion_Task::factory(Minion_CLI::options())->execute();
 }
 else
 {
-
-	// Initialize Kohana
-
-	if(strpos($_SERVER['SCRIPT_NAME'], 'phpunit') && empty($_SERVER['SERVER_NAME']))
-	{
-
-		require APPPATH.'tests/BootstrapPHPUnit'.EXT;
-	}
-	else
-	{
-		require SYSPATH.'core/Bootstrap'.EXT;
-	}
-
+	/**
+	 * Execute the main request. A source of the URI can be passed, eg: $_SERVER['PATH_INFO'].
+	 * If no source is specified, the URI will be automatically detected.
+	 */
+	echo Request::factory(TRUE, [], FALSE)
+		->execute()
+		->send_headers(TRUE)
+		->body();
 }

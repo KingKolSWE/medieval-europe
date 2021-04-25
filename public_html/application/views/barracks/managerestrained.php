@@ -36,7 +36,7 @@ foreach ($rset as $restrained )
 	
 	echo "<tr class='$class'>";
 	echo "<td>".$restrained -> name . "</td>";
-	echo "<td>".Utility_Model::format_datetime( $restrained->endtime) ."</td>";
+	echo "<td>".Model_Utility::format_datetime( $restrained->endtime) ."</td>";
 	echo "<td>". $restrained -> param5  ."</td>";
 	echo "<td  style='padding-left:5px'>".form::input( array( 'name' => 'reason', 'size' => '30' ))."</td>";	
 	echo "<td>" . form::submit( array ('id' => 'submit', 'class' => 'button button-medium', 'onclick' => 'return confirm(\''.kohana::lang('global.confirm_operation').'\')' ), kohana::lang('structures_actions.cancelrestrain'))."</td>";

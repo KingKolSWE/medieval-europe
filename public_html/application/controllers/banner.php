@@ -10,7 +10,7 @@ class Banner_Controller extends Template_Controller
 	{				
 		
 		$view = new View ('user/banner');		
-		$img = Utility_Model::create_banner( $char_id );
+		$img = Model_Utility::create_banner( $char_id );
 		$view -> img = $img;
 		$this -> template -> content = $view;	
 	}

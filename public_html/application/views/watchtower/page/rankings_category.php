@@ -62,7 +62,7 @@ $centeronplayer = ( $mode == 'all' ) ? true : false;
   <div id='helpertext'>
 		<?php 
 		if ( count($rankings) > 0 )
-			echo kohana::lang('rankings.helper', Utility_Model::format_datetime( $rankings['extractiontime'] )) 
+			echo kohana::lang('rankings.helper', Model_Utility::format_datetime( $rankings['extractiontime'] ))
 		?>
 	</div>
 	<div id='wikisection'>
@@ -152,7 +152,7 @@ else
 		// Valore del punteggio
 	
 		if ( $category == 'oldestchars' )		
-			$value = Utility_Model::d2y( time(), ( $r['stat'] -> value )); 
+			$value = Model_Utility::d2y( time(), ( $r['stat'] -> value ));
 		elseif ( in_array($category, array( 
 			'richestchars', 
 			'poorestchars', 

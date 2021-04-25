@@ -140,14 +140,14 @@ else
 	
 		<tr>
 		<td><?php echo kohana::lang('global.since') ?></td>
-		<td colspan='2'><b><?php echo Utility_Model::format_date( $role -> begin) ;?></b></td>
+		<td colspan='2'><b><?php echo Model_Utility::format_date( $role -> begin) ;?></b></td>
 		</tr>
 	
 	<?php } ?>
 
 	<tr>
 		<td><?php echo kohana::lang('character.born') ?></td>
-		<td colspan='2'><b><?php echo Utility_Model::format_datetime( $character -> birthdate ) ; ?></b></td>
+		<td colspan='2'><b><?php echo Model_Utility::format_datetime( $character -> birthdate ) ; ?></b></td>
 	</tr>	
 	<tr>
 		<td><?php echo kohana::lang('character.birthregion') ?></td>
@@ -161,7 +161,7 @@ else
 		<td><?php echo  kohana::lang('global.age') ?></td>
 		<td colspan='2'><b>
 				
-		<?php echo Utility_Model::secs2hmstostring(
+		<?php echo Model_Utility::secs2hmstostring(
 			$character -> get_age('seconds'), 'days');?></b></td>
 	</tr>
 	
@@ -216,7 +216,7 @@ else
 	
 	<tr>
 		<td><?php echo kohana::lang('global.last_login') ?></td>
-		<td colspan='2'><b><?php echo Utility_model::format_date ($character->user->last_login)?></b></td>
+		<td colspan='2'><b><?php echo Model_Utility::format_date ($character->user->last_login)?></b></td>
 	</tr>
 	<tr>
 		<td><?php echo kohana::lang('global.status') ?></td>
@@ -449,7 +449,7 @@ if ( $viewingchar -> id == $character -> id )
 				if ($boughtdoubloons -> loaded )
 				{
 			?>
-				<tr><td width="50%"><?=kohana::lang('character.stat_boughtdoubloons');?></td><td class='value'><?= Utility_Model::number_format($boughtdoubloons -> value); ?></td></tr>
+				<tr><td width="50%"><?=kohana::lang('character.stat_boughtdoubloons');?></td><td class='value'><?= Model_Utility::number_format($boughtdoubloons -> value); ?></td></tr>
 			<?
 				}
 				
@@ -457,7 +457,7 @@ if ( $viewingchar -> id == $character -> id )
 				if ($changedkingdom -> loaded )
 				{
 			?>
-				<tr><td width="50%"><?=kohana::lang('character.stat_changedkingdom');?></td><td class='value'><?= Utility_Model::format_date($changedkingdom -> value); ?></td></tr>
+				<tr><td width="50%"><?=kohana::lang('character.stat_changedkingdom');?></td><td class='value'><?= Model_Utility::format_date($changedkingdom -> value); ?></td></tr>
 			<?
 				}
 				
@@ -474,7 +474,7 @@ if ( $viewingchar -> id == $character -> id )
 				{
 			?>
 				<tr><td width="50%"><?=kohana::lang('character.stat_fightstats');?></td><td class='value'><?= $fightstats -> value; ?>/<?= $fightstats -> stat1; ?>&nbsp;
-				(<?= Utility_Model::number_format($fightstats -> value/$fightstats -> stat1 * 100,2) ?>%)</td></tr>	
+				(<?= Model_Utility::number_format($fightstats -> value/$fightstats -> stat1 * 100,2) ?>%)</td></tr>
 			<?
 				}
 				
@@ -482,7 +482,7 @@ if ( $viewingchar -> id == $character -> id )
 				if ($fpcontribution -> loaded )
 				{
 			?>
-				<tr><td><?=kohana::lang('character.stat_fpcontribution');?></td><td class='value'><?= Utility_Model::number_format($fpcontribution -> value); ?></td></tr>		
+				<tr><td><?=kohana::lang('character.stat_fpcontribution');?></td><td class='value'><?= Model_Utility::number_format($fpcontribution -> value); ?></td></tr>
 			<?
 				}
 				
@@ -490,7 +490,7 @@ if ( $viewingchar -> id == $character -> id )
 				if ($lastretiretime -> loaded )
 				{
 			?>
-				<tr><td width="50%"><?=kohana::lang('character.stat_lastretiretime');?></td><td class='value'><?= Utility_Model::format_datetime($lastretiretime -> value); ?></td></tr>		
+				<tr><td width="50%"><?=kohana::lang('character.stat_lastretiretime');?></td><td class='value'><?= Model_Utility::format_datetime($lastretiretime -> value); ?></td></tr>
 			<?
 				}
 				
@@ -560,7 +560,7 @@ if ( $viewingchar -> id == $character -> id )
 							
 							<td class="value">
 								<?php echo $killednpc_stat -> value . '/' .  $killednpc_stat -> stat1 . ' (' . 
-								Utility_Model::number_format(($killednpc_stat->value/$killednpc_stat -> stat1)*100,2) . '%)' ?>
+								Model_Utility::number_format(($killednpc_stat->value/$killednpc_stat -> stat1)*100,2) . '%)' ?>
 							</td>
 						</tr>
 			<?php						

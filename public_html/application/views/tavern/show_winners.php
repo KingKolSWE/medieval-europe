@@ -38,7 +38,7 @@ else
 		echo kohana::lang( 'structures_tavern.winners_' . $type, 
 			$winner -> winner,
 			$winner -> amount,
-			Utility_Model::format_date( $winner -> windate ),
+			Model_Utility::format_date( $winner -> windate ),
 			kohana::lang( $winner -> region_name ) ) . '<br/>';	
 		echo "</p>";
 	}

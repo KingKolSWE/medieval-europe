@@ -28,7 +28,7 @@ foreach ( $events as $e )
 {	
 	($i % 2 == 0) ? $class = "alternaterow_1" : $class = "alternaterow_2";
 	echo "<tr class=\"$class\">";
-	echo "<td class='center'>".Utility_Model::format_datetime($e->timestamp)."</td>";
+	echo "<td class='center'>".Model_Utility::format_datetime($e->timestamp)."</td>";
 	echo "<td>".My_I18n_Model::translate( $e->description ) ."</td>";	
 	echo "</tr>";
 	$i++;

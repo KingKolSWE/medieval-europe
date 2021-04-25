@@ -53,7 +53,7 @@
 	</div>	
 
 	<div style='float:right'>
-	On <?= Utility_Model::format_datetime($message->date); ?>
+	On <?= Model_Utility::format_datetime($message->date); ?>
 	</div>
 	
 </div>	
@@ -92,7 +92,7 @@
 	</div>
 
 	<div style='width:85%;float:left;border-left:1px solid #bbb;padding-left:5px;'>
-	<?php echo Utility_Model::bbcode( $message -> body );?>
+	<?php echo Model_Utility::bbcode( $message -> body );?>
 	</div>
 	
 </div>

@@ -13,7 +13,7 @@
 	<div id='helper'>
 	<?php echo kohana::lang( 'structures_barracks.jail_text', 		
 		$sentence -> text,
-		Utility_Model::format_datetime( $sentence -> imprisonment_end ) ); 
+		Model_Utility::format_datetime( $sentence -> imprisonment_end ) );
 	?>
 	</div>
 

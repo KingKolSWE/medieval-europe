@@ -404,7 +404,7 @@ class Admin_Controller extends Template_Controller
 			return false;			
 		}
 		
-		User_Model::modifyemail( $char -> user, $newemail );		
+		Model_User::modifyemail( $char -> user, $newemail );
 		$message = 'Character email changed to: ' . $newemail;
 		
 		return true;
@@ -755,7 +755,7 @@ class Admin_Controller extends Template_Controller
 					';' . date("d-M-Y H:i:s", time())
 				);
 						
-				Utility_Model::mail( kohana::config('medeur.adminemail'),
+				Model_Utility::mail( kohana::config('medeur.adminemail'),
 					"Item sent by console", 
 					$par[2] . ' ' . kohana::lang($par[1] -> name) . ' has been sent to: ' . $par[0] -> name . ' by: ' . 
 					$par[4] -> name );			

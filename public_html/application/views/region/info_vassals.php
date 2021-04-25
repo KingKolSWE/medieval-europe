@@ -39,8 +39,8 @@ else
 echo 
 kohana::lang('regionview.vassaldescription', 
 	html::anchor('character/publicprofile/' . $vassal -> id, $vassal -> name), 
-	Utility_Model::format_date($vassal -> begin),
-	is_null ($vassal -> end) ? '-' : Utility_Model::format_date($vassal -> end));
+	Model_Utility::format_date($vassal -> begin),
+	is_null ($vassal -> end) ? '-' : Model_Utility::format_date($vassal -> end));
 ?>
 </b>	
 <br/>
@@ -50,11 +50,11 @@ kohana::lang('regionview.vassaldescription',
 if ( $vassal->lifestatus == 'dead' ) 
 echo 
 kohana::lang('regionview.vassaldescription2', 		
-	Utility_Model::format_date($vassal -> birthdate),
-	is_null ($vassal -> deathdate) ? kohana::lang('character.unknowndeathdate') : Utility_Model::format_date($vassal -> deathdate));
+	Model_Utility::format_date($vassal -> birthdate),
+	is_null ($vassal -> deathdate) ? kohana::lang('character.unknowndeathdate') : Model_Utility::format_date($vassal -> deathdate));
 else
 echo 
-kohana::lang('regionview.vassaldescription3', Utility_Model::format_date($vassal -> birthdate)); 	
+kohana::lang('regionview.vassaldescription3', Model_Utility::format_date($vassal -> birthdate));
 
 ?>
 <br/>

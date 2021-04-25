@@ -39,7 +39,7 @@ foreach ( $laws as $law )
 				"&nbsp;" . 
 				html::anchor("royalpalace/deletelaw/". $structure->id . "/" . $law->id, '[' . kohana::lang('global.delete' ) . ']', array('onclick' => 'return confirm(\''.kohana::lang('global.confirm_operation').'\')'));		
 			echo '<br/><br/>';
-			echo Utility_Model::bbcode( $law -> description ); 
+			echo Model_Utility::bbcode( $law -> description );
 		?>	
 			
 		</p>
@@ -48,13 +48,13 @@ foreach ( $laws as $law )
 			if ( $law -> signature != '' )
 			{
 				echo kohana::lang('global.lawcreatedon', 
-					Utility_Model::format_datetime( $law -> timestamp ));
+					Model_Utility::format_datetime( $law -> timestamp ));
 			}
 			
 			if ( !empty( $law -> signature ) )
 			{
 				echo "<hr style='margin-bottom:5px'/>";
-				echo Utility_Model::bbcode( $law -> signature );
+				echo Model_Utility::bbcode( $law -> signature );
 			}		
 		?>
 		</div>

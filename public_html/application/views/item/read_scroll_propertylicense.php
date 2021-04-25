@@ -22,7 +22,7 @@
 
 			<?php echo kohana::lang('structures_shop.property_license_text'
 				, kohana::lang( $bodycontent['regionname'])
-				, Utility_Model::format_datetime( $bodycontent['contract_date'] )	
+				, Model_Utility::format_datetime( $bodycontent['contract_date'] )
 				, kohana::lang( $bodycontent['shoptype'])
 				, kohana::lang( $bodycontent['regionname'])
 				, kohana::lang( $bodycontent['kingdomname'])

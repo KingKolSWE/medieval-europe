@@ -38,9 +38,9 @@
 					echo kohana::lang('global.user_id') . ': ' ."<b>" . $character->user->id  . "</b><br/>";
 					echo kohana::lang('global.character_id') . ': ' . "<b>" . $character->id  . "</b><br/>";
 					echo kohana::lang('global.referralid') . ': ' . "<b>" . $character->user_id  . "</b><br/>";
-					echo kohana::lang('character.born') . ': ' . "<b>" . Utility_Model::format_date($character->birthdate) . "</b><br/>";
+					echo kohana::lang('character.born') . ': ' . "<b>" . Model_Utility::format_date($character->birthdate) . "</b><br/>";
 					echo kohana::lang('character.birthregion') . ': ' . "<b>" .$birthregionname . "</b><br/>";
-					echo kohana::lang('global.age') . ': ' . "<b>" . Utility_Model::d2y( 
+					echo kohana::lang('global.age') . ': ' . "<b>" . Model_Utility::d2y(
 						time(), $character -> birthdate ) . "</b><br/>";
 					echo kohana::lang('character.home') . ': ' . "<b>" . kohana::lang( $home ) . "</b><br/>";
 					echo kohana::lang('character.actual_position') . ': ' . "<b>" . kohana::lang( $current_position ) . "</b><br/>";			
@@ -331,14 +331,14 @@
 	<p><?php echo nl2br( $character->slogan) ?></p>
 	<br/>
 	<b><?php echo Kohana::lang('global.description')?></b> ( <?php echo html::anchor('/character/change_description/', kohana::lang('global.edit') )?> )
-	<p><?php echo Utility_Model::truncateHtml(
-		Utility_Model::bbcode( $character -> description), 250	) ?></p>
+	<p><?php echo Model_Utility::truncateHtml(
+		Model_Utility::bbcode( $character -> description), 250	) ?></p>
 	<br/>
 	<b><?php echo Kohana::lang('character.char_history')?></b> ( <?php echo html::anchor('/character/change_history/', kohana::lang('global.edit') )?> )
-	<p><?php echo Utility_Model::bbcode( $character->history) ?></p>
+	<p><?php echo Model_Utility::bbcode( $character->history) ?></p>
 	<br/>
 	<b><?php echo Kohana::lang('character.char_signature')?></b> ( <?php echo html::anchor('/character/change_signature/', kohana::lang('global.edit') )?> )
-	<p><?php echo Utility_Model::bbcode( $character->signature) ?></p>
+	<p><?php echo Model_Utility::bbcode( $character->signature) ?></p>
 </div>
 	</div>
 </div>

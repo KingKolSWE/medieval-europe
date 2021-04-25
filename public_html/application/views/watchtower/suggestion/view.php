@@ -72,7 +72,7 @@ $(function () {
 			<h2><?php echo $suggestion -> title ?></h2>		
 			<p style='max-width:600px;word-wrap:break-word;'>
 			<?php 
-				echo Utility_Model::bbcode($suggestion -> body);
+				echo Model_Utility::bbcode($suggestion -> body);
 			?>
 			</p>
 		</div>

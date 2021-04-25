@@ -91,13 +91,13 @@ else
 
 	kohana::lang('kingdomprojects.projecthistory', 		 
 		My_I18n_Model::translate(   $info['kingdomproject']['project'] -> startedby ),
-		Utility_Model::format_date( $info['kingdomproject']['project'] -> start ) );
+		Model_Utility::format_date( $info['kingdomproject']['project'] -> start ) );
 
 	$elapsed = $info['kingdomproject']['project'] -> end - $info['kingdomproject']['project'] -> start;	
-	$elapsedtime = Utility_Model::secs2hmstostring($elapsed);
+	$elapsedtime = Model_Utility::secs2hmstostring($elapsed);
 	
 	echo kohana::lang('kingdomprojects.projecthistory2',
-		Utility_Model::format_date( $info['kingdomproject']['project'] -> end ),
+		Model_Utility::format_date( $info['kingdomproject']['project'] -> end ),
 		$elapsedtime );			
 	
 }

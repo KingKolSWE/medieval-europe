@@ -87,11 +87,11 @@ else
 	foreach ($items['items'] as $item ) 
 	{	
 		$class = ( $r % 2 == 0 ) ? '' : 'alternaterow_1';
-		$title = Utility_Model::createitemtooltip( $item ); 
+		$title = Model_Utility::createitemtooltip( $item );
 		echo form::open('/character/loot');
 		echo form::hidden('targetchar_id', $item -> character_id );
 		echo form::hidden('item_id', $item -> item_id );		
-		echo form::hidden('w-' . $item -> item_id , Utility_Model::number_format( $item -> totalweight/1000,3));
+		echo form::hidden('w-' . $item -> item_id , Model_Utility::number_format( $item -> totalweight/1000,3));
 		echo form::hidden('sc-' . $item -> item_id , $item -> subcategory);
 		echo "<tr class='$class'>";
 		echo "<td class='center'>" . form::checkbox( array( 'id' => $item -> item_id, 'name' => 'charitemcheckbox', 'value' => $item -> item_id )) . "</td>";
@@ -109,8 +109,8 @@ else
 						'value' => $item -> quantity,
 						'style' => 'margin:0px;padding:0px;width:40px;text-align:right' ) )
 		. "</td>"; 
-		echo "<td style='text-align:right'>" . Utility_Model::number_format( $item -> weight/1000,3) . " Kg. </td>"; 
-		echo "<td style='text-align:right'>" . Utility_Model::number_format( $item -> totalweight/1000,1) . " Kg. </td>"; 
+		echo "<td style='text-align:right'>" . Model_Utility::number_format( $item -> weight/1000,3) . " Kg. </td>";
+		echo "<td style='text-align:right'>" . Model_Utility::number_format( $item -> totalweight/1000,1) . " Kg. </td>";
 		echo "</tr>";
 		echo form::close();
 		$r++;
@@ -120,12 +120,12 @@ else
 	
 	<tr>
 		<td colspan='6' style='text-align:right'><?php echo kohana::lang('character.inventory_totalweight')?></td>
-		<td class='right' colspan='1'><?php echo Utility_Model::number_format($items['totalitemsweight']/1000,1)?> Kg.</td>
+		<td class='right' colspan='1'><?php echo Model_Utility::number_format($items['totalitemsweight']/1000,1)?> Kg.</td>
 	</tr>
 	
 	<tr>
 		<td colspan='6' style='text-align:right'><?php echo kohana::lang('character.charleftweightcapacity')?></td>
-		<td class='right' colspan='1'><?php echo Utility_Model::number_format($transportableweight/1000,1)?> Kg.</td>
+		<td class='right' colspan='1'><?php echo Model_Utility::number_format($transportableweight/1000,1)?> Kg.</td>
 	</tr>
 	
 	

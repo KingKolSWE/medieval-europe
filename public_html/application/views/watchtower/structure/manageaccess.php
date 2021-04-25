@@ -83,7 +83,7 @@ foreach ( $structure -> structure_grant as $structure_grant  )
 		echo "<tr class='" . $class ."'>";
 		echo "<td class='center'>" . $structure_grant -> character -> name . '</td>'; 
 		echo "<td class='center'>" . kohana::lang('structures.grant_' . $structure_grant -> grant ) . '</td>'; 
-		echo "<td class='center'>" . Utility_Model::format_datetime($structure_grant -> expiredate) . '</td>'; 
+		echo "<td class='center'>" . Model_Utility::format_datetime($structure_grant -> expiredate) . '</td>';
 		echo "<td class='center'>" . html::anchor('/structure/revokegrant/' . $structure -> id . '/' . $structure_grant -> character -> id . '/' . $structure_grant -> grant, 
 			kohana::lang('global.revoke' ),
 			array('class' => 'submenu')

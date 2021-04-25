@@ -72,7 +72,7 @@ else { ?>
 		echo "<td class='center'>" . $job -> hourlywage  . "</td>";
 		
 		echo "<td class='center'>" . html::anchor('boardmessage/view/' . $job -> boardmessage_id, $job -> boardmessage_title, array( 'target' => 'blank' ) ) . "</td>";
-		echo "<td class='center'>" . Utility_Model::format_date( $job -> expiredate ) . "</td>"; 
+		echo "<td class='center'>" . Model_Utility::format_date( $job -> expiredate ) . "</td>";
 		echo "<td class='center'>" ;
 		
 		if ( $job -> employer_id != $character -> id ) 

@@ -447,7 +447,7 @@ function forceCompleteAction() {
 		<!-- game panel -->
 		<div id="rightpanel">
 			<div id="servertime">
-			<?php echo Utility_Model::format_datetime( time() ) ?>
+			<?php echo Model_Utility::format_datetime( time() ) ?>
 			</div>
 			<ul id="gamepanel">				
 				<li>

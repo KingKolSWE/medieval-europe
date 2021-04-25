@@ -12,7 +12,7 @@
 
 	
 	<div id='helper'>
-	<?php echo kohana::lang( 'ca_retire.retire_text', Utility_Model::format_datetime($retireaction -> endtime) ) ?>	
+	<?php echo kohana::lang( 'ca_retire.retire_text', Model_Utility::format_datetime($retireaction -> endtime) ) ?>
 	</div>
 
 </div>

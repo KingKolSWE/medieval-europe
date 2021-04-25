@@ -43,7 +43,7 @@ else
 <p>
 <?php 
 
-	$time = Utility_Model::secs2hms( $info['timeforfullenergy'] ) ;
+	$time = Model_Utility::secs2hms( $info['timeforfullenergy'] ) ;
 	echo kohana::lang( "structures.rest_factor", 
 		round($info['restfactor']/50*100,2), 
 		$time[3] );

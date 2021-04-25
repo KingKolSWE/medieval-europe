@@ -60,7 +60,7 @@ if ( $suggestion -> status == 'fundable' or $suggestion -> status == 'funded' )
  ?>
 </td>
 <td>
-<div style='margin:0 auto' class="rateYo"data-rateyo-read-only="true" data-rateyo-rating="<?=Utility_Model::number_format($suggestion->baesianrating,2);?>"></div>
+<div style='margin:0 auto' class="rateYo"data-rateyo-read-only="true" data-rateyo-rating="<?=Model_Utility::number_format($suggestion->baesianrating,2);?>"></div>
 <div class='center'><?= $suggestion -> votes;?> <?= kohana::lang('global.votes');?></div>
 </td>
 <td class='center'>

@@ -1,5 +1,5 @@
 <?php
-class Controller extends Controller_Core
+class ControllerASDF extends Controller_Core
 {
 	
 	protected $disabledmodules;

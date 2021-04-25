@@ -35,7 +35,7 @@ foreach ( $rows as $row )
 		<div class='topicdate small'><?php echo kohana::lang('kingdomforum.postedon', $row -> created);?></div>		
 		<hr/>
 		<br/>
-		<?php echo Utility_Model::bbcode($row -> body) ; ?>
+		<?php echo Model_Utility::bbcode($row -> body) ; ?>
 	</td>
 	</tr>	
 	<tr>

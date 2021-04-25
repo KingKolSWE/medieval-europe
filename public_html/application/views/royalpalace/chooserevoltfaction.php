@@ -39,7 +39,7 @@ else
 }
 
 echo '<br/></br>';
-echo kohana::lang('structures_royalpalace.revolt_par4', Utility_Model::countdown( $battleround -> starttime) );
+echo kohana::lang('structures_royalpalace.revolt_par4', Model_Utility::countdown( $battleround -> starttime) );
 		
 ?> 
 

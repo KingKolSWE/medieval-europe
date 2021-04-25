@@ -48,7 +48,7 @@ echo html::anchor('boardmessage/index/other', kohana::lang('boardmessage.announc
 <?php if (!empty ($errors['message'])) echo "<div class='error_msg'>".$errors['message']."</div>";?>
 <br/>
 <?php echo kohana::lang('boardmessage.expireson',
-	Utility_Model::format_datetime($form['validity'] * 24 * 3600 + $form['created'])) ?></b>
+	Model_Utility::format_datetime($form['validity'] * 24 * 3600 + $form['created'])) ?></b>
 
 <br/>
 

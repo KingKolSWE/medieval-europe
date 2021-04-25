@@ -39,8 +39,8 @@ else
 echo 
 kohana::lang('regionview.kingdescription', 
 	html::anchor('character/publicprofile/' . $king -> id, $king -> name), 
-	Utility_Model::format_date($king -> begin),
-	is_null ($king -> end) ? '-' : Utility_Model::format_date($king -> end));
+	Model_Utility::format_date($king -> begin),
+	is_null ($king -> end) ? '-' : Model_Utility::format_date($king -> end));
 ?>
 </b>	
 <br/>
@@ -50,11 +50,11 @@ kohana::lang('regionview.kingdescription',
 if ( $king->lifestatus == 'dead' ) 
 echo 
 kohana::lang('regionview.kingdescription2', 		
-	Utility_Model::format_date($king -> birthdate),
-	is_null ($king -> deathdate) ? kohana::lang('character.unknowndeathdate') : Utility_Model::format_date($king -> deathdate));
+	Model_Utility::format_date($king -> birthdate),
+	is_null ($king -> deathdate) ? kohana::lang('character.unknowndeathdate') : Model_Utility::format_date($king -> deathdate));
 else
 echo 
-kohana::lang('regionview.kingdescription3', Utility_Model::format_date($king -> birthdate)); 	
+kohana::lang('regionview.kingdescription3', Model_Utility::format_date($king -> birthdate));
 
 ?>
 <br/>
