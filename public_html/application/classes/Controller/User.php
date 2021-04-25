@@ -1,6 +1,6 @@
 <?php //defined('SYSPATH') OR die('No direct access allowed.');
 
-class Controller_User extends Controller
+class Controller_User extends Controller_Template
 {		
 	public $template = 'template/gamelayout';
 
@@ -40,7 +40,7 @@ class Controller_User extends Controller
     {
         $d = explode("@", $value);
         // controllo il db
-        $fake_domain = (bool) ORM::factory('Blockedemailprovider') -> where('domain', $d[1])->count_all();
+        $fake_domain = (bool) ORM::factory('Blockedemailprovider') -> where('domain', '=', $d[1])->count_all();
 
         if ($fake_domain)
         {
@@ -68,8 +68,8 @@ class Controller_User extends Controller
 		// FACEBOOK SSO
 		//$fb = new Facebook_Bridge_Model();
 		
-		$view = new View('page/home');		
-		$this -> template = new View('template/homepage');		
+		$view = View::factory('page/home');
+		$this -> template = View::factory('template/homepage');
 		$sheets = array( 'home' => 'screen',);	 	
 		$this -> template -> content = $view; 
 		$this -> template -> sheets = $sheets;  
@@ -134,26 +134,30 @@ class Controller_User extends Controller
 			
 			if ( $post -> check() )
 			{
-				$rc = Model_User::registerorloginuser( $post, $message );
+			    echo "HERE\n";
+				$rc = Model_User::registerorloginuser( $post->data(), $message );
 				if ( $rc == false )
-					Session::set_flash( 'user_message', "<div class=\"error_msg\">" . $message . "</div>");										
+					Session::instance()->get_once('user_message', "<div class=\"error_msg\">" . $message . "</div>");
 				else
 				{
 					header('P3P: CP="NOI ADM DEV COM NAV OUR STP"');
+                    echo "HERE2\n";
 					HTTP::redirect( 'boardmessage/index/europecrier');
 				}
 			}
 			else
-			{      
-				$errors = $post -> errors('form_errors');						
-				$view -> errors = $errors;			
-				$form = arr::overwrite( $form, $post -> as_array());	
+			{
+                echo "HERE3\n";
+                $errors = $post -> errors('form_errors');
+                $view -> errors = $errors;
+				$form = Arr::overwrite( $form, $post -> data());
 			}
 		}
 		// else, redirect to home
 		else
 		{
-			HTTP::redirect('/');
+            echo "HERE4\n";
+            HTTP::redirect('/');
 		}
 		
 
@@ -216,9 +220,9 @@ class Controller_User extends Controller
 	public function resendvalidationtoken()
 	{
 		
-		$this -> template = new View('template/homepage');		
+		$this -> template = View::factory('template/homepage');
 		$sheets = array('home' => 'screen');	 	
-		$view = new View('user/resendvalidationtoken');
+		$view = View::factory('user/resendvalidationtoken');
 		
 		$form = array(			
 			'email' => '',  
@@ -232,17 +236,25 @@ class Controller_User extends Controller
 		{       
 		
 			$post = Validation::factory($_POST)
-			->pre_filter('trim', TRUE)
-			->add_rules('email', 'required', 'email', 'length[1,30]');
-					
+                ->rule('email',
+                    function(Validation $array, $field, $value) {
+                        if (strlen($value) < 1 or strlen($value) > 60) {
+                            $array->error($field, 'too_long_or_short');
+                            return;
+                        } elseif (filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                            $array->error($field, 'not_valid_email');
+                        }
+                    },
+                    array(':validation', ':field', ':value'));
+
 		  
-		  if ($post->validate() )
+		  if ($post->check() )
 		  {
 
-				$user = ORM::factory('User')->where( array(
-					'email' => $this -> request -> post('email'),
-					'status' => 'new'
-				)) -> find();
+				$user = ORM::factory('User')->where(
+					'email', '=', $this -> request -> post('email'))->and_where(
+					'status', '=', 'new'
+				) -> find();
 				
 				if ($user -> loaded)
 				{
@@ -251,29 +263,29 @@ class Controller_User extends Controller
 						// email
 						$subject = __('user.resendvalidationtoken_emailsubject');
 						$body    = sprintf (__('user.resendvalidationtoken_emailbody'),
-						'https://' . $this->input->server('SERVER_NAME') . "/index.php/user/activate/".$user->id."/".$user->activationtoken);				
+						'https://' . $this->request->uri() . "/index.php/user/activate/".$user->id."/".$user->activationtoken);
 						$to = $post['email'];				
 						$result = Model_Utility::mail( $to, $subject, $body );
 						
 						if ( $result ) 
 						{                      
-							Session::set_flash('user_message', "<div class=\"info_msg\">".__('user.resendvalidationtoken_success')."</div>" );
+							Session::instance()->get_once('user_message', "<div class=\"info_msg\">".__('user.resendvalidationtoken_success')."</div>" );
 						}
 						else
 						{
-								Session::set_flash('user_message', "<div class=\"error_msg\">".__('user.resendvalidationtoken_error')."</div>" );
+								Session::instance()->get_once('user_message', "<div class=\"error_msg\">".__('user.resendvalidationtoken_error')."</div>" );
 						}        
 					}  
 					else
 					{
-						Session::set_flash('user_message', "<div class=\"info_msg\">".__('user.resendvalidationtoken_noneedtobevalidated')."</div>" );
+						Session::instance()->get_once('user_message', "<div class=\"info_msg\">".__('user.resendvalidationtoken_noneedtobevalidated')."</div>" );
 						
 					}
 				}
 				// Nessun utente � stato trovato con l' email specificata
 				else
 				{	
-					Session::set_flash('user_message', "<div class=\"error_msg\">".__('user.resendvalidationtoken_nouserfound')."</div>" );
+					Session::instance()->get_once('user_message', "<div class=\"error_msg\">".__('user.resendvalidationtoken_nouserfound')."</div>" );
 				}
   
 		  }
@@ -350,7 +362,7 @@ class Controller_User extends Controller
 					$to      = $post['email'];					
 					$result_email = Model_Utility::mail( $to, $subject, $body );
 								
-					Session::set_flash('user_message', "<div class=\"info_msg\">".__('user.resendpassword_success')."</div>");
+					Session::instance()->get_once('user_message', "<div class=\"info_msg\">".__('user.resendpassword_success')."</div>");
 					
 				}  
 				
@@ -358,7 +370,7 @@ class Controller_User extends Controller
 			
 				else
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">".__('user.resendpassword_nouserfound')."</div>");
+					Session::instance()->get_once('user_message', "<div class=\"error_msg\">".__('user.resendpassword_nouserfound')."</div>");
 				}
 			}
 			else
@@ -368,7 +380,7 @@ class Controller_User extends Controller
 				
 			}
 		  
-			$form = arr::overwrite($form, $post->as_array());
+			$form = arr::overwrite($form, $post->data());
 		  
 		}
 		
@@ -450,12 +462,12 @@ class Controller_User extends Controller
 				
 				KO7::$log->add(KO7_Log::INFO, '-> Check: user: [' . $username . '], exists?');
 				// si può usare l' username.
-				$user = ORM::factory( 'User' ) -> where ( 'username', $username) -> find();
+				$user = ORM::factory( 'User' ) -> where ( 'username', '=', $username) -> find();
 				
 				if ( !$user -> loaded )
 				{
 					$error = 'user.login_usernotfound';
-					Session::set_flash( 'user_message', "<div class=\"error_msg\">".__( $error )."</div>");
+					Session::instance()->get_once( 'user_message', "<div class=\"error_msg\">".__( $error )."</div>");
 				}			
 				
 				if ( is_null( $error ) )
@@ -476,7 +488,7 @@ class Controller_User extends Controller
 						$rc = Model_User::registerorloginuser( $data, $message );
 						
 						if ( $rc == false )
-							Session::set_flash( 'user_message', "<div class=\"error_msg\">" . $message . "</div>");										
+							Session::instance()->get_once( 'user_message', "<div class=\"error_msg\">" . $message . "</div>");
 						else
 						{
 							header('P3P: CP="NOI ADM DEV COM NAV OUR STP"');
@@ -487,14 +499,14 @@ class Controller_User extends Controller
 					else
 					{
 						KO7::$log->add( KO7_Log::DEBUG, "-> Password [{$password}] is wrong." );
-						Session::set_flash( 'user_message', "<div class=\"error_msg\">".__("user.incorrectpassword")."</div>");
+						Session::instance()->get_once( 'user_message', "<div class=\"error_msg\">".__("user.incorrectpassword")."</div>");
 					}
 					
 				}
 				
 			}	
 			else
-				Session::set_flash( 'user_message', "<div class='error_msg'>".__("user.login_autherror")."</div>");
+				Session::instance()->get_once( 'user_message', "<div class='error_msg'>".__("user.login_autherror")."</div>");
 		}
 		else
 		{
@@ -591,7 +603,7 @@ class Controller_User extends Controller
 		
 		$rc = Model_User::registerorloginuser( $data, $message );
 		if ( $rc == false )
-			Session::set_flash( 'user_message', "<div class=\"error_msg\">" . $message . "</div>");										
+			Session::instance()->get_once( 'user_message', "<div class=\"error_msg\">" . $message . "</div>");
 		else
 		{
 			header('P3P: CP="NOI ADM DEV COM NAV OUR STP"');
@@ -673,7 +685,7 @@ class Controller_User extends Controller
 		if ( $rc == false )
 		{
 
-			Session::set_flash( 'user_message', "<div class=\"error_msg\">" . $message . "</div>");
+			Session::instance()->get_once( 'user_message', "<div class=\"error_msg\">" . $message . "</div>");
 			HTTP::redirect('/');
 		}
 		else
@@ -741,7 +753,7 @@ class Controller_User extends Controller
 		
 		$rc = Model_User::registerorloginuser( $data, $message );
 		if ( $rc == false )
-			Session::set_flash( 'user_message', "<div class=\"error_msg\">" . $message . "</div>");
+			Session::instance()->get_once( 'user_message', "<div class=\"error_msg\">" . $message . "</div>");
 		else
 		{
 			header('P3P: CP="NOI ADM DEV COM NAV OUR STP"');
@@ -846,7 +858,7 @@ class Controller_User extends Controller
 			if ( $rc == false )
 			{
 
-				Session::set_flash( 'user_message', "<div class=\"error_msg\">" . $message . "</div>");
+				Session::instance()->get_once( 'user_message', "<div class=\"error_msg\">" . $message . "</div>");
 				HTTP::redirect('/');
 			}
 			else
@@ -967,7 +979,7 @@ class Controller_User extends Controller
 			if ($post -> validate() )
 			{
 				$user -> password = $this -> request -> post( 'password'); $user -> save();
-				Session::set_flash('user_message', "<div class=\"info_msg\">".__('user.change_password_ok')."</div>" );
+				Session::instance()->get_once('user_message', "<div class=\"info_msg\">".__('user.change_password_ok')."</div>" );
 				HTTP::redirect('user/profile');
 			}	
 			else
@@ -993,7 +1005,7 @@ class Controller_User extends Controller
   public function _unique_username(Validation $array, $field, $value)
   {
      // controllo il db
-     $name_exists = (bool) ORM::factory('User')->where('username', $value)->count_all();
+     $name_exists = (bool) ORM::factory('User')->where('username', '=', $value)->count_all();
    
      if ($name_exists)
      {
@@ -1012,7 +1024,7 @@ class Controller_User extends Controller
   public function _unique_email(Validation $array, $field, $value)
   {
      // controllo il db
-     $email_exists = (bool) ORM::factory('User')->where('email', $value)->count_all();
+     $email_exists = (bool) ORM::factory('User')->where('email', '=', $value)->count_all();
    
      if ($email_exists)
      {
@@ -1038,10 +1050,7 @@ class Controller_User extends Controller
 				
      // controllo il db
      $id_exists = (bool) ORM::factory('User')->where(
-      array( 
-        'id' => $value,
-        'status != '   => 'canceled'
-        ))->count_all();
+        'id', '=', $value)->and_where('status', '!=', 'canceled')->count_all();
    
      if (! $id_exists)
      {
@@ -1308,7 +1317,7 @@ class Controller_User extends Controller
 					if ( $this -> request -> post('maxglut') < 1 or $this -> request -> post('maxglut') > 50 )
 					{
 					
-					Session::set_flash('user_message', "<div class=\"error_msg\">" . __('user.error-maxglutvalue')."</div>" );
+					Session::instance()->get_once('user_message', "<div class=\"error_msg\">" . __('user.error-maxglutvalue')."</div>" );
 						HTTP::redirect('/user/configure');
 					}
 					
@@ -1318,7 +1327,7 @@ class Controller_User extends Controller
 				}
 			}
 			
-			Session::set_flash('user_message', "<div class=\"info_msg\">".__('user.customization_ok')."</div>" );
+			Session::instance()->get_once('user_message', "<div class=\"info_msg\">".__('user.customization_ok')."</div>" );
 			
 		}
 		
