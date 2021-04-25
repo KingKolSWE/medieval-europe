@@ -26,9 +26,9 @@ foreach ( $rows as $row )
 	<tr class='<?php echo $class;?>'>
 	<td class='center' valign="top" width='20%'>
 	<?php 	
-	echo Character_Model::create_publicprofilelink ($row -> author, null);?>
+	echo Model_Character::create_publicprofilelink ($row -> author, null);?>
 	<br/>
-	<?php echo Character_Model::display_avatar($row -> author, 'l', 'border'); ?>	
+	<?php echo Model_Character::display_avatar($row -> author, 'l', 'border'); ?>
 	</td>
 	<td valign='top'>
 		<div class='topictitle'><?php echo $row -> title; ?></div>		

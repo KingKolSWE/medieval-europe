@@ -30,7 +30,7 @@ class Skill_Model
 		}
 		else
 		{
-			Character_Model::modify_stat_d(
+			Model_Character::modify_stat_d(
 				$character -> id,
 				'skill',
 				10,
@@ -103,7 +103,7 @@ class Skill_Model
 	
 	function getProficiency( $character_id )
 	{
-		$skillstat = Character_Model::get_stat_d(
+		$skillstat = Model_Character::get_stat_d(
 			$character_id,
 			'skill',
 			$this -> getTag());
@@ -123,7 +123,7 @@ class Skill_Model
 	function remove( $char )
 	{
 		
-		$skillstat = Character_Model::get_stat_d(
+		$skillstat = Model_Character::get_stat_d(
 			$char -> id,
 			'skill',
 			$this->getTag() );
@@ -156,7 +156,7 @@ class Skill_Model
 		
 		// in meditation the skills do not decay
 		
-		if ( Character_Model::is_meditating( $character_id  ) )
+		if ( Model_Character::is_meditating( $character_id  ) )
 			return;
 		
 		$oldproficiency = $this -> getProficiency($character_id);
@@ -168,7 +168,7 @@ class Skill_Model
 		kohana::log('info', "-> Char: {$character_id}: Old proficiency: {$oldproficiency}. Decreasing proficiency. New proficiency: {$newproficiency}");
 		
 		
-		Character_Model:: modify_stat_d( 
+		Model_Character:: modify_stat_d(
 			$character_id, 
 			'skill',
 			$newproficiency,
@@ -191,7 +191,7 @@ class Skill_Model
 	{
 				
 		$stat =  
-		Character_Model::get_stat_d( 
+		Model_Character::get_stat_d(
 			$character_id,
 			'skill',
 			$tag,
@@ -215,7 +215,7 @@ class Skill_Model
 	function get_character_skillcount( $character_id )
 	{
 		
-		$skills = Character_Model::get_stats_d( $character_id, 'skill' );
+		$skills = Model_Character::get_stats_d( $character_id, 'skill' );
 			
 		if (is_null($skills))
 			return 0;
@@ -255,7 +255,7 @@ class Skill_Model
 		
 		if ($newproficiency != $oldproficiency)
 		{
-			Character_Model:: modify_stat_d( 
+			Model_Character:: modify_stat_d(
 				$character_id, 
 				'skill',
 				$newproficiency,

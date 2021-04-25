@@ -43,7 +43,7 @@ and status = 'running' and param1 in ( select id from battles where status = 'ca
 			foreach( $battle_participants as $battle_participant )
 			{
 				
-				Character_Model::modify_stat_d(
+				Model_Character::modify_stat_d(
 					$battle_participant -> character_id, 
 					'fighting', 
 					false,

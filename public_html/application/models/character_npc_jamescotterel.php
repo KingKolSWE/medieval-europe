@@ -39,11 +39,11 @@ class Character_NPC_JamesCotterel_Model extends Character_NPC_Model
 			
 		kohana::log('debug', "-> -------- NPC: {$this -> name}: Called npcAI --------");
 		
-		// 1. se è busy, return
+		// 1. se ï¿½ busy, return
 		
 		kohana::log('debug', '-> Checking if a pending action exists...');		
 				
-		$action = Character_Model::get_currentpendingaction( $this -> id );			
+		$action = Model_Character::get_currentpendingaction( $this -> id );
 		if ( is_array( $action ) )
 		{			
 			kohana::log('debug', "-> NPC: {$this -> name} pending action DOES exists ({$action['action']}), doing NOTHING." );						
@@ -87,14 +87,14 @@ class Character_NPC_JamesCotterel_Model extends Character_NPC_Model
 			
 		}
 		
-		// 2. se è sotto 30 di sazietà , compra cibo nel mercato. Se non trova il mercato
+		// 2. se ï¿½ sotto 30 di sazietï¿½, compra cibo nel mercato. Se non trova il mercato
 		// si sposta.
 		
 		if ($this -> glut < 30 )
 		{
 			
 			kohana::log('debug', "-> NPC: {$this -> name} is hungry, searching a market...");
-			// Trova il mercato nella città
+			// Trova il mercato nella cittï¿½
 			
 			$npccurrentposition = ORM::factory('region', $this -> position_id );
 			
@@ -106,7 +106,7 @@ class Character_NPC_JamesCotterel_Model extends Character_NPC_Model
 				return true;
 			}
 			
-			// trovo cibo nel mercato, ordinato dal più cheap.
+			// trovo cibo nel mercato, ordinato dal piï¿½ cheap.
 			
 			$food = Database::instance() -> query ("
 			SELECT i.id, i.seller_id 
@@ -223,7 +223,7 @@ class Character_NPC_JamesCotterel_Model extends Character_NPC_Model
 		}
 
 		// evento per quest		
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );		
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		GameEvent_Model::process_event( $char, 'killrat', null );			
 		
 	}

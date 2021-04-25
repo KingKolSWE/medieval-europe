@@ -26,8 +26,8 @@ class CA_Writearrestwarrant_Model extends Character_Action_Model
 		{ $message = kohana::lang('ca_writearrestwarrant.invalidcrimeprocedure'); return FALSE; }				
 		
 		// il giocatore ha gli item nesessari 
-		if ( ! Character_Model::has_item( $par[0]->id, 'paper_piece', 1 ) 
-			or ! Character_Model::has_item( $par[0]->id, 'waxseal', 1 ) ) 
+		if ( ! Model_Character::has_item( $par[0]->id, 'paper_piece', 1 )
+			or ! Model_Character::has_item( $par[0]->id, 'waxseal', 1 ) )
 		{ $message = kohana::lang('charactions.paperpieceandwaxsealneeded'); return FALSE; }				
 		
 		return true;

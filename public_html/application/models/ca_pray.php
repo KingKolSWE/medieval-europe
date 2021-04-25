@@ -157,7 +157,7 @@ class CA_Pray_Model extends Character_Action_Model
 		if ( !$par[0] -> loaded or !$par[1] -> loaded or $par[0] -> region -> id != $par[1] -> position_id )
 		{ $message = Kohana::lang("global.operation_not_allowed"); return false; }		
 		
-		if ( !in_array ( $par[2], array( 1, 2, 3 )) or ($par[2] > 1 and (Character_Model::get_premiumbonus( $par[1] -> id, 'workerpackage' ) === false )) )
+		if ( !in_array ( $par[2], array( 1, 2, 3 )) or ($par[2] > 1 and (Model_Character::get_premiumbonus( $par[1] -> id, 'workerpackage' ) === false )) )
 				{ $message = Kohana::lang("global.operation_not_allowed"); return false; }
 		
 		// Controllo che il char abbia l'energia e la sazieta' richiesti
@@ -234,7 +234,7 @@ class CA_Pray_Model extends Character_Action_Model
 		//////////////////////////////////////////////////////////////////////
 		// Aumenta Faith Level
 		//////////////////////////////////////////////////////////////////////
-		if ( Character_Model::get_premiumbonus(  $data-> character_id, 'rosary' ) !== false )
+		if ( Model_Character::get_premiumbonus(  $data-> character_id, 'rosary' ) !== false )
 		{
 			$char -> modify_faithlevel( 2* $data ->  param3 * self::DELTA_FAITHPERHOUR );
 		}
@@ -252,7 +252,7 @@ class CA_Pray_Model extends Character_Action_Model
 		if ( $structure -> loaded )
 		{
 			
-			$hasrosarybonus = Character_Model::get_premiumbonus(  $data-> character_id, 'rosary' );
+			$hasrosarybonus = Model_Character::get_premiumbonus(  $data-> character_id, 'rosary' );
 			
 			if ( $hasrosarybonus !== false )
 				$points = 4 * $data -> param3 ;				

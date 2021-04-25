@@ -4779,7 +4779,7 @@ $('#toggletextmap').click(function() {
 			
 			<br/><br/>
 
-			<? if (Character_Model::has_merole( $character, 'admin' )) { ?>
+			<? if (Model_Character::has_merole( $character, 'admin' )) { ?>
 			<button id='disableregion' class ='button button-large' style='width:100%' >Disable/Enable</button>
 			<? } ?>
 

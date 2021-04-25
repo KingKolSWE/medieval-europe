@@ -58,8 +58,8 @@ else { ?>
 		$class = ($k % 2 == 0) ? '' : 'alternaterow_1' ; 
 		echo "<tr class='$class'>";
 		echo "<td class='center'>" . $job -> id  . "</td>";
-		echo "<td class='center'>" . Character_Model::create_publicprofilelink( $job -> employer_id, $job -> employer )  . "</td>";
-		echo "<td class='center'>" . Character_Model::create_publicprofilelink( $job -> character_id, $job -> employee )  . "</td>";
+		echo "<td class='center'>" . Model_Character::create_publicprofilelink( $job -> employer_id, $job -> employer )  . "</td>";
+		echo "<td class='center'>" . Model_Character::create_publicprofilelink( $job -> character_id, $job -> employee )  . "</td>";
 			
 		echo "<td class='center'>" ; 
 			if ( is_null( $structure ) )

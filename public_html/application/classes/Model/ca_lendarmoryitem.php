@@ -32,7 +32,7 @@ class CA_Lendarmoryitem_Model extends Character_Action_Model
 		if ( is_null( $bonus ) and $par[2] -> position_id != $par[1] -> region_id ) 
 		{ $message = kohana::lang( 'ca_lendarmoryitem.error-charisnotinarmoryregion'); return false;}					
 		
-		if ( Character_Model::is_traveling( $par[2] -> id ) )
+		if ( Model_Character::is_traveling( $par[2] -> id ) )
 		{ $message = kohana::lang( 'ca_send.error-targetcharistraveling'); return false; }				
 			
 		return true;

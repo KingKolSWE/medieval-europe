@@ -18,7 +18,7 @@
 	<tr>
 	<td width="15%" valign="top" class="center">
 		<div id='frame'>
-		<?php echo Character_Model::display_avatar( $character -> id, 'l', 'charpic');?>
+		<?php echo Model_Character::display_avatar( $character -> id, 'l', 'charpic');?>
 		</div>
 	</td>
 	<td  width="85%" valign="top">
@@ -107,7 +107,7 @@
 <td width="35%" valign="top" class="center">
 <?php 
 //var_dump( Character_Model::get_stat_d( $character -> id, 'tournamentparticipant'));
-$isparticipatingtotournament = Character_Model::get_stat_d( $character -> id, 'tournamentparticipant');
+$isparticipatingtotournament = Model_Character::get_stat_d( $character -> id, 'tournamentparticipant');
 if ( $isparticipatingtotournament -> loaded == false )
 {
 	$character -> render_char ( $equippeditems, 'wardrobe', 'medium' );	
@@ -223,7 +223,7 @@ else
 		<td colspan='2'><b>
 		<?php 
 		
-		$online = Character_Model::is_online($character -> id);
+		$online = Model_Character::is_online($character -> id);
 				
 		if ( $online ) 
 			echo "<span style='color:#009933;font-weight:bold'>Online</span>";
@@ -240,7 +240,7 @@ else
 	<td>
 	<b>
 		<?php
-		if ( Character_Model::is_meditating( $character -> id ) )
+		if ( Model_Character::is_meditating( $character -> id ) )
 			echo kohana::lang('global.yes');
 		else
 			echo kohana::lang('global.no');
@@ -291,9 +291,9 @@ else
 		{
 ?>
 			<div class='kinship center'>
-				<?php echo Character_Model::display_avatar($data['id'], 'l', 'border'); ?>
+				<?php echo Model_Character::display_avatar($data['id'], 'l', 'border'); ?>
 				<br/>
-				<?php echo Character_Model::create_publicprofilelink($data['id']); ?>
+				<?php echo Model_Character::create_publicprofilelink($data['id']); ?>
 				<br/>
 				<?php echo kohana::lang('character.kinrelation_' . $relationtype ); ?>					
 			</div>			
@@ -315,7 +315,7 @@ else
 	<br/>
 	<?php
 		
-		$rankings = Character_Model::get_rankings( $character -> id );
+		$rankings = Model_Character::get_rankings( $character -> id );
 		
 		if ( count( $rankings ) > 0 )
 		{
@@ -437,7 +437,7 @@ if ( $viewingchar -> id == $character -> id )
 			<table class="hover grid">		
 			<?	
 				
-				$battlechampion = Character_Model::get_stat_d( $viewingchar -> id, 'battlechampion');
+				$battlechampion = Model_Character::get_stat_d( $viewingchar -> id, 'battlechampion');
 				if ($battlechampion -> loaded )
 				{
 			?>
@@ -445,7 +445,7 @@ if ( $viewingchar -> id == $character -> id )
 			<?
 				}
 				
-				$boughtdoubloons = Character_Model::get_stat_d( $viewingchar -> id, 'boughtdoubloons');
+				$boughtdoubloons = Model_Character::get_stat_d( $viewingchar -> id, 'boughtdoubloons');
 				if ($boughtdoubloons -> loaded )
 				{
 			?>
@@ -453,7 +453,7 @@ if ( $viewingchar -> id == $character -> id )
 			<?
 				}
 				
-				$changedkingdom = Character_Model::get_stat_d( $viewingchar -> id, 'changedkingdom');
+				$changedkingdom = Model_Character::get_stat_d( $viewingchar -> id, 'changedkingdom');
 				if ($changedkingdom -> loaded )
 				{
 			?>
@@ -461,7 +461,7 @@ if ( $viewingchar -> id == $character -> id )
 			<?
 				}
 				
-				$duelscore = Character_Model::get_stat_d( $viewingchar -> id, 'duelscore');
+				$duelscore = Model_Character::get_stat_d( $viewingchar -> id, 'duelscore');
 				if ($duelscore -> loaded )
 				{
 			?>
@@ -469,7 +469,7 @@ if ( $viewingchar -> id == $character -> id )
 			<?
 				}
 				
-				$fightstats = Character_Model::get_stat_d( $viewingchar -> id, 'fightstats');
+				$fightstats = Model_Character::get_stat_d( $viewingchar -> id, 'fightstats');
 				if ($fightstats -> loaded )
 				{
 			?>
@@ -478,7 +478,7 @@ if ( $viewingchar -> id == $character -> id )
 			<?
 				}
 				
-				$fpcontribution = Character_Model::get_stat_d( $viewingchar -> id, 'fpcontribution', $viewingchar -> church_id);
+				$fpcontribution = Model_Character::get_stat_d( $viewingchar -> id, 'fpcontribution', $viewingchar -> church_id);
 				if ($fpcontribution -> loaded )
 				{
 			?>
@@ -486,7 +486,7 @@ if ( $viewingchar -> id == $character -> id )
 			<?
 				}
 				
-				$lastretiretime = Character_Model::get_stat_d( $viewingchar -> id, 'lastretiretime');
+				$lastretiretime = Model_Character::get_stat_d( $viewingchar -> id, 'lastretiretime');
 				if ($lastretiretime -> loaded )
 				{
 			?>
@@ -494,7 +494,7 @@ if ( $viewingchar -> id == $character -> id )
 			<?
 				}
 				
-				$questtokensent = Character_Model::get_stat_d( $viewingchar -> id, 'questtokensent');
+				$questtokensent = Model_Character::get_stat_d( $viewingchar -> id, 'questtokensent');
 				if ($questtokensent -> loaded )
 				{
 			?>

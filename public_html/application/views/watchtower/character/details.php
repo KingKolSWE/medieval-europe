@@ -17,7 +17,7 @@
 		<br/>
 		
 		<div id='frame'>				
-			<?php echo Character_Model::display_avatar( $character -> id, $size = 'l', $class = 'charpic' ) ?>		
+			<?php echo Model_Character::display_avatar( $character -> id, $size = 'l', $class = 'charpic' ) ?>
 		</div>
 			
 		<div id="links-avatar">
@@ -87,7 +87,7 @@
 				<div class="stat">
 					<?php echo Kohana::lang('character.create_charstr'); ?>
 					<div class="boxstat2" >
-						<div class="barstat2" style="width:<?php echo round(146*$strinfo/Character_Model::get_attributelimit()) ?>px" 
+						<div class="barstat2" style="width:<?php echo round(146*$strinfo/Model_Character::get_attributelimit()) ?>px"
 							title="<?php 
 							echo kohana::lang('global.originalvalue') . ': ' ;
 							echo $strinfooriginal . ', ' ;
@@ -123,7 +123,7 @@
 					<?php echo Kohana::lang('character.create_chardex'); ?>
 					<div class="boxstat2">
 						<div class="barstat2" style="width:<?php echo round(146*
-							$dexinfo/Character_Model::get_attributelimit()) ?>px" title="<?php 
+							$dexinfo/Model_Character::get_attributelimit()) ?>px" title="<?php
 							echo kohana::lang('global.originalvalue') . ': ' ;
 							echo $dexinfooriginal . ', ' ;
 							echo kohana::lang('global.actualvalue') . ': ' ;
@@ -158,7 +158,7 @@
 					<?php echo Kohana::lang('character.create_charintel'); ?>
 					<div class="boxstat2">
 						<div class="barstat2" style="width:<?php echo round(146*
-							$intelinfo/Character_Model::get_attributelimit()) ?>px" title="<?php 
+							$intelinfo/Model_Character::get_attributelimit()) ?>px" title="<?php
 							echo kohana::lang('global.originalvalue') . ': ' ;
 							echo $intelinfooriginal . ', ' ;
 							echo kohana::lang('global.actualvalue') . ': ' ;
@@ -192,7 +192,7 @@
 					<?php echo Kohana::lang('character.create_charcost'); ?>
 					<div class="boxstat2">
 						<div class="barstat2" style="width:<?php echo round(146*
-							$costinfo/Character_Model::get_attributelimit()) ?>px" title="<?php 
+							$costinfo/Model_Character::get_attributelimit()) ?>px" title="<?php
 							
 							echo kohana::lang('global.originalvalue') . ': ' ;
 							echo $costinfooriginal . ', ' ;
@@ -227,7 +227,7 @@
 					<?php echo Kohana::lang('character.create_charcar'); ?>
 					<div class="boxstat2">
 						<div class="barstat2" style="width:<?php echo round(146*
-							$carinfo/Character_Model::get_attributelimit()) ?>px" title="<?php 
+							$carinfo/Model_Character::get_attributelimit()) ?>px" title="<?php
 							echo kohana::lang('global.originalvalue') . ': ' ;
 							echo $carinfooriginal . ', ' ;
 							echo kohana::lang('global.actualvalue') . ': ' ;
@@ -327,9 +327,9 @@ foreach ((array)$skills as $skill) { ?>
 		{
 ?>
 			<div class='kinship center'>
-				<?php echo Character_Model::display_avatar($data['id'], 'l', 'border'); ?>
+				<?php echo Model_Character::display_avatar($data['id'], 'l', 'border'); ?>
 				<br/>
-				<?php echo Character_Model::create_publicprofilelink($data['id']); ?>
+				<?php echo Model_Character::create_publicprofilelink($data['id']); ?>
 				<br/>
 				<?php echo kohana::lang('character.kinrelation_' . $relationtype ); ?>					
 			</div>			

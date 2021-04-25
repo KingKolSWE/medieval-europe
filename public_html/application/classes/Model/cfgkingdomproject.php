@@ -21,7 +21,7 @@ class CfgKingdomproject_Model extends ORM
 	{
 		
 		$info = array();	
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
 		// oggetto completo
 		$info['obj'] = $this ;
@@ -75,7 +75,7 @@ class CfgKingdomproject_Model extends ORM
 		
 		
 		$v = array( 'result' => false, 'message' => null, 'cost' => 0 );				
-		$character = Character_Model::get_info( Session::instance()->get('char_id') );
+		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$db = Database::instance();
 		
 		///////////////////////////////////////////////
@@ -97,7 +97,7 @@ class CfgKingdomproject_Model extends ORM
 		}
 		
 		///////////////////////////////////////////////
-		// Se è richiesta una struttura, la struttura 
+		// Se ï¿½ richiesta una struttura, la struttura 
 		// richiesta deve esistere.
 		///////////////////////////////////////////////
 		
@@ -132,7 +132,7 @@ class CfgKingdomproject_Model extends ORM
 		
 		///////////////////////////////////////////////
 		// controlliamo se un progetto con la stesso 
-		// tipo di struttura è in corso
+		// tipo di struttura ï¿½ in corso
 		///////////////////////////////////////////////
 		
 		$runningprojects = Database::instance() -> query("
@@ -158,7 +158,7 @@ class CfgKingdomproject_Model extends ORM
 		{
 					
 			// Due o piu' cantieri possono coesistere se
-			// la chiesa è diversa (chi finisce prima, conquista il diritto)
+			// la chiesa ï¿½ diversa (chi finisce prima, conquista il diritto)
 			// non possono coesistere due cantieri per la stessa chiesa
 			
 			$runningprojects = ORM::factory('kingdomproject') ->
@@ -231,7 +231,7 @@ class CfgKingdomproject_Model extends ORM
 		
 			///////////////////////////////////////////////
 			// controlliamo che la regione di destinazione
-			// sia controllata (se il progetto non è religioso)
+			// sia controllata (se il progetto non ï¿½ religioso)
 			///////////////////////////////////////////////
 			
 			if ( $destregion -> kingdom -> get_name()  == 'kingdoms.kingdom-independent' )
@@ -243,7 +243,7 @@ class CfgKingdomproject_Model extends ORM
 			}
 		
 			////////////////////////////////////////////////////
-			// se il progetto è harbor, allora la regione deve 
+			// se il progetto ï¿½ harbor, allora la regione deve 
 			// avere almeno un path mixed			
 			////////////////////////////////////////////////////
 			

@@ -132,7 +132,7 @@ KO7::init([
 /**
  * Attach the file write to logging. Multiple writers are supported.
  */
-KO7::$log->attach(new Log_File(APPPATH.'logs'));
+KO7::$log->attach(new Log_File(APPPATH.'logs'), KO7_Log::DEBUG);
 
 /**
  * Attach a file reader to config. Multiple readers are supported.

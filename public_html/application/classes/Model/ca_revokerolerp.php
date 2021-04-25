@@ -152,7 +152,7 @@ class CA_Revokerolerp_Model extends Character_Action_Model
 				
 		// Controllo che il char che esegue la revoca
 		// sia il gestore della struttura
-		$character = Character_Model::get_info( Session::instance()->get('char_id') );
+		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		if ($character->id != $par[1]->character_id)
 		{ $message = 'global.operation_not_allowed'; return false; }
 		

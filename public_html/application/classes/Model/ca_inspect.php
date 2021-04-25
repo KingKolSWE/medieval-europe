@@ -62,7 +62,7 @@ class CA_Inspect_Model extends Character_Action_Model
 		
 		// cooldown
 		
-		$cooldown = Character_Model::get_stat_d(
+		$cooldown = Model_Character::get_stat_d(
 			$par[0] -> id,
 			'lastinspectdate'
 		);

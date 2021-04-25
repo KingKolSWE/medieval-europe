@@ -28,8 +28,8 @@ class CA_Launchduel_Model extends Character_Action_Model
 		// check items necessari
 		
 		if ( 
-			! Character_Model::has_item( $par[0]->id, 'paper_piece', 1 ) or 
-			! Character_Model::has_item( $par[0]->id, 'waxseal', 1 ) ) 
+			! Model_Character::has_item( $par[0]->id, 'paper_piece', 1 ) or
+			! Model_Character::has_item( $par[0]->id, 'waxseal', 1 ) )
 		{ $message = kohana::lang('charactions.paperpieceandwaxsealneeded'); return FALSE; }				
 		
 		// check età sfidato
@@ -66,7 +66,7 @@ class CA_Launchduel_Model extends Character_Action_Model
 		{ $message = kohana::lang('ca_launchduel.error-dueltime-tooearly'); return FALSE; }								
 		// cooldown: almeno 7 giorni devono passare da una sfida all'altra
 		
-		$lastduel = Character_Model::get_stat_d( 
+		$lastduel = Model_Character::get_stat_d(
 			$par[0] -> id, 'launchduel', $par[0] -> id, $par[1] -> id );
 			
 		

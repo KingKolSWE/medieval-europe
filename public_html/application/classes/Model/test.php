@@ -104,7 +104,7 @@ class Test_Model
 		$type = $cr -> get_roletype($roletag);		
 		
 		if( $type == 'religious' and $char -> church_id != $church_id )
-			die("Il char non è battezzato per la chiesa: {$church_id}");
+			die("Il char non ï¿½ battezzato per la chiesa: {$church_id}");
 		
 		Database::instance() -> query("
 		update character_roles set end = unix_timestamp(), current = false 
@@ -191,7 +191,7 @@ class Test_Model
 				);
 			");
 
-			Character_Model::invalidate_char_cache( $char_id );
+			Model_Character::invalidate_char_cache( $char_id );
 			
 			$cachetag = '-charstructuregrant_' . $char_id . '_' . $structure_id;			
 			My_Cache_Model::delete( $cachetag );

@@ -37,7 +37,7 @@ class Quest_Resourcesfromafar_Model extends Quest_Model
 			$structure -> attribute1 = 0;					
 		$structure -> save();
 		
-		Character_Model::modify_stat_d(
+		Model_Character::modify_stat_d(
 			$character -> id,
 			'speedbonus',
 			10,

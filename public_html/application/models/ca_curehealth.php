@@ -198,7 +198,7 @@ class CA_Curehealth_Model extends Character_Action_Model
 		// unless it's recovery
 		
 		$pendingaction = Character_Action_Model::get_pending_action( $par[1] ); 
-		if ( !is_null( $pendingaction ) and Character_Model::is_recovering( $par[1] -> id ) == false )		
+		if ( !is_null( $pendingaction ) and Model_Character::is_recovering( $par[1] -> id ) == false )
 		{ $message = Kohana::lang("global.error-characterisbusy", $par[1] -> name ); return false; }
 				
 		// Check: the structure does not have enough FP to cure the char
@@ -207,7 +207,7 @@ class CA_Curehealth_Model extends Character_Action_Model
 		{ $message = Kohana::lang("global.error-notenoughfp", self::REQUESTEDFP); return false; }
 		
 		// Check: Does the one who cures have the medical kit?
-		if ( ! Character_Model::has_item( $par[0] -> id, 'medicalkit') )
+		if ( ! Model_Character::has_item( $par[0] -> id, 'medicalkit') )
 		{ $message = Kohana::lang("ca_cure.error_no_medikit" ); return false; }
 		
 		// Check: religion has no dogma bonus
@@ -280,7 +280,7 @@ class CA_Curehealth_Model extends Character_Action_Model
 		
 		$was_recovering = false;
 		
-		if ( Character_Model::is_recovering( $par[1] -> id) == true )
+		if ( Model_Character::is_recovering( $par[1] -> id) == true )
 		{
 			$was_recovering = true;
 			kohana::log('debug', '-> Trying to cancel recovering action...');
@@ -597,7 +597,7 @@ class CA_Curehealth_Model extends Character_Action_Model
 		{
 			// Recupero la salute solo se il FL è
 			// Maggiore della salute attuale del char
-			$fl = Character_Model::get_stat_d( $character->id, 'faithlevel' );
+			$fl = Model_Character::get_stat_d( $character->id, 'faithlevel' );
 			
 			if ( $fl -> value > $character -> health )
 				$hptorestore = $fl -> value ;			
@@ -616,7 +616,7 @@ class CA_Curehealth_Model extends Character_Action_Model
 			else
 			{
 				// Il char curato è un fedele
-				$fl = Character_Model::get_stat_d( $character -> id, 'faithlevel' );
+				$fl = Model_Character::get_stat_d( $character -> id, 'faithlevel' );
 				
 				kohana::log('debug', 'Faith Level of cured: ' . $fl -> value );
 				

@@ -31,7 +31,7 @@ class Course_Battleagility_Model extends Course_Model
 		if ( $char -> dex == 20 ) 
 			Achievement_Model::compute_achievement ( 'stat_dex', 20, $char -> id ); 				
 				
-		Character_Model::modify_stat_d( 
+		Model_Character::modify_stat_d(
 			$char -> id,
 			'studiedhours', 
 			0,

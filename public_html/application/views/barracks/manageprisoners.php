@@ -35,11 +35,11 @@ foreach ($prisoners as $prisoner )
 	
 	$class = ( $k % 2 == 0  ? 'alternaterow_1' : 'alternaterow_2' );
 	echo "<tr class='$class'>";
-	echo "<td class='center'>". Character_Model::create_publicprofilelink($prisoner -> character -> id, null)."</td>";	
+	echo "<td class='center'>". Model_Character::create_publicprofilelink($prisoner -> character -> id, null)."</td>";
 	
 	// get real imprisonment date end
 	
-	$stat = Character_Model::get_stat_d(		$prisoner -> character -> id, 'servejailtime'	);
+	$stat = Model_Character::get_stat_d(		$prisoner -> character -> id, 'servejailtime'	);
 	
 	echo "<td class='center' >".
 		Model_Utility::format_datetime( $stat -> stat2 ) .

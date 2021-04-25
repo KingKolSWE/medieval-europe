@@ -22,7 +22,7 @@ class ControllerASDF extends Controller_Core
 	{			
 		
 		$char_id = Session::instance()->get('char_id');		
-		$skinstat = Character_Model::get_stat_d( $char_id, 'skin');
+		$skinstat = Model_Character::get_stat_d( $char_id, 'skin');
 		if (!$skinstat -> loaded )
 			$skin = 'classic';
 		else

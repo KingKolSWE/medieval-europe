@@ -82,14 +82,14 @@ else
 		echo "<tr class = '{$class}'>";
 		echo "<td class='charname' data-characterid='" . $citizen->id . "'>";
 		
-		$title =  Character_Model::get_basicpackagetitle( $citizen -> id );
+		$title =  Model_Character::get_basicpackagetitle( $citizen -> id );
 		if (!empty($title))
 			echo kohana::lang($title) . " ";
-		echo Character_Model::create_publicprofilelink( $citizen -> id, null ) . "</td>";
+		echo Model_Character::create_publicprofilelink( $citizen -> id, null ) . "</td>";
 		echo '<td class=\'center\'>' . kohana::lang($citizen->region_name) . '</td>';			
 		echo "<td class='center'>".$citizen->last_login."</td>";
 		
-		if ( Character_Model::is_online($citizen->id) )
+		if ( Model_Character::is_online($citizen->id) )
 			echo "<td  class='center' style='color:#009933;font-weight:bold'>Online</td>";
 		else
 			echo "<td  class='center' style='color:#cc0000;font-weight:bold'>Offline</td>";

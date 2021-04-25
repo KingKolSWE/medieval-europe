@@ -70,10 +70,10 @@
 		$db -> query("select '--gamelayout--'");
 		$user = Auth::instance() -> get_user();
 		$char_id = Session::instance()->get('char_id');
-		$currentpendingaction = Character_Model::get_currentpendingaction( $char_id );
+		$currentpendingaction = Model_Character::get_currentpendingaction( $char_id );
 	
-		$character = Character_Model::get_data( $char_id ); 
-		$activequest = Character_Model::get_active_quest($char_id);
+		$character = Model_Character::get_data( $char_id );
+		$activequest = Model_Character::get_active_quest($char_id);
 		
 		$promo = Configuration_Model::get_valid_promo();		
 		
@@ -285,7 +285,7 @@ function forceCompleteAction() {
 	<div id="container">	
   
 	<?php 
-		if ( $char_id != 0 and Character_Model::get_premiumbonus( $char_id, 'basicpackage' ) === false )
+		if ( $char_id != 0 and Model_Character::get_premiumbonus( $char_id, 'basicpackage' ) === false )
 		
 	{
 	?>
@@ -368,17 +368,17 @@ function forceCompleteAction() {
 				<div id="coin-block">
 					<div  style="margin-bottom:3px">
 					<?php echo html::image(array('src' => 'media/images/template/doubloon.png'), array('title'=>kohana::lang('items.doubloon_name')))?>
-					<span style="font-size:14px;font-weight:bold"><?php echo Character_Model::get_item_quantity_d( $char_id, 'doubloon' ); ?></span>
+					<span style="font-size:14px;font-weight:bold"><?php echo Model_Character::get_item_quantity_d( $char_id, 'doubloon' ); ?></span>
 					</div>
 					
 					<div style="margin-bottom:3px">
 					<?php echo html::image(array('src' => 'media/images/template/coins.png'), array('title'=>kohana::lang('items.silvercoin_name')))?>
-					<span id='silvercoins' style="font-size:14px;font-weight:bold"><?php echo Character_Model::get_item_quantity_d( $char_id, 'silvercoin' ); ?></span>
+					<span id='silvercoins' style="font-size:14px;font-weight:bold"><?php echo Model_Character::get_item_quantity_d( $char_id, 'silvercoin' ); ?></span>
 					</div>
 					
 					<div style="clear:left">
 					<?php echo html::image(array('src' => 'media/images/template/copper.png'), array('title'=>kohana::lang('items.coppercoin_name')))?>
-					<span id='coppercoins' style="font-size:14px;font-weight:bold"><?php echo Character_Model::get_item_quantity_d( $char_id, 'coppercoin' ); ?></span>
+					<span id='coppercoins' style="font-size:14px;font-weight:bold"><?php echo Model_Character::get_item_quantity_d( $char_id, 'coppercoin' ); ?></span>
 					</div>
 				</div>
 			
@@ -506,7 +506,7 @@ function forceCompleteAction() {
 					</td>
 					<td width="25%" class='center'>
 						<?php
-							$speedbonus = Character_Model::get_stat_from_cache($character -> id, 'speedbonus');
+							$speedbonus = Model_Character::get_stat_from_cache($character -> id, 'speedbonus');
 							if ($speedbonus -> loaded and $speedbonus -> stat1 > time() )							
 							{
 						        echo "<span class='evidence'>";
@@ -565,7 +565,7 @@ function forceCompleteAction() {
 			<div id='region-info'>
 				<?php
 				
-				$r = Character_Model::get_currentposition_d( $char_id );
+				$r = Model_Character::get_currentposition_d( $char_id );
 				//$r = $character -> get_currentposition() ;
 				if ( $r )
 				{
@@ -638,8 +638,8 @@ function forceCompleteAction() {
 				<?php 
 				if ( $character )				
 				{	
-					if (Character_Model::get_basicpackagetitle( $char_id ) != '')
-						echo kohana::lang(Character_Model::get_basicpackagetitle( $char_id ));
+					if (Model_Character::get_basicpackagetitle( $char_id ) != '')
+						echo kohana::lang(Model_Character::get_basicpackagetitle( $char_id ));
 					echo '<br/>' . $character->name;
 				} 
 				?>				
@@ -649,7 +649,7 @@ function forceCompleteAction() {
 				<!-- avatar -->
 				<? if (!is_null($character)) { ?>
 				<div id='avatar'>
-					<?php echo Character_Model::display_avatar( $character->id, $size = 'l', $class = 'charpic' ) ?>		
+					<?php echo Model_Character::display_avatar( $character->id, $size = 'l', $class = 'charpic' ) ?>
 				</div>
 				<? } ?>
 								
@@ -679,7 +679,7 @@ function forceCompleteAction() {
 						array( 						
 						'title' => Kohana::lang('menu_logged.messages'))));					
 					
-					$unreadmessages = Character_Model::get_unreadmessages_d( $char_id );
+					$unreadmessages = Model_Character::get_unreadmessages_d( $char_id );
 					
 					if ( $unreadmessages > 0 )
 						
@@ -718,7 +718,7 @@ function forceCompleteAction() {
 						'title' => Kohana::lang('global.events')), false));
 					
 					//$unreadevents = $character -> get_unreadevents();					
-					$unreadevents = Character_Model::get_unreadevents_d( $char_id );
+					$unreadevents = Model_Character::get_unreadevents_d( $char_id );
 					
 					if ( $unreadevents > 0 )
 						echo '<div id="newevt">'. $unreadevents .'</div>';					

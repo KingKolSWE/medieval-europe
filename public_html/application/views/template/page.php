@@ -76,7 +76,7 @@
 	</script>
 	</head>
 <?php
-$char = Character_Model::get_info( Session::instance()->get('char_id') );
+$char = Model_Character::get_info( Session::instance()->get('char_id') );
 ?>
 
 <body>

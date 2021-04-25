@@ -16,7 +16,7 @@ class Toplistvote_Model extends ORM
 
 		$rewardgiven = false; 
 		
-		// c'è una entry valida con la stessa key?
+		// c'ï¿½ una entry valida con la stessa key?
 	
 		$r = ORM::factory('toplistvote') -> where( 
 			array( 
@@ -26,7 +26,7 @@ class Toplistvote_Model extends ORM
 		if ( $r -> loaded )
 		{
 			kohana::log('info', '-> Key found, checking if char has already received a reward...');
-			// determiniamo se il char non ha già ricevuto un reward oggi da questa toplist
+			// determiniamo se il char non ha giï¿½ ricevuto un reward oggi da questa toplist
 			
 			$db = Database::instance();
 			$sql = "select id from toplistvotes
@@ -81,7 +81,7 @@ class Toplistvote_Model extends ORM
 				
 				// Updates votes counter
 			
-				$stat = Character_Model::get_stat_d($char -> id, 'dailytoplistvotes', $itemtag );
+				$stat = Model_Character::get_stat_d($char -> id, 'dailytoplistvotes', $itemtag );
 				
 				$lastvoteddate = date('Y-m-d', $stat -> stat1);
 				$today = date('Y-m-d');

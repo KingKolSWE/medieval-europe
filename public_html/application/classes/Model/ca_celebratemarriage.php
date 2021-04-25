@@ -174,9 +174,9 @@ class CA_CelebrateMarriage_Model extends Character_Action_Model
 		
 		// husband or wife are already married?
 		
-		if ( !is_null(Character_Model::is_married( $par[2] -> id )) 
+		if ( !is_null(Model_Character::is_married( $par[2] -> id ))
 			or
-			!is_null(Character_Model::is_married( $par[3] -> id )) 
+			!is_null(Model_Character::is_married( $par[3] -> id ))
 		)
 		{ $message = Kohana::lang("ca_celebratemarriage.error-characteralreadymarried"); return false; };
 		
@@ -282,22 +282,22 @@ class CA_CelebrateMarriage_Model extends Character_Action_Model
 		
 		if (
 			
-			(Character_Model::has_item( $par[2] -> id, 'ringemerald', 1) == true
+			(Model_Character::has_item( $par[2] -> id, 'ringemerald', 1) == true
 			or
-			Character_Model::has_item( $par[2] -> id, 'ringruby', 1) == true
+			Model_Character::has_item( $par[2] -> id, 'ringruby', 1) == true
 			or
-			Character_Model::has_item( $par[2] -> id, 'ringdiamond', 1) == true
+			Model_Character::has_item( $par[2] -> id, 'ringdiamond', 1) == true
 			or 
-			Character_Model::has_item( $par[2] -> id, 'ringsapphire', 1) == true
+			Model_Character::has_item( $par[2] -> id, 'ringsapphire', 1) == true
 			)
 			and
-			(Character_Model::has_item( $par[3] -> id, 'ringemerald', 1) == true
+			(Model_Character::has_item( $par[3] -> id, 'ringemerald', 1) == true
 			or
-			Character_Model::has_item( $par[3] -> id, 'ringruby', 1) == true
+			Model_Character::has_item( $par[3] -> id, 'ringruby', 1) == true
 			or
-			Character_Model::has_item( $par[3] -> id, 'ringsapphire', 1) == true
+			Model_Character::has_item( $par[3] -> id, 'ringsapphire', 1) == true
 			or 
-			Character_Model::has_item( $par[3] -> id, 'ringdiamond', 1) == true)			
+			Model_Character::has_item( $par[3] -> id, 'ringdiamond', 1) == true)
 		)
 			$passed = true;		
 		
@@ -454,19 +454,19 @@ class CA_CelebrateMarriage_Model extends Character_Action_Model
 
 			Character_Event_Model::addrecord( $officer -> id, 
 			'normal', '__events.celebrateweddingofficer' . 
-			';' . Character_Model::create_publicprofilelink($husband -> id, $husband -> name) . 
-			';' . Character_Model::create_publicprofilelink($wife -> id, $wife -> name),
+			';' . Model_Character::create_publicprofilelink($husband -> id, $husband -> name) .
+			';' . Model_Character::create_publicprofilelink($wife -> id, $wife -> name),
 			'normal' );
 			
 			// evento per town crier
 						
 			Character_Event_Model::addrecord( null, 
 			'announcement', '__events.weddingcelebrated' . 
-			';' . Character_Model::create_publicprofilelink($officer -> id, $officer -> name) . 
+			';' . Model_Character::create_publicprofilelink($officer -> id, $officer -> name) .
 			';__' . $structure -> structure_type -> name .
 			';__' . $structure -> region -> name .
-			';' . Character_Model::create_publicprofilelink($husband -> id, $husband -> name) . 
-			';' . Character_Model::create_publicprofilelink($wife -> id, $wife -> name) ,	
+			';' . Model_Character::create_publicprofilelink($husband -> id, $husband -> name) .
+			';' . Model_Character::create_publicprofilelink($wife -> id, $wife -> name) ,
 			'normal' );
 				
 		}
@@ -486,7 +486,7 @@ class CA_CelebrateMarriage_Model extends Character_Action_Model
 			$husband -> id, 
 			'normal', 
 			'__events.celebrateweddingspouses' . 
-			';' . Character_Model::create_publicprofilelink($wife -> id, $wife -> name) . 
+			';' . Model_Character::create_publicprofilelink($wife -> id, $wife -> name) .
 			';__' . $structure -> structure_type -> name .
 			';__' . $structure -> region -> name,
 			'normal' );
@@ -495,10 +495,10 @@ class CA_CelebrateMarriage_Model extends Character_Action_Model
 
 			Character_Permanentevent_Model::add_model( $husband -> id,
 			'__permanentevents.married' .
-			';' . Character_Model::create_publicprofilelink($wife -> id, $wife -> name) . 
+			';' . Model_Character::create_publicprofilelink($wife -> id, $wife -> name) .
 			';__' . $structure -> structure_type -> name .
 			';__' . $structure -> region -> name .
-			';' . Character_Model::create_publicprofilelink($officer -> id, $officer -> name) 
+			';' . Model_Character::create_publicprofilelink($officer -> id, $officer -> name)
 			);
 	
 		}
@@ -514,14 +514,14 @@ class CA_CelebrateMarriage_Model extends Character_Action_Model
 			Character_Event_Model::addrecord( $wife -> id, 
 			'normal', 
 			'__events.celebrateweddingspouses' . 
-			';' . Character_Model::create_publicprofilelink($husband -> id, $husband -> name) . 
+			';' . Model_Character::create_publicprofilelink($husband -> id, $husband -> name) .
 			';__' . $structure -> structure_type -> name .
 			';__' . $structure -> region -> name,
 			'normal' );
 			
 			Character_Permanentevent_Model::add_model( $wife -> id,
 			'__permanentevents.married' .
-			';' . Character_Model::create_publicprofilelink($husband -> id, $husband -> name) . 
+			';' . Model_Character::create_publicprofilelink($husband -> id, $husband -> name) .
 			';__' . $structure -> structure_type -> name .
 			';__' . $structure -> region -> name			
 			);

@@ -93,7 +93,7 @@ foreach ( $referrals as $r )
 <tr class="<?php echo $class; ?>">
 <td><?php echo html::anchor('character/publicprofile/' . $r->character_id, $r ->name ); ?></td>
 <td class="center"><?php echo Model_Utility::secs2hmstostring(
-	Character_Model::get_age_s($r->character_id, 'year')); ?></td>
+	Model_Character::get_age_s($r->character_id, 'year')); ?></td>
 <td class="right"><?php echo $r -> coins; ?></td>
 <td class="right"><?php echo $r -> doubloons; ?></td>
 </tr>	

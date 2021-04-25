@@ -137,7 +137,7 @@ class Boardmessage_Job_Model extends Boardmessage_Model
 		}
 		
 		
-		if ( Character_Model::has_item( $params[1] -> id, 'paper_piece', 1 ) == false )
+		if ( Model_Character::has_item( $params[1] -> id, 'paper_piece', 1 ) == false )
 		{
 			$message = kohana::lang('charactions.paperpieceneeded');
 			return false;

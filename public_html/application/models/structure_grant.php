@@ -137,7 +137,7 @@ function get_chargrants( $structure, $granted )
 		
 		// is the granted husband or wife of the structure owner?
 	
-		if ( Character_Model::is_marriedto( $granted -> id, $structure -> character_id, $relationtype ) )
+		if ( Model_Character::is_marriedto( $granted -> id, $structure -> character_id, $relationtype ) )
 			$grants[] = $relationtype;
 	
 		// in caso di struttura battlefield, ognuno � owner perch� 

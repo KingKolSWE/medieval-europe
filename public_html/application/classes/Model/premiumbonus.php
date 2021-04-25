@@ -160,7 +160,7 @@ class PremiumBonus_Model
 	{
 
 		$info = $this -> get_info();
-		$currentchar = Character_Model::get_info( Session::instance()->get('char_id') );
+		$currentchar = Model_Character::get_info( Session::instance()->get('char_id') );
 
 		if ( !$targetchar -> loaded )
 		{
@@ -208,7 +208,7 @@ class PremiumBonus_Model
 
 		if ($this -> get_name() == 'armory')
 		{
-			$currentbonuses = Character_Model::get_premiumbonuses($targetchar -> id);
+			$currentbonuses = Model_Character::get_premiumbonuses($targetchar -> id);
 			if(!empty($currentbonuses['armory'])) {
 
 				foreach ( $currentbonuses['armory'] as $armorybonus )
@@ -220,9 +220,9 @@ class PremiumBonus_Model
 
 		}
 		else
-			$currentbonus = Character_Model::get_premiumbonus($targetchar -> id, $this -> get_name());
+			$currentbonus = Model_Character::get_premiumbonus($targetchar -> id, $this -> get_name());
 
-		$currentchar = Character_Model::get_info( Session::instance()->get('char_id') );
+		$currentchar = Model_Character::get_info( Session::instance()->get('char_id') );
 		$isatelierlicense = strpos ($this->get_name(), "atelier-license");
 
 		//var_dump($x);
@@ -335,7 +335,7 @@ class PremiumBonus_Model
 
 		$info = $this -> get_info();
 		//var_dump($info);exit;
-		$sourcechar = Character_Model::get_info( Session::instance()->get('char_id') );
+		$sourcechar = Model_Character::get_info( Session::instance()->get('char_id') );
 
 		// send event for normal purchase
 		if ($sourcechar -> id == $targetchar -> id)

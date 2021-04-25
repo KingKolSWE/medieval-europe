@@ -14,7 +14,7 @@ $("#location").autocomplete(
 
 <div id='helper'>
 	<?= kohana::lang('character.launchduel_helper',
-	Character_Model::create_publicprofilelink( $targetchar -> id, $targetchar -> name )
+	Model_Character::create_publicprofilelink( $targetchar -> id, $targetchar -> name )
 	);
 	?>
 </div>

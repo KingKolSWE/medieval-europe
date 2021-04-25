@@ -2087,7 +2087,7 @@ CREATE TABLE `users` (
   `tutor_id` int(11) UNSIGNED DEFAULT NULL,
   `email` varchar(127) NOT NULL,
   `username` varchar(32) NOT NULL DEFAULT '',
-  `password` char(50) NOT NULL,
+  `password` varchar(256) NOT NULL,
   `status` varchar(20) NOT NULL,
   `gender` varchar(1) DEFAULT NULL,
   `activationtoken` varchar(25) NOT NULL,

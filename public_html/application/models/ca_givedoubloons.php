@@ -61,7 +61,7 @@ class CA_Givedoubloons_Model extends Character_Action_Model
 			
 			kohana::log('info', '-> Updating boughtdoubloon stats...');			
 			
-			Character_Model::modify_stat_d( $par[0] -> id, 'boughtdoubloons', $par[1], null, null, false );
+			Model_Character::modify_stat_d( $par[0] -> id, 'boughtdoubloons', $par[1], null, null, false );
 			
 			kohana::log('info', '-> Updated boughtdoubloon stats.');
 					 

@@ -36,11 +36,11 @@ class Character_NPC_Smallrat_Model extends Character_NPC_Model
 			
 		kohana::log('debug', "-> ***** NPC: {$this -> name}: Called npcAI *****");
 		
-		// se è busy, return
+		// se ï¿½ busy, return
 		
 		kohana::log('debug', '-> Checking if a pending action exists...');		
 				
-		$action = Character_Model::get_currentpendingaction( $this -> id );
+		$action = Model_Character::get_currentpendingaction( $this -> id );
 			
 		if ( is_array( $action ) )
 		{			
@@ -48,7 +48,7 @@ class Character_NPC_Smallrat_Model extends Character_NPC_Model
 			return;
 		}
 		
-		// se è sotto 30 di sazietà , mangia cibo nel mercato 
+		// se ï¿½ sotto 30 di sazietï¿½, mangia cibo nel mercato 
 		// se no si sposta
 		
 		if ($this -> glut < 30 )
@@ -168,7 +168,7 @@ class Character_NPC_Smallrat_Model extends Character_NPC_Model
 		}
 
 		// evento per quest		
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );		
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		GameEvent_Model::process_event( $char, 'killrat', null );			
 		
 	}

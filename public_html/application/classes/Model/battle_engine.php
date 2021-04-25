@@ -143,7 +143,7 @@ class Battle_Engine_Model
 		// display equipment.
 		
 		if (isset($attacker['char']['obj']))
-			$tournstat = Character_Model::get_stat_d( $attacker['char']['obj'] -> id, 'tournamentparticipant');
+			$tournstat = Model_Character::get_stat_d( $attacker['char']['obj'] -> id, 'tournamentparticipant');
 		else
 			$tournstat = null;
 		
@@ -227,7 +227,7 @@ class Battle_Engine_Model
 		$this -> battlereport[]['newline'] = '' ; 			
 		
 		if (isset($defender['char']['obj']))
-			$tournstat = Character_Model::get_stat_d( $defender['char']['obj'] -> id, 'tournamentparticipant');
+			$tournstat = Model_Character::get_stat_d( $defender['char']['obj'] -> id, 'tournamentparticipant');
 		else
 			$tournstat = null;
 		
@@ -1118,9 +1118,9 @@ class Battle_Engine_Model
 								
 								$_defender['char']['stunnedround'] = 								
 								max(1,
-									round(( Character_Model::get_attributelimit() - mt_rand( 
+									round(( Model_Character::get_attributelimit() - mt_rand(
 									max( 1, $_defender['char']['cost'] - 5 ), 
-									min( Character_Model::get_attributelimit(), $_defender['char']['cost'] + 6 )))/5));
+									min( Model_Character::get_attributelimit(), $_defender['char']['cost'] + 6 )))/5));
 																
 								$battlestats['totalstungiven'][$_attacker['char']['name']] ++;
 								$battlestats['totalstunreceived'][$_defender['char']['name']] ++;
@@ -1159,7 +1159,7 @@ class Battle_Engine_Model
 					$weaponweight_normalized = ($att_rightweaponweight - 0)/($this-> cfgweapons['maxweight']/1000-0);
 					$armorencumbrance_normalized = ( $_attacker['char']['armorencumbrance'] - 0 )/(107.8-0);
 					$weaponreach_normalized = ( $weaponreach - 1 )/ (5 - 1);
-					$constitution_normalized = ( $_attacker['char']['cost'] - 1 )/ (Character_Model::get_attributelimit() - 1);
+					$constitution_normalized = ( $_attacker['char']['cost'] - 1 )/ (Model_Character::get_attributelimit() - 1);
 					
 					
 					$drainrate = 0.150 + 
@@ -1411,7 +1411,7 @@ class Battle_Engine_Model
 			$charcopy['char']['parry'] = $parry -> getProficiency($char->id);
 		}
 		
-		$charcopy['char']['basetransportableweight'] = Character_Model::get_basetransportableweight( $charcopy['char']['str']);
+		$charcopy['char']['basetransportableweight'] = Model_Character::get_basetransportableweight( $charcopy['char']['str']);
 		$charcopy['char']['encumbrance'] = $char -> get_encumbrance();		
 		$charcopy['char']['armorencumbrance'] = 0;
 		$charcopy['char']['stunnedround'] = 0;
@@ -1427,7 +1427,7 @@ class Battle_Engine_Model
 		// load equipped objects
 		
 		$equippedarmorweight = 0;
-		$wornequipment = Character_Model::get_equipment( $char -> id );
+		$wornequipment = Model_Character::get_equipment( $char -> id );
 		//var_dump($wornequipment);exit;
 		$cfgarmors = Configuration_Model::get_armorscfg();		
 		
@@ -1461,7 +1461,7 @@ class Battle_Engine_Model
 		
 		// faith level
 		
-		$stat = Character_Model::get_stat_d( $char -> id, 'faithlevel' );
+		$stat = Model_Character::get_stat_d( $char -> id, 'faithlevel' );
 		if ( $stat -> loaded )		
 			$charcopy['char']['faithlevel'] = $stat -> value;
 
@@ -1635,9 +1635,9 @@ class Battle_Engine_Model
 			}
 		}
 			
-		$btw = Character_Model::get_basetransportableweight	( $charcopy['char']['str'] ) ;
+		$btw = Model_Character::get_basetransportableweight	( $charcopy['char']['str'] ) ;
 		
-		$charcopy['char']['armorencumbrance'] = Character_Model::get_armorencumbrance( $btw, $equippedarmorweight ); 		
+		$charcopy['char']['armorencumbrance'] = Model_Character::get_armorencumbrance( $btw, $equippedarmorweight );
 		Battle_Engine_Model::battledebug("New Armor Encumberance: {$charcopy['char']['armorencumbrance']}%", $debug);
 		
 	}
@@ -2276,7 +2276,7 @@ class Battle_Engine_Model
 		Battle_Engine_Model::battledebug( "Armor Encumbrance:{$char['char']['armorencumbrance']}", $this -> debug );
 		$armorencumbrance_normalized = ( $char['char']['armorencumbrance'] - 0 )/($maxarmorencumbrance-0);		
 		$energy_normalized = ( $char['char']['energy'] - 1 )/ (50 - 1);
-		$constitution_normalized = ( $char['char']['cost'] - 1 )/ (Character_Model::get_attributelimit() - 1);
+		$constitution_normalized = ( $char['char']['cost'] - 1 )/ (Model_Character::get_attributelimit() - 1);
 		
 		
 		// makes consecutive attacks in case you wear a weapon or are bare-handed	

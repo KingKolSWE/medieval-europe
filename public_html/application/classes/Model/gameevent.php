@@ -26,7 +26,7 @@ class GameEvent_Model
 			kohana::log('debug', "-> GameEvent: registeredquests: " . count( $registeredquests ) );
 			foreach ( $registeredquests as $registeredquest )
 			{
-				$questinstance	= Character_Model::get_stat_d( 
+				$questinstance	= Model_Character::get_stat_d(
 						$char -> id,
 						'quest',
 						$registeredquest -> cfgquest -> name );

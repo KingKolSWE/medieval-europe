@@ -174,7 +174,7 @@ class CA_Excommunicateplayer_Model extends Character_Action_Model
 		{ $message = Kohana::lang("global.error-notenoughfp", $this -> fpcost ); return false; }		
 		
 		// check faith level
-		$fl = Character_Model::get_stat_d( $par[0] -> id, 'faithlevel' );
+		$fl = Model_Character::get_stat_d( $par[0] -> id, 'faithlevel' );
 		if ( !$fl -> loaded or $fl -> value < self::FAITHLEVELREQUESTED )
 		{ $message = Kohana::lang("religion.faithleveltoolow", self::FAITHLEVELREQUESTED ); return false; }
 		
@@ -189,7 +189,7 @@ class CA_Excommunicateplayer_Model extends Character_Action_Model
 		{   $message = Kohana::lang("global.error-charnotcorrectchurch"); return false; }		
 		
 		// scroll control present
-		if ( Character_Model::has_item( $par[0]->id, 'paper_piece', 1 ) == false )
+		if ( Model_Character::has_item( $par[0]->id, 'paper_piece', 1 ) == false )
 		{   $message = kohana::lang('charactions.paperpieceneeded'); return false; }		
 		
 		// the player cannot have religious roles.
@@ -351,7 +351,7 @@ class CA_Excommunicateplayer_Model extends Character_Action_Model
 	{				
 			  
 		$info = Church_Model::get_info($par[2] -> structure_type -> church_id);		
-		$fpcontributionachievement = Character_Model::get_achievement( $par[0] ->id, 'stat_fpcontribution');
+		$fpcontributionachievement = Model_Character::get_achievement( $par[0] ->id, 'stat_fpcontribution');
 		
 		if (!is_null($fpcontributionachievement))
 			$cost = max (1, self::REQUESTEDFP * pow( $fpcontributionachievement['stars'], 2 ) );		

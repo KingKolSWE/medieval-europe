@@ -267,7 +267,7 @@ class Structure_Model extends ORM
 	public function inventory( $structure_id, $ismarket = false )
 	{
 
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		$items = array( 'items' => null, 'totalitemsweight' => 0, 'storableweight' => 0 );
 
 		if ($ismarket)
@@ -527,12 +527,12 @@ class Structure_Model extends ORM
 			kohana::log('info', '-> Checking if char is dressed properly.');
 			if ( !is_null( $role ))
 			{
-				$equipment = Character_Model::get_equipment( $char -> id );
+				$equipment = Model_Character::get_equipment( $char -> id );
 
 				if ( $this -> character_id == $char -> id and !is_null ($role) and $this -> structure_type -> subtype != 'player' )
 				{
 					if
-						( Character_Model::is_naked( $char -> id ) == true or
+						( Model_Character::is_naked( $char -> id ) == true or
 							(
 								(isset($equipment['torso']) and $equipment['torso'] -> tag == 'rags_shirt') or
 								(isset($equipment['legs']) and $equipment['legs'] -> tag == 'rags_trousers') or
@@ -582,7 +582,7 @@ class Structure_Model extends ORM
 				{
 
 					$churchhasoraetlaborabonus = Church_Model::has_dogma_bonus( $char -> church_id, 'craftblessing');
-					$charhasfpcontribution = Character_Model::get_achievement( $char -> id, 'stat_fpcontribution');
+					$charhasfpcontribution = Model_Character::get_achievement( $char -> id, 'stat_fpcontribution');
 
 					if (
 						$churchhasoraetlaborabonus == false
@@ -665,7 +665,7 @@ class Structure_Model extends ORM
 	function get_info()
 	{
 
-		$character = Character_Model::get_info( Session::instance() -> get('char_id') );
+		$character = Model_Character::get_info( Session::instance() -> get('char_id') );
 
 		$info = array(
 			'obj' => $this,
@@ -812,8 +812,8 @@ class Structure_Model extends ORM
 
 	/**
 	* Trasferisce la propriet� di una struttura
-	* @param Character_Model $seller: Acquirente
-	* @param Character_Model $buyer: Venditore
+	* @param Model_Character $seller: Acquirente
+	* @param Model_Character $buyer: Venditore
 	* @return none
 	*/
 
@@ -1046,7 +1046,7 @@ class Structure_Model extends ORM
 	public function getlinkedcompletedprojects()
 	{
 
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		$role = $char -> get_current_role();
 		$db = Database::instance();
 
@@ -1112,7 +1112,7 @@ class Structure_Model extends ORM
 	public function get_startableprojects()
 	{
 
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		$role = $char -> get_current_role();
 		$db = Database::instance();
 		$result = array();

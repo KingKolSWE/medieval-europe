@@ -63,7 +63,7 @@ class CA_Shovel_Model extends Character_Action_Model
 		
 		// controllo parametri URL
 		$queuebonus = false;
-		if ( Character_Model::get_premiumbonus( $par[1] -> id, 'workerpackage') !== false )			
+		if ( Model_Character::get_premiumbonus( $par[1] -> id, 'workerpackage') !== false )
 			$queuebonus = true;
 		
 		/////////////////////////////////////////////////////////////////////////////////////

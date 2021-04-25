@@ -106,7 +106,7 @@ class CA_Buystructure_Model extends Character_Action_Model
 			{
 				
 				$churchhasoraetlaborabonus = Church_Model::has_dogma_bonus( $par[1] -> church_id, 'craftblessing');
-				$charhasfpcontribution = Character_Model::get_achievement( $par[1] -> id, 'stat_fpcontribution');
+				$charhasfpcontribution = Model_Character::get_achievement( $par[1] -> id, 'stat_fpcontribution');
 				
 				if (
 					$churchhasoraetlaborabonus == false

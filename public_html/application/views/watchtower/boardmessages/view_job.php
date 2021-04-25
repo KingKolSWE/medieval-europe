@@ -21,9 +21,9 @@ echo html::anchor(
 	
 	<div id='suggestionleftpanel' style='float:left;width:20;text-align:center;margin-right:1%'>			
 		<div><?php 
-		echo Character_Model::display_avatar( $poster -> id, 'l', 'border' ); ?></div>
+		echo Model_Character::display_avatar( $poster -> id, 'l', 'border' ); ?></div>
 		<div id='suggestioncaption'>
-		<?php echo Character_Model::create_publicprofilelink( $poster -> id, null );?>		
+		<?php echo Model_Character::create_publicprofilelink( $poster -> id, null );?>
 		</div>
 	</div>
 	<div id='suggestionrightpanel' style='float:left;width:77%;border-left:1px solid;padding:1%;'>		

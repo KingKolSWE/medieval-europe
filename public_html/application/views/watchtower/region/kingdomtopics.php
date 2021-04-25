@@ -44,7 +44,7 @@ foreach ( $rows as $row )
 ?>
 	<tr class='<?php echo $class;?>'>
 	<td><?php echo html::anchor('/region/kingdomreplies/' . $kingdom -> id . '/' . $row -> id, $row -> title);?></td>
-	<td class='center'><?php echo Character_Model::create_publicprofilelink($row -> author, null);?></td>
+	<td class='center'><?php echo Model_Character::create_publicprofilelink($row -> author, null);?></td>
 	<td class='center'><?php echo Model_Utility::format_datetime(strtotime($row -> created));?></td>
 	</tr>	
 <?php 

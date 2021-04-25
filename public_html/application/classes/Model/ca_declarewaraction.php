@@ -26,7 +26,7 @@ class CA_Declarewaraction_Model extends Character_Action_Model
 		// Cooldown on click
 
 		$lastdeclarationsubmit =
-		Character_Model::get_stat_d(
+		Model_Character::get_stat_d(
 			$par[0] -> id,
 			'lastdeclarationwarsubmit',
 			null,
@@ -40,7 +40,7 @@ class CA_Declarewaraction_Model extends Character_Action_Model
 			{
 				// sets the cooldown
 				$nexttime = mt_rand(60,120);
-				Character_Model::modify_stat_d(
+				Model_Character::modify_stat_d(
 					$par[0] -> id,
 					'lastdeclarationwarsubmit',
 					0,
@@ -55,7 +55,7 @@ class CA_Declarewaraction_Model extends Character_Action_Model
 
 		// set the cooldown
 		$nexttime = mt_rand(60,120);
-		Character_Model::modify_stat_d(
+		Model_Character::modify_stat_d(
 				$par[0] -> id,
 				'lastdeclarationwarsubmit',
 				0,

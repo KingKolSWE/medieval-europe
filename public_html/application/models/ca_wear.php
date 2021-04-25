@@ -42,7 +42,7 @@ class CA_Wear_Model extends Character_Action_Model
 		// controllo che l' item esista nel contenitore
 
 		if ( 
-			Character_Model::has_item( $par[1] -> id, $this -> item -> cfgitem -> tag, 1 ) == false )
+			Model_Character::has_item( $par[1] -> id, $this -> item -> cfgitem -> tag, 1 ) == false )
 			{ $message = kohana::lang('charactions.item_notininventory'); return FALSE; }
 			
 		// Controllo che l' oggetto sia opportuno per il sesso

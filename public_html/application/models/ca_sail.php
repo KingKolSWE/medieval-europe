@@ -59,8 +59,8 @@ class CA_Sail_Model extends Character_Action_Model
 		if ( ! parent::check_( $par, $message ) )					
 		{ return false; }
 		
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );
-		$bonuses = Character_Model::get_premiumbonuses( $char -> id ); ;
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
+		$bonuses = Model_Character::get_premiumbonuses( $char -> id ); ;
 
 		$region_path = ORM::factory('region_path')->where(array('region_id' => $char->position_id, 'destination' => $par[0] -> id ))->find();
 		$currentregion = ORM::factory('region', $char -> position_id );
@@ -143,7 +143,7 @@ class CA_Sail_Model extends Character_Action_Model
 		/////////////////////////////////////////////////////
 		
 		if ( 
-			Character_Model::is_restrained( $char -> id )
+			Model_Character::is_restrained( $char -> id )
 			and 
 			$par[0] -> kingdom -> id != $currentregion -> kingdom_id )
 		{ $message = kohana::lang('charactions.move_charisrestrained') ; return FALSE; }	
@@ -163,7 +163,7 @@ class CA_Sail_Model extends Character_Action_Model
 	protected function append_action( $par, &$message )
 	{
 		
-		$char = Character_Model::get_info( Session::instance()->get('char_id') ); 
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		$region_path = ORM::factory('region_path')
 			->where(array('region_id' => $char->position_id, 'destination' => $par[0]))
 			->find();		
@@ -188,7 +188,7 @@ class CA_Sail_Model extends Character_Action_Model
 		
 		$frombattlefield = false;
 		
-		if ( Character_Model::is_fighting( $char -> id ) == true ) 	
+		if ( Model_Character::is_fighting( $char -> id ) == true )
 		{
 			$db = Database::instance();
 			$sql = "delete from battle_participants where
@@ -237,7 +237,7 @@ class CA_Sail_Model extends Character_Action_Model
 	public function complete_action( $data )
 	{
 		$char = ORM::factory('character')->find( $data->character_id );
-		$bonuses = Character_Model::get_premiumbonuses( $char -> id ); ;
+		$bonuses = Model_Character::get_premiumbonuses( $char -> id ); ;
 		$region_path = ORM::factory('region_path')->where(array('region_id' => $data->param1, 'destination' => $data->param2))->find();		
 		
 		$currentregion = ORM::factory('region', $data -> param1 );
@@ -303,7 +303,7 @@ class CA_Sail_Model extends Character_Action_Model
 		
 		kohana::log('debug', '-> Sail: canceling action.');
 		
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );		
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
 		// Se l'azione � gi� oltre i 10 minuti non si pu� cancellare.
 		

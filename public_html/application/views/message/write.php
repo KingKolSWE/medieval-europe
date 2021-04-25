@@ -58,7 +58,7 @@ $(document).ready(function()
 			'id' => 'to', 
 			'name' => 'to', 'value' =>  $form['to'], 'style'=>'width:200px') );
 		
-		$role =  Character_Model::get_info( Session::instance()->get('char_id') ) -> get_current_role();
+		$role =  Model_Character::get_info( Session::instance()->get('char_id') ) -> get_current_role();
 		if ( !is_null( $role ) and ($role->tag == 'king' or $role->tag == 'vassal' ))
 			echo '&nbsp;' . form::label('massive', Kohana::lang('message.massive')) . '&nbsp;' . form::checkbox('massive', true, false);
 		?>

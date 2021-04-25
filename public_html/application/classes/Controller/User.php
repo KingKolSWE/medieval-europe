@@ -31,7 +31,7 @@ class Controller_User extends Controller_Template
         {
             $valid = false;
             $array -> error($field, 'captchaerror');
-            KO7::$log->add(KO7_Log::DEBUG, kohana::debug($array));
+            KO7::$log->add(KO7_Log::DEBUG, KO7_Debug::dump($array));
         }
 
     }
@@ -105,14 +105,14 @@ class Controller_User extends Controller_Template
 				        if (strlen($value) < 1 or strlen($value) > 60) {
 				            $array->error($field, 'too_long_or_short');
 				            return;
-                        } elseif (filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                        } elseif (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
                             $array->error($field, 'not_valid_email');
                         }
                     },
                     array(':validation', ':field', ':value')
                 ) -> rule('referral_id',
                     function(Validation $array, $field, $value) {
-                        if (!ctype_digit($value)) {
+                        if (!is_null($value) and !ctype_digit($value)) {
                             $array->error($field, 'not_numeric');
                         }
                     },
@@ -125,17 +125,19 @@ class Controller_User extends Controller_Template
 			$post -> rule('captchaanswer', function(Validation $array, $field, $value){$this->_checkcaptcha($array, $field, $value); }, array(':validation', ':field', ':value'));
 			$post -> rule( 'referral_id',  function(Validation $array, $field, $value){$this->_c_referral_id($array, $field, $value); }, array(':validation', ':field', ':value'));
 
-			$post->bind('birthday', null);
-			$post->bind('gender', null);
-			$post->bind('status', 'new');
-			$post->bind('ipaddress', Request::$client_ip);
-			$post->bind('request_ids', $this -> request -> param('request_ids'));
-			$post->bind('referrersite', null);
+			$additional_params = [
+			    'birthday' => null,
+			    'gender' => null,
+			    'status' => 'new',
+			    'ipaddress' => Request::$client_ip,
+			    'request_ids' => $this -> request -> param('request_ids'),
+			    'referrersite' => null
+			];
 			
 			if ( $post -> check() )
 			{
 			    echo "HERE\n";
-				$rc = Model_User::registerorloginuser( $post->data(), $message );
+				$rc = Model_User::registerorloginuser( array_merge($post->data(), $additional_params), $message );
 				if ( $rc == false )
 					Session::instance()->get_once('user_message', "<div class=\"error_msg\">" . $message . "</div>");
 				else
@@ -151,6 +153,7 @@ class Controller_User extends Controller_Template
                 $errors = $post -> errors('form_errors');
                 $view -> errors = $errors;
 				$form = Arr::overwrite( $form, $post -> data());
+				print_r($form);
 			}
 		}
 		// else, redirect to home
@@ -175,11 +178,11 @@ class Controller_User extends Controller_Template
 
 	public function activate($user_id = null, $activationtoken = null)
 	{
-		$this -> template = new View('template/homepage');
-		$view = new View('user/activate');
+		$this -> template = View::factory('template/homepage');
+		$view = View::factory('user/activate');
 		$sheets = array('home' => 'screen');
 	 	
-		$this->template = new View('template/homepage');
+		$this->template = View::factory('template/homepage');
 		$this->template->sheets = $sheets;
 		
 		$user = ORM::factory('User')->where( array(
@@ -241,7 +244,7 @@ class Controller_User extends Controller_Template
                         if (strlen($value) < 1 or strlen($value) > 60) {
                             $array->error($field, 'too_long_or_short');
                             return;
-                        } elseif (filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                        } elseif (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
                             $array->error($field, 'not_valid_email');
                         }
                     },
@@ -313,10 +316,10 @@ class Controller_User extends Controller_Template
 		
 		// Imposto il template e gli stylesheets
 		
-		$this -> template = new View('template/homepage');
+		$this -> template = View::factory('template/homepage');
 		$sheets = array('home' => 'screen');
 
-		$view = new View('user/resendpassword');
+		$view = View::factory('user/resendpassword');
 		$this -> template -> content = $view;
 		$this -> template -> sheets = $sheets;
 
@@ -420,7 +423,7 @@ class Controller_User extends Controller_Template
 		$this -> template = View::factory('template/homepage');
         //$this->response->body($message);
 		echo Debug::vars($message);
-		$view = new View('page/home');			
+		$view = View::factory('page/home');			
 		$sheets = array( 'home' => 'screen' );
 		//$db = Database::instance();
 		$this -> template -> sheets = $sheets;  
@@ -536,7 +539,7 @@ class Controller_User extends Controller_Template
 	function y8_login()
 	{
 	
-		$view = new View('page/home');
+		$view = View::factory('page/home');
 		$sheets = array( 'home' => 'screen' );
 		$db = Database::instance();				
 		$this -> template -> sheets = $sheets;  
@@ -625,7 +628,7 @@ class Controller_User extends Controller_Template
 	function google_login()
 	{
 		
-		$view = new View('page/home');
+		$view = View::factory('page/home');
 		$sheets = array( 'home' => 'screen' );
 		$this -> template -> sheets = $sheets;  		
 				
@@ -705,7 +708,7 @@ class Controller_User extends Controller_Template
 	function relaxbb_login()
 	{
 		
-		$view = new View('page/home');
+		$view = View::factory('page/home');
 		$sheets = array( 'home' => 'screen' );
 		$db = Database::instance();				
 		$this -> template -> sheets = $sheets;  
@@ -879,8 +882,8 @@ class Controller_User extends Controller_Template
 	public function logout()
 	{
 		
-		$character = Character_Model::get_info( Session::instance()->get('char_id') ); 		
-		$this -> template = new View('template/homepage');
+		$character = Model_Character::get_info( Session::instance()->get('char_id') );
+		$this -> template = View::factory('template/homepage');
 		$sheets = array('home' => 'screen');
 		
 		$message = '';
@@ -892,7 +895,7 @@ class Controller_User extends Controller_Template
 		if ( !is_null( $character ))
 		{
 			if ( 
-				Character_Model::get_premiumbonus( $character -> id, 'automatedsleep' ) !== false 
+				Model_Character::get_premiumbonus( $character -> id, 'automatedsleep' ) !== false
 				and
 				$character -> user -> disablesleepafteraction == 'N' 
 			)
@@ -905,7 +908,7 @@ class Controller_User extends Controller_Template
 		
 		Session::instance() -> destroy();
 		
-		$this->template->content=new View('user/logout'); 
+		$this->template->content=View::factory('user/logout'); 
 		$this->template->sheets = $sheets;   
 		
 		Auth::instance()->logout( true );	
@@ -919,10 +922,10 @@ class Controller_User extends Controller_Template
 	public function profile()
 	{
 	
-      $view    = new View('user/profile');
-      $subm    = new View ('template/submenu');
+      $view    = View::factory('user/profile');
+      $subm    = View::factory ('template/submenu');
       $sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
-	  $char = Character_Model::get_info( Session::instance()->get('char_id') ); 		
+	  $char = Model_Character::get_info( Session::instance()->get('char_id') );
       
 	  $lnkmenu = $char -> user -> get_account_submenu( 'profile' );	 
 	  $subm->submenu = $lnkmenu;
@@ -943,10 +946,10 @@ class Controller_User extends Controller_Template
 	public function changepassword()
 	{
     
-		$view    = new View('user/changepassword');
-		$subm    = new View ('template/submenu');
+		$view    = View::factory('user/changepassword');
+		$subm    = View::factory ('template/submenu');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
-		$char = Character_Model::get_info( Session::instance()->get('char_id') ); 		
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
 		$lnkmenu = $char -> user -> get_account_submenu( 'changepassword' );	 
 		$subm -> submenu = $lnkmenu;
@@ -1096,10 +1099,10 @@ class Controller_User extends Controller_Template
 	public function referrals()
 	{
 	
-		$view = new View( 'user/referrals');
+		$view = View::factory( 'user/referrals');
 		$sheets  = array('gamelayout' => 'screen', 'character'=>'screen', 'pagination'=>'screen', 'submenu'=>'screen');		
 		$user = Auth::instance()->get_user();			
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
 		$db = Database::instance();
 		$sql = "
@@ -1115,7 +1118,7 @@ class Controller_User extends Controller_Template
 		
 		//$output = $this->profiler->render(TRUE);				
 		
-		$submenu = new View("character/submenu");
+		$submenu = View::factory("character/submenu");
 		$submenu -> action = 'referrals';
 		$view -> submenu = $submenu;
 		$view->referrals = $referrals;
@@ -1138,9 +1141,9 @@ class Controller_User extends Controller_Template
 		$_user = Auth::instance()->get_user();							
 		$user = ORM::factory('User', $_user -> id);
 		
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );
-		$view = new View ( 'user/configure');
-		$subm    = new View ('template/submenu');
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
+		$view = View::factory ( 'user/configure');
+		$subm    = View::factory ('template/submenu');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		$lnkmenu = $char -> user -> get_account_submenu( 'configure' );	 
 		$titles = array(		
@@ -1245,7 +1248,7 @@ class Controller_User extends Controller_Template
 			
 			if ( $this -> input-> post('skin') != '' )
 			{
-				Character_Model::modify_stat_d( $char -> id, 
+				Model_Character::modify_stat_d( $char -> id,
 					'skin', 
 					0,
 					null,
@@ -1259,7 +1262,7 @@ class Controller_User extends Controller_Template
 			
 			if ( $this -> request -> post('basicpackage') != '' )
 			{
-				Character_Model::modify_stat_d( 
+				Model_Character::modify_stat_d(
 					$char -> id,
 					'basicpackage',
 					0,
@@ -1306,7 +1309,7 @@ class Controller_User extends Controller_Template
 			{
 				// Automated Rest
 			
-				if ( Character_Model::get_premiumbonus( $char -> id, 'automatedsleep' ) !== false )
+				if ( Model_Character::get_premiumbonus( $char -> id, 'automatedsleep' ) !== false )
 				{
 				
 					if ( $this -> request -> post('disablesleepafteraction') == 'activate')
@@ -1344,7 +1347,7 @@ class Controller_User extends Controller_Template
 		foreach ($user -> user_languages as $language)
 			$languages[$language -> position] = $language -> language;
 		
-		$stat = Character_Model::get_stat_d(
+		$stat = Model_Character::get_stat_d(
 				$char -> id,
 				'basicpackage',
 				'title');
@@ -1376,13 +1379,13 @@ class Controller_User extends Controller_Template
 	function bonuspurchases()
 	{
 		
-		$view = new view( 'user/bonuspurchases');
-		$subm    = new View ('template/submenu');
+		$view = View::factory( 'user/bonuspurchases');
+		$subm    = View::factory ('template/submenu');
 		$sheets  = array('gamelayout' => 'screen', 'character'=>'screen', 'pagination'=>'screen', 'submenu'=>'screen');		
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		$limit = 20	;
 
-		$activebonuses = Character_Model::get_premiumbonuses($char -> id);
+		$activebonuses = Model_Character::get_premiumbonuses($char -> id);
 		
 		$purchasedbonuses = Database::instance() -> query("
 			SELECT cp.id, c.name, c.cutunit, cp.user_id, 
@@ -1437,11 +1440,11 @@ class Controller_User extends Controller_Template
 	public function purchases( )
 	{
 		
-		$view = new view( 'user/purchases');
-		$subm    = new View ('template/submenu');
+		$view = View::factory( 'user/purchases');
+		$subm    = View::factory ('template/submenu');
 		$sheets  = 
 			array('gamelayout' => 'screen', 'character'=>'screen', 'pagination'=>'screen', 'submenu'=>'screen');		
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		$limit = 20	;
 		
 		$purchases = Database::instance() -> query("

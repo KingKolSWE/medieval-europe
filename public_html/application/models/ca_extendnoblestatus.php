@@ -35,7 +35,7 @@ class CA_Extendnoblestatus_Model extends Character_Action_Model
 		if ( $par[0]->get_item_quantity( 'doubloon' ) < $this -> tariffplan[$par[2]] )
 		{ $message = kohana::lang('bonus.error-notenoughdoubloons'); return FALSE; }				
 		
-		$this -> bonus = Character_Model::get_premiumbonus( $par[0] -> id, 'basicpackage' );
+		$this -> bonus = Model_Character::get_premiumbonus( $par[0] -> id, 'basicpackage' );
 		
 		if ( $this -> bonus == false ) 
 		{ $message = kohana::lang('ca_acquirenoblestatus.packagenotowned'); return FALSE; }				

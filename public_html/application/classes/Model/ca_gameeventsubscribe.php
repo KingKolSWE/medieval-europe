@@ -88,7 +88,7 @@ class CA_Gameeventsubscribe_Model extends Character_Action_Model
 		
 		// Assegna un activitypoint.
 		
-		Character_Model::modify_stat_d(
+		Model_Character::modify_stat_d(
 			$par[0] -> id,
 			'activitypoints',
 			1,

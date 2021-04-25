@@ -22,18 +22,18 @@ class Model_User extends Model_Auth_User
 		if ( $data['referrersite'] == 'facebook' )
 		{
 
-			KO7::$log->add('debug', '-> Searching for user with fb id: ' . $data['fb_id'] );
-			$local_user = ORM::factory('user') -> where ( 'fb_id', $data['fb_id'] ) -> find();	
+			KO7::$log->add(KO7_Log::DEBUG, '-> Searching for user with fb id: ' . $data['fb_id'] );
+			$local_user = ORM::factory('User') -> where ( 'fb_id', '=', $data['fb_id'] ) -> find();
 
-			if ($local_user -> loaded == false )
+			if ($local_user -> loaded() == false )
 			{
-				KO7::$log->add('debug', "-> User not found with FBID, Trying to search for user with email: [{$data['email']}]");
-				$local_user = ORM::factory('user') -> where ( 'email', $data['email'] ) -> find();
+				KO7::$log->add(KO7_Log::DEBUG, "-> User not found with FBID, Trying to search for user with email: [{$data['email']}]");
+				$local_user = ORM::factory('User') -> where ( 'email', '=', $data['email'] ) -> find();
 			}
 
-			if ($local_user -> loaded and is_null($local_user -> fb_id)  )
+			if ($local_user -> loaded() and is_null($local_user -> fb_id)  )
 			{
-				KO7::$log->add('debug', '-> User found, marking it as FB.');
+				KO7::$log->add(KO7_Log::DEBUG, '-> User found, marking it as FB.');
 				$local_user -> fb_id = $data['fb_id'];
 				$local_user -> external_id = $data['fb_id'];
 				$local_user -> referrersite = 'facebook';
@@ -42,15 +42,15 @@ class Model_User extends Model_Auth_User
 		}
 		else
 		{
-			KO7::$log->add('debug', '-> Searching for user with email: ' . $data['email'] );
-			$local_user = ORM::factory('user') -> where ( 'email', $data['email'] ) -> find();
+			KO7::$log->add(KO7_Log::DEBUG, '-> Searching for user with email: ' . $data['email'] );
+			$local_user = ORM::factory('User') -> where ( 'email', '=', $data['email'] ) -> find();
 		}
 				
 		// If exists, we update data and log them in
 		
-		if ( $local_user -> loaded )
+		if ( $local_user -> loaded() )
 		{
-			KO7::$log->add('debug', '-> User exists... logging in.');
+			KO7::$log->add(KO7_Log::DEBUG, '-> User exists... logging in.');
 			$rc = Model_User::postchecks( $local_user, $data['ipaddress'], $message );
 			if ($rc == false)
 				return false;
@@ -84,10 +84,10 @@ class Model_User extends Model_Auth_User
 	* @return boolean true|false
 	*/
 	
-	function postchecks( $user, $ipaddress, &$message )
+	static function postchecks( $user, $ipaddress, &$message )
 	{
 		
-		KO7::$log->add('debug', "------- POSTCHECKS PROCESS -------");
+		KO7::$log->add(KO7_Log::DEBUG, "------- POSTCHECKS PROCESS -------");
 		
 		// utente sospeso?		
 			
@@ -102,11 +102,11 @@ class Model_User extends Model_Auth_User
 				KO7::$log->add(KO7_Log::INFO, '-> User is banned.');
 				if ( $user -> bandate > time() )
 				{
-					$message = kohana::lang('user.login_userbanned', date("d-m-y H:i:s", $user -> bandate), $user -> reason );
+					$message = __('user.login_userbanned', date("d-m-y H:i:s", $user -> bandate), $user -> reason );
 					return false;
 				}
 				else
-					Database::instance() -> query ( "
+					Database::instance() -> query (Database::UPDATE, "
 						update users
 						set status = 'active', 
 						bandate = null,
@@ -116,7 +116,7 @@ class Model_User extends Model_Auth_User
 			else
 			{
 				KO7::$log->add(KO7_Log::INFO, '-> User is suspended or canceled.');
-				$message = kohana::lang('user.login_usersuspended', $user -> reason );
+				$message = __('user.login_usersuspended', $user -> reason );
 				return false;
 			}
 			
@@ -128,16 +128,16 @@ class Model_User extends Model_Auth_User
 		{						
 			
 			// se � in grace period, nessun check
-			$character = ORM::factory('character')-> where ( 'user_id', $user -> id ) -> find();
+			$character = ORM::factory('character')-> where ( 'user_id', '=', $user -> id ) -> find();
 			if( !is_null( $user -> gracedate) and $user -> gracedate > time() )
 			{
 				KO7::$log->add(KO7_Log::INFO, '-> Not checking proxy as user is in grace period.');
 			}
 			/*
 			elseif (
-				$character -> loaded 
+				$character -> loaded()
 				and 
-				Character_Model::get_premiumbonus( $character->id, 'ipcheckshield' ) === true 
+				Model_Character::get_premiumbonus( $character->id, 'ipcheckshield' ) === true
 			)
 			{
 				KO7::$log->add(KO7_Log::INFO, '-> Skipping proxy check because char has ipcheckshield.');
@@ -154,7 +154,7 @@ class Model_User extends Model_Auth_User
 				if ($user -> proxycheckdisabled == 'N' )
 				{
 					
-					KO7::$log->add('debug', "-> Checking user {$user -> username}. Is using a proxy: [{$proxyscore}]." );
+					KO7::$log->add(KO7_Log::DEBUG, "-> Checking user {$user -> username}. Is using a proxy: [{$proxyscore}]." );
 					if ( $proxyscore == 1 )
 					{
 						if (
@@ -163,13 +163,13 @@ class Model_User extends Model_Auth_User
 							$user -> proxywarningdate < (time() - (5*24*3600))
 						)
 						{
-							KO7::$log->add('debug', "-> Suspending user.");
+							KO7::$log->add(KO7_Log::DEBUG, "-> Suspending user.");
 
 							/*							
 							$user -> status = 'suspended';
 							$user -> reason = 'Using Proxy';				
 							$user -> save();
-							$message = kohana::lang('user.login_usersuspended', $user -> reason );
+							$message = __('user.login_usersuspended', $user -> reason );
 							return false;
 							*/
 						}
@@ -177,7 +177,7 @@ class Model_User extends Model_Auth_User
 						{
 							
 							// Evento 
-							if ($character -> loaded )
+							if ($character -> loaded() )
 							{
 								Character_Event_Model::addrecord( 
 								$character -> id,
@@ -199,11 +199,11 @@ class Model_User extends Model_Auth_User
 		// utente bannato a livello IP?
 		
 		$bannedip = ORM::factory('admin_bannedip')
-			-> where( array( 'ipaddress' => $ipaddress ) )->find();
+			-> where( 'ipaddress', '=', $ipaddress ) ->find();
 		
 		if ( $bannedip->loaded and $bannedip -> status == 'banned' )
 		{
-			$message = kohana::lang( 'user.bannedip' );
+			$message = __( 'user.bannedip' );
 			return false;
 		}
 		
@@ -211,7 +211,7 @@ class Model_User extends Model_Auth_User
 		
 		self::multicheck( $user, $ipaddress );
 		
-		KO7::$log->add('debug', "------- POSTCHECKS PROCESS END -------");
+		KO7::$log->add(KO7_Log::DEBUG, "------- POSTCHECKS PROCESS END -------");
 		
 		return true;
 	
@@ -239,17 +239,17 @@ class Model_User extends Model_Auth_User
 		
 		$db = Database::instance();		
 		
-		$character = ORM::factory('character')
-			-> where( 'user_id', $user -> id )->find();
+		$character = ORM::factory('Character')
+			-> where( 'user_id', '=', $user -> id )->find();
 					
-		if ( $character -> loaded )
+		if ( $character -> loaded() )
 		{
 		
-			$bonuses = Character_Model::get_premiumbonuses( $character -> id );			
+			$bonuses = Model_Character::get_premiumbonuses( $character -> id );
 			KO7::$log->add(KO7_Log::INFO, '-> Checking if user ' . $user -> username . ' should be controlled for multi...');
 			if ( 
 				( 					
-					Character_Model::get_premiumbonus( $character -> id, 'ipcheckshield' ) === false and 
+					Model_Character::get_premiumbonus( $character -> id, 'ipcheckshield' ) === false and
 					$user -> multi_status != 'allowed' and 
 					kohana::config('medeur.multilogin_check') == true  and
 					( is_null( $user -> gracedate) or $user -> gracedate < time() ) 
@@ -262,11 +262,11 @@ class Model_User extends Model_Auth_User
 				
 				$sql = "select u.username from users u, characters c
 				where c.user_id = u.id 
-				and   u.username != ? 
-				and   u.ipaddress = ? 
+				and   u.username != {$user->username} 
+				and   u.ipaddress = {$user->ipaddress} 
 				and   u.status =   'active' " ;
 				
-				$res = Database::instance() -> query( $sql, $user -> username, $user -> username  ) -> as_array();														
+				$res = Database::instance() -> query( Database::SELECT, $sql ) -> as_array();
 				// Se c'� un altro utente attivo con lo stesso IP e che ha un char...
 				
 				if ( count ($res) > 0 )
@@ -276,14 +276,11 @@ class Model_User extends Model_Auth_User
 					$multi['username_1'] = $user -> username ;
 					$multi['username_2'] = $res[0] -> username ;
 										
-					$res1 = $db -> query (
+					$res1 = $db -> query ( Database::SELECT,
 						"select counter from trace_userip_conflicts 
-						where ipaddress = ?
-						and username_1 = ?
-						and username_2 = ?",
-						$multi['ipaddress'], 
-						$multi['username_1'], 
-						$multi['username_2']
+						where ipaddress = {$multi['ipaddress']}
+						and username_1 = {$multi['username_1']}
+						and username_2 = {$multi['username_2']}"
 					) ;
 					
 					KO7::$log->add(KO7_Log::INFO, 'user: ' . $multi['username_1'] . ' has the same IP of: ' . $multi['username_2'] );
@@ -299,53 +296,46 @@ class Model_User extends Model_Auth_User
 						replace into trace_userip_conflicts 
 						set 	
 						counter = " . $c . ", 
-						ipaddress = ?,
-						username_1 = ?,
-						username_2 = ?";
+						ipaddress = {$multi['ipaddress']},
+						username_1 = {$multi['username_1']},
+						username_2 = {$multi['username_2']}";
 					}
 					else
 						$sql = "
 					  replace into trace_userip_conflicts 
 						set 	
 						counter = 1, 
-						ipaddress = ?,
-						username_1 = ?,						
-						username_2 = ?";
+						ipaddress = {$multi['ipaddress']},
+						username_1 = {$multi['username_1']},						
+						username_2 = {$multi['username_2']}";
 					
 					
-					//KO7::$log->add('debug', 'sql: ' . $sql );
+					//KO7::$log->add(KO7_Log::DEBUG, 'sql: ' . $sql );
 					
-					$db -> query( $sql,
-						$multi['ipaddress'],
-						$multi['username_1'],
-						$multi['username_2']
-					); 
+					$db -> query(Database::UPDATE, $sql);
 					
 					// se il count della coppia � maggiore di un certo parametro sospendi l'account
 					// solo in certi giorni del mese (rapporto 15:15)
 					
-					$res2 = $db -> query ( 
+					$res2 = $db -> query (Database::SELECT,
 					"
 						select sum(counter) n 
 						from trace_userip_conflicts
-						where username_1 = ?
-						and username_2 = ?",
-						$multi['username_1'],
-						$multi['username_2']
+						where username_1 = {$multi['username_1']}
+						and username_2 = {$multi['username_2']}"
 					);
 					
-					KO7::$log->add('debug', 'Shared IP logins: ' . $res2[0] -> n );
+					KO7::$log->add(KO7_Log::DEBUG, 'Shared IP logins: ' . $res2[0] -> n );
 					
 					if ( $res2[0] -> n	>= 10 and date("d", time()) >= 15)
 					{
-						KO7::$log->add('debug', '-> Suspending account: ' . $multi['username_1'] . '!');
+						KO7::$log->add(KO7_Log::DEBUG, '-> Suspending account: ' . $multi['username_1'] . '!');
 					
-						$db -> query ( 
+						$db -> query (Database::UPDATE,
 							"update users set 
 							status = 'suspended',
 							reason = 'IP Address Conflict' 
-							where username = ?",
-								$multi['username_1']
+							where username = {$multi['username_1']}"
 							);
 							
 						// email
@@ -367,27 +357,27 @@ class Model_User extends Model_Auth_User
 	* @return none
 	*/
 
-	function loginuser( $user, $ipaddress, &$message )
+	static function loginuser( $user, $ipaddress, &$message )
 	{
 	
 		// solo gli admin possono entrare?
 		
-		KO7::$log->add('debug', "------- LOGIN PROCESS -------");
-		KO7::$log->add('debug', '-> isadmin?: ' . Auth::instance() -> logged_in('admin') );
-		KO7::$log->add('debug', '-> isstaff?: ' . Auth::instance() -> logged_in('staff') );
+		KO7::$log->add(KO7_Log::DEBUG, "------- LOGIN PROCESS -------");
+		KO7::$log->add(KO7_Log::DEBUG, '-> isadmin?: ' . Auth::instance() -> logged_in('admin') );
+		KO7::$log->add(KO7_Log::DEBUG, '-> isstaff?: ' . Auth::instance() -> logged_in('staff') );
 		
 		if ( 
 			! Auth::instance() -> logged_in( 'admin' ) and 
 			! Auth::instance() -> logged_in( 'staff' ) and 
 			kohana::config( 'medeur.loginonlyadmin' ) )
 		{
-			$message = kohana::lang('user.login_onlyadmin'); 
+			$message = __('user.login_onlyadmin');
 			return false;
 		}
 		
 		KO7::$log->add (KO7_Log::INFO, '-> loginuser: ' . $user -> username . ' logged in succesfully.' );
 		
-		$auth = new Auth();
+		$auth = Auth::instance();
 		$auth -> force_login( $user );
 
 		// Memorizzo in sessione l' user_id, il char_id e le statistiche di base del char				
@@ -395,15 +385,15 @@ class Model_User extends Model_Auth_User
 		//KO7::$log->add( KO7_Log::INFO, '-> loginuser: Putting userid: ' . $user -> id . ' in session.');
 		Session::instance() -> set( 'user_id', $user -> id );									
 		
-		$character = ORM::factory('character') -> where( 'user_id', $user -> id ) -> find();
+		$character = ORM::factory('character') -> where( 'user_id', '=', $user -> id ) -> find();
 		
-		if ( $character -> loaded )
+		if ( $character -> loaded() )
 		{
 			//KO7::$log->add( KO7_Log::INFO, '-> loginuser: Putting charid ' . $character -> id . ' in session...');
 			Session::instance() -> set( 'char_id', $character -> id );
 			
 			// update game age stats
-			Character_Model::modify_stat_d( 
+			Model_Character::modify_stat_d(
 			$character -> id, 
 			'gameage',
 			$character -> get_age(),
@@ -415,7 +405,7 @@ class Model_User extends Model_Auth_User
 		}
 		
 			// install security cookie
-		KO7::$log->add('debug', '-> Installing security cookie...');
+		KO7::$log->add(KO7_Log::DEBUG, '-> Installing security cookie...');
 		$val = cookie::get('me-login', 'cookiemissing');	
 		if ( $val == 'cookiemissing' )
 		{
@@ -462,7 +452,7 @@ class Model_User extends Model_Auth_User
 		if ( Auth::instance()->logged_in('staff') )
 			Session::instance() -> set ('isstaff', true );	
 	
-		KO7::$log->add('debug', "------- LOGIN PROCESS END -------");
+		KO7::$log->add(KO7_Log::DEBUG, "------- LOGIN PROCESS END -------");
 	
 		return true;
 	
@@ -477,12 +467,12 @@ class Model_User extends Model_Auth_User
 	* @return none
 	*/
 		
-	function register( $data, &$user, &$message )
+	public static function register( $data, &$user, &$message )
 	{	
 		
-		KO7::$log->add('debug', "------- REGISTER USER START -------");
+		KO7::$log->add(KO7_Log::DEBUG, "------- REGISTER USER START -------");
 		
-		$user = ORM::factory('user');		
+		$user = ORM::factory('User');
 		$user -> username = Model_User::normalizeusername($data['username']);
 		$passwordclear = $user -> username  . '_' . substr(md5(time()),1,5);
 		$user -> password = $passwordclear;
@@ -500,21 +490,21 @@ class Model_User extends Model_Auth_User
 		$user -> newsletter = 'Y';			
 		$user -> tutorialmode = 'Y' ;
 		$user -> created = time();        
-		//KO7::$log->add('debug', kohana::debug($user)); exit;
+		//KO7::$log->add(KO7_Log::DEBUG, kohana::debug($user)); exit;
 		
 		$rc = $user -> save();
 		
 		if ( $user -> save() ) 
 		{                    
 			// Add login role
-			Database::instance() -> query ("insert into roles_users values ( {$user -> id}, 1 )");
+			Database::instance() -> query (Database::INSERT, "insert into roles_users values ( {$user -> id}, 1 )");
 			
 			// add referrer link if user exists
 			
 			if ( !empty($data['referreruser']) )
 			{
-				$referreruser = ORM::factory('user', $data['referreruser']);
-				if ($referreruser -> loaded )
+				$referreruser = ORM::factory('User', $data['referreruser']);
+				if ($referreruser -> loaded() )
 				{		
 					$referral_link = ORM::factory('user_referral');					
 					$referral_link -> user_id = $data['referreruser'];
@@ -529,10 +519,10 @@ class Model_User extends Model_Auth_User
 			
 			if ( !in_array( $user -> referrersite, array( 'facebook', 'bbrelax') ) )
 			{
-				$subject = Kohana::lang('user.register_emailsubject');
-				$body    = Kohana::lang('user.register_emailbody', 
-					$user -> username, $passwordclear,
-					'https://' . $_SERVER['SERVER_NAME'] . "/index.php/user/activate/".$user -> id."/".$user->activationtoken);
+				$subject = __('user.register_emailsubject');
+				$body    = __('user.register_emailbody',
+					array(':user' => $user -> username, ':pass' => $passwordclear,
+					':link' => 'https://' . $_SERVER['SERVER_NAME'] . "/index.php/user/activate/".$user -> id."/".$user->activationtoken));
 				$to      = $user -> email;
 				$result = Model_Utility::mail( $to, $subject, $body );
 			}
@@ -540,11 +530,11 @@ class Model_User extends Model_Auth_User
 		}
 		else 
 		{
-			$message = kohana::lang('user.error-');
+			$message = __('user.error-');
 			return false;
 		}
 		
-		KO7::$log->add('debug', "------- REGISTER USER END -------");
+		KO7::$log->add(KO7_Log::DEBUG, "------- REGISTER USER END -------");
 		return true;
 	
 	}
@@ -664,23 +654,23 @@ class Model_User extends Model_Auth_User
 		$submenu = array( 
 			'user/profile/' . $this -> id => 
 				array(
-				'name' => kohana::lang('user.profile'), 
+				'name' => __('user.profile'),
 				'htmlparams' => array( 'class' =>( $action == 'profile' ) ? 'selected' : '' )),
 			'user/changepassword/' . $this -> id => 
 				array(
-				'name' => kohana::lang('user.changepassword'), 
+				'name' => __('user.changepassword'),
 				'htmlparams' => array( 'class' =>( $action == 'changepassword' ) ? 'selected' : '' )),	
 			'user/configure/' . $this -> id => 
 				array(
-				'name' => kohana::lang('user.configure'), 
+				'name' => __('user.configure'),
 				'htmlparams' => array( 'class' =>( $action == 'configure' ) ? 'selected' : '' )),		
 			'user/bonuspurchases/' => 
 				array(
-				'name' => kohana::lang('user.bonuspurchases'), 
+				'name' => __('user.bonuspurchases'),
 				'htmlparams' => array( 'class' =>( $action == 'bonuspurchases' ) ? 'selected' : '' )),
 			'user/purchases/' => 
 				array(
-				'name' => kohana::lang('user.purchases'), 
+				'name' => __('user.purchases'),
 				'htmlparams' => array( 'class' =>( $action == 'purchases' ) ? 'selected' : '' ))
 				);
 		return $submenu;		
@@ -694,21 +684,21 @@ class Model_User extends Model_Auth_User
 	function get_proxyscore( $ipaddress )
 	{
 						
-		KO7::$log->add('debug', "-> Checking IP: [{$ipaddress}] for proxy...");
+		KO7::$log->add(KO7_Log::DEBUG, "-> Checking IP: [{$ipaddress}] for proxy...");
 		
-		$rec = ORM::factory('ipaddress_proxy') -> where( 'ipaddress', $ipaddress ) -> find();
+		$rec = ORM::factory('ipaddress_proxy') -> where( 'ipaddress', '=', $ipaddress ) -> find();
 		
 		// cache: 6 mesi
 		if (
-			$rec -> loaded == false 
+			$rec -> loaded() == false
 			or 
 			$rec -> timestamp < (time() - (6*30*24*3600)) 
 		)
 		{
-			KO7::$log->add('debug', '-> Contacting IPintel server...');
+			KO7::$log->add(KO7_Log::DEBUG, '-> Contacting IPintel server...');
 						
 			$calls = ORM::factory('ipaddress_proxy_call')
-			-> where( 'date' , date("Y-m-d", time()) )
+			-> where( 'date' , '=', date("Y-m-d", time()) )
 			-> find();
 
 			if ($calls->calls >= 500 )
@@ -729,7 +719,7 @@ class Model_User extends Model_Auth_User
 			curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, false);
 			$rawdata = curl_exec($ch);			
 			
-			KO7::$log->add('debug', "-> IP: [{$ipaddress}] proxy score: {$rawdata}");
+			KO7::$log->add(KO7_Log::DEBUG, "-> IP: [{$ipaddress}] proxy score: {$rawdata}");
 			
 			$rec -> ipaddress = $ipaddress;
 			$rec -> score = $rawdata;
@@ -738,7 +728,7 @@ class Model_User extends Model_Auth_User
 		}
 		else
 		{
-			KO7::$log->add('debug', "-> IP Address {$ipaddress} is cached.");
+			KO7::$log->add(KO7_Log::DEBUG, "-> IP Address {$ipaddress} is cached.");
 			
 		}
 		return $rec -> score;
@@ -769,9 +759,9 @@ class Model_User extends Model_Auth_User
 	public function modifyemail( $user, $newemail )
 	{
 		
-		Database::instance() -> query("set autocommit = 0");
-		Database::instance() -> query("start transaction");
-		Database::instance() -> query("begin");
+		Database::instance() -> query(Database::UPDATE, "set autocommit = 0");
+		Database::instance() -> query(Database::UPDATE, "start transaction");
+		Database::instance() -> query(Database::UPDATE, "begin");
 		
 		try 
 		{
@@ -780,20 +770,19 @@ class Model_User extends Model_Auth_User
 			$user -> save();
 					
 			$dbforum = Database::instance('forum');		
-			$dbforum -> query ("update smf_members set email_address = ? where member_name = ?",
-				$newemail, $user -> username );		
+			$dbforum -> query (Database::UPDATE, "update smf_members set email_address = {$newemail} where member_name = {$user->username}");
 			KO7::$log->add(KO7_Log::INFO, '-> changecharemail ***commit***.');
-			Database::instance() -> query("commit");
+			Database::instance() -> query(Database::UPDATE, "commit");
 			
 		} catch (Kohana_Database_Exception $e)
 		{
 			$message = $e -> getMessage();
 			KO7::$log->add(KO7_Log::ERROR, 'Error while modifying email: ' . $message );
-			Database::instance() -> query("rollback");						
+			Database::instance() -> query(Database::UPDATE, "rollback");
 			return false;
 		}	
 		
-		Database::instance() -> query("set autocommit = 1");
+		Database::instance() -> query(Database::UPDATE, "set autocommit = 1");
 		
 	}
 

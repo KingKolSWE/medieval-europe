@@ -69,7 +69,7 @@ class CA_Imprison_Model extends Character_Action_Model
 		// Cooldown di 24 ore
 		//////////////////////////////////////////////////////////////////////
 		
-		$stat = Character_Model::get_stat_d( $par[1] -> character_id, 'lastimprisonment', $par[0] -> region -> kingdom_id );
+		$stat = Model_Character::get_stat_d( $par[1] -> character_id, 'lastimprisonment', $par[0] -> region -> kingdom_id );
 		
 		//var_dump($stat);exit;
 		if ( $stat -> loaded and time() - self::IMPRISON_COOLDOWN < $stat -> stat1 )
@@ -137,7 +137,7 @@ class CA_Imprison_Model extends Character_Action_Model
 		// scontando qualche altra pena
 		/////////////////////////////////////////////////////
 		
-		if ( Character_Model::is_imprisoned( $par[1] -> character -> id ) )
+		if ( Model_Character::is_imprisoned( $par[1] -> character -> id ) )
 		{ $message = sprintf(kohana::lang('ca_imprison.alreadyimprisoned', $par[1]->name)); return FALSE; }
 	
 		/////////////////////////////////////////////////////
@@ -148,7 +148,7 @@ class CA_Imprison_Model extends Character_Action_Model
 		if ( $par[1] -> character -> is_meditating( $par[1] -> character -> id ) )
 		{ $message = sprintf(kohana::lang('ca_imprison.charismeditating', $par[1] -> character -> name)); return FALSE; }		
 	
-		if ( Character_Model::is_fighting( $par[1] -> id ) == true ) 		
+		if ( Model_Character::is_fighting( $par[1] -> id ) == true )
 		{ $message = sprintf(kohana::lang('ca_imprison.charisfighting', $par[1] -> character -> name)); return FALSE;}		
 		
 		return true;
@@ -264,7 +264,7 @@ class CA_Imprison_Model extends Character_Action_Model
 			
 			// modifico stat per settare che � in prigione.
 			
-			Character_Model::modify_stat_d(
+			Model_Character::modify_stat_d(
 				$char -> id,
 				'servejailtime',
 				0,

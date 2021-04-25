@@ -61,7 +61,7 @@ class CA_Trash_Model extends Character_Action_Model
 	{
 	
 		$i = Item_Model::factory( $par[1], null );
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
 		///////////////////////////////////////////////////////////////////
 		// aggiunge l' item sulla struttura.

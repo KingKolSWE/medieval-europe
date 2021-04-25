@@ -63,8 +63,8 @@ class Battle_Conquer_IR_Model extends Battle_Type_Model
 			
 			if ( 
 				$group_member -> character -> position_id == $this -> par[0] -> character -> position_id 
-				and Character_Model::is_recovering( $group_member -> character -> id ) === false
-				and Character_Model::is_resting( $group_member -> character -> id ) === false 
+				and Model_Character::is_recovering( $group_member -> character -> id ) === false
+				and Model_Character::is_resting( $group_member -> character -> id ) === false
 				and $group_member -> character -> get_age() > kohana::config('medeur.mindaystofight', 30)
 				)
 			{
@@ -167,10 +167,10 @@ class Battle_Conquer_IR_Model extends Battle_Type_Model
 			$native['char']['car'] = $stats['car'];
 			
 			$native['char']['basetransportableweight'] = 
-				Character_Model::get_basetransportableweight( $native['char']['str'] );
+				Model_Character::get_basetransportableweight( $native['char']['str'] );
 						
 			$native['char']['armorencumbrance'] = 
-				Character_Model::get_armorencumbrance( $native['char']['basetransportableweight'], 
+				Model_Character::get_armorencumbrance( $native['char']['basetransportableweight'],
 					$native['char']['equippedweight'] );
 			
 			kohana::log('debug' , '-> Native equippedweight: ' . $native['char']['equippedweight'] );

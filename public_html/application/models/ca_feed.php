@@ -60,7 +60,7 @@ class CA_Feed_Model extends Character_Action_Model
 	
 	protected function check( $par, &$message )
 	{ 
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );	
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
 		// Check classe madre (compreso il check_equipment)
 		if ( ! parent::check_( $par, $message ) )					

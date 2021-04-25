@@ -96,7 +96,7 @@ echo form::submit( array( 'id' => 'submit', 'class' => 'button button-small', 'v
 			</td>
 			<td>
 				<h3><?=	html::anchor( '/group/view/'.$group->id, $group->name ); ?></h3>				
-				<?= kohana::lang('groups.group_founder'). ' '. Character_Model::create_publicprofilelink( $group -> char_id ); ?>
+				<?= kohana::lang('groups.group_founder'). ' '. Model_Character::create_publicprofilelink( $group -> char_id ); ?>
 				<br/>
 				<i><?= $group -> description ; ?></i>
 			</td>

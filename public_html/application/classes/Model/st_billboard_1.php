@@ -21,7 +21,7 @@ class ST_Billboard_1_Model extends Structure_Model
 	{
 		
 		$links = parent::build_common_links( $structure );
-		$character = Character_Model::get_info( Session::instance()->get('char_id') );				
+		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		if ($structure -> region -> kingdom_id == $character -> region -> kingdom_id )
 			$links .= html::anchor( "royalpalace/showwelcomeannouncement", Kohana::lang('character.regentmessage'),
 				array('class' => 'st_evidence2')) . "<br/>" ;		

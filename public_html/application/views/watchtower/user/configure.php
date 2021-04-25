@@ -173,7 +173,7 @@ Choose Skin:
 <br/>
 <!-- automated sleep -->
 
-<?php if ( Character_Model::get_premiumbonus( $char -> id, 'automatedsleep' ) !== false ) { ?>
+<?php if ( Model_Character::get_premiumbonus( $char -> id, 'automatedsleep' ) !== false ) { ?>
 <?php echo form::open() ?>
 <fieldset>
 <legend><?php echo kohana::lang('bonus.automatedsleep_name')?></legend>
@@ -204,7 +204,7 @@ Choose Skin:
 
 <!-- basic package -->
 
-<?php if ( Character_Model::get_premiumbonus( $char -> id, 'basicpackage' ) !== false ) { ?>
+<?php if ( Model_Character::get_premiumbonus( $char -> id, 'basicpackage' ) !== false ) { ?>
 <?php echo form::open() ?>
 <fieldset>
 <legend><?php echo kohana::lang('bonus.basicpackage_name')?></legend>

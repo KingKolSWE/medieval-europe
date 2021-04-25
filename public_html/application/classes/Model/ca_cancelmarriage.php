@@ -159,7 +159,7 @@ class CA_CancelMarriage_Model extends Character_Action_Model
 		if ( !$par[2] -> loaded )
 		{ $message = Kohana::lang("global.error-characterunknown"); return false; };
 		
-		if ( is_null(Character_Model::is_married( $par[2] -> id )) )
+		if ( is_null(Model_Character::is_married( $par[2] -> id )) )
 		{ $message = Kohana::lang("ca_cancelmarriage.error-characterisnotmarried"); return false; };
 				
 		//find partner
@@ -187,7 +187,7 @@ class CA_CancelMarriage_Model extends Character_Action_Model
 		// husband or wife are married?		
 		
 		// char 1 and 2, are married?
-		if ( Character_Model::is_marriedto( $par[2] -> id, $this -> partner -> id, $relationtype ) == false )
+		if ( Model_Character::is_marriedto( $par[2] -> id, $this -> partner -> id, $relationtype ) == false )
 		{ $message = Kohana::lang("ca_cancelmarriage.error-charactersarenotmarried"); return false; };
 				
 		// requesting char is busy?
@@ -359,19 +359,19 @@ class CA_CancelMarriage_Model extends Character_Action_Model
 		
 			Character_Event_Model::addrecord( $officer -> id, 
 			'normal', '__events.cancelweddingofficer' . 
-			';' . Character_Model::create_publicprofilelink($requester -> id, $requester -> name) . 
-			';' . Character_Model::create_publicprofilelink($partner -> id, $partner -> name),
+			';' . Model_Character::create_publicprofilelink($requester -> id, $requester -> name) .
+			';' . Model_Character::create_publicprofilelink($partner -> id, $partner -> name),
 			'normal' );
 			
 			// evento per town crier
 				
 			Character_Event_Model::addrecord( null, 
 			'announcement', '__events.weddingcanceled' . 
-			';' . Character_Model::create_publicprofilelink($officer -> id, $officer -> name) . 
+			';' . Model_Character::create_publicprofilelink($officer -> id, $officer -> name) .
 			';__' . $structure -> structure_type -> name .
 			';__' . $structure -> region -> name .
-			';' . Character_Model::create_publicprofilelink($requester -> id, $requester -> name) . 
-			';' . Character_Model::create_publicprofilelink($partner -> id, $partner -> name) ,	
+			';' . Model_Character::create_publicprofilelink($requester -> id, $requester -> name) .
+			';' . Model_Character::create_publicprofilelink($partner -> id, $partner -> name) ,
 			'normal' );
 				
 		}
@@ -395,14 +395,14 @@ class CA_CancelMarriage_Model extends Character_Action_Model
 			
 			Character_Event_Model::addrecord( $requester -> id, 
 			'normal', '__events.cancelweddingspouses' . 
-			';' . Character_Model::create_publicprofilelink($partner -> id, $partner -> name) . 
+			';' . Model_Character::create_publicprofilelink($partner -> id, $partner -> name) .
 			';__' . $structure -> structure_type -> name .
 			';__' . $structure -> region -> name,
 			'normal' );
 			
 			Character_Event_Model::addrecord( $partner -> id, 
 			'normal', '__events.cancelweddingspouses' . 
-			';' . Character_Model::create_publicprofilelink($requester -> id, $requester -> name) . 
+			';' . Model_Character::create_publicprofilelink($requester -> id, $requester -> name) .
 			';__' . $structure -> structure_type -> name .
 			';__' . $structure -> region -> name,
 			'normal' );
@@ -411,14 +411,14 @@ class CA_CancelMarriage_Model extends Character_Action_Model
 			
 			Character_Permanentevent_Model::add_model( $requester -> id,
 			'__permanentevents.marriedcanceled' .
-			';' . Character_Model::create_publicprofilelink($partner -> id, $partner -> name) . 
+			';' . Model_Character::create_publicprofilelink($partner -> id, $partner -> name) .
 			';__' . $structure -> structure_type -> name .
 			';__' . $structure -> region -> name			
 			);
 			
 			Character_Permanentevent_Model::add_model( $partner -> id,
 			'__permanentevents.marriedcanceled' .
-			';' . Character_Model::create_publicprofilelink($requester -> id, $requester -> name) .
+			';' . Model_Character::create_publicprofilelink($requester -> id, $requester -> name) .
 			'__' . 'religion.church-' . $structure -> structure_type -> church -> name . ';' .
 			';__' . $structure -> structure_type -> name .
 			';__' . $structure -> region -> name

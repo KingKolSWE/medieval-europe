@@ -45,7 +45,7 @@ else
 
 		<tr class='<?php echo $class; ?>'>
 		<td class ='center'> <?php echo kohana::lang('bonus.'. $b -> name . '_name'); ?></td>
-		<td class ='center'> <?php echo Character_Model::create_publicprofilelink( null, $b -> targetcharname ) ?></td>
+		<td class ='center'> <?php echo Model_Character::create_publicprofilelink( null, $b -> targetcharname ) ?></td>
 		<td class ='center'> <?php echo date('d/m/Y H:i:s', $b -> starttime); ?></td>
 		<td class ='center'> <?php echo date('d/m/Y H:i:s', $b -> endtime); ?></td>
 		<td class ='center' style="<?=$style?>"> <?php echo kohana::lang('global.' . $active ); ?></td>

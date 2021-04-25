@@ -1,6 +1,6 @@
 
 <?php
-	$char = Character_Model::get_info( Session::instance() -> get('char_id') );		
+	$char = Model_Character::get_info( Session::instance() -> get('char_id') );
 ?>
 
 <div class="pagetitle"><?php echo kohana::lang('quests.welcomepagetitle')?></div>

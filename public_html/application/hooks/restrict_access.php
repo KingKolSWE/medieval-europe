@@ -79,7 +79,7 @@ function Restrict_Access()
 	);
 	
 	/////////////////////////////////////////////////////////////////
-	// array di pagine che è possibile navigare senza char
+	// array di pagine che ï¿½ possibile navigare senza char
 	/////////////////////////////////////////////////////////////////
 	
 	$okwithoutchar = array_merge ( 
@@ -93,9 +93,9 @@ function Restrict_Access()
 	);	
 
 	/////////////////////////////////////////////////////////////////
-	// controllo se l' utente è autorizzato ad accedere alla pagina
+	// controllo se l' utente ï¿½ autorizzato ad accedere alla pagina
 	// fix: url::current() ritorna anche i parametri, per gestire 
-	// una lista di controller/function è
+	// una lista di controller/function ï¿½
 	// necessario usare l' helper uri.
 	/////////////////////////////////////////////////////////////////
 	
@@ -126,9 +126,9 @@ function Restrict_Access()
 	}
 	
 	/////////////////////////////////////////////////////////////////
-	// Se l' utente è autenticato l'oggetto user esiste.
+	// Se l' utente ï¿½ autenticato l'oggetto user esiste.
 	// Controlliamo che l' utente abbia un char valido associato 
-	// altrimenti viene rediretto alla creazione utente (se non è un affiliato)		
+	// altrimenti viene rediretto alla creazione utente (se non ï¿½ un affiliato)		
 	/////////////////////////////////////////////////////////////////
 	
 	//$db = Database::instance();
@@ -136,10 +136,10 @@ function Restrict_Access()
 	
 	
 	kohana::log('debug', '-> Restrict Access: Retrieving char.');	
-	$char = Character_Model::get_data( Session::instance() -> get('char_id') );  	
+	$char = Model_Character::get_data( Session::instance() -> get('char_id') );
 	kohana::log('debug', "-> Restrict Access: Action: {$action}, Char is null? " . is_null($char));
-	// se la request non è nell' elenco degli indirizzi a cui si puo' accedere senza char e il 
-	// personaggio non è ancora stato creato, ridirezioniamo alla pagina di creazione carattere.	
+	// se la request non ï¿½ nell' elenco degli indirizzi a cui si puo' accedere senza char e il 
+	// personaggio non ï¿½ ancora stato creato, ridirezioniamo alla pagina di creazione carattere.	
 		
 	if ( !in_array( $action, $okwithoutchar) and is_null($char) ) 
 	{			
@@ -149,14 +149,14 @@ function Restrict_Access()
 	}
 
 	/////////////////////////////////////////////////////////////////
-	// Se siamo arrivati qui, l' utente è loggato ed ha un char.
+	// Se siamo arrivati qui, l' utente ï¿½ loggato ed ha un char.
 	// Controlliamo lo stato
 	/////////////////////////////////////////////////////////////////
 	
 	if ( !is_null( $char ) )
 	{
 		kohana::log('debug', '-> Char is logged.');
-		$lastactiontime = Character_Model::get_lastactiontime_d( $char -> id );
+		$lastactiontime = Model_Character::get_lastactiontime_d( $char -> id );
 		
 		// salva il dato su DB solo se sono passati + di 15 minuti
 		
@@ -165,7 +165,7 @@ function Restrict_Access()
 		
 	My_Cache_Model::set ( '-charinfo_' . $char -> id . '_lastactiontime', time() ); 		
 		
-		Character_Model::handle_char_specialstatus();
+		Model_Character::handle_char_specialstatus();
 	}
 
 	kohana::log('debug', '-> Displaying page.');

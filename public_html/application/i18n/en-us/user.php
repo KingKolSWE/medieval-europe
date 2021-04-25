@@ -12,7 +12,7 @@ return Array
 'register_register' => 'Sign Up', 
 'register_createerror' => 'An error happened while saving data. Please contact site administrator.', 
 'register_emailsubject' => 'Welcome to Medieval Europe', 
-'register_emailbody' => 'Welcome to Medieval Europe. You just signed up with the following credentials: User: %s, password: %s. To confirm your email address and activate your account, please click on the following link: %s or copy it into the browser address bar. Thanks again for signing up at Medieval Europe.', 
+'register_emailbody' => 'Welcome to Medieval Europe. You just signed up with the following credentials: User: :user, password: :pass. To confirm your email address and activate your account, please click on the following link: :link or copy it into the browser address bar. Thanks again for signing up at Medieval Europe.',
 'login_pagetitle' => 'LOGIN', 
 'login_submit' => 'Enter', 
 'login_autherror' => 'Wrong username or password.', 

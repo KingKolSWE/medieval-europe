@@ -34,7 +34,7 @@ class CA_Move_Model extends Character_Action_Model
 		if ( ! parent::check_( $par, $message, $par[2] -> id ) )					
 		{ return false; }
 		
-		$bonuses = Character_Model::get_premiumbonuses( $par[2] -> id ); ;
+		$bonuses = Model_Character::get_premiumbonuses( $par[2] -> id ); ;
 		$regionpaths = Configuration_Model::get_cfg_regions_paths2();
 			
 		// la regione di destinazione esiste?
@@ -56,7 +56,7 @@ class CA_Move_Model extends Character_Action_Model
 		
 		// se il path � fasttravel e il char non ha il bonus travel, errore
 		
-		if ( $region_path['data'] -> type == 'fastland' and Character_Model::get_premiumbonus( $par[2] -> id, 'travelerpackage' ) === false )
+		if ( $region_path['data'] -> type == 'fastland' and Model_Character::get_premiumbonus( $par[2] -> id, 'travelerpackage' ) === false )
 		{ $message = kohana::lang('global.operation_not_allowed'); return FALSE; }
 		
 		// se il path � fasttravel ma una ragione attraversata � ostile, errore		
@@ -126,7 +126,7 @@ class CA_Move_Model extends Character_Action_Model
 		/////////////////////////////////////////////////////
 		
 		if ( 
-			Character_Model::is_restrained( $par[2] -> id )
+			Model_Character::is_restrained( $par[2] -> id )
 			and 
 			$par[0] -> kingdom -> id != $currentregion -> kingdom_id )
 		{ $message = kohana::lang('charactions.move_charisrestrained') ; return FALSE; }
@@ -171,7 +171,7 @@ class CA_Move_Model extends Character_Action_Model
 		
 		$frombattlefield = false;
 		
-		if ( Character_Model::is_fighting( $par[2] -> id ) == true ) 
+		if ( Model_Character::is_fighting( $par[2] -> id ) == true )
 		{
 			$db = Database::instance();
 			$sql = "
@@ -231,7 +231,7 @@ class CA_Move_Model extends Character_Action_Model
 	{
 	
 		$char = ORM::factory('character')->find( $data->character_id );
-		$bonuses = Character_Model::get_premiumbonuses( $char -> id ); ;
+		$bonuses = Model_Character::get_premiumbonuses( $char -> id ); ;
 		
 		$region_path = ORM::factory('region_path')->where(array('region_id' => $data->param1, 'destination' => $data->param2))->find();		
 		$destregion = ORM::factory('region', $data -> param2 );
@@ -253,10 +253,10 @@ class CA_Move_Model extends Character_Action_Model
 		
 		// consuma il carro, solo se non si ha il cart pro
 		
-		if ( Character_Model::get_premiumbonus(  $char -> id, 'supercart') == false )
+		if ( Model_Character::get_premiumbonus(  $char -> id, 'supercart') == false )
 		{
 		
-			if ( Character_Model::has_item( $char->id, 'cart_2') == true )
+			if ( Model_Character::has_item( $char->id, 'cart_2') == true )
 			{
 				
 				kohana::log('debug', '-> Char has a cart 2.');
@@ -287,7 +287,7 @@ class CA_Move_Model extends Character_Action_Model
 				 
 			}
 			
-			if ( Character_Model::has_item( $char->id, 'cart_1') == true )
+			if ( Model_Character::has_item( $char->id, 'cart_1') == true )
 			{		
 				kohana::log('debug', '-> Char has a cart 1.');
 				$res = Database::instance() -> query ( 
@@ -323,7 +323,7 @@ class CA_Move_Model extends Character_Action_Model
 		// erlo dallo schieramento e resettare lo stato
 		////////////////////////////////////////////////
 		
-		if ( Character_Model::is_fighting( $char -> id ) == true )
+		if ( Model_Character::is_fighting( $char -> id ) == true )
 		{
 			Database::instance() -> query ( "delete from battle_participants bp, battles b 
 				where b.id = bp.battle_id
@@ -399,7 +399,7 @@ class CA_Move_Model extends Character_Action_Model
 		
 		kohana::log('debug', '-> Move: canceling action.');
 		
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );		
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
 		// Se l'azione � gi� oltre i 10 minuti non si pu� cancellare.
 		

@@ -34,10 +34,10 @@ class CA_Loot_Model extends Character_Action_Model
 		
 		// check: il char � svenuto?		
 				
-		if ( Character_Model::is_recovering( $par[1] -> id ) != true )
+		if ( Model_Character::is_recovering( $par[1] -> id ) != true )
 		{ $message = kohana::lang('ca_loot.error-targetcharisnotrecovering'); return FALSE; }
 		
-		$currentaction = Character_Model::get_currentpendingaction( $par[1] -> id );
+		$currentaction = Model_Character::get_currentpendingaction( $par[1] -> id );
 		
 		if ( $currentaction['param1'] == 'duel' )
 		{ $message = kohana::lang('ca_loot.error-lootnotpossiblewhendueling'); return FALSE; }

@@ -74,9 +74,9 @@ class CA_Modifydiplomacystatus_Model extends Character_Action_Model
 		// controllo: foglio di carta e sigillo necessario
 		
 		if ( 
-			! Character_Model::has_item( $par[0]->id, 'paper_piece', 1 ) 
+			! Model_Character::has_item( $par[0]->id, 'paper_piece', 1 )
 			or 
-			! Character_Model::has_item( $par[0]->id, 'waxseal', 1 ) 
+			! Model_Character::has_item( $par[0]->id, 'waxseal', 1 )
 		) 
 		{ $message = kohana::lang('charactions.paperpieceandwaxsealneeded'); return FALSE; }						
 		

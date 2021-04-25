@@ -14,7 +14,7 @@ class PremiumBonus_supercart_Model extends PremiumBonus_Model
 	function postsaveactions( $char, $cut, $par, &$message )
 	{
 		
-		if ( Character_Model::has_item($char->id, 'cart_3', 1) == false )
+		if ( Model_Character::has_item($char->id, 'cart_3', 1) == false )
 		{		
 			$item = Item_Model::factory( null, 'cart_3' );		
 			$item -> additem( 'character', $char-> id, 1 );		

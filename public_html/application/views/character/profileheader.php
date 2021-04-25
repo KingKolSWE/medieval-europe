@@ -109,9 +109,9 @@
 		// badge admin
 		
 		if ( 
-			Character_Model::has_merole( $character, 'admin' ) 
+			Model_Character::has_merole( $character, 'admin' )
 			or
-			Character_Model::has_merole( $character, 'staff' ) 
+			Model_Character::has_merole( $character, 'staff' )
 		)
 			echo html::image(
 			'media/images/badges/character/badge_admin.png', 
@@ -119,7 +119,7 @@
 		
 		// badge tutor
 		
-		if ( Character_Model::has_merole( $character, 'newborntutor' ) )
+		if ( Model_Character::has_merole( $character, 'newborntutor' ) )
 			echo html::image(
 			'media/images/badges/character/badge_newborntutor.png', 
 			array( 'title' => kohana::lang('admin.newborntutor'))); 

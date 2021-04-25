@@ -105,13 +105,13 @@ if ( $info['tag'] != 'nochurch' )
 					foreach ( $followers as $follower) {				
 						
 						$class = ($r % 2 == 0) ? '' : 'alternaterow_1' ; 
-						$role = Character_Model::get_current_role_s( $follower -> id );
+						$role = Model_Character::get_current_role_s( $follower -> id );
 						$roletext = '-';
 						if (!is_null($role) and $role -> get_roletype() == 'religious' )
 							$roletext = $role -> get_title(true);
 				?>					
 				<tr class='<?php echo $class; ?>'>
-					<td class='left'><?= Character_Model::create_publicprofilelink(null, $follower -> character_name); ?></td>								
+					<td class='left'><?= Model_Character::create_publicprofilelink(null, $follower -> character_name); ?></td>
 					<td class='left'><?= kohana::lang($follower -> kingdom_name) ; ?></td>
 					<td class='center'><?= $roletext;?></td>	
 					</tr>

@@ -32,7 +32,7 @@ class Course_Battlepower_Model extends Course_Model
 		if ( $char -> str == 20 ) 
 			Achievement_Model::compute_achievement ( 'stat_str', 20, $char -> id ); 		
 		
-		Character_Model::modify_stat_d( 
+		Model_Character::modify_stat_d(
 			$char -> id,
 			'studiedhours', 
 			0,

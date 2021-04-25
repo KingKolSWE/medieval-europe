@@ -52,7 +52,7 @@ function get_wardrobeitemdata( $name )
 function approvecustomizeditems( $request )
 {
 	$path = DOCROOT . 'media/images/characters/wardrobe/' . $request -> character_id ;	
-	$character = Character_Model::get_info( $request -> character_id );
+	$character = Model_Character::get_info( $request -> character_id );
 
 	foreach ( array( 
 		'clothes',
@@ -177,7 +177,7 @@ function helper_ownwardrobe
 	$nocustomimage = 'media/images/template/noimage.png';
 	
 	$i = 0;		
-	$stat = Character_Model::get_stat_d( $char -> id, 'wardrobeset', $tag . '_' . $char -> sex, null );		
+	$stat = Model_Character::get_stat_d( $char -> id, 'wardrobeset', $tag . '_' . $char -> sex, null );
 	
 	$html = '';
 	$html .= "<tr>";
@@ -439,8 +439,8 @@ function get_correctimage( $char, $equippeditem, $mode, $itemtype = 'item' )
 	$aspect_alternativesetpath = 'media/images/characters/wardrobe/' . $char -> id . '/' ;
 	$aspect_defaultsetpath = 'media/images/characters/aspect/';
 	$image = 'notset';
-	$customizaziondisabledstat = Character_Model::get_stat_d( $char -> id, 'disablecustomwardrobe' );
-	$haswardrobebonus = is_array(Character_Model::get_premiumbonus($char -> id, 'wardrobe'));
+	$customizaziondisabledstat = Model_Character::get_stat_d( $char -> id, 'disablecustomwardrobe' );
+	$haswardrobebonus = is_array(Model_Character::get_premiumbonus($char -> id, 'wardrobe'));
 	
 	//kohana::log('debug', kohana::debug(Character_Model::get_premiumbonus($char -> id, 'wardrobe')));
 	kohana::log('debug', "-> ----- Finding correct Image mode: {$mode} ----- <-");
@@ -482,7 +482,7 @@ function get_correctimage( $char, $equippeditem, $mode, $itemtype = 'item' )
 		{
 			// troviamo lo slot selezionato dall' utente.
 			
-			$slotstat = Character_Model::get_stat_d( 
+			$slotstat = Model_Character::get_stat_d(
 				$char -> id, 'wardrobeset', $equippeditem -> tag . '_' . $char -> sex );
 			
 						
@@ -510,7 +510,7 @@ function get_correctimage( $char, $equippeditem, $mode, $itemtype = 'item' )
 			// get current slot, if stat is not set display the 
 			// default item
 			
-			$slotstat = Character_model::get_stat_d( $char -> id, 'wardrobeset', $itemtype . '_' . $char -> sex );
+			$slotstat = Model_Character::get_stat_d( $char -> id, 'wardrobeset', $itemtype . '_' . $char -> sex );
 			//kohana::log('debug', '-> item: ' . $itemtype . ', slot is : ' . $slotstat -> value );
 			
 			if ( !$slotstat -> loaded or $slotstat -> value == 0 )
@@ -600,7 +600,7 @@ function get_correctimage( $char, $equippeditem, $mode, $itemtype = 'item' )
 				// troviamo lo slot selezionato dall' utente, se non � selezionato, prendiamo il
 				// default item
 			
-				$slotstat = Character_Model::get_stat_d( $char -> id, 'wardrobeset', $equippeditem -> tag . '_' . $char -> sex );			
+				$slotstat = Model_Character::get_stat_d( $char -> id, 'wardrobeset', $equippeditem -> tag . '_' . $char -> sex );
 				//kohana::log('debug', '-> item: ' . $equippeditem -> tag . ', slot is : ' . $slotstat -> value );
 			
 				if ( !$slotstat -> loaded or $slotstat -> value == 0 ) {
@@ -643,7 +643,7 @@ function get_correctimage( $char, $equippeditem, $mode, $itemtype = 'item' )
 				// get current slot, if stat is not set display the 
 				// default item
 			
-				$slotstat = Character_model::get_stat_d( $char -> id, 'wardrobeset', $itemtype . '_' . $char -> sex );
+				$slotstat = Model_Character::get_stat_d( $char -> id, 'wardrobeset', $itemtype . '_' . $char -> sex );
 				kohana::log('debug', '-> item: ' . $itemtype . ', slot is : ' . $slotstat -> value );
 				
 				if ( !$slotstat -> loaded or $slotstat -> value == 0 )
@@ -764,8 +764,8 @@ function removeuploadedimages( $char )
 	public function get_horizontalmenu( $selected )
 	{
 		
-		$character = Character_Model::get_info( Session::instance()->get('char_id') );
-		if ( Character_Model::get_premiumbonus( $character -> id, 'wardrobe' ) !== false )
+		$character = Model_Character::get_info( Session::instance()->get('char_id') );
+		if ( Model_Character::get_premiumbonus( $character -> id, 'wardrobe' ) !== false )
 		{
 			$lnkmenu = array(
 				'/wardrobe/configureequipment/' => 

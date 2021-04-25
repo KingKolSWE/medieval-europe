@@ -98,7 +98,7 @@ class CA_Harvest_Model extends Character_Action_Model
 	public function append_action( $par, &$message )
 	{
 		
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 				
 		$this -> character_id = $par[0] -> id; 
 		$this -> starttime = time();			

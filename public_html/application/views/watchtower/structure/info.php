@@ -59,7 +59,7 @@ else
 		echo kohana::lang('global.noone' );
 	else
 	{
-		echo Character_Model::create_publicprofilelink( $info['obj'] -> character -> id, $info['obj'] -> character  -> name );	
+		echo Model_Character::create_publicprofilelink( $info['obj'] -> character -> id, $info['obj'] -> character  -> name );
 		echo ' - ' . $info['obj'] -> character -> get_rolename(true ); 
 	}
 ?>
@@ -120,7 +120,7 @@ else
 		foreach ( $stats as $stat )		
 		{
 			$class = ( $r % 2 == 0 ) ? 'alternaterow_1' : 'alternaterow_2' ; 
-			echo "<tr class='$class'><td>" . Character_Model::create_publicprofilelink(null, $stat -> spare2) . "</td><td class='right'>"  . $stat -> value . ' ' . kohana::lang('global.hours') .  '</td></tr>';
+			echo "<tr class='$class'><td>" . Model_Character::create_publicprofilelink(null, $stat -> spare2) . "</td><td class='right'>"  . $stat -> value . ' ' . kohana::lang('global.hours') .  '</td></tr>';
 			$r++;
 		}
 ?>

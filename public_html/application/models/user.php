@@ -245,11 +245,11 @@ class User_Model extends Auth_User_Model
 		if ( $character -> loaded )
 		{
 		
-			$bonuses = Character_Model::get_premiumbonuses( $character -> id );			
+			$bonuses = Model_Character::get_premiumbonuses( $character -> id );
 			kohana::log('info', '-> Checking if user ' . $user -> username . ' should be controlled for multi...');
 			if ( 
 				( 					
-					Character_Model::get_premiumbonus( $character -> id, 'ipcheckshield' ) === false and 
+					Model_Character::get_premiumbonus( $character -> id, 'ipcheckshield' ) === false and
 					$user -> multi_status != 'allowed' and 
 					kohana::config('medeur.multilogin_check') == true  and
 					( is_null( $user -> gracedate) or $user -> gracedate < time() ) 
@@ -403,7 +403,7 @@ class User_Model extends Auth_User_Model
 			Session::instance() -> set( 'char_id', $character -> id );
 			
 			// update game age stats
-			Character_Model::modify_stat_d( 
+			Model_Character::modify_stat_d(
 			$character -> id, 
 			'gameage',
 			$character -> get_age(),

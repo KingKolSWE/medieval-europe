@@ -21,7 +21,7 @@ class Quest_Training_Model extends Quest_Model
 		
 		// da un bonus velocità
 		
-		Character_Model::modify_stat_d(
+		Model_Character::modify_stat_d(
 			$character -> id,
 			'speedbonus',
 			10,

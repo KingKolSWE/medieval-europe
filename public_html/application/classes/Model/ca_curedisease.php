@@ -227,7 +227,7 @@ class CA_Curedisease_Model extends Character_Action_Model
 		
 		$required_item = $this -> disease -> get_requireditem();			
 		
-		if ( ! Character_Model::has_item($par[0]->id, $required_item) )
+		if ( ! Model_Character::has_item($par[0]->id, $required_item) )
 		{ $message = Kohana::lang("ca_cure.error-required_item_not_present"); return false; }
 				
 		// Check: la religione non ha il bonus dogma
@@ -326,7 +326,7 @@ class CA_Curedisease_Model extends Character_Action_Model
 		$a -> param4 = $par[2];		
 		
 		// Se � presente, Rimuove il medikit dall'inventario del char		
-		if ( Character_Model::has_item($par[0]->id, 'medicalkit') )
+		if ( Model_Character::has_item($par[0]->id, 'medicalkit') )
 		{		
 			$i = Item_Model::factory( null, 'medicalkit' );
 			$i -> removeitem( "character", $par[0]->id, 1 );
@@ -515,7 +515,7 @@ class CA_Curedisease_Model extends Character_Action_Model
 		// se chi cancella � il target ed � in prigione, non  pu� cancellare.
 		
 		if ( $targetchar -> id == $this -> character_id 
-			and Character_Model::is_imprisoned( $this -> character_id ) )
+			and Model_Character::is_imprisoned( $this -> character_id ) )
 				return false;
 				
 		kohana::log('debug', "-> Canceling other action...");

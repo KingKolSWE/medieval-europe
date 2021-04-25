@@ -499,7 +499,7 @@ function create_banner( $char_id, $language = 'en_US' )
 
 		// character name
 		$y = 14;
-		$bonus_title = Character_Model::get_basicpackagetitle( $char -> id );
+		$bonus_title = Model_Character::get_basicpackagetitle( $char -> id );
     		if ($bonus_title != '')
 			$bonus_title = kohana::lang($bonus_title);
 		imagettftext($image, 9, 0, 3, $y, $fontcolor_red, $fontfile_bold, $bonus_title);
@@ -676,7 +676,7 @@ function create_banner( $char_id, $language = 'en_US' )
 	{
 
 		require_once( "application/libraries/vendors/FusionChartsFree/Code/PHP/Includes/FusionCharts.php");
-		$character = Character_Model::get_info( Session::instance()->get('char_id') );
+		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$db = Database::instance();
 		$commonoptions = " hoverCapBgColor='000000' bgColor='faf2bc' chartLeftMargin ='25' chartTopMargin ='1' chartBottomMargin ='1' chartRightMargin ='35'
 		rotateNames='0'	animation='0' showAlternateHGridColor='1' AlternateHGridColor='FFE0B3' divLineColor='ff5904' divLineAlpha='20'  canvasBorderColor='666666' baseFontColor='000000' canvasBgColor='FFD18B' canvasBgAlpha='90' ";
@@ -1186,15 +1186,15 @@ function create_banner( $char_id, $language = 'en_US' )
 						"<div class='childlevel_".$level."'>" .
 						"<div style='float:left;margin-right:5px'>";
 						if ( $level == 0 )
-							$output .= Character_Model::display_avatar( $char -> id, 'l', 'border');
+							$output .= Model_Character::display_avatar( $char -> id, 'l', 'border');
 						else
-							$output .= Character_Model::display_avatar( $char -> id, 's', 'border');
+							$output .= Model_Character::display_avatar( $char -> id, 's', 'border');
 						$output .=
 						"</div>".
 						"<div>" .
 						kohana::lang('structures.' . $data[$id] -> type. '_' . $data[$id] -> churchname ) . "<br/>" .
 						'Location: ' . kohana::lang($data[$id] -> regionname) . "<br/>" .
-						Character_Model::create_publicprofilelink( $char -> id, $char -> name ) .
+						Model_Character::create_publicprofilelink( $char -> id, $char -> name ) .
 						':&nbsp;' . $char -> get_rolename(true) .
 						"</div>" .
 						"</div>" .
@@ -1204,7 +1204,7 @@ function create_banner( $char_id, $language = 'en_US' )
 				{
 					$output .= "<div class='childlevel_".$level."'>" .
 						"<div style='float:left;margin-right:5px'>" .
-						Character_Model::display_avatar( 0, 's', 'border') .
+						Model_Character::display_avatar( 0, 's', 'border') .
 						"</div>".
 						"<div>" .
 						kohana::lang('structures.' . $data[$id] -> type . '_' . $data[$id] -> churchname ) . "<br/>" .

@@ -41,13 +41,13 @@ class Character_Model extends ORM
 	
 	function is_online($char_id)
 	{
-		$lastactiontime = Character_Model::get_lastactiontime_d ( $char_id ); 	
+		$lastactiontime = Model_Character::get_lastactiontime_d ( $char_id );
 		return ( time() - $lastactiontime > (Kohana::config('medeur.maxidletime')) ) ?  false : true ;
 	}
 	
 	/**
 	* Calcola se un char è newborn o meno
-	* @param Character_Model $char Personaggio
+	* @param Model_Character $char Personaggio
 	* @return boolean
 	*/
 	
@@ -72,7 +72,7 @@ class Character_Model extends ORM
 		//var_dump($this);exit;
 		parent::save();
 		
-		Character_Model::invalidate_char_cache( $this -> id );
+		Model_Character::invalidate_char_cache( $this -> id );
 		
 		return true;
 		
@@ -90,7 +90,7 @@ class Character_Model extends ORM
 	
 		if ( $reason == '' )
 			$reason = 'notspecified';
-		Character_Model::modify_stat_d( $this -> id, 'honorpoints', $delta, null, null, false );
+		Model_Character::modify_stat_d( $this -> id, 'honorpoints', $delta, null, null, false );
 		Character_Event_Model::addrecord(
 			$this -> id,
 			'normal',
@@ -168,15 +168,15 @@ class Character_Model extends ORM
 			
 		$delta *= 100;
 		
-		$silvercoins = Character_Model::get_item_quantity_d( $this -> id, 'silvercoin' );
-		$coppercoins = Character_Model::get_item_quantity_d( $this -> id, 'coppercoin' );		
+		$silvercoins = Model_Character::get_item_quantity_d( $this -> id, 'silvercoin' );
+		$coppercoins = Model_Character::get_item_quantity_d( $this -> id, 'coppercoin' );
 		
 		kohana::log( 'debug', '->  Char has NOW silvercoins: ' . $silvercoins . ' coppercoins: ' . $coppercoins );
 		
 		$this -> convertcoppercoins();
 		
-		$silvercoins = Character_Model::get_item_quantity_d( $this -> id, 'silvercoin' );
-		$coppercoins = Character_Model::get_item_quantity_d( $this -> id, 'coppercoin' );
+		$silvercoins = Model_Character::get_item_quantity_d( $this -> id, 'silvercoin' );
+		$coppercoins = Model_Character::get_item_quantity_d( $this -> id, 'coppercoin' );
 		
 		$deltasilvercoins = intval($delta/100);
 		$deltacoppercoins = $delta - ($deltasilvercoins * 100);
@@ -208,8 +208,8 @@ class Character_Model extends ORM
 		
 		$this -> convertcoppercoins();
 		
-		$silvercoins = Character_Model::get_item_quantity_d( $this -> id, 'silvercoin' );
-		$coppercoins = Character_Model::get_item_quantity_d( $this -> id, 'coppercoin' );		
+		$silvercoins = Model_Character::get_item_quantity_d( $this -> id, 'silvercoin' );
+		$coppercoins = Model_Character::get_item_quantity_d( $this -> id, 'coppercoin' );
 		
 		kohana::log( 'debug', '-> (recreated coins) -> Char has silvercoins: ' . $silvercoins . ' coppercoins: ' . $coppercoins );
 		
@@ -236,7 +236,7 @@ class Character_Model extends ORM
 	
 	public function convertcoppercoins( )
 	{
-		$amount = Character_Model::get_item_quantity_d( $this -> id, 'coppercoin' );		
+		$amount = Model_Character::get_item_quantity_d( $this -> id, 'coppercoin' );
 		
 		$deltasilvercoins = intval( $amount / 100 );
 		$deltacoppercoins = $amount - ($deltasilvercoins * 100 );
@@ -262,8 +262,8 @@ class Character_Model extends ORM
 		
 		kohana::log('debug', '-> Checking if character ' .  $this -> name . ' has at least ' . $silvercoins . ' silvercoins and ' .  $coppercoins . ' copper coins.' ); 
 		
-		$silvercoins = Character_Model::get_item_quantity_d( $this -> id, 'silvercoin' );
-		$coppercoins = Character_Model::get_item_quantity_d( $this -> id, 'coppercoin' );
+		$silvercoins = Model_Character::get_item_quantity_d( $this -> id, 'silvercoin' );
+		$coppercoins = Model_Character::get_item_quantity_d( $this -> id, 'coppercoin' );
 			
 		$totalownedcoins = $silvercoins * 100 + $coppercoins;
 		
@@ -367,7 +367,7 @@ class Character_Model extends ORM
 	
 	public function unequip_all( $character_id, &$message )	
 	{
-		$equippeditems = Character_Model::get_equipment( $character_id );
+		$equippeditems = Model_Character::get_equipment( $character_id );
 		foreach ((array) $equippeditems as $equippeditem)
 		{			
 			$ca_undress = Character_Action_Model::factory("undress");		
@@ -450,7 +450,7 @@ class Character_Model extends ORM
 	
 	function get_basetransportableweight( $str )
 	{		
-		$btw = (100 - round(pow( abs ( $str - Character_Model::get_attributelimit() ), 1.3 ), 0)) * 1000 ;		
+		$btw = (100 - round(pow( abs ( $str - Model_Character::get_attributelimit() ), 1.3 ), 0)) * 1000 ;
 		return $btw;
 	}
 	
@@ -489,7 +489,7 @@ class Character_Model extends ORM
 	
 	function get_maxtransportableweight( $excludecart = FALSE )
 	{
-		$btw = Character_Model::get_basetransportableweight( $this -> get_attribute( 'str', true ) );
+		$btw = Model_Character::get_basetransportableweight( $this -> get_attribute( 'str', true ) );
 		
 		if ( ! $excludecart )
 		{
@@ -497,9 +497,9 @@ class Character_Model extends ORM
 			// controlliamo, se ha il cart3 se è scaduto. Se lo è, distruzione.
 			
 			if ( 
-				Character_Model::has_item( $this->id, 'cart_3', 1 ) 
+				Model_Character::has_item( $this->id, 'cart_3', 1 )
 				and 
-				Character_Model::get_premiumbonus( $this -> id, 'supercart' ) === false 
+				Model_Character::get_premiumbonus( $this -> id, 'supercart' ) === false
 			)
 			{
 			
@@ -527,11 +527,11 @@ class Character_Model extends ORM
 			// se il giocatore ha pià¹ cart, viene calcolata la massima 
 			// capacità , ma non si cumula
 			
-			if ( Character_Model::has_item( $this->id, 'cart_3', 1 ) )
+			if ( Model_Character::has_item( $this->id, 'cart_3', 1 ) )
 			{ $btw += self::CART_3_STORAGE; }
-			elseif ( Character_Model::has_item( $this->id, 'cart_1', 1 ) )
+			elseif ( Model_Character::has_item( $this->id, 'cart_1', 1 ) )
 			{ $btw += self::CART_1_STORAGE; }
-			elseif ( Character_Model::has_item( $this->id, 'cart_2', 1 ) )
+			elseif ( Model_Character::has_item( $this->id, 'cart_2', 1 ) )
 			{ $btw += self::CART_2_STORAGE; }			
 			else
 				;		
@@ -557,7 +557,7 @@ class Character_Model extends ORM
 	function get_transportedweight()
 	{
 	
-		$items = Character_Model::inventory( $this -> id ); 
+		$items = Model_Character::inventory( $this -> id );
 		$transportedweight = $items['totalitemsweight'];
 		
 		$db = Database::instance();
@@ -567,11 +567,11 @@ class Character_Model extends ORM
 		kohana::log('debug', '-> Transportedweight before cart computation: ' . 
 			$transportedweight/1000 . ' Kg' );
 		
-		if ( Character_Model::has_item( $this->id, 'cart_3', 1 ) )
+		if ( Model_Character::has_item( $this->id, 'cart_3', 1 ) )
 			{ $transportedweight -= self::CART_3_WEIGHT; }
-		elseif ( Character_Model::has_item( $this->id, 'cart_1', 1 ) )
+		elseif ( Model_Character::has_item( $this->id, 'cart_1', 1 ) )
 			{ $transportedweight -= self::CART_1_WEIGHT; }
-		elseif ( Character_Model::has_item( $this->id, 'cart_2', 1 ) )
+		elseif ( Model_Character::has_item( $this->id, 'cart_2', 1 ) )
 			{ $transportedweight -= self::CART_2_WEIGHT; }			
 		else
 			;	
@@ -667,7 +667,7 @@ class Character_Model extends ORM
 		// bonus se il char ha lo stato nobile
 		/////////////////////////////////////////
 		
-		if ( Character_Model::get_premiumbonus( $this -> id, 'basicpackage' ) !== false )
+		if ( Model_Character::get_premiumbonus( $this -> id, 'basicpackage' ) !== false )
 			$info['restfactor']  = 	$info['restfactor']  * 2;
 		
 		kohana::log('info', '-> Restfactor (after basic package bonus): [' . $info['restfactor'] .']');				
@@ -692,7 +692,7 @@ class Character_Model extends ORM
 		kohana::log('info', '-> Restfactor (after server speed): [' . $info['restfactor'] .']' );
 		
 		// Apply speed bonus
-		$speedbonus = Character_Model::get_stat_from_cache($this -> id, 'speedbonus');
+		$speedbonus = Model_Character::get_stat_from_cache($this -> id, 'speedbonus');
 		if ($speedbonus -> loaded and $speedbonus -> stat1 > time() )		
 			$info['restfactor'] *= $speedbonus -> value;
 		
@@ -1073,7 +1073,7 @@ class Character_Model extends ORM
 		// traccio perdita silver coins
 		////////////////////////////////////////////////
 		
-		$silvercoins = Character_Model::get_item_quantity_d( $this -> id, 'silvercoin' );	
+		$silvercoins = Model_Character::get_item_quantity_d( $this -> id, 'silvercoin' );
 		Trace_Sink_Model::add_model( 'silvercoin', $this -> id, -( $silvercoins ), 'chardeath');
 		
 		////////////////////////////////////////////////
@@ -1284,7 +1284,7 @@ class Character_Model extends ORM
 
 	public function get_changeregion_price ($origin, $dest)
 	{
-		if ( Character_Model::get_premiumbonus( $this -> id, 'basicpackage') !== false )					
+		if ( Model_Character::get_premiumbonus( $this -> id, 'basicpackage') !== false )
 		{ return 25; }
 		else
 		{ return 50; }
@@ -1302,7 +1302,7 @@ class Character_Model extends ORM
 	{
 		//kohana::log( 'info', "-> get_premiumbonus: checking bonus $name for char: $char_id");
 		
-		$bonuses = Character_Model::get_premiumbonuses( $char_id );		
+		$bonuses = Model_Character::get_premiumbonuses( $char_id );
 		//kohana::log('info', kohana::debug( $bonuses )); 
 		
 		if ( !is_null($bonuses) and array_key_exists( $name, $bonuses ) )
@@ -1342,7 +1342,7 @@ class Character_Model extends ORM
 		
 		$name = '';				
 			
-		$title = Character_Model::get_basicpackagetitle( $this -> id );		
+		$title = Model_Character::get_basicpackagetitle( $this -> id );
 		if ( !empty($title) )
 			if ( $translate )
 				$name = kohana::lang( $title ) . ' ' ;
@@ -1621,7 +1621,7 @@ class Character_Model extends ORM
 			
 			// Meditazione
 			
-			if ( Character_Model::is_meditating( Session::instance()->get('char_id') ) )
+			if ( Model_Character::is_meditating( Session::instance()->get('char_id') ) )
 			{
 				kohana::log('debug', '--> char is meditating.' ); 				
 				$allowedurls = array_merge( $commonurls, array( 'page/retire'));			
@@ -1638,7 +1638,7 @@ class Character_Model extends ORM
 			
 			// In prigione
 			
-			if ( Character_Model::is_imprisoned( Session::instance()->get('char_id') ) )
+			if ( Model_Character::is_imprisoned( Session::instance()->get('char_id') ) )
 			{
 				
 				kohana::log('debug', '--> char is imprisoned.' ); 				
@@ -1662,7 +1662,7 @@ class Character_Model extends ORM
 			
 			// Sta combattendo
 			
-			if ( Character_Model::is_fighting( Session::instance() -> get('char_id') ) )
+			if ( Model_Character::is_fighting( Session::instance() -> get('char_id') ) )
 			{
 				
 				kohana::log('debug', '--> Char is fighting.' ); 				
@@ -1712,7 +1712,7 @@ class Character_Model extends ORM
 			
 			// Sta viaggiando
 			
-			if ( Character_Model::is_traveling( Session::instance()->get('char_id') ) )
+			if ( Model_Character::is_traveling( Session::instance()->get('char_id') ) )
 			{
 					kohana::log('debug', '--> Char is traveling.' ); 				
 					$nonallowedurls = array (						
@@ -1753,7 +1753,7 @@ class Character_Model extends ORM
 		if ( is_null( $bonuses ) )
 		{
 
-                       $character = Character_Model::get_info( $char_id );
+                       $character = Model_Character::get_info( $char_id );
 
 			
 			$res = Database::instance() -> query("
@@ -1813,7 +1813,7 @@ class Character_Model extends ORM
 	static function get_pending_action_d( $char_id, $action )
 	{
 		//kohana::log( 'info', '-> Checking if character ' . $char_id . ' has a pending action: ' . $action );
-		$pendingaction = Character_Model::get_currentpendingaction( $char_id ); 				
+		$pendingaction = Model_Character::get_currentpendingaction( $char_id );
 		//kohana::log( 'info', "-> Character {$char_id} has a pending action: [{$pendingaction}]");
 		if ( 
 			$pendingaction != 'NOACTION' and $pendingaction['action'] == $action and $pendingaction['status'] == 'running' ) 
@@ -1908,7 +1908,7 @@ class Character_Model extends ORM
 		
 		if (true)
 		{
-			$hidehairsunderclothes = Character_Model::get_stat_d( $this -> id, 'hidehairsunderclothes');
+			$hidehairsunderclothes = Model_Character::get_stat_d( $this -> id, 'hidehairsunderclothes');
 			$image = Wardrobe_Model::get_correctimage( $this, 'hair', $mode, 'hair'	);
 			if ( $hidehairsunderclothes -> loaded and $hidehairsunderclothes -> value == true )
 				echo html::image ( array( 'src' => $image), array('class' => 'item_hair_hidden') );
@@ -2008,7 +2008,7 @@ class Character_Model extends ORM
 		
 		if (isset($equippeditems['ring']))
 		{
-			$hideringunderclothes = Character_Model::get_stat_d( $this -> id, 'hideringunderclothes');
+			$hideringunderclothes = Model_Character::get_stat_d( $this -> id, 'hideringunderclothes');
 			$image = Wardrobe_Model::get_correctimage( $this, $equippeditems['ring'], $mode);
 			if ( $hideringunderclothes -> loaded and $hideringunderclothes -> value == true )
 				echo html::image ( array( 'src' => $image), array('class' => 'item_ring_hidden') );
@@ -2122,7 +2122,7 @@ class Character_Model extends ORM
 			replace: 	[{$replace}]");
 			
 		
-		$stat = Character_Model::get_stat_d( $character_id, $name, $searchparam1, $searchparam2 );
+		$stat = Model_Character::get_stat_d( $character_id, $name, $searchparam1, $searchparam2 );
 							
 		if ( !$stat -> loaded )		
 		{
@@ -2244,7 +2244,7 @@ class Character_Model extends ORM
 			' spare4: ' . $spare4 . 
 			' replace: ' . $replace ); 
 		
-		$stat = Character_Model::get_stat_d( $this -> id, $name, $searchparam1, $searchparam2 );
+		$stat = Model_Character::get_stat_d( $this -> id, $name, $searchparam1, $searchparam2 );
 							
 		if ( !$stat -> loaded )		
 		{
@@ -2336,7 +2336,7 @@ class Character_Model extends ORM
 		
 		if ( is_null( $stat ) )
 		{			
-			$stat = Character_Model::get_stat_d( $character_id, $name, $searchparam1, $searchparam2 );
+			$stat = Model_Character::get_stat_d( $character_id, $name, $searchparam1, $searchparam2 );
 			My_Cache_Model::set($cachetag, $stat);
 		}
 	
@@ -2585,7 +2585,7 @@ class Character_Model extends ORM
 				
 				// check bonuses
 				
-				$stat = Character_Model::get_stat_d($this -> id, 'dexboost');
+				$stat = Model_Character::get_stat_d($this -> id, 'dexboost');
 				
 				if ( $stat -> loaded and $stat -> stat1 > time() )
 				{
@@ -2612,7 +2612,7 @@ class Character_Model extends ORM
 				
 				// check bonuses
 				
-				$stat = Character_Model::get_stat_d($this -> id, 'strboost');
+				$stat = Model_Character::get_stat_d($this -> id, 'strboost');
 				
 				if ( $stat -> loaded and $stat -> stat1 > time() )
 				{
@@ -2637,7 +2637,7 @@ class Character_Model extends ORM
 				
 				// check bonuses
 				
-				$stat = Character_Model::get_stat_d($this -> id, 'intelboost');
+				$stat = Model_Character::get_stat_d($this -> id, 'intelboost');
 				
 				if ( $stat -> loaded and $stat -> stat1 > time() )
 				{
@@ -2669,7 +2669,7 @@ class Character_Model extends ORM
 				
 				// Query per il conteggio del bonus carisma in base ai vestiti indossati				
 				
-				$equipment = Character_Model::get_equipment( $this -> id );			
+				$equipment = Model_Character::get_equipment( $this -> id );
 										
 				foreach ($equipment as $e )
 				{
@@ -2700,7 +2700,7 @@ class Character_Model extends ORM
 				
 				// check bonuses
 				
-				$stat = Character_Model::get_stat_d($this -> id, 'costboost');
+				$stat = Model_Character::get_stat_d($this -> id, 'costboost');
 				
 				if ( $stat -> loaded and $stat -> stat1 > time() )
 				{
@@ -2759,8 +2759,8 @@ class Character_Model extends ORM
 		
 		//kohana::log( 'debug',  '-> Get Attribute: after modifiers: attribute ' . $attribute . ' is: ' . $value ); 
 		
-		if ( $value > Character_Model::get_attributelimit() )
-			$value = Character_Model::get_attributelimit();
+		if ( $value > Model_Character::get_attributelimit() )
+			$value = Model_Character::get_attributelimit();
 		if ( $value < 1 )
 			$value = 1;
 			
@@ -2948,7 +2948,7 @@ class Character_Model extends ORM
 	
 	function is_beingcured( $char_id )
 	{	
-		return Character_Model::get_pending_action_d ( $char_id, 'cure' ); 		
+		return Model_Character::get_pending_action_d ( $char_id, 'cure' );
 	}
 	
 	/**
@@ -2975,7 +2975,7 @@ class Character_Model extends ORM
 	
 	function is_watchingarea( $char_id )
 	{
-		return Character_Model::get_pending_action_d ( $char_id, 'watcharea' ); 		
+		return Model_Character::get_pending_action_d ( $char_id, 'watcharea' );
 	}
 	
 	
@@ -2988,7 +2988,7 @@ class Character_Model extends ORM
 	function is_imprisoned( $char_id )
 	{	
 		kohana::log('debug', '--- is_imprisoned ---');
-		$stat = Character_Model::get_stat_from_cache( $char_id, 'servejailtime');
+		$stat = Model_Character::get_stat_from_cache( $char_id, 'servejailtime');
 		//kohana::log('debug', kohana::debug($stat));
 		if (!is_null($stat) and $stat -> stat2 > time())
 		{
@@ -3009,7 +3009,7 @@ class Character_Model extends ORM
 	function is_fighting( $char_id )
 	{
 		
-		$fighting = Character_Model::get_stat_from_cache( $char_id, 'fighting' ); 
+		$fighting = Model_Character::get_stat_from_cache( $char_id, 'fighting' );
 		
 		if ( $fighting -> loaded and $fighting -> value == true )
 			return true;
@@ -3022,9 +3022,9 @@ class Character_Model extends ORM
 	{
 		return 
 		(
-			Character_Model::get_pending_action_d( $char_id, 'rest' ) 
+			Model_Character::get_pending_action_d( $char_id, 'rest' )
 				or
-			Character_Model::get_pending_action_d( $char_id, 'resttavern' )
+			Model_Character::get_pending_action_d( $char_id, 'resttavern' )
 		);
 	}
 	
@@ -3036,7 +3036,7 @@ class Character_Model extends ORM
 	
 	static function is_meditating( $char_id )
 	{	
-		return Character_Model::get_pending_action_d( $char_id, 'retire' ); 	
+		return Model_Character::get_pending_action_d( $char_id, 'retire' );
 	}
 				
 	/**
@@ -3049,10 +3049,10 @@ class Character_Model extends ORM
 	{
 		
 		return ( 
-			Character_Model::get_pending_action_d ( $char_id, 'move' ) or 
-			Character_Model::get_pending_action_d ( $char_id, 'sail' ) or 
-			Character_Model::get_pending_action_d ( $char_id, 'arrest' ) or
-			Character_Model::get_pending_action_d ( $char_id, 'imprison' )  
+			Model_Character::get_pending_action_d ( $char_id, 'move' ) or
+			Model_Character::get_pending_action_d ( $char_id, 'sail' ) or
+			Model_Character::get_pending_action_d ( $char_id, 'arrest' ) or
+			Model_Character::get_pending_action_d ( $char_id, 'imprison' )
 			);
 	}
 	
@@ -3062,7 +3062,7 @@ class Character_Model extends ORM
 	
 	function is_recovering( $char_id )
 	{		
-		return Character_Model::get_pending_action_d( $char_id, 'recovering' );
+		return Model_Character::get_pending_action_d( $char_id, 'recovering' );
 	}
 		
 	
@@ -3086,9 +3086,9 @@ class Character_Model extends ORM
 	
 	function is_inkingdom( $kingdom )
 	{
-		if ( Character_Model::is_traveling( $this -> id ) )
+		if ( Model_Character::is_traveling( $this -> id ) )
 		{
-			$action = Character_Model::get_pending_action_d( $this -> id, 'move' );			
+			$action = Model_Character::get_pending_action_d( $this -> id, 'move' );
 			$position_id = $action -> param2;
 		}
 		else
@@ -3113,13 +3113,13 @@ class Character_Model extends ORM
 	function get_status ( $character_id )
 	{
 			
-		if ( Character_Model::is_resting( $this -> id ) )	return 'resting'; 
-		if ( Character_Model::is_fighting( $this -> id ) )	return 'fighting'; 
-		if ( Character_Model::is_recovering( $character_id ) )	return 'recovering';
-		if ( Character_Model::is_meditating( $character_id ) )	return 'meditating';		
-		if ( Character_Model::is_imprisoned( $character_id ) )	return 'imprisoned';		
-		if ( Character_Model::is_restrained( $character_id ) )	return 'restrained';				
-		if ( Character_Model::is_traveling( $this -> id ) )	return 'traveling'; 		
+		if ( Model_Character::is_resting( $this -> id ) )	return 'resting';
+		if ( Model_Character::is_fighting( $this -> id ) )	return 'fighting';
+		if ( Model_Character::is_recovering( $character_id ) )	return 'recovering';
+		if ( Model_Character::is_meditating( $character_id ) )	return 'meditating';
+		if ( Model_Character::is_imprisoned( $character_id ) )	return 'imprisoned';
+		if ( Model_Character::is_restrained( $character_id ) )	return 'restrained';
+		if ( Model_Character::is_traveling( $this -> id ) )	return 'traveling';
 
 		return null;
 	}	
@@ -3134,7 +3134,7 @@ class Character_Model extends ORM
 	public function is_naked( $char_id )
 	{
 		
-		$equipment = Character_Model::get_equipment( $char_id );
+		$equipment = Model_Character::get_equipment( $char_id );
 		
 		// ha qualche parte nuda?
 		
@@ -3232,7 +3232,7 @@ class Character_Model extends ORM
 	
 	static function get_rankings($character_id)
 	{	
-		$allrankings = Character_Model::get_allrankings();
+		$allrankings = Model_Character::get_allrankings();
 		if(isset($allrankings['player'][$character_id]))
 			return $allrankings['player'][$character_id];
 		else	
@@ -3412,7 +3412,7 @@ class Character_Model extends ORM
 		if ( is_null ( $unreadevents ) )
 		{
 			//kohana::log('debug', "-> Getting $cachetag from DB..." ); 
-			$data = Character_Model::get_stat_d( $char_id, 'lastreadevent' ); 
+			$data = Model_Character::get_stat_d( $char_id, 'lastreadevent' );
 			
 			if ( is_null( $data ) )
 				$date = 0;
@@ -3475,10 +3475,10 @@ class Character_Model extends ORM
 	public function get_basicpackagetitle( $char_id )
 	{		
 	
-		if (Character_Model::get_premiumbonus( $char_id, 'basicpackage') )
+		if (Model_Character::get_premiumbonus( $char_id, 'basicpackage') )
 		{
 			
-			$stat = Character_Model::get_stat_d( 
+			$stat = Model_Character::get_stat_d(
 				$char_id,
 				'basicpackage',
 				'title'
@@ -3623,13 +3623,13 @@ class Character_Model extends ORM
 			
 			//kohana::log('debug', "-> Getting $cachetag from DB."); 
 			
-			$data = Character_Model::get_stat_d( $char_id, 'boardlastread', 'job' );
+			$data = Model_Character::get_stat_d( $char_id, 'boardlastread', 'job' );
 			if ( is_null( $data ) )	$date_job = 0; else	$date_job = $data -> value;
 			
-			$data = Character_Model::get_stat_d( $char_id, 'boardlastread', 'other' );
+			$data = Model_Character::get_stat_d( $char_id, 'boardlastread', 'other' );
 			if ( is_null( $data ) )	$date_other = 0; else	$date_other= $data -> value;
 			
-			$data = Character_Model::get_stat_d( $char_id, 'boardlastread', 'suggestion' );
+			$data = Model_Character::get_stat_d( $char_id, 'boardlastread', 'suggestion' );
 			if ( is_null( $data ) )	$date_suggestion = 0; else	$date_suggestion = $data -> value;
 			
 			kohana::log('debug', $date_job );
@@ -3858,7 +3858,7 @@ class Character_Model extends ORM
 	
 	function has_achievement( $char_id, $name )
 	{
-		$achievement = Character_Model::get_achievement( $char_id, $name );
+		$achievement = Model_Character::get_achievement( $char_id, $name );
 		
 		if ( is_null($achievement))
 			return false;
@@ -4034,7 +4034,7 @@ class Character_Model extends ORM
 		{
 			kohana::log('debug', '-> Loading data from DB');
 
-		$activequest = Character_Model::get_stat_d( 
+		$activequest = Model_Character::get_stat_d(
 				$char_id, 
 			'quest', 
 			null, 
@@ -4108,7 +4108,7 @@ class Character_Model extends ORM
 			return false;
 		}
 		
-		if ( Character_Model::get_premiumbonus( $character -> id , 'automatedsleep' ) === false )
+		if ( Model_Character::get_premiumbonus( $character -> id , 'automatedsleep' ) === false )
 		{
 			kohana::log( 'info', "-> Character does not have the bonus.");
 			return false;
@@ -4117,7 +4117,7 @@ class Character_Model extends ORM
 		if ( $character -> user -> sleepafteraction  == 'Y'	)
 		{		
 			kohana::log( 'info', "-> Finding pending actions..." );
-			$pendingaction = Character_Model::get_currentpendingaction( $character -> id );
+			$pendingaction = Model_Character::get_currentpendingaction( $character -> id );
 				
 			// solo se non c'è pending action mettiamo a dormire il char.
 
@@ -4260,7 +4260,7 @@ class Character_Model extends ORM
 				
 				// caso speciale: sposato
 				
-				$relation = Character_Model::is_married( $character -> id );
+				$relation = Model_Character::is_married( $character -> id );
 				
 				if (!is_null($relation))				
 				{
@@ -4309,7 +4309,7 @@ class Character_Model extends ORM
 				// cart
 
 				kohana::log('info', '-> Checking restfactor of cart...');	
-				if ( Character_Model::has_item( $character->id, 'cart_3', 1 ) )
+				if ( Model_Character::has_item( $character->id, 'cart_3', 1 ) )
 				{
 					kohana::log('info', '-> Adding restfactor of cart...');
 					$restfactors[$i]['structure'] = null;
@@ -4611,7 +4611,7 @@ class Character_Model extends ORM
 				false
 			);
 			
-			Character_Model::modify_stat_d(
+			Model_Character::modify_stat_d(
 				$choosentutor -> character_id,
 				'lastnewbornassigned',
 				0,

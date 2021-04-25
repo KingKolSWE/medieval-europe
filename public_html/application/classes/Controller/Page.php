@@ -15,7 +15,7 @@ class Controller_Page extends Controller_Template
 
 		if ( request::is_ajax() )
 		{
-			$char = Character_Model::get_info( Session::instance()->get('char_id') ); 
+			$char = Model_Character::get_info( Session::instance()->get('char_id') );
 
 			$this -> auto_render = false;
 			KO7::$log->add('debug', '--- refreshing stats ---');
@@ -64,9 +64,9 @@ class Controller_Page extends Controller_Template
 	public function minedoubloons()
 	{
 		KO7::$log->add(KO7_Log::INFO, '-> in minedoubloons...');
-		$char = Character_Model::get_info( Session::instance()->get('char_id') ); 
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 
-		$view = new view('page/minedoubloons');
+		$view = View::factory('page/minedoubloons');
 		$sheets  = array(
 			'gamelayout' => 'screen', 
 			'character' => 'screen', 'pagination'=>'screen');
@@ -82,9 +82,9 @@ class Controller_Page extends Controller_Template
 	public function fullchatscreen()
 	{
 		KO7::$log->add(KO7_Log::INFO, '-> in fullchatscreen...');
-		$view = new view ('page/fullchatscreen');
+		$view = View::factory ('page/fullchatscreen');
 		$title = 'Medieval Europe Chat';
-		$char = Character_Model::get_info( Session::instance()->get('char_id') ); 
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		$sheets  = array(
 			'gamelayout' => 'screen', 
 			'character' => 'screen', 'pagination'=>'screen');
@@ -272,12 +272,12 @@ class Controller_Page extends Controller_Template
 	public function retire()
 	{
 		KO7::$log->add(KO7_Log::INFO, '-> in retire...');
-		$char = Character_Model::get_info( Session::instance()->get('char_id') ); 
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		if ( $char -> is_meditating($char -> id) )
 			$retireaction = Character_Action_Model::get_pending_action( $char -> id );
 		else
 			HTTP::redirect('boardmessage/index/europecrier');
-		$view = new view('page/retire');
+		$view = View::factory('page/retire');
 		$sheets  = array(
 			'gamelayout' => 'screen', 
 			'character' => 'screen', 'pagination'=>'screen');
@@ -294,14 +294,14 @@ class Controller_Page extends Controller_Template
 	{
 		KO7::$log->add(KO7_Log::INFO, '-> in page...');
 	
-		$view = new view ('page/jail');
+		$view = View::factory ('page/jail');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
-		$char = Character_Model::get_info( Session::instance()->get('char_id') ); 	
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 			
 		$region = ORM::factory("region", $char -> position_id ); 		
 		$db = Database::instance();		
 				
-		if (Character_Model::is_imprisoned($char->id)	== false )
+		if (Model_Character::is_imprisoned($char->id)	== false )
 		{
 			HTTP::redirect('region/view');
 			return;
@@ -337,7 +337,7 @@ class Controller_Page extends Controller_Template
 	public function battlereport( $battle_id = null, $round_id = 1 )
 	{
 		KO7::$log->add(KO7_Log::INFO, '-> in battlereport...');
-		$view = new view ('page/battlereport');
+		$view = View::factory ('page/battlereport');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen', 'battlereport' => 'screen');
 		
 		$sql = "
@@ -440,7 +440,7 @@ class Controller_Page extends Controller_Template
 		
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');		
 		$paginationlimit = 25;
-		$character = Character_Model::get_info( Session::instance()->get('char_id') ); 
+		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$db = Database::instance();
 		$linkedtitle = null;
 		
@@ -583,7 +583,7 @@ class Controller_Page extends Controller_Template
 	{		
 		KO7::$log->add(KO7_Log::INFO, '-> in readnews...');
 		
-		$view = new view( 'page/readnews');
+		$view = View::factory( 'page/readnews');
 		$this -> template = View::factory('template/blank');
 		$sheets  = array('bootstrap_me' => 'screen');
 		

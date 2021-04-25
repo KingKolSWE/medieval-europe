@@ -91,7 +91,7 @@ class Suggestion_Model extends ORM
 		
 		// save stat
 		
-		Character_Model::modify_stat_d( 
+		Model_Character::modify_stat_d(
 			$char -> id,
 			'votedsuggestion', 
 			0,
@@ -280,7 +280,7 @@ class Suggestion_Model extends ORM
 			';' . $suggestion -> sponsoredamount .'/'. $suggestion -> quote,
 			'system' ); 
 		
-		Character_Model::modify_stat_d(
+		Model_Character::modify_stat_d(
 			$char -> id,
 			'suggestionsponsorship', 
 			$doubloons,

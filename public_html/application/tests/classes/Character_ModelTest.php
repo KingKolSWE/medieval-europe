@@ -1,10 +1,10 @@
 <?php
-//require_once ‘PHPUnit/Framework.php’;
+//require_once ï¿½PHPUnit/Framework.phpï¿½;
 class Character_ModelTest extends PHPUnit_Framework_TestCase
 {
     public function test_is_newbie()
     {
-				$char = new Character_Model();				
+				$char = new Model_Character();
 				$char -> birthdate = time();				
 				$this -> assertEquals(true, $char -> is_newbie($char) );
 				$char -> birthdate = time() - (31*24*3600);				

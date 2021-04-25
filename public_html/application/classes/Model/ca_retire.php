@@ -40,7 +40,7 @@ class CA_Retire_Model extends Character_Action_Model
 		// e del possesso di un titolo nobiliare.
 		
 		$maxperiod = min( round( pow($par[0] -> get_age(), 1.2)  / 10 ), 180 ) ;
-		$noblebonus = Character_Model::get_premiumbonus( $par[0] -> id, 'basicpackage' );
+		$noblebonus = Model_Character::get_premiumbonus( $par[0] -> id, 'basicpackage' );
 		
 		if ( $noblebonus !== false)
 		{
@@ -57,7 +57,7 @@ class CA_Retire_Model extends Character_Action_Model
 				
 		// Controllo cooldown
 		
-		$lastretiretime = Character_Model::get_stat_d( $par[0] -> id, 'lastretiretime' ); 
+		$lastretiretime = Model_Character::get_stat_d( $par[0] -> id, 'lastretiretime' );
 		
 		if ( !is_null( $lastretiretime ) and time() - $lastretiretime -> value 	< self::COOLDOWN )
 		{ $message = kohana::lang('ca_retire.cooldownnotexpired'); return FALSE; }	

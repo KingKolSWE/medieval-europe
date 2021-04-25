@@ -44,7 +44,7 @@ class Character_Action_Model extends ORM
 		// � in stato running. Se il character_id passato � null, prendo quello in sessione.		
 		
 		if ( is_null( $callerchar_id ) )
-			$char = Character_Model::get_info( Session::instance() -> get('char_id') ); 
+			$char = Model_Character::get_info( Session::instance() -> get('char_id') );
 		else
 			$char = ORM::factory('character', $callerchar_id  ); 
 		
@@ -85,7 +85,7 @@ class Character_Action_Model extends ORM
 
 		kohana::log('info', '-> Checking if a pending action exists...');		
 				
-		$action = Character_Model::get_currentpendingaction( $char -> id );
+		$action = Model_Character::get_currentpendingaction( $char -> id );
 		
 		if ( is_array( $action ) )
 		{			
@@ -99,7 +99,7 @@ class Character_Action_Model extends ORM
 		kohana::log('info', '-> Checking if action can be done while being restrained...' );
 		
 		if ( $this -> enabledifrestrained == false and 
-			Character_Model::is_restrained($char -> id) )
+			Model_Character::is_restrained($char -> id) )
 		{$message = Kohana::lang("charactions.error-notenabledwhenrestrained");return false;}
 		
 		
@@ -241,7 +241,7 @@ class Character_Action_Model extends ORM
 			
 		if ( $charflag == true )
 		{
-			$char = Character_Model::get_info( Session::instance() -> get('char_id') );
+			$char = Model_Character::get_info( Session::instance() -> get('char_id') );
 			kohana::log( 'info', "-> Completing actions, charflag: [{$charflag}]");
 		}
 		
@@ -317,7 +317,7 @@ class Character_Action_Model extends ORM
 					if ( 
 						$row -> blocking_flag == true and 
 						!in_array( $row -> action, array( 'rest', 'resttavern' ) ) )
-						Character_Model::makecharsleep( $row -> character_id );					
+						Model_Character::makecharsleep( $row -> character_id );
 					
 				}
 								
@@ -393,12 +393,12 @@ class Character_Action_Model extends ORM
 
 		if ( is_null( $character_id ) )
 		{
-			$char = Character_Model::get_info( Session::instance()->get('char_id') );
+			$char = Model_Character::get_info( Session::instance()->get('char_id') );
 			//kohana::log('debug', kohana::debug( $char ));
 			$character_id =  $char -> id ;
 		}			
 		
-		$pendingaction = Character_Model::get_currentpendingaction( $character_id );			
+		$pendingaction = Model_Character::get_currentpendingaction( $character_id );
 		
 		if ( $pendingaction != 'NOACTION' )
 		{			
@@ -507,7 +507,7 @@ class Character_Action_Model extends ORM
 			
 		// apply bonus speed
 		kohana::log('debug', '-> Applying speed bonus...');
-		$speedbonus = Character_Model::get_stat_from_cache($character -> id, 'speedbonus');
+		$speedbonus = Model_Character::get_stat_from_cache($character -> id, 'speedbonus');
 		//var_dump($speedbonus);exit;
 		if ($speedbonus -> loaded and $speedbonus -> stat1 > time() )
 		{			
@@ -523,9 +523,9 @@ class Character_Action_Model extends ORM
 		{
 			kohana::log('debug', 
 				'-> Applying '. $this -> attribute .' Attribute bonus...' . 
-				$character -> get_attribute( $this -> attribute ) . '/' . Character_Model::get_attributelimit() );
+				$character -> get_attribute( $this -> attribute ) . '/' . Model_Character::get_attributelimit() );
 			
-			$bonus = $bonus * (( 100 - 30 * ( $character -> get_attribute( $this -> attribute )/Character_Model::get_attributelimit()))/100);			
+			$bonus = $bonus * (( 100 - 30 * ( $character -> get_attribute( $this -> attribute )/Model_Character::get_attributelimit()))/100);
 			
 			kohana::log('debug', '-> Bonus after attribute check: ' . $bonus );
 		}
@@ -533,7 +533,7 @@ class Character_Action_Model extends ORM
 		// Calcolo del bonus in base al pacchetto premium
 		
 		if ( in_array( 'workerpackage', $this -> appliedbonuses ) and
-			Character_Model::get_premiumbonus(  $character -> id, 'workerpackage') !== false )	 				
+			Model_Character::get_premiumbonus(  $character -> id, 'workerpackage') !== false )
 		{
 			kohana::log('debug', '-> Applying workerpackage bonus...');
 			$bonus *= 50 / 100;			
@@ -578,7 +578,7 @@ class Character_Action_Model extends ORM
 		{
 			kohana::log('debug', '-> Applying concentrateandlearn bonus...');
 			// Verifico il badge del char
-			$afpachievement = Character_Model::get_achievement( $character->id, 'stat_fpcontribution' );
+			$afpachievement = Model_Character::get_achievement( $character->id, 'stat_fpcontribution' );
 			// Ad ogni livello badge corrisponde un bonus del 10% sul tempo
 			if (is_null($afpachievement))
 				$stars = 0;

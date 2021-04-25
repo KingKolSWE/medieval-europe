@@ -20,7 +20,7 @@ class ST_Watchtower_1_Model extends Structure_Model
 	
 	public function build_common_links( $structure, $bonus = false )
 	{
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );		
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		$links = parent::build_common_links( $structure );
 				
 		$links .= html::anchor( "/structure/donate/" . $structure -> id, Kohana::lang('structures_actions.global_deposit'), array('class' => 'st_common_command')) . "<br/>";

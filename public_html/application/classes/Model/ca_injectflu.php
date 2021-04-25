@@ -17,7 +17,7 @@ class CA_Injectflu_Model extends Character_Action_Model
 
 	// Viene eseguita nel caso in cui l'azione non si di tipo immediato
 	// La char_action viene collegata al character fino alla sua scadenza
-	// In questo caso l'azione è di tipo immediato e quindi la funzione non viene evocata
+	// In questo caso l'azione ï¿½ di tipo immediato e quindi la funzione non viene evocata
 	protected function append_action( $par, &$message )
 	{}
 	
@@ -48,7 +48,7 @@ class CA_Injectflu_Model extends Character_Action_Model
 		foreach ($candidates as $candidate)
 		{
 			kohana::log('debug', "-> Trying to inject char {$candidate -> name}");
-			if (Character_Model::is_naked( $candidate -> id ) == false )
+			if (Model_Character::is_naked( $candidate -> id ) == false )
 				continue;
 			kohana::log('debug', "{$candidate -> name} is naked, trying to give him the flu...");
 			

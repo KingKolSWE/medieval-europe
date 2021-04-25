@@ -117,7 +117,7 @@ class CA_Seed_Model extends Character_Action_Model
 	protected function append_action( $par, &$message )
 	{
 	
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );		
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
 		$this -> starttime = time();			
 		$this -> status = "running";

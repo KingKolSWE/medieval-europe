@@ -30,7 +30,7 @@
 	<p>
 	ID: <?php echo $info['id']?><br/>
 	<?php echo kohana::lang('global.name') ?>: <?php echo $info['descriptivename']?><br/>
-	<?php echo kohana::lang('global.author') ?>: <?php echo Character_Model::create_publicprofilelink($info['author_id'])?><br/>
+	<?php echo kohana::lang('global.author') ?>: <?php echo Model_Character::create_publicprofilelink($info['author_id'])?><br/>
 	<?php echo kohana::lang('global.status') ?>: <?php echo kohana::lang('global.status_' . $info['status'] )?><br/>
 	<?php echo kohana::lang('quests.rewards') ?>: <span class='evidence'><?php echo kohana::lang($info['rewards'])?></span><br/>
 	</p>

@@ -81,7 +81,7 @@ public static function getitemaverageprices( $securitykey, $period )
 
 	if ( $securitykey != self::SECURITYKEY )
 	{
-		kohana::log('error', "-> securitykey $securitykey is different from " . self::SECURITYKEY . ", exiting." );
+		KO7::$log->add('error', "-> securitykey $securitykey is different from " . self::SECURITYKEY . ", exiting." );
 		return;
 	}
 
@@ -94,10 +94,10 @@ public static function getitemaverageprices( $securitykey, $period )
 		and timestamp = '$period'
 		group by  c.name";
 
-	$rset = Database::instance() -> query( $sql );
+	$rset = Database::instance() -> query( Database::SELECT, $sql );
 	print "Item;Sold Items;Average Price\r\n";
 	foreach ( $rset as $r )
-		print kohana::lang($r -> name) . ";" . $r -> quantity . ";" . $r -> averageprice . "\r\n";
+		print __($r -> name) . ";" . $r -> quantity . ";" . $r -> averageprice . "\r\n";
 
 }
 
@@ -106,15 +106,15 @@ function initquest( $securitykey, $char_id, $questname )
 
 	$this -> auto_render = false;
 
-	kohana::log('debug', "-> Init Quest {$questname}");
+	KO7::$log->add('debug', "-> Init Quest {$questname}");
 
 	if ( $securitykey != self::SECURITYKEY )
 	{
-		kohana::log('error', "-> securitykey $securitykey is different from " . self::SECURITYKEY . ", exiting." );
+		KO7::$log->add('error', "-> securitykey $securitykey is different from " . self::SECURITYKEY . ", exiting." );
 		die();
 	}
 
-	$character = ORM::factory('character', $char_id );
+	$character = ORM::factory('Character', $char_id );
 	$quest = QuestFactory_Model::createQuest($questname);
 	$quest -> activate( $character );
 
@@ -217,11 +217,11 @@ function secondsToTime($inputSeconds) {
 
 static function secs2hmstostring( $secs, $mode = 'hours' )
 {
-	//kohana::log('debug', "-> Converting $secs, $mode");
+	//KO7::$log->add('debug', "-> Converting $secs, $mode");
 
 	$data = self::s2ydhms($secs, $mode) ;
 	$text = '';
-	//kohana::log('debug', kohana::debug($data));
+	//KO7::$log->add('debug', kohana::debug($data));
 	if ($data['y'] > 0)
 		$text .= $data['y'] . 'y ' ;
 
@@ -284,13 +284,14 @@ function s2ydhms($seconds)
 static function mail( $to, $subject, $body, $attachment = null, $unsubscribelink = false )
 {
 
-	if ( kohana::config('medeur.sendnotifications', false) == false )
+	$meduerConfig = KO7::$config->load('medeur');
+	if ( $meduerConfig->get('sendnotifications', false) == false )
 	{
-		kohana::log('debug', '-> Not sending email because notifications are disabled.');
-		kohana::log('debug', '------- EMAIL BEGINS -------');
-		kohana::log('debug', "subject: {$subject}");
-		kohana::log('debug', $body );
-		kohana::log('debug', '------- EMAIL ENDS -------');
+		KO7::$log->add('debug', '-> Not sending email because notifications are disabled.');
+		KO7::$log->add('debug', '------- EMAIL BEGINS -------');
+		KO7::$log->add('debug', "subject: {$subject}");
+		KO7::$log->add('debug', $body );
+		KO7::$log->add('debug', '------- EMAIL ENDS -------');
 		return true;
 	}
 
@@ -299,7 +300,7 @@ static function mail( $to, $subject, $body, $attachment = null, $unsubscribelink
 	require_once(dirname(realpath(__FILE__)) . "/../libraries/vendors/PHPMailer/src/OAuth.php");
 	require_once(dirname(realpath(__FILE__)) . "/../libraries/vendors/PHPMailer/src/Exception.php");
 
-	kohana::log("info", "Sending email to: " . $to);
+	KO7::$log->add("info", "Sending email to: " . $to);
 
 	$clientId = "";
 	$clientSecret = "";
@@ -342,7 +343,7 @@ static function mail( $to, $subject, $body, $attachment = null, $unsubscribelink
 
 	// header
 
-	$_body = html::image(
+	$_body = HTML::image(
 		'https://i.imgur.com/jxjeTbI.jpg',
 		array( 'alt' => 'Medieval Europe' ));
 	$_body .= "<hr/>";
@@ -365,21 +366,21 @@ static function mail( $to, $subject, $body, $attachment = null, $unsubscribelink
 
 	if ( $unsubscribelink == true )
 	{
-		$user = ORM::factory("user") -> where ("email", $to) -> find();
+		$user = ORM::factory("User") -> where ("email", '=', $to) -> find();
 
 		if ( $user -> loaded )
 		{
 			$_body .= '<br/>';
 			$_body .= "<br/><span style='font-size:11px'>If you would like to stop receiving similar emails kindly unsubscribe from our mailing list by clicking this " .
-				html::anchor( "https://medieval-europe.eu/user/unsubscribe/" . $user -> username . "/" . $user -> activationtoken, 'link.' );
+				HTML::anchor( "https://medieval-europe.eu/user/unsubscribe/" . $user -> username . "/" . $user -> activationtoken, 'link.' );
 			$_body .= "</span><br/><br/>";
 		}
 
 	}
 	$_body .= "<hr/>";
-	$_body .= html::anchor('https://medieval-europe.eu', 'Medieval Europe');
+	$_body .= HTML::anchor('https://medieval-europe.eu', 'Medieval Europe');
 
-	$mail -> Subject = "[Server: " . kohana::config('medeur.servername') . ", Instance: " . kohana::config('medeur.environment') . "] " . $subject;
+	$mail -> Subject = "[Server: " . $meduerConfig->get('servername') . ", Instance: " . $meduerConfig->get('environment') . "] " . $subject;
 	$mail -> Body    = $_body;
 	$mail -> AltBody = strip_tags( $_body );
 
@@ -390,9 +391,9 @@ static function mail( $to, $subject, $body, $attachment = null, $unsubscribelink
 	try
 	{
 		$rc = $mail -> send();
-		kohana::log('debug', '-> return code: ' . $rc );
+		KO7::$log->add('debug', '-> return code: ' . $rc );
 	} catch (Exception $e) {
-		kohana::log('error', $e -> errorMessage() );
+		KO7::$log->add('error', $e -> errorMessage() );
 		return false;
 	}
 
@@ -416,9 +417,9 @@ function d2y( $d1, $d2 )
 	$diff = $date1 -> diff( $date2 );
 
 	return
-		$diff -> y . ' ' . kohana::lang('global.years') . ', ' .
-		$diff -> m . ' ' . kohana::lang('global.months') . ', ' .
-		$diff -> d . ' ' . kohana::lang('global.days') ;
+		$diff -> y . ' ' . __('global.years') . ', ' .
+		$diff -> m . ' ' . __('global.months') . ', ' .
+		$diff -> d . ' ' . __('global.days') ;
 
 }
 
@@ -445,9 +446,9 @@ function create_banner( $char_id, $language = 'en_US' )
 {
 	// Force English Language for Banner
 
-	Kohana::config_set('locale.language', 'en_US' );
+	I18n::lang('en_US' );
 
-	$char = ORM::factory ('character', $char_id );
+	$char = ORM::factory ('Character', $char_id );
 	if ( ! $char -> loaded )
 	{
 		return;
@@ -468,17 +469,17 @@ function create_banner( $char_id, $language = 'en_US' )
 		$fontfile_small = 'media/fonts/visitor1.ttf' ;
 		$fontfile_italic = 'media/fonts/arialbi.ttf' ;
 
-		$avatar  = $_SERVER['DOCUMENT_ROOT'] . url::base() . 'media/images/characters/'.$char->id.'_l.jpg';
+		$avatar  = $_SERVER['DOCUMENT_ROOT'] . URL::base() . 'media/images/characters/'.$char->id.'_l.jpg';
 		if ( ! is_file($avatar))
 		{
-			$avatar  = $_SERVER['DOCUMENT_ROOT'] . url::base() .'media/images/characters/aspect/noimage_l.jpg';
+			$avatar  = $_SERVER['DOCUMENT_ROOT'] . URL::base() .'media/images/characters/aspect/noimage_l.jpg';
 		}
 
-		$kingdom = $_SERVER['DOCUMENT_ROOT'] . url::base() .'media/images/heraldry/' . $char -> region -> kingdom -> get_image('small') ;
+		$kingdom = $_SERVER['DOCUMENT_ROOT'] . URL::base() .'media/images/heraldry/' . $char -> region -> kingdom -> get_image('small') ;
 
-		//kohana::log('debug', 'kingdom: ' . $kingdom );
+		//KO7::$log->add('debug', 'kingdom: ' . $kingdom );
 
-		$background = $_SERVER['DOCUMENT_ROOT'] . url::base() .'media/images/template/banner_background.gif';
+		$background = $_SERVER['DOCUMENT_ROOT'] . URL::base() .'media/images/template/banner_background.gif';
 
 
 		//$kingdom_img = imagecreatetruecolor( 35, 40 );
@@ -501,13 +502,13 @@ function create_banner( $char_id, $language = 'en_US' )
 
 		// character name
 		$y = 14;
-		$bonus_title = Character_Model::get_basicpackagetitle( $char -> id );
+		$bonus_title = Model_Character::get_basicpackagetitle( $char -> id );
     		if ($bonus_title != '')
-			$bonus_title = kohana::lang($bonus_title);
+			$bonus_title = __($bonus_title);
 		imagettftext($image, 9, 0, 3, $y, $fontcolor_red, $fontfile_bold, $bonus_title);
 		$bbox = imagettfbbox(9, 0, $fontfile_bold, $bonus_title);
 		$x += $bbox[2]+6;
-		//kohana::log( 'debug', kohana::debug( $bbox ));
+		//KO7::$log->add( 'debug', kohana::debug( $bbox ));
 		imagettftext($image, 9, 0, $x, $y, $fontcolor_black, $fontfile_bold, substr($char->name,0,23));
 
 		// avatar image
@@ -517,12 +518,12 @@ function create_banner( $char_id, $language = 'en_US' )
 
 		$y+=12;
 
-		$kingdom_name = kohana::lang( $char->region->kingdom -> get_name() ) ;
-		//kohana::log('debug', 'kingdom: ' . $kingdom_name );
+		$kingdom_name = __( $char->region->kingdom -> get_name() ) ;
+		//KO7::$log->add('debug', 'kingdom: ' . $kingdom_name );
 
 		imagettftext($image, 8, 0, 81, $y, $fontcolor_black, $fontfile_bold, $kingdom_name );
-		//imagettftext($image, 8, 0, 81, $y, $fontcolor_black, $fontfile_bold, kohana::lang('global.ciao') );
-		//kohana::log('debug', kohana::debug( $r) );
+		//imagettftext($image, 8, 0, 81, $y, $fontcolor_black, $fontfile_bold, __('global.ciao') );
+		//KO7::$log->add('debug', kohana::debug( $r) );
 
 		$y += 12;
 		$role = $char->get_current_role();
@@ -539,7 +540,7 @@ function create_banner( $char_id, $language = 'en_US' )
 		$age = Model_Utility::d2y( time(), $char -> birthdate );
 
 		//$age = Utility_Model::s2ydhms( time() - $char -> birthdate );
-		//kohana::log('debug', 'age: ' . kohana::debug( $age ));
+		//KO7::$log->add('debug', 'age: ' . kohana::debug( $age ));
 
 		$born = 'Age: ' . $age ;
 		/*
@@ -564,7 +565,7 @@ function create_banner( $char_id, $language = 'en_US' )
 				;
 			elseif ( $title -> current == 'Y' )
 			{
-				$badge = $_SERVER['DOCUMENT_ROOT'] . url::base() .
+				$badge = $_SERVER['DOCUMENT_ROOT'] . URL::base() .
 					'media/images/badges/character/badge_' . $title -> name .'_' . $title -> stars . '.png';
 				$badge_img = imagecreatefrompng($badge);
 				$newimage = ImageCreateTrueColor(20, 20);
@@ -657,7 +658,7 @@ function create_banner( $char_id, $language = 'en_US' )
 		require_once( "application/libraries/vendors/nbbc-1.4.5/nbbc.php");
 		$bbcode = new BBCode;
 		// set smileys dir...
-		$bbcode->SetSmileyUrl ( url::base( false )  . 'media/images/smileys' );
+		$bbcode->SetSmileyUrl ( URL::base( false )  . 'media/images/smileys' );
 		return $bbcode -> Parse( $text );
 	}
 
@@ -678,7 +679,7 @@ function create_banner( $char_id, $language = 'en_US' )
 	{
 
 		require_once( "application/libraries/vendors/FusionChartsFree/Code/PHP/Includes/FusionCharts.php");
-		$character = Character_Model::get_info( Session::instance()->get('char_id') );
+		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$db = Database::instance();
 		$commonoptions = " hoverCapBgColor='000000' bgColor='faf2bc' chartLeftMargin ='25' chartTopMargin ='1' chartBottomMargin ='1' chartRightMargin ='35'
 		rotateNames='0'	animation='0' showAlternateHGridColor='1' AlternateHGridColor='FFE0B3' divLineColor='ff5904' divLineAlpha='20'  canvasBorderColor='666666' baseFontColor='000000' canvasBgColor='FFD18B' canvasBgAlpha='90' ";
@@ -691,7 +692,7 @@ function create_banner( $char_id, $language = 'en_US' )
 		// categories, weekly (last month)
 		///////////////////////////////////////
 
-		$categories_w = $db -> query( "select distinct period
+		$categories_w = $db -> query( Database::SELECT, "select distinct period
 			from stats_historical where kingdom_id =  "
 			. $character -> region -> kingdom -> id . "
 			and period > " . $onemonthago ."
@@ -705,7 +706,7 @@ function create_banner( $char_id, $language = 'en_US' )
 			$month_s = date("m", $category -> period );
 			$week   = date("W", $category -> period );
 			$day   = date("d", $category -> period );
-			//kohana::log('debug', 'week: ' . $week );
+			//KO7::$log->add('debug', 'week: ' . $week );
 			$label = $day .", ". $month;
 			$strCategories_w .= "<category name='" . $label . "' />";
 		}
@@ -716,7 +717,7 @@ function create_banner( $char_id, $language = 'en_US' )
 		// categories, monthly
 		///////////////////////////////////////
 
-		$categories_m = $db -> query( "select distinct period
+		$categories_m = $db -> query( Database::SELECT, "select distinct period
 			from stats_historical where kingdom_id =  "
 			. $character -> region -> kingdom -> id . "
 			and period > " . $oneyearago ."
@@ -740,7 +741,7 @@ function create_banner( $char_id, $language = 'en_US' )
 		// (mensile
 		/////////////////////////////////////////////
 
-		$resultOwnedRegions = $db -> query("select * from stats_historical
+		$resultOwnedRegions = $db -> query(Database::SELECT, "select * from stats_historical
 		where name = 'kingdomownedregions'
 		and period > " . $onemonthago . "
 		and   kingdom_id = " . $character -> region -> kingdom -> id .
@@ -757,7 +758,7 @@ function create_banner( $char_id, $language = 'en_US' )
 		// (annuale)
 		/////////////////////////////////////////////
 
-		$resultOwnedRegions = $db -> query("select * from stats_historical
+		$resultOwnedRegions = $db -> query(Database::SELECT, "select * from stats_historical
 		where name = 'kingdomownedregions'
 		and period > " . $oneyearago . "
 		and   kingdom_id = " . $character -> region -> kingdom -> id .
@@ -768,16 +769,16 @@ function create_banner( $char_id, $language = 'en_US' )
 			$strDataSet1_m .= "<set value='" . $ownedRegion -> param1."'/>";
 		$strDataSet1_m .= "</dataset>";
 
-		$max_kingdomownedregions = $db -> query( "select * from stats_historical where name = 'max_kingdomownedregions'
+		$max_kingdomownedregions = $db -> query(Database::SELECT, "select * from stats_historical where name = 'max_kingdomownedregions'
 			and kingdom_id = " . $character -> region -> kingdom -> id ) -> as_array();
-		$min_kingdomownedregions = $db -> query( "select * from stats_historical where name = 'min_kingdomownedregions'
+		$min_kingdomownedregions = $db -> query(Database::SELECT, "select * from stats_historical where name = 'min_kingdomownedregions'
 			and kingdom_id = " . $character -> region -> kingdom -> id ) -> as_array();
 
 		/////////////////////////////////////////////
 		// data set 2, cittadini del regno (mese)
 		/////////////////////////////////////////////
 
-		$resultKingdomCitizens = $db -> query("select * from stats_historical
+		$resultKingdomCitizens = $db -> query(Database::SELECT,"select * from stats_historical
 		where name = 'kingdompopulation'
 		and period > " . $onemonthago . "
 		and   kingdom_id = " . $character -> region -> kingdom -> id .
@@ -789,16 +790,16 @@ function create_banner( $char_id, $language = 'en_US' )
 			$strDataSet2_w .= "<set value='" . $KingdomCitizen -> param1."'/>";
 		$strDataSet2_w .= "</dataset>";
 
-		$max_kingdompopulation = $db -> query( "select * from stats_historical where name = 'max_kingdompopulation'
+		$max_kingdompopulation = $db -> query(Database::SELECT, "select * from stats_historical where name = 'max_kingdompopulation'
 			and kingdom_id = " . $character -> region -> kingdom -> id ) -> as_array();
-		$min_kingdompopulation = $db -> query( "select * from stats_historical where name = 'min_kingdompopulation'
+		$min_kingdompopulation = $db -> query(Database::SELECT, "select * from stats_historical where name = 'min_kingdompopulation'
 			and kingdom_id = " . $character -> region -> kingdom -> id ) -> as_array();
 
 		/////////////////////////////////////////////
 		// data set 2, cittadini del regno (anno)
 		/////////////////////////////////////////////
 
-		$resultKingdomCitizens = $db -> query("select * from stats_historical
+		$resultKingdomCitizens = $db -> query(Database::SELECT,"select * from stats_historical
 		where name = 'kingdompopulation'
 		and period > " . $oneyearago . "
 		and   kingdom_id = " . $character -> region -> kingdom -> id .
@@ -814,7 +815,7 @@ function create_banner( $char_id, $language = 'en_US' )
 		// data set 3, Ricchezza regno (mese)
 		/////////////////////////////////////////////
 
-		$resultKingdomHeritage = $db -> query("select * from stats_historical
+		$resultKingdomHeritage = $db -> query(Database::SELECT, "select * from stats_historical
 		where name = 'kingdomheritage'
 		and period > " . $onemonthago . "
 		and   kingdom_id = " . $character -> region -> kingdom -> id .
@@ -825,16 +826,16 @@ function create_banner( $char_id, $language = 'en_US' )
 			$strDataSet3_w .= "<set value='" . $KingdomHeritage -> param1."'/>";
 		$strDataSet3_w .= "</dataset>";
 
-		$max_kingdomheritage = $db -> query( "select * from stats_historical where name = 'max_kingdomheritage'
+		$max_kingdomheritage = $db -> query(Database::SELECT, "select * from stats_historical where name = 'max_kingdomheritage'
 			and kingdom_id = " . $character -> region -> kingdom -> id ) -> as_array();
-		$min_kingdomheritage = $db -> query( "select * from stats_historical where name = 'min_kingdomheritage'
+		$min_kingdomheritage = $db -> query(Database::SELECT, "select * from stats_historical where name = 'min_kingdomheritage'
 			and kingdom_id = " . $character -> region -> kingdom -> id ) -> as_array();
 
 		/////////////////////////////////////////////
 		// data set 3, Ricchezza regno (anno)
 		/////////////////////////////////////////////
 
-		$resultKingdomHeritage = $db -> query("select * from stats_historical
+		$resultKingdomHeritage = $db -> query(Database::SELECT, "select * from stats_historical
 		where name = 'kingdomheritage'
 		and period > " . $oneyearago . "
 		and   kingdom_id = " . $character -> region -> kingdom -> id .
@@ -849,7 +850,7 @@ function create_banner( $char_id, $language = 'en_US' )
 		// data set 4, ricchezza media (mese)
 		/////////////////////////////////////////////
 
-		$resultKingdomAvgHeritage = $db -> query("select * from stats_historical
+		$resultKingdomAvgHeritage = $db -> query(Database::SELECT, "select * from stats_historical
 		where name = 'kingdomavgheritage'
 		and period > " . $onemonthago . "
 		and   kingdom_id = " . $character -> region -> kingdom -> id .
@@ -860,9 +861,9 @@ function create_banner( $char_id, $language = 'en_US' )
 			$strDataSet4_w .= "<set value='" . $KingdomAvgHeritage -> param1."'/>";
 		$strDataSet4_w .= "</dataset>";
 
-		$max_kingdomavgheritage = $db -> query( "select * from stats_historical where name = 'max_kingdomavgheritage'
+		$max_kingdomavgheritage = $db -> query(Database::SELECT, "select * from stats_historical where name = 'max_kingdomavgheritage'
 			and kingdom_id = " . $character -> region -> kingdom -> id ) -> as_array();
-		$min_kingdomavgheritage = $db -> query( "select * from stats_historical where name = 'min_kingdomavgheritage'
+		$min_kingdomavgheritage = $db -> query(Database::SELECT, "select * from stats_historical where name = 'min_kingdomavgheritage'
 			and kingdom_id = " . $character -> region -> kingdom -> id ) -> as_array();
 
 
@@ -870,7 +871,7 @@ function create_banner( $char_id, $language = 'en_US' )
 		// data set 4, ricchezza media (anno)
 		/////////////////////////////////////////////
 
-		$resultKingdomAvgHeritage = $db -> query("select * from stats_historical
+		$resultKingdomAvgHeritage = $db -> query(Database::SELECT, "select * from stats_historical
 		where name = 'kingdomavgheritage'
 		and period > " . $oneyearago . "
 		and   kingdom_id = " . $character -> region -> kingdom -> id .
@@ -924,45 +925,45 @@ function create_banner( $char_id, $language = 'en_US' )
 		$strXML8 .=  "</graph>";
 
 
-		//kohana::log('debug', $strXML );
-		//kohana::log('debug', $strXML2 );
-		//kohana::log('debug', $strXML3 );
+		//KO7::$log->add('debug', $strXML );
+		//KO7::$log->add('debug', $strXML2 );
+		//KO7::$log->add('debug', $strXML3 );
 
 		$chartinfo['kingdomownedregions_w']['html'] = renderChartHTML(
-		url::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML,  "graph1", $chartwidth, $chartheight);
+		URL::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML,  "graph1", $chartwidth, $chartheight);
 		$chartinfo['kingdomownedregions_w']['max'] = $max_kingdomownedregions;
 		$chartinfo['kingdomownedregions_w']['min'] = $min_kingdomownedregions;
 
 		$chartinfo['kingdomownedregions_m']['html'] = renderChartHTML(
-		url::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML2, "graph2", $chartwidth, $chartheight);
+		URL::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML2, "graph2", $chartwidth, $chartheight);
 
 		$chartinfo['kingdompopulation_w']['html'] = renderChartHTML(
-		url::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML3, "graph3", $chartwidth, $chartheight);
+		URL::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML3, "graph3", $chartwidth, $chartheight);
 		$chartinfo['kingdompopulation_w']['max'] = $max_kingdompopulation;
 		$chartinfo['kingdompopulation_w']['min'] = $min_kingdompopulation;
 
 		$chartinfo['kingdompopulation_m']['html'] = renderChartHTML(
-		url::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML4, "graph4", $chartwidth, $chartheight);
+		URL::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML4, "graph4", $chartwidth, $chartheight);
 
 		$chartinfo['kingdomheritage_w']['html'] = renderChartHTML(
-		url::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML5, "graph5", $chartwidth, $chartheight);
+		URL::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML5, "graph5", $chartwidth, $chartheight);
 
 		$chartinfo['kingdomheritage_w']['max'] = $max_kingdomheritage;
 		$chartinfo['kingdomheritage_w']['min'] = $min_kingdomheritage;
 
 		$chartinfo['kingdomheritage_m']['html'] = renderChartHTML(
-		url::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML6, "graph6", $chartwidth, $chartheight);
+		URL::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML6, "graph6", $chartwidth, $chartheight);
 
 		//
 
 		$chartinfo['kingdomavgheritage_w']['html'] = renderChartHTML(
-		url::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML7, "graph7", $chartwidth, $chartheight);
+		URL::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML7, "graph7", $chartwidth, $chartheight);
 
 		$chartinfo['kingdomavgheritage_w']['max'] = $max_kingdomavgheritage;
 		$chartinfo['kingdomavgheritage_w']['min'] = $min_kingdomavgheritage;
 
 		$chartinfo['kingdomavgheritage_m']['html'] = renderChartHTML(
-		url::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML8, "graph8", $chartwidth, $chartheight);
+		URL::base() . "application/libraries/vendors/FusionChartsFree/Charts/FCF_MSLine.swf", "", $strXML8, "graph8", $chartwidth, $chartheight);
 
 		return $chartinfo;
 
@@ -979,7 +980,7 @@ function create_banner( $char_id, $language = 'en_US' )
 	function alertadmins( $subject, $text, $attachment = null )
 	{
 
-		$res = Database::instance() -> query("
+		$res = Database::instance() -> query(Database::SELECT, "
 		SELECT email
 		FROM   users u, roles_users ru, roles r
 		WHERE  u.id = ru.user_id
@@ -995,7 +996,7 @@ function create_banner( $char_id, $language = 'en_US' )
 	function alertstaff( $subject, $text )
 	{
 
-		$res = Database::instance() -> query("
+		$res = Database::instance() -> query(Database::SELECT, "
 
 		SELECT email
 		FROM   users u, roles_users ru, roles r
@@ -1183,20 +1184,20 @@ function create_banner( $char_id, $language = 'en_US' )
 
 				if ( !is_null ($data[$id] -> character_id ) )
 				{
-					$char = ORM::factory('character', $data[$id]-> character_id);
+					$char = ORM::factory('Character', $data[$id]-> character_id);
 					$output .=
 						"<div class='childlevel_".$level."'>" .
 						"<div style='float:left;margin-right:5px'>";
 						if ( $level == 0 )
-							$output .= Character_Model::display_avatar( $char -> id, 'l', 'border');
+							$output .= Model_Character::display_avatar( $char -> id, 'l', 'border');
 						else
-							$output .= Character_Model::display_avatar( $char -> id, 's', 'border');
+							$output .= Model_Character::display_avatar( $char -> id, 's', 'border');
 						$output .=
 						"</div>".
 						"<div>" .
-						kohana::lang('structures.' . $data[$id] -> type. '_' . $data[$id] -> churchname ) . "<br/>" .
-						'Location: ' . kohana::lang($data[$id] -> regionname) . "<br/>" .
-						Character_Model::create_publicprofilelink( $char -> id, $char -> name ) .
+						__('structures.' . $data[$id] -> type. '_' . $data[$id] -> churchname ) . "<br/>" .
+						'Location: ' . __($data[$id] -> regionname) . "<br/>" .
+						Model_Character::create_publicprofilelink( $char -> id, $char -> name ) .
 						':&nbsp;' . $char -> get_rolename(true) .
 						"</div>" .
 						"</div>" .
@@ -1206,12 +1207,12 @@ function create_banner( $char_id, $language = 'en_US' )
 				{
 					$output .= "<div class='childlevel_".$level."'>" .
 						"<div style='float:left;margin-right:5px'>" .
-						Character_Model::display_avatar( 0, 's', 'border') .
+						Model_Character::display_avatar( 0, 's', 'border') .
 						"</div>".
 						"<div>" .
-						kohana::lang('structures.' . $data[$id] -> type . '_' . $data[$id] -> churchname ) . "<br/>" .
-						'Location: ' . kohana::lang($data[$id] -> regionname) .
-						"<br/>" . kohana::lang('global.uncontrolledstructure') .
+						__('structures.' . $data[$id] -> type . '_' . $data[$id] -> churchname ) . "<br/>" .
+						'Location: ' . __($data[$id] -> regionname) .
+						"<br/>" . __('global.uncontrolledstructure') .
 						"</div>" .
 					"</div>" .
 					"<br style='clear:both'/>";
@@ -1274,7 +1275,7 @@ function create_banner( $char_id, $language = 'en_US' )
 		{
 			if ($user -> receiveigmessagesonemail == 'Y' )
 			{
-				kohana::log('debug', 'nowhere?: ' . strpos($user -> email, 'nowhere.com'));
+				KO7::$log->add('debug', 'nowhere?: ' . strpos($user -> email, 'nowhere.com'));
 				if (strpos($user -> email, 'nowhere.com') !== false)
 					$rc = Model_Utility::send_fb_notification( $user -> fb_id, $subject, $url);
 				else
@@ -1298,18 +1299,20 @@ function create_banner( $char_id, $language = 'en_US' )
 	function send_fb_notification($recipientFbid, $text, $url) {
 	{
 
-		if ( kohana::config('medeur.sendnotifications', false) == false )
+		$meduerConfig = KO7::$config->load('medeur');
+
+		if ( $meduerConfig->get('sendnotifications', false) == false )
 		{
-			kohana::log('info', '-> Not sending FB message because notifications are disabled.');
+			KO7::$log->add(KO7_Log::INFO, '-> Not sending FB message because notifications are disabled.');
 			return false;
 		}
 
 		$text = strip_tags($text);
 
-		kohana::log('info', '-> Sending fb notification to user: ' . $recipientFbid);
+		KO7::$log->add(KO7_Log::INFO, '-> Sending fb notification to user: ' . $recipientFbid);
 
-		$AppID = kohana::config('medeur.facebook_app_id');
-		$AppSecret = kohana::config('medeur.facebook_app_secret');
+		$AppID = $meduerConfig->get('facebook_app_id');
+		$AppSecret = $meduerConfig->get('facebook_app_secret');
 
 		$fb_app_token =  $AppID . "|" . $AppSecret;
 		if (!is_null( $url) )
@@ -1355,7 +1358,7 @@ function create_banner( $char_id, $language = 'en_US' )
 		$iv = mcrypt_create_iv(16, MCRYPT_RAND);
 		$encryptedText = openssl_encrypt($texttoencrypt,$encryptionMethod,$secretHash, 0, $iv);
 		$encryptedText .= ':' . base64_encode($iv);
-		return $encryptedtext;
+		return $encryptedText;
 	}
 
 	/*

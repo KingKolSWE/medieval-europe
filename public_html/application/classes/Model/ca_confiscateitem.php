@@ -40,7 +40,7 @@ class CA_Confiscateitem_Model extends Character_Action_Model
 		if ( $par[1] -> user -> status == 'canceled' or  $par[1] -> user -> status == 'suspended' )
 		{ $message = kohana::lang('ca_confiscateitem.error-useriscanceled'); return FALSE; }	
 		
-		if ( Character_Model::has_merole( $par[1], 'admin' ) )
+		if ( Model_Character::has_merole( $par[1], 'admin' ) )
 		{ $message = kohana::lang('global.operation_not_allowed'); return FALSE; }	
 	
 		// check quantit�

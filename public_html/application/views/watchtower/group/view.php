@@ -39,7 +39,7 @@ $(document).ready(function()
 	<h2><?= $group -> name; ?></h2>
 	<?= $group -> description; ?>
 	<br/>
-	<?= kohana::lang('groups.group_founder') .'&nbsp;' . Character_Model::create_publicprofilelink( $group -> character_id, null ); ?>
+	<?= kohana::lang('groups.group_founder') .'&nbsp;' . Model_Character::create_publicprofilelink( $group -> character_id, null ); ?>
 	<br/>
 	<?= kohana::lang('global.type') . ': ' . kohana::lang( $group -> type); ?>
 	</div>
@@ -77,7 +77,7 @@ $(document).ready(function()
 		foreach ( $pendents as $pendent )
 		{
 			
-			echo "<div class='center'> " . Character_Model::create_publicprofilelink( $pendent -> character_id, null ) . "</div>";		
+			echo "<div class='center'> " . Model_Character::create_publicprofilelink( $pendent -> character_id, null ) . "</div>";
 		}
 		
 	}	
@@ -126,12 +126,12 @@ if ( $istutor and $group -> classification == 'tutor' ) { ?>
 <tr class="<?= $class; ?>">
 
 <td class="center">
-<?= Character_Model::create_publicprofilelink( $member -> character_id, null ); ?>
+<?= Model_Character::create_publicprofilelink( $member -> character_id, null ); ?>
 </td>
 <td class="center">
 <?= 
 Model_Utility::secs2hmstostring(
-	Character_Model::get_age_s( 
+	Model_Character::get_age_s(
 		$member -> character_id, 'year'));
  ?>
 </td>

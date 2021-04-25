@@ -38,7 +38,7 @@ class CA_Apply_Model extends Character_Action_Model
 		{ $message = kohana::lang('ca_apply.error-wrongquantity'); return FALSE; }	
 				
 		if ( 
-			Character_Model::has_item( 
+			Model_Character::has_item(
 					$par[1]->id, $this -> item -> cfgitem -> tag, $par[2] ) == false )
 			{ $message = kohana::lang('charactions.item_notininventory'); return FALSE; }
 
@@ -133,7 +133,7 @@ class CA_Apply_Model extends Character_Action_Model
 	
 			// aumento il livello di disintossicazione, usando anche un +/- 1,2 random.
 			
-			$current_il_stat = Character_Model::get_stat_d( $par[1] -> id, 	'intoxicationlevel');
+			$current_il_stat = Model_Character::get_stat_d( $par[1] -> id, 	'intoxicationlevel');
 		
 			$r = mt_rand(0,1);
 			$r2 = mt_rand(1,2);
@@ -176,7 +176,7 @@ class CA_Apply_Model extends Character_Action_Model
 				null );				
 		}
 		elseif ( $this -> item -> cfgitem -> tag == 'elixirofdexterity' )
-			Character_Model::modify_stat_d(
+			Model_Character::modify_stat_d(
 				$par[1] -> id,
 				'dexboost',
 				0,
@@ -187,7 +187,7 @@ class CA_Apply_Model extends Character_Action_Model
 			);		
 		elseif ( $this -> item -> cfgitem -> tag == 'elixirofmight'	)
 		{
-			Character_Model::modify_stat_d(
+			Model_Character::modify_stat_d(
 				$par[1] -> id,
 				'strboost',
 				0,
@@ -200,7 +200,7 @@ class CA_Apply_Model extends Character_Action_Model
 		}
 			
 		elseif ( $this -> item -> cfgitem -> tag == 'elixirofstrength' )				
-			Character_Model::modify_stat_d(
+			Model_Character::modify_stat_d(
 				$par[1] -> id,
 				'strboost',
 				0,
@@ -210,7 +210,7 @@ class CA_Apply_Model extends Character_Action_Model
 				time() + (8*3600)			
 			);			
 		elseif ( $this -> item -> cfgitem -> tag == 'elixirofintelligence' )
-			Character_Model::modify_stat_d(
+			Model_Character::modify_stat_d(
 				$par[1] -> id,
 				'intelboost',
 				0,
@@ -220,7 +220,7 @@ class CA_Apply_Model extends Character_Action_Model
 				time() + (8*3600)			
 			);
 		elseif ( $this -> item -> cfgitem -> tag == 'elixirofconstitution' )
-			Character_Model::modify_stat_d(
+			Model_Character::modify_stat_d(
 				$par[1] -> id,
 				'costboost',
 				0,
@@ -230,7 +230,7 @@ class CA_Apply_Model extends Character_Action_Model
 				time() + (8*3600)			
 			);
 		elseif ( $this -> item -> cfgitem -> tag == 'elixirofstamina' )
-			Character_Model::modify_stat_d(
+			Model_Character::modify_stat_d(
 				$par[1] -> id,
 				'staminaboost',
 				0,
@@ -252,7 +252,7 @@ class CA_Apply_Model extends Character_Action_Model
 				if (in_array($disease -> param1, array('tipsyness')))
 				{						
 			
-					Character_Model::modify_stat_d(
+					Model_Character::modify_stat_d(
 					$par[1] -> id,
 					'intoxicationlevel',
 					0,					

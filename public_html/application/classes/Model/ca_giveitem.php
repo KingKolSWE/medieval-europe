@@ -11,7 +11,7 @@ class CA_Giveitem_Model extends Character_Action_Model
 	// @input: array di parametri
 	// par[0]: oggetto character destinatario
 	// par[1]: cfgitem
-	// par[2]: quantità
+	// par[2]: quantitï¿½
 	// par[3]: causale
 	// par[4]: char che invia
 	
@@ -31,7 +31,7 @@ class CA_Giveitem_Model extends Character_Action_Model
 		
 		if ( $par[2] < 0 )
 		{
-			$ownedquantity = Character_Model::get_item_quantity_d( $par[0] -> id, $this -> cfgitem -> tag );
+			$ownedquantity = Model_Character::get_item_quantity_d( $par[0] -> id, $this -> cfgitem -> tag );
 			//var_dump($ownedquantity."-".$par[2]);exit;
 			if (abs($ownedquantity) < abs($par[2]))
 			{

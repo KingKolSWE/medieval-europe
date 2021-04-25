@@ -70,7 +70,7 @@ class Region_Model extends ORM
 			$data[$i]['character_id'] = $presentchar -> id;
 			$data[$i]['character_name'] = $presentchar -> character_name;
 			$data[$i]['kingdom_name'] = $presentchar -> kingdom_name;
-			$data[$i]['activity'] = Character_Model::get_currentpendingaction( $presentchar -> id );
+			$data[$i]['activity'] = Model_Character::get_currentpendingaction( $presentchar -> id );
 			$i++;
 		}
 		//var_dump($data); exit;
@@ -177,7 +177,7 @@ class Region_Model extends ORM
 					else
 					{
 						$pc++;
-						$data['list'][$i]['online'] = Character_Model::is_online($char->id);
+						$data['list'][$i]['online'] = Model_Character::is_online($char->id);
 					}
 
 					$data['list'][$i]['char'] = $char;
@@ -1067,7 +1067,7 @@ class Region_Model extends ORM
 				(
 				$currentregion -> kingdom_id == $targetregion -> kingdom_id
 				and
-				Character_Model::is_fighting($char->id) == true )
+				Model_Character::is_fighting($char->id) == true )
 			)
 		)
 		{

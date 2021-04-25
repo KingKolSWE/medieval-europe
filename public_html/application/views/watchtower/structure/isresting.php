@@ -4,7 +4,7 @@
 
 <?php 
 
-$action = Character_Model::get_currentpendingaction( $character );
+$action = Model_Character::get_currentpendingaction( $character );
 
 if ( $action != 'NOACTION' and $action['action'] != 'resttavern' )
 {

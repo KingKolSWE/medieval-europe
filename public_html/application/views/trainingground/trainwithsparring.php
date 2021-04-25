@@ -33,7 +33,7 @@ $(".roundanchor").click( function ()
 
 <div class="pagetitle">Test - Fight Report</div>
 
-<i> BETT - v 1.3 - originally inspired by <?php echo Character_Model::create_publicprofilelink( null, 'Aegis Rex') ?></i>
+<i> BETT - v 1.3 - originally inspired by <?php echo Model_Character::create_publicprofilelink( null, 'Aegis Rex') ?></i>
 <br/><br/>
 
 <style>

@@ -40,10 +40,10 @@ class CA_CleanPrisons_Model extends Character_Action_Model
 		{ return false; }
 						
 		$queuebonus = false;
-		if ( Character_Model::get_premiumbonus( $par[0] -> id, 'workerpackage') !== false )						
+		if ( Model_Character::get_premiumbonus( $par[0] -> id, 'workerpackage') !== false )
 			$queuebonus = true;
 			
-		// Controllo, se il moltiplicatore è > 1, il char deve avere il bonus
+		// Controllo, se il moltiplicatore ï¿½ > 1, il char deve avere il bonus
 		if ( !in_array ( $par[2], array( 1, 2, 3 )) or ($par[2] > 1 and ! $queuebonus ) )
 				{ $message = Kohana::lang("global.operation_not_allowed"); return false; }
 		

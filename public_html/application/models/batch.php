@@ -332,7 +332,7 @@ class Batch_Model
 
 		foreach ( $rset as $row )
 		{
-			$current_il_stat = Character_Model::get_stat_d(
+			$current_il_stat = Model_Character::get_stat_d(
 				$row -> cid,
 				'intoxicationlevel');
 
@@ -359,7 +359,7 @@ class Batch_Model
 				$obj -> cure_disease( $char );
 			}
 
-			Character_Model::modify_stat_d(
+			Model_Character::modify_stat_d(
 				$row -> cid,
 				'intoxicationlevel',
 				$new_il,

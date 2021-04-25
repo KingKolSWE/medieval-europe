@@ -104,7 +104,7 @@ function ec_scroll_conquerirorder( $item )
 public function buy_do_proprietary_check( $boughtquantity, &$message )
 {
 	
-	$character = Character_Model::get_info( Session::instance()->get('char_id') ); 	
+	$character = Model_Character::get_info( Session::instance()->get('char_id') );
 	
 	////////////////////////////////////////////////////////////////////
 	// controlli per property_license
@@ -151,7 +151,7 @@ public function buy_do_proprietary_check( $boughtquantity, &$message )
 			{
 				
 				$churchhasoraetlaborabonus = Church_Model::has_dogma_bonus( $character -> church_id, 'craftblessing');
-				$charhasfpcontribution = Character_Model::get_achievement( $character -> id, 'stat_fpcontribution');
+				$charhasfpcontribution = Model_Character::get_achievement( $character -> id, 'stat_fpcontribution');
 				
 				if (
 					$churchhasoraetlaborabonus == false
@@ -177,7 +177,7 @@ public function buy_do_proprietary_check( $boughtquantity, &$message )
 		{
 			list ( $cfgitem_id, $quantity ) = explode ('-', $item );
 			$cfgitem = ORM::factory('cfgitem', $cfgitem_id ); 
-			if ( Character_Model::has_item( $character->id, $cfgitem->tag, $quantity, true) == false )
+			if ( Model_Character::has_item( $character->id, $cfgitem->tag, $quantity, true) == false )
 			{
 				$message = 'charactions.market_deliverygoods_sourcehasnotitems';
 				return false;
@@ -214,7 +214,7 @@ public function sell_do_proprietary_check( &$message )
 public function buy_do_proprietary_action( &$message)
 {
 
-	$character = Character_Model::get_info( Session::instance()->get('char_id') ); 
+	$character = Model_Character::get_info( Session::instance()->get('char_id') );
 	$seller = ORM::factory('character', $this->seller_id );
 	
 	if ( $this -> cfgitem -> tag == 'scroll_propertylicense' ) 

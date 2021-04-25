@@ -52,7 +52,7 @@ $class = ($r % 2 == 0) ? 'alternaterow_1' : 'alternaterow_2';
 ?>
 <tr class="<?=$class;?>">
 <td class='center'><?=$suggestion -> id; ?></td>
-<td class='center'><?= Character_Model::create_publicprofilelink($suggestion->character_id); ?></td>
+<td class='center'><?= Model_Character::create_publicprofilelink($suggestion->character_id); ?></td>
 <td class='center' style='word-wrap: break-word'><?= html::anchor('/suggestion/view/' . $suggestion -> id, $suggestion -> title) ?></td>
 <td class='center'><?= kohana::lang('suggestions.status_'.$suggestion -> status);
 if ( $suggestion -> status == 'fundable' or $suggestion -> status == 'funded' )

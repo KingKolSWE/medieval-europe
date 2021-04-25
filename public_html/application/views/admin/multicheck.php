@@ -48,7 +48,7 @@ $(".character").autocomplete({
 
 <?php if (empty($characters) ) { ?>
 <br/>
-<p class='center'>Nessun record trovato o il cookie non è stato piazzato.</p>
+<p class='center'>Nessun record trovato o il cookie non ï¿½ stato piazzato.</p>
 <?php }
 else
 {
@@ -65,7 +65,7 @@ else
 	<?php foreach ($characters as $character) 
 	{ 
 		($r % 2 == 0) ? $class = '' : $class = 'alternaterow_1';		
-		$hasipshieldbonus = Character_Model::get_premiumbonus( $character -> character_id, 'ipcheckshield' )
+		$hasipshieldbonus = Model_Character::get_premiumbonus( $character -> character_id, 'ipcheckshield' )
 	
 	?>
 		<tr class="<?php echo $class;?>">

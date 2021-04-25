@@ -107,7 +107,7 @@ class Course_Model
 	*/
 	public function addStudyHours( $char, $hours )
 	{
-		Character_Model::modify_stat_d(
+		Model_Character::modify_stat_d(
 			$char -> id,
 			'studiedhours', 
 			$hours,
@@ -135,7 +135,7 @@ class Course_Model
 	
 	public function getStudiedHours( $char )
 	{
-		$stat = Character_Model::get_stat_from_cache( $char -> id, 'studiedhours', $this->getTag() );		
+		$stat = Model_Character::get_stat_from_cache( $char -> id, 'studiedhours', $this->getTag() );
 		if ( $stat -> loaded )
 			return $stat -> value;
 		else

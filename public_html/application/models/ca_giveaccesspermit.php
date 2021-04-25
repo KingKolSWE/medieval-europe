@@ -29,13 +29,13 @@ class CA_Giveaccesspermit_Model extends Character_Action_Model
 		
 		// controllo: foglio di carta e sigillo ???
 		
-		if ( ! Character_Model::has_item( $par[1] -> character_id, 'paper_piece', 1 ) 
-			or ! Character_Model::has_item( $par[1] -> character_id, 'waxseal', 1 ) ) 
+		if ( ! Model_Character::has_item( $par[1] -> character_id, 'paper_piece', 1 )
+			or ! Model_Character::has_item( $par[1] -> character_id, 'waxseal', 1 ) )
 		{ $message = kohana::lang('charactions.paperpieceandwaxsealneeded'); return FALSE; }	
 		
 		// ha già un permesso?
 		
-		$stat = Character_Model::get_stat_d( $this -> targetchar -> id, 'accesspermit',
+		$stat = Model_Character::get_stat_d( $this -> targetchar -> id, 'accesspermit',
 			$par[1] -> region -> kingdom_id );
 		if ( $stat -> value > time() )
 		{ $message = kohana::lang('ca_giveaccesspermit.error-charhasalreadyapermit',

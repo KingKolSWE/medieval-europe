@@ -1080,7 +1080,7 @@ class Item_Model extends ORM
 			'workonproject' => kohana::config('medeur.consume_medium'),
 		);
 		
-		$equippeditems = Character_Model::get_equipment( $char -> id );
+		$equippeditems = Model_Character::get_equipment( $char -> id );
 		
 		foreach ( $equippeditems as $equippeditem )	
 		{
@@ -1205,10 +1205,10 @@ class Item_Model extends ORM
 		$target = ORM::factory('character') -> where ( 'name',  $targetname) -> find( );	
 		$item = ORM::factory('item', $item_id );
 		$source_region = ORM::factory('region', $source -> position_id );
-		if ( Character_Model::is_traveling( $target -> id ) )
+		if ( Model_Character::is_traveling( $target -> id ) )
 		{
 			kohana::log('debug', "-> Char {$target->name} is traveling.");
-			$moveaction = Character_Model::get_currentpendingaction( $target -> id ); 			
+			$moveaction = Model_Character::get_currentpendingaction( $target -> id );
 			$target_region = ORM::factory('region', $moveaction['param2']	);			
 		}
 		else
@@ -1262,7 +1262,7 @@ class Item_Model extends ORM
 				return $info;
 			}
 			
-			if (  Character_Model::has_item( $source -> id, $item -> cfgitem -> tag, $quantity ) == false )
+			if (  Model_Character::has_item( $source -> id, $item -> cfgitem -> tag, $quantity ) == false )
 			{
 				$info['rc'] = 'NOK';
 				$info['message'] = kohana::lang('charactions.itemsquantitynotowned');
@@ -1292,8 +1292,8 @@ class Item_Model extends ORM
 			}
 			
 			// il char destinatario ed il sorgente, sono in prigione?
-			if ( Character_Model::is_imprisoned( $target -> id ) or 
-				 Character_Model::is_imprisoned( $source -> id ) )
+			if ( Model_Character::is_imprisoned( $target -> id ) or
+				 Model_Character::is_imprisoned( $source -> id ) )
 			{
 				$info['rc'] = 'NOK';
 				$info['message'] = kohana::lang('ca_senditem.error-targetorsourceimprisoned');
@@ -1785,7 +1785,7 @@ class Item_Model extends ORM
 					. $item -> seller_id, 	$item -> seller_name) ."</td>";
 					
 				// destinatario
-				$html .= "<td class='center'>" . Character_Model::create_publicprofilelink($item -> recipient_id) . "</td>";
+				$html .= "<td class='center'>" . Model_Character::create_publicprofilelink($item -> recipient_id) . "</td>";
 				
 				//$html .= "<td class='center'>" . Utility_Model::format_date($item->salepostdate) . "</td>";				
 				

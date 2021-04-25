@@ -37,7 +37,7 @@ $class = ($k % 2 == 0) ? 'alternaterow_1' : 'alternaterow_2' ;
 
 <tr class='<?=$class;?>'>
 <td class='center'><?= $message -> id; ?></td>
-<td class='center'><?= Character_Model::create_publicprofilelink( $message -> character_id, null);?></td>
+<td class='center'><?= Model_Character::create_publicprofilelink( $message -> character_id, null);?></td>
 <td class='center'><?= html::anchor('boardmessage/view/' . $message -> id, $message->title);?></td>
 <td class='center'><?= Model_Utility::format_datetime($message -> created);?></td>
 <td class='center'><?= Model_Utility::format_datetime($message -> created + $message -> validity *24*3600);?></td>

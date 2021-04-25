@@ -114,7 +114,7 @@ foreach ($religioncount as $r)
 		//kohana::log('debug', kohana::debug($value) );		
 		echo "<tr class = '{$class}'>";
 		echo "<td class='charname' data-characterid='" . $citizen->id . "'>";
-		$basicpackagetitle = 	Character_Model::get_basicpackagetitle( $citizen -> id );
+		$basicpackagetitle = 	Model_Character::get_basicpackagetitle( $citizen -> id );
 		if ($basicpackagetitle != '' )
 		{
 			echo kohana::lang($basicpackagetitle);
@@ -143,7 +143,7 @@ foreach ($religioncount as $r)
 		
 		if ($citizen -> type == 'pc' )
 		{
-			if ( Character_Model::is_online($citizen->id) )
+			if ( Model_Character::is_online($citizen->id) )
 				echo "<td  class='center' style='color:#009933;font-weight:bold'>Online</td>";
 			else
 				echo "<td  class='center' style='color:#cc0000;font-weight:bold'>Offline</td>";

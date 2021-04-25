@@ -70,7 +70,7 @@ class CA_Restrain_Model extends Character_Action_Model
 		// It is not possible to lock an already locked char		
 		///////////////////////////////////////////////////////////////////////
 		
-		if ( Character_Model::is_restrained( $par[1] -> id ) )
+		if ( Model_Character::is_restrained( $par[1] -> id ) )
 		{ $message = kohana::lang('ca_restrain.alreadyrestrained', $par[1] -> name); return FALSE; }
 	
 		///////////////////////////////////////////////////////////////////////		
@@ -100,7 +100,7 @@ class CA_Restrain_Model extends Character_Action_Model
 		// the player has the necessary items
 		//////////////////////////////////////////////////////////////////////
 		
-		if ( ! Character_Model::has_item( $par[0]->id, 'paper_piece', 1 ) ) 
+		if ( ! Model_Character::has_item( $par[0]->id, 'paper_piece', 1 ) )
 		{ $message = kohana::lang('charactions.paperpieceneeded'); return FALSE; }				
 
 		//////////////////////////////////////////////////////////////////////
@@ -124,14 +124,14 @@ class CA_Restrain_Model extends Character_Action_Model
 		// the player is recovering but is he in the battlefield?
 		//////////////////////////////////////////////////////////////////////
 		
-		if ( Character_Model::is_recovering( $par[1] -> id ) and Character_Model::is_fighting( $par[1] -> id ) == true )
+		if ( Model_Character::is_recovering( $par[1] -> id ) and Model_Character::is_fighting( $par[1] -> id ) == true )
 		{ $message = kohana::lang('ca_restrain.error-charisfighting', $par[1] -> name); return FALSE; }				
 		
 		//////////////////////////////////////////////////////////////////////
 		// Cooldown is 24 hour
 		//////////////////////////////////////////////////////////////////////
 		
-		$stat = Character_Model::get_stat_d( $par[1] -> id, 'lastrestrain', $par[0] -> region -> kingdom_id );
+		$stat = Model_Character::get_stat_d( $par[1] -> id, 'lastrestrain', $par[0] -> region -> kingdom_id );
 		if ( $stat -> loaded and time() - ( 24 * 3600 ) < $stat -> stat1 )
 		{ $message = kohana::lang('ca_restrain.error-restraincooldown', $par[1] -> name); return FALSE; }				
 		

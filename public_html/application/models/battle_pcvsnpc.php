@@ -169,7 +169,7 @@ class Battle_PcvsNpc_Model extends Battle_Type_Model
 			
 			// Stat
 			
-			Character_Model::modify_stat_d(
+			Model_Character::modify_stat_d(
 				$this -> sourcechar -> id,
 				'killednpc',
 				0,
@@ -198,7 +198,7 @@ class Battle_PcvsNpc_Model extends Battle_Type_Model
 			
 			// Stat
 			
-			Character_Model::modify_stat_d(
+			Model_Character::modify_stat_d(
 				$this -> sourcechar -> id,
 				'killednpc',
 				+1,

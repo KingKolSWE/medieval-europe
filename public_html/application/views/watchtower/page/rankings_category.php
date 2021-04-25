@@ -114,7 +114,7 @@ else
 
 <?php	
 	$i = 1 + $pagination -> sql_offset;
-	$char = Character_Model::get_info( Session::instance()->get('char_id') ); 
+	$char = Model_Character::get_info( Session::instance()->get('char_id') );
 	//var_dump($rankings[$category]);exit;
 	foreach ( $rankings[$category] as $r )
 	{
@@ -178,9 +178,9 @@ else
 		elseif ( in_array( $category, array ( 'mostfollowedchurch') ) )
 			echo "<td class='center'>" . kohana::lang($r['stat'] -> stats_label) . ' (' . kohana::lang($r['stat'] -> param1) . ") </td>" ;
 		elseif ( in_array( $category, array ( 'mostreligious', 'mostcharitable') ) )
-			echo "<td class='center'>" . Character_Model::create_publicprofilelink($r['stat'] -> stats_id, $r['stat'] -> stats_label) . "</td>" ;				
+			echo "<td class='center'>" . Model_Character::create_publicprofilelink($r['stat'] -> stats_id, $r['stat'] -> stats_label) . "</td>" ;
 		else
-			echo "<td class='center'>" . Character_Model::create_publicprofilelink($r['stat'] -> stats_id, $r['stat'] -> stats_label) . "</td>" ;
+			echo "<td class='center'>" . Model_Character::create_publicprofilelink($r['stat'] -> stats_id, $r['stat'] -> stats_label) . "</td>" ;
 		
 		// Titolo collegato
 		echo "<td class='center' >" ;

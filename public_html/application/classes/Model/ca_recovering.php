@@ -86,7 +86,7 @@ class CA_Recovering_Model extends Character_Action_Model
 			
 			$chance = round(
 				pow(
-					max( Character_Model::get_attributelimit()  - $character -> get_attribute( 'cost' ), 0),0.8
+					max( Model_Character::get_attributelimit()  - $character -> get_attribute( 'cost' ), 0),0.8
 				), 0 
 			);
 							
@@ -148,7 +148,7 @@ class CA_Recovering_Model extends Character_Action_Model
 			if ($data -> param2 == true)			
 				$chance = round(
 					pow(
-						max( Character_Model::get_attributelimit()  - $character -> get_attribute( 'cost' ), 0), 1.4
+						max( Model_Character::get_attributelimit()  - $character -> get_attribute( 'cost' ), 0), 1.4
 					), 0 
 				);
 			else

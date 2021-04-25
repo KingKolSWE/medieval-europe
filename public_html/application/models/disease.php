@@ -10,11 +10,11 @@ abstract class Disease_Model
 	protected $checkinterval;
 	protected $strmalus;
 	protected $dexmalus;	
-	protected $iscurable;  			// è curabile?
+	protected $iscurable;  			// ï¿½ curabile?
 	protected $intelmalus;	
 	protected $costmalus;
 	protected $carmalus;
-	protected $iscyclic;					// è ciclica? Se sÃ¬ viene instanziata una azione ciclica
+	protected $iscyclic;					// ï¿½ ciclica? Se sÃ¬ viene instanziata una azione ciclica
 	protected $isblocking;
 	protected $timedependent;
 	protected $cooldown;         	// Se si ha la malattia meno di $cooldown giorni fa non si puÃ² riprendere
@@ -23,7 +23,7 @@ abstract class Disease_Model
 	
 	/*
 	* Applica la malattia
-	* @param obj $char Character_Model personaggio a cui la malattia è applicata
+	* @param obj $char Character_Model personaggio a cui la malattia ï¿½ applicata
 	*/
 	
 	public function apply( $char ) 
@@ -31,13 +31,13 @@ abstract class Disease_Model
 		
 		kohana::log( 'info', "-> *** Trying to apply disease ({$this -> get_name()}) effects to: {$char -> name}");
 		
-		if ( Character_Model::is_meditating( $char -> id ) )
+		if ( Model_Character::is_meditating( $char -> id ) )
 		{
 			kohana::log( 'info', '-> *** Char is meditating, exiting.' );
 			return;
 		}
 		
-		if ( Character_Model::is_recovering( $char -> id ) )
+		if ( Model_Character::is_recovering( $char -> id ) )
 		{
 			kohana::log( 'info', '-> *** Char is recovering, exiting.' );
 			return;
@@ -50,26 +50,26 @@ abstract class Disease_Model
 			
 		}
 		
-		if ( Character_Model::is_newbie ( $char ) )
+		if ( Model_Character::is_newbie ( $char ) )
 		{
 			kohana::log( 'info', '-> *** Char is newbie, exiting.' );
 			return;
 		}
 		
-		if ( Character_Model::is_beingcured( $char -> id ) )
+		if ( Model_Character::is_beingcured( $char -> id ) )
 		{
 			kohana::log( 'info', '-> *** Char is curing or being cured, exiting.' );
 			return;
 		}
 		
-		if ( Character_Model::is_imprisoned( $char -> id ) )
+		if ( Model_Character::is_imprisoned( $char -> id ) )
 		{
 			kohana::log( 'info', '-> *** Char is imprisoned, applying ONLY effects.' );
 			$this -> apply_effects( $char );
 			return;
 		}
 		
-		if ( Character_Model::is_traveling( $char -> id ) )
+		if ( Model_Character::is_traveling( $char -> id ) )
 		{
 			kohana::log( 'info', '-> *** Char is traveling, applying ONLY effects.' );
 			$this -> apply_effects( $char );
@@ -202,7 +202,7 @@ abstract class Disease_Model
 	
 		// Inietta la malattia
 	
-		Character_Model::modify_stat_d( 
+		Model_Character::modify_stat_d(
 			$char -> id,
 			'disease', 
 			0, 
@@ -234,7 +234,7 @@ abstract class Disease_Model
 			$action -> save();
 		}
 		
-		// Se è blocking, fa collassare il char
+		// Se ï¿½ blocking, fa collassare il char
 		
 		if ( $this -> get_isblocking() == true )
 		{
@@ -261,7 +261,7 @@ abstract class Disease_Model
 	}
 	
 	/*
-	* torna se la malattia è attiva oppure no
+	* torna se la malattia ï¿½ attiva oppure no
 	* @param $char oggetto char
 	* @return false | true 
 	*/
@@ -269,7 +269,7 @@ abstract class Disease_Model
 	public function is_active( $char )
 	{
 	
-		$sickness = Character_Model::get_stat_d( 
+		$sickness = Model_Character::get_stat_d(
 			$char -> id,
 			$this -> name );
 		
@@ -284,14 +284,14 @@ abstract class Disease_Model
 	
 	/**
 	* Applica un infezione 
-	* @param Character_Model $char Personaggio che ha la malattia
+	* @param Model_Character $char Personaggio che ha la malattia
 	* @return none
 	*/
 	
 	public function apply_infection( $char )
 	{	
 		
-		// Se la malattia non è infettiva... no action
+		// Se la malattia non ï¿½ infettiva... no action
 		
 		if ($this -> get_diffusion() == 0 )
 		{
@@ -321,7 +321,7 @@ abstract class Disease_Model
 			
 			kohana::log( 'info', '-> *** Trying to infect ' . $char -> name ); 			
 			
-			// se è giÃ  infettato non puÃ² essere reinfettato. 
+			// se ï¿½ giÃ  infettato non puÃ² essere reinfettato. 
 			
 			if ( $this -> is_active( $char ) )
 			{
@@ -331,7 +331,7 @@ abstract class Disease_Model
 			
 			// Controlliamo quando ha preso la malattia
 			
-			$gotthisdisease = Character_Model::get_stat_d( 			
+			$gotthisdisease = Model_Character::get_stat_d(
 				$char -> id,
 				'disease', 
 				$this -> name );			
@@ -342,7 +342,7 @@ abstract class Disease_Model
 				continue;
 			}
 			
-			// se è stato curato ed ha avuto la malattia non piÃ¹ di cooldown giorni fa
+			// se ï¿½ stato curato ed ha avuto la malattia non piÃ¹ di cooldown giorni fa
 			// giorni fa non puÃ² prenderla ancora
 			
 			if ( 
@@ -354,9 +354,9 @@ abstract class Disease_Model
 				continue;
 			}
 			
-			// se è in meditazione non puÃ² essere infettato			
+			// se ï¿½ in meditazione non puÃ² essere infettato			
 			
-			if ( Character_Model::is_meditating( $char -> id ) )
+			if ( Model_Character::is_meditating( $char -> id ) )
 			{
 				kohana::log( 'info', '-> Char is meditating, exiting.' );
 				continue;
@@ -364,15 +364,15 @@ abstract class Disease_Model
 			
 			// se ha meno di 30 giorni non puÃ² essere infettato
 			
-			if ( Character_Model::is_newbie ( $char ) )
+			if ( Model_Character::is_newbie ( $char ) )
 			{
 				kohana::log( 'info', '-> Char is newbie, exiting.' );
 				continue;
 			}
 			
-			// se si sta muovendo non è possibile infettarlo
+			// se si sta muovendo non ï¿½ possibile infettarlo
 			
-			if ( Character_Model::is_traveling( $char -> id ) )
+			if ( Model_Character::is_traveling( $char -> id ) )
 			{
 				kohana::log( 'info', '-> Char is traveling, exiting.' );
 				continue;			

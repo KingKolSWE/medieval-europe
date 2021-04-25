@@ -4,9 +4,9 @@ class CA_Consumeglut_Model extends Character_Action_Model
 {
 	// Costanti	
 	const CYCLE_TIME = 86400;            // Tempo ciclo
-	const CYCLE_CONSUME = 8;             // Sazietà da consumare
-	const STARVING = -10;				 // Punti salute da togliere quando si è affamati
-	const FAITHLEVEL_DELTA = -1;         // Punti di fedeltà da consumare
+	const CYCLE_CONSUME = 8;             // Sazietï¿½ da consumare
+	const STARVING = -10;				 // Punti salute da togliere quando si ï¿½ affamati
+	const FAITHLEVEL_DELTA = -1;         // Punti di fedeltï¿½ da consumare
 	
 	protected $enabledifrestrained = true;
 	protected $cancel_flag = false;
@@ -22,7 +22,7 @@ class CA_Consumeglut_Model extends Character_Action_Model
 		return $this;
 	}
 			
-	// Nessun controllo dato che l' azione è chained dal sistema.
+	// Nessun controllo dato che l' azione ï¿½ chained dal sistema.
 	protected function check( $par, &$error )
 	{ 
 		return true;
@@ -45,33 +45,33 @@ class CA_Consumeglut_Model extends Character_Action_Model
 		$char = ORM::factory('character', $data -> character_id);
 		
 		if ( 
-			Character_Model::has_merole( $char, 'admin') 
+			Model_Character::has_merole( $char, 'admin')
 				or
-			Character_Model::has_merole( $char, 'staff') 	
+			Model_Character::has_merole( $char, 'staff')
 				or
-			Character_Model::has_merole( $char, 'bot') 	
+			Model_Character::has_merole( $char, 'bot')
 		)
 			return;
 		
 		if ($char -> user -> status == 'banned' )
 			return;
 		
-		// Aggiorno il char sul db, aggiorno la sazietà e la salute in sessione
-		// Se il char ha abbastanza sazietà allora scalo i punti,
-		// se la sazietà è bassa o = a 0 allora inizio a scalare anche i punti
-		// salute. Se la salute è = 0 allora il pg muore.
+		// Aggiorno il char sul db, aggiorno la sazietï¿½ e la salute in sessione
+		// Se il char ha abbastanza sazietï¿½ allora scalo i punti,
+		// se la sazietï¿½ ï¿½ bassa o = a 0 allora inizio a scalare anche i punti
+		// salute. Se la salute ï¿½ = 0 allora il pg muore.
 		
 		// prima di consumare la glut, verifichiamo se sia la glut che la salute sono 
-		// a 0. Se il char è in meditazione, o in convalescenza non lo faccio morire.
-		// In prigione può morire.
+		// a 0. Se il char ï¿½ in meditazione, o in convalescenza non lo faccio morire.
+		// In prigione puï¿½ morire.
 				
 		kohana::log('info', '-> Consumeglut: char ' . $char->name . ' health: ' . $char -> health . ', glut: ' . $char -> glut );
 		
 		if ( 
 				( 
-					Character_Model::is_meditating( $char -> id ) == false 
+					Model_Character::is_meditating( $char -> id ) == false
 					and 
-					Character_Model::is_recovering( $char -> id ) == false 					
+					Model_Character::is_recovering( $char -> id ) == false
 				) and
 			$char -> health < 0 )
 		{
@@ -83,14 +83,14 @@ class CA_Consumeglut_Model extends Character_Action_Model
 		}
 		
 		//////////////////////////////////////////////////////////////////////////////////
-		// prima di consumare la glut, se la glut è già a 0, tolgo 10 punti salute
+		// prima di consumare la glut, se la glut ï¿½ giï¿½ a 0, tolgo 10 punti salute
 		//////////////////////////////////////////////////////////////////////////////////
 		
 		if ( 
 				( 
-					Character_Model::is_meditating( $char -> id ) == false 
+					Model_Character::is_meditating( $char -> id ) == false
 					and 
-					Character_Model::is_recovering( $char -> id ) == false 										
+					Model_Character::is_recovering( $char -> id ) == false
 				) 
 				and $char -> glut <= 0
 				and $char -> type != 'npc' 
@@ -119,16 +119,16 @@ class CA_Consumeglut_Model extends Character_Action_Model
 			$char -> save();
 		}
 		
-		// se il char sta meditando o è in convalescenza, non consumo
+		// se il char sta meditando o ï¿½ in convalescenza, non consumo
 		// il parametro glut				
 		
 		if (
 			$char -> glut > 0 and 
-			Character_Model::is_meditating( $char -> id ) == false 
+			Model_Character::is_meditating( $char -> id ) == false
 			and 
-			Character_Model::is_recovering( $char -> id ) == false 					
+			Model_Character::is_recovering( $char -> id ) == false
 			and
-			Character_Model::is_imprisoned( $char -> id ) == false 
+			Model_Character::is_imprisoned( $char -> id ) == false
 		)
 		{
 			kohana::log('debug', '-> Consumeglut: char ' . $char -> name . ' Consuming glut...' );
@@ -139,9 +139,9 @@ class CA_Consumeglut_Model extends Character_Action_Model
 		
 		}
 				
-		// se il giocatore è in prigione, verifico se perde un attributo 
+		// se il giocatore ï¿½ in prigione, verifico se perde un attributo 
 			
-		if ( Character_Model::is_imprisoned( $char -> id ) )
+		if ( Model_Character::is_imprisoned( $char -> id ) )
 		{
 			$const = $char -> get_attribute ( 'cost' );
 						

@@ -4,7 +4,7 @@
 class CA_DestroyCdb_Model extends Character_Action_Model
 {		
 	
-	protected $cancel_flag = false; // se true, la azione è cancellabile dal pg.	
+	protected $cancel_flag = false; // se true, la azione ï¿½ cancellabile dal pg.	
 	protected $immediate_action = true;	
 	
 	protected function check( $par, &$message )	{ }
@@ -29,8 +29,8 @@ class CA_DestroyCdb_Model extends Character_Action_Model
 			
 			foreach ( $res as $row )
 			{
-				if ( Character_Model::is_fighting( $row -> id ) )
-					Character_Model::modify_stat_d( 
+				if ( Model_Character::is_fighting( $row -> id ) )
+					Model_Character::modify_stat_d(
 					$row -> id,
 					'fighting',
 					false,

@@ -171,10 +171,10 @@ class Battle_Nativerevolt_Model extends Battle_Type_Model
 			$native['char']['car'] = $stats['car'];
 			
 			$native['char']['basetransportableweight'] = 
-				Character_Model::get_basetransportableweight( $native['char']['str'] );
+				Model_Character::get_basetransportableweight( $native['char']['str'] );
 						
 			$native['char']['armorencumbrance'] = 
-				Character_Model::get_armorencumbrance( $native['char']['basetransportableweight'], 
+				Model_Character::get_armorencumbrance( $native['char']['basetransportableweight'],
 					$native['char']['equippedweight'] );
 				
 			//kohana::log('debug', kohana::debug($native));
@@ -452,7 +452,7 @@ class Battle_Nativerevolt_Model extends Battle_Type_Model
 			if ( $soldier -> faction == 'attack' )
 				$data[$soldier -> faction]['list'][] = $soldier -> name . $i ;
 			else
-				$data[$soldier -> faction]['list'][] = Character_Model::create_publicprofilelink(null, $soldier -> name) ;
+				$data[$soldier -> faction]['list'][] = Model_Character::create_publicprofilelink(null, $soldier -> name) ;
 				
 			$data[$soldier -> faction][$soldier -> categorization] += 1;	
 			

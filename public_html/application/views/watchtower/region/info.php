@@ -35,7 +35,7 @@
 	<td  class='left'  width="50%"><?php echo Kohana::lang('global.regent'); ?></td>
 	<td  class='right' width="50%"><b>
 	<?php if ( !is_null( $king ) and $king -> loaded == true ) 
-				echo Character_Model::create_publicprofilelink( 
+				echo Model_Character::create_publicprofilelink(
 					$king -> id, $king -> get_name() );
 			else
 				echo kohana::lang('global.vacant' );
@@ -53,7 +53,7 @@
 		<?php 			
 			if ( count($constables) > 0 ) 
 				foreach ( $constables as $constable )
-					echo Character_Model::create_publicprofilelink( 
+					echo Model_Character::create_publicprofilelink(
 						$constable -> id, $constable -> get_name() ) . '<br>';
 			else
 				echo kohana::lang('global.vacant' );
@@ -69,7 +69,7 @@
 		<?php 			
 			if ( count($chancellors) > 0 ) 
 				foreach ( $chancellors as $chancellor )
-					echo Character_Model::create_publicprofilelink( 
+					echo Model_Character::create_publicprofilelink(
 						$chancellor -> id, $chancellor -> get_name() ) . '<br>';
 			else
 				echo kohana::lang('global.vacant' );
@@ -85,7 +85,7 @@
 		<?php 			
 			if ( count($seneschals) > 0 ) 
 				foreach ( $seneschals as $seneschal )
-					echo Character_Model::create_publicprofilelink( 
+					echo Model_Character::create_publicprofilelink(
 						$seneschal -> id, $seneschal -> get_name() ) . '<br>';
 			else
 				echo kohana::lang('global.vacant' );
@@ -101,7 +101,7 @@
 		<?php 			
 			if ( count($chamberlains) > 0 ) 
 				foreach ( $chamberlains as $chamberlain )
-					echo Character_Model::create_publicprofilelink( 
+					echo Model_Character::create_publicprofilelink(
 						$chamberlain -> id, $chamberlain -> get_name() ) . '<br>';
 			else
 				echo kohana::lang('global.vacant' );
@@ -117,7 +117,7 @@
 		<?php 			
 			if ( count($treasurers) > 0 ) 
 				foreach ( $treasurers as $treasurer )
-					echo Character_Model::create_publicprofilelink( 
+					echo Model_Character::create_publicprofilelink(
 						$treasurer -> id, $treasurer -> get_name() ) . '<br>';
 			else
 				echo kohana::lang('global.vacant' );
@@ -133,7 +133,7 @@
 		<?php 			
 			if ( count($ambassadors) > 0 ) 
 				foreach ( $ambassadors as $ambassador )
-					echo Character_Model::create_publicprofilelink( 
+					echo Model_Character::create_publicprofilelink(
 						$ambassador -> id, $ambassador -> get_name() ) . '<br>';
 			else
 				echo kohana::lang('global.vacant' );
@@ -336,7 +336,7 @@
 	<td  class='right'><b>
 	
 	<?php if ( !is_null( $vassal ) and $vassal -> loaded == true ) 
-				echo Character_Model::create_publicprofilelink( 
+				echo Model_Character::create_publicprofilelink(
 					$vassal -> id, $vassal -> get_name() );
 			else
 				echo kohana::lang('global.vacant' );
@@ -349,7 +349,7 @@
 	<td  class='left'><?php echo Kohana::lang('global.judge'); ?></td>
 	<td style="text-align:right"><b>
 	<?php if ( !is_null( $judge ) and $judge -> loaded == true ) 
-				echo Character_Model::create_publicprofilelink( 
+				echo Model_Character::create_publicprofilelink(
 					$judge -> id, $judge -> get_name() );
 			else
 				echo kohana::lang('global.vacant' );
@@ -362,7 +362,7 @@
 	<td  class='left' ><?php echo Kohana::lang('global.sheriff'); ?></td>
 	<td style="text-align:right"><b>
 	<?php if ( !is_null( $sheriff ) and $sheriff -> loaded == true ) 
-				echo Character_Model::create_publicprofilelink( 
+				echo Model_Character::create_publicprofilelink(
 					$sheriff -> id, $sheriff -> get_name() );
 			else
 				echo kohana::lang('global.vacant' );
@@ -378,7 +378,7 @@
 	
 
 	<?php if ( !is_null( $academydirector ) and $academydirector -> loaded == true ) 
-				echo Character_Model::create_publicprofilelink( 
+				echo Model_Character::create_publicprofilelink(
 					$academydirector -> id, $academydirector -> get_name() );
 			else
 				echo kohana::lang('global.vacant' );		
@@ -390,7 +390,7 @@
 	<td  class='left' ><?php echo Kohana::lang('global.drillmaster'); ?></td>
 	<td  style="text-align:right"><b>
 	<?php if ( !is_null( $drillmaster ) and $drillmaster -> loaded == true ) 
-				echo Character_Model::create_publicprofilelink( 
+				echo Model_Character::create_publicprofilelink(
 					$drillmaster -> id, $drillmaster -> get_name() );
 			else
 				echo kohana::lang('global.vacant' );

@@ -63,9 +63,9 @@ class Region_Path_Model extends ORM
 			$weightinexcess = $par['char'] -> get_weightinexcess( false );
 			$parameter = 20000;
 			if (
-				Character_Model::has_item( $par['char']->id, 'cart_1', 1 ) or
-				Character_Model::has_item( $par['char']->id, 'cart_2', 1 ) or
-				Character_Model::has_item( $par['char']->id, 'cart_3', 1 ) )
+				Model_Character::has_item( $par['char']->id, 'cart_1', 1 ) or
+				Model_Character::has_item( $par['char']->id, 'cart_2', 1 ) or
+				Model_Character::has_item( $par['char']->id, 'cart_3', 1 ) )
 					$parameter = 40000;
 
 			$travelinfo['cost'] += 1 * round($weightinexcess/$parameter,0);
@@ -130,7 +130,7 @@ class Region_Path_Model extends ORM
 		// soldi necessari
 		/////////////////////////////////////////////////////////////////////////
 
-		if ( Character_Model::get_premiumbonus($par['char'] -> id, 'travelerpackage') !== false )
+		if ( Model_Character::get_premiumbonus($par['char'] -> id, 'travelerpackage') !== false )
 			$travelinfo['cost'] = 0;
 
 		//kohana::log('debug', '-> Type: ' . $par['type']);
@@ -147,7 +147,7 @@ class Region_Path_Model extends ORM
 		// Applicazione bonus su viaggi via terra e mare
 		/////////////////////////////////////////////////////////////////////////
 
-		if ( Character_Model::get_premiumbonus($par['char'] -> id, 'travelerpackage') !== false	)
+		if ( Model_Character::get_premiumbonus($par['char'] -> id, 'travelerpackage') !== false	)
 		{
 			$travelinfo['realtraveltime'] = intval( $travelinfo['realtraveltime'] * 50 / 100 );
 		}

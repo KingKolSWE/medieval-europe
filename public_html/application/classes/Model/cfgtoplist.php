@@ -19,8 +19,8 @@ class Cfgtoplist_Model extends ORM
 		if ( $type != 'energy' and $type != 'silvercoin' ) 
 			return null;
 			
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );
-		// trova le toplist per cui oggi il char non ha già votato
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
+		// trova le toplist per cui oggi il char non ha giï¿½ votato
 		
 		$db = Database::instance();
 		

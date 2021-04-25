@@ -9,7 +9,7 @@
 <div>
 	
 	<div id='frame' style='margin-right:1%'>
-		<?php echo Character_Model::display_avatar( $character -> id, 'l', 'charpic');?>
+		<?php echo Model_Character::display_avatar( $character -> id, 'l', 'charpic');?>
 	</div>
 	
 	<div style="float:left;width:75%">

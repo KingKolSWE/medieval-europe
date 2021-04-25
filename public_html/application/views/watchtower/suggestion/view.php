@@ -34,9 +34,9 @@ $(function () {
 	
 	<div id='suggestionleftpanel' style='float:left;width:20%;text-align:center;margin-right:1%'>			
 		<div><?php 
-		echo Character_Model::display_avatar( $suggestion -> character_id, 'l', 'border' ); ?></div>
+		echo Model_Character::display_avatar( $suggestion -> character_id, 'l', 'border' ); ?></div>
 		<div id='suggestioncaption'>
-		<?php echo Character_Model::create_publicprofilelink( $suggestion -> character_id, null );?>		
+		<?php echo Model_Character::create_publicprofilelink( $suggestion -> character_id, null );?>
 		</div>
 	</div>
 

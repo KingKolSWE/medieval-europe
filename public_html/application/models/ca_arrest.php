@@ -130,19 +130,19 @@ class CA_Arrest_Model extends Character_Action_Model
 		// che gli impedisca l' arresto
 		/////////////////////////////////////////////////////
 		
-		if ( Character_Model::is_fighting( $par[1] -> id ) == true ) 
+		if ( Model_Character::is_fighting( $par[1] -> id ) == true )
 		{ $message = sprintf(kohana::lang('ca_arrest.charisfighting', $par[1]->name)); return FALSE; }
 		
-		if ( Character_Model::is_restrained( $par[1] -> id ) )
+		if ( Model_Character::is_restrained( $par[1] -> id ) )
 		{ $message = sprintf(kohana::lang('ca_arrest.charisrestrained', $par[1]->name)); return FALSE; }
 
-		if ( Character_Model::is_imprisoned( $par[1] -> id ) )
+		if ( Model_Character::is_imprisoned( $par[1] -> id ) )
 		{ $message = sprintf(kohana::lang('ca_arrest.charisimprisoned', $par[1]->name)); return FALSE; }		
 		
 		if ( $par[1] -> is_meditating( $par[1] -> id ) )
 		{ $message = sprintf(kohana::lang('ca_arrest.charismeditating', $par[1]->name)); return FALSE; }						
 	
-		if ( Character_Model::is_traveling( $par[1] -> id ) )
+		if ( Model_Character::is_traveling( $par[1] -> id ) )
 		{ $message = sprintf(kohana::lang('ca_arrest.charistraveling', $par[1]->name)); return FALSE; }				
 		
 		$this -> currentregion = ORM::factory('region', $par[0] -> position_id );

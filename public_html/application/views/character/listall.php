@@ -80,10 +80,10 @@ foreach ( $characters as $c )
 	echo '</td>';
 	echo "<td>";
 	
-	$title =  Character_Model::get_basicpackagetitle( $c -> id );
+	$title =  Model_Character::get_basicpackagetitle( $c -> id );
 	if (!empty($title))
 		echo kohana::lang($title) . " " ;
-	echo Character_Model::create_publicprofilelink( $c -> id, $c -> character_name ) . "</td>";
+	echo Model_Character::create_publicprofilelink( $c -> id, $c -> character_name ) . "</td>";
 	
 	//$role = $char->get_current_role();
 	//$role = null;
@@ -94,7 +94,7 @@ foreach ( $characters as $c )
 	
 	echo "<td class='center'>". $c -> last_login."</td>";
 	
-	$online = Character_Model::is_online($c-> id);	
+	$online = Model_Character::is_online($c-> id);
 	
 	if ( $online )
 		echo "<td class='sinistra' style='color:#009933;font-weight:bold'>Online</td>";
@@ -102,7 +102,7 @@ foreach ( $characters as $c )
 		echo "<td class='sinistra'>&nbsp;</td>";
 	
 	echo "<td class='center'>";
-	if ( Character_Model::is_meditating( $c -> id ) )
+	if ( Model_Character::is_meditating( $c -> id ) )
 		echo kohana::lang('global.yes');
 	else
 		echo kohana::lang('global.no');

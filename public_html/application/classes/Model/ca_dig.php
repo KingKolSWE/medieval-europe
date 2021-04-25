@@ -83,7 +83,7 @@ class CA_Dig_Model extends Character_Action_Model
 		// Check: il moltiplicatore non � nel range 1-3
 		// Check: il moltiplicatore � > 1 e il char non ha il relativo bonus		
 		$queuebonus = false;
-		if ( Character_Model::get_premiumbonus( $par[1] -> id, 'workerpackage') !== false )			
+		if ( Model_Character::get_premiumbonus( $par[1] -> id, 'workerpackage') !== false )
 			$queuebonus = true;
 		if
 		(

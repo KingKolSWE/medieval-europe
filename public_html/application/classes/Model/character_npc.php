@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Character_NPC_Model extends Character_Model
+class Character_NPC_Model extends Model_Character
 {
 	protected $table_name = 'characters';
 	protected $rate;
@@ -456,9 +456,9 @@ class Character_NPC_Model extends Character_Model
 	public function helper_tooltip( $npc )
 	{
 		$html = '';
-		$char = Character_Model::get_info( Session::instance()->get('char_id') ); 
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		$tooltiptext = "ID: {$npc->id}<br/>";
-		$tooltiptext .= kohana::lang('global.name') . ": " . Character_Model::create_publicprofilelink($npc -> id, $npc->name) . "<br/>";
+		$tooltiptext .= kohana::lang('global.name') . ": " . Model_Character::create_publicprofilelink($npc -> id, $npc->name) . "<br/>";
 		$tooltiptext .= html::anchor(
 			"character/attackchar/{$char->id}/{$npc->id}",
 			kohana::lang('charactions.attack') ); 

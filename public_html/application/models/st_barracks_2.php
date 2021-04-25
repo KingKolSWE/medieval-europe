@@ -20,8 +20,8 @@ class ST_Barracks_2_Model extends ST_Barracks_1_Model
 	{	
 					
 		$links = parent::build_common_links( $structure, $bonus );		
-		$char = Character_Model::get_info( Session::instance()->get('char_id') );			
-		// se il char è delegato, deve esserci il link
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
+		// se il char ï¿½ delegato, deve esserci il link
 		
 		if ( Structure_Grant_Model::get_chargrant( $structure,  $char, 'captain_assistant') == true )
 		{

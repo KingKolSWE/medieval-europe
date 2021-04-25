@@ -230,7 +230,7 @@ class Achievement_Model
 						
 			// give points, only if not already done.
 			
-			$pointsalreadyrewarded = Character_Model::get_stat_d(
+			$pointsalreadyrewarded = Model_Character::get_stat_d(
 				$character -> id,
 				'pointrewarded',
 				$name,
@@ -240,7 +240,7 @@ class Achievement_Model
 			if ( ! $pointsalreadyrewarded -> loaded or $pointsalreadyrewarded -> value == 0)
 			{
 				
-				Character_Model::modify_stat_d( 
+				Model_Character::modify_stat_d(
 					$character -> id, 
 					'pointrewarded',
 					1,
@@ -260,7 +260,7 @@ class Achievement_Model
 				
 				// Recompute score
 				kohana::log('info', '-> Recomputing score...' );
-				Achievement_Model::computescore( $character -> id );		
+				Achievement_Model::computescore( $character -> id );
 				
 			}
 			else
@@ -296,7 +296,7 @@ class Achievement_Model
 		
 		// find current achievement of char
 		
-		$currentachievement = Character_Model::get_achievement( $character_id, $tag );			
+		$currentachievement = Model_Character::get_achievement( $character_id, $tag );
 		
 		if (!is_null($currentachievement ))
 		{
@@ -339,7 +339,7 @@ class Achievement_Model
 			
 				// update stat
 				
-				Character_Model::modify_stat_d(
+				Model_Character::modify_stat_d(
 					$character_id,
 					'pointrewarded',
 					0,

@@ -90,11 +90,11 @@ class PremiumBonus_easteregg_Model extends PremiumBonus_Model
     
     protected function checks($targetchar, $targetstructure, $cut, $par = null, &$message, $free)
     {
-        $currentchar = Character_Model::get_info(Session::instance()->get('char_id'));
+        $currentchar = Model_Character::get_info(Session::instance()->get('char_id'));
         if (parent::checks($targetchar, $targetstructure, $cut, $par = null, $message, $free) == false)
             return false;
         // TODO: check cooldown                
-        $lastbought = Character_Model::get_stat_d($currentchar->id, 'lastbonusbought', null, null);
+        $lastbought = Model_Character::get_stat_d($currentchar->id, 'lastbonusbought', null, null);
         if ($lastbought->loaded and time() - $lastbought->stat1 <= 60) {
             $message = 'You need to wait at least a minute before buying the next egg.';
             return false;
@@ -115,7 +115,7 @@ class PremiumBonus_easteregg_Model extends PremiumBonus_Model
         Database::instance()->query("        UPDATE events_randomextractions        SET character_id = {$currentchar -> id},        status = 'reserved'         WHERE id = {$rset[0] -> id}");
         $this->randomnumber = $rset[0]->id;
         Database::instance()->query("UNLOCK TABLES");
-        Character_Model::modify_stat_d($currentchar->id, 'lastbonusbought', 0, null, null, true, time());
+        Model_Character::modify_stat_d($currentchar->id, 'lastbonusbought', 0, null, null, true, time());
         return true;
     }
 	

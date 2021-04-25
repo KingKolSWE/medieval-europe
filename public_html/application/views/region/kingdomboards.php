@@ -44,7 +44,7 @@ foreach ( $rows as $row )
 	<br/>
 	<i><?php echo $row -> description; ?></i>
 	</td>
-	<td class='center' width='20%'><?php echo Character_Model::create_publicprofilelink($row -> author, null);?></td>
+	<td class='center' width='20%'><?php echo Model_Character::create_publicprofilelink($row -> author, null);?></td>
 	<td class='center' width='20%'><?php echo Model_Utility::format_datetime(strtotime($row -> created));?></td>
 	<td class='center' width='10%'><?php 
 		if ( Kingdom_Forum_Board_Model::haswriterights($char, $kingdom) == true  )

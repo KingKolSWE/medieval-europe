@@ -66,10 +66,10 @@
 		$db -> query("select '--gamelayout--'");
 		$user = Auth::instance() -> get_user();
 		$char_id = Session::instance()->get('char_id');
-		$currentpendingaction = Character_Model::get_currentpendingaction( $char_id );
-		$charobj = Character_Model::get_data( $char_id );
+		$currentpendingaction = Model_Character::get_currentpendingaction( $char_id );
+		$charobj = Model_Character::get_data( $char_id );
 		$promo = Configuration_Model::get_valid_promo();
-		$currentposition = Character_Model::get_currentposition_d( $charobj -> id);
+		$currentposition = Model_Character::get_currentposition_d( $charobj -> id);
 		//var_dump($promo);exit;
 
 		if (!empty($promo))
@@ -279,11 +279,11 @@ function forceCompleteAction() {
 			<div style='float:left'><b><?=$charobj -> name;?></b></div>
 			<div style='float:right'>
 				<?= html::image('media/newlayout/images/set1/icons/doubloons.png'); ?>
-				<?php echo Character_Model::get_item_quantity_d( $char_id, 'doubloon' ); ?>
+				<?php echo Model_Character::get_item_quantity_d( $char_id, 'doubloon' ); ?>
 				<?= html::image('media/newlayout/images/set1/icons/silvercoins.png'); ?>
-				<?php echo Character_Model::get_item_quantity_d( $char_id, 'silvercoin' ); ?>
+				<?php echo Model_Character::get_item_quantity_d( $char_id, 'silvercoin' ); ?>
 			</div>
-			<div id="avatar"><?= Character_Model::display_avatar( $charobj->id, $size = 's') ?></div>
+			<div id="avatar"><?= Model_Character::display_avatar( $charobj->id, $size = 's') ?></div>
 			<div id="characterbars">
 				<table>
 				<tr><td>Health</td><td class="valuelight text-right"><?=$charobj -> health;?>%</td></tr>

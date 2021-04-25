@@ -64,7 +64,7 @@ class CA_Steal_Model extends Character_Action_Model
 		
 		// se il target si sta riposando, errore
 		
-		if ( Character_Model::is_meditating( $par[1] -> id ) )
+		if ( Model_Character::is_meditating( $par[1] -> id ) )
 		{
 			$message = Kohana::lang("ca_steal.error-charisresting");
 			return false;			
@@ -72,7 +72,7 @@ class CA_Steal_Model extends Character_Action_Model
 		
 		// se il target sta viaggiando, errore
 		
-		if ( Character_Model::is_traveling( $par[1] -> id ) )
+		if ( Model_Character::is_traveling( $par[1] -> id ) )
 		{
 			$message = Kohana::lang("ca_steal.error-charistraveling");
 			return false;			
@@ -80,7 +80,7 @@ class CA_Steal_Model extends Character_Action_Model
 				
 		// se il target è in meditation, errore
 		
-		if ( Character_Model::is_meditating( $par[1] -> id ) )
+		if ( Model_Character::is_meditating( $par[1] -> id ) )
 		{
 			$message = Kohana::lang("ca_steal.error-charisinmeditation");
 			return false;			
@@ -88,7 +88,7 @@ class CA_Steal_Model extends Character_Action_Model
 		
 		// cooldown
 		
-		$lastrobbed = Character_Model::get_stat_d($par[1] -> id, 'lastrobbed');
+		$lastrobbed = Model_Character::get_stat_d($par[1] -> id, 'lastrobbed');
 		
 		if ( 
 			$lastrobbed -> loaded 
@@ -101,7 +101,7 @@ class CA_Steal_Model extends Character_Action_Model
 		
 		// cannot steal a newborn
 		
-		if (Character_Model::is_newbie($par[1]))
+		if (Model_Character::is_newbie($par[1]))
 		{
 			$message = Kohana::lang("ca_steal.error-robbedisnewbie");
 			return false;									
@@ -123,7 +123,7 @@ class CA_Steal_Model extends Character_Action_Model
 		$par[0] -> modify_glut(self::REQUIREDGLUT);
 		$par[0] -> modify_energy(self::REQUIREDENERGY, false, 'steal');
 		
-		Character_Model::modify_stat_d( 
+		Model_Character::modify_stat_d(
 			$par[1] -> id, 
 			'lastrobbed',
 			0,
@@ -134,13 +134,13 @@ class CA_Steal_Model extends Character_Action_Model
 		
 		// quanti coins ha il target char?
 		
-		$silvercoins = Character_Model::get_item_quantity_d( $par[1] -> id, 'silvercoin' );
+		$silvercoins = Model_Character::get_item_quantity_d( $par[1] -> id, 'silvercoin' );
 		if ($silvercoins > 0 )
 		{
 			
 			// roll source dex vs targe dex
 			
-			$statstealingskill = Character_Model::get_stat_d(
+			$statstealingskill = Model_Character::get_stat_d(
 				$par[0] -> id,
 				'skill',
 				'stealing',
@@ -182,7 +182,7 @@ class CA_Steal_Model extends Character_Action_Model
 				
 				// Aumenta skill del x%
 				
-				Character_Model::modify_stat_d(
+				Model_Character::modify_stat_d(
 					$par[0] -> id, 
 					'skill',
 					0,
@@ -198,7 +198,7 @@ class CA_Steal_Model extends Character_Action_Model
 			{
 				// Aumenta skill del x%
 				
-				Character_Model::modify_stat_d(
+				Model_Character::modify_stat_d(
 					$par[0] -> id, 
 					'skill',
 					0,

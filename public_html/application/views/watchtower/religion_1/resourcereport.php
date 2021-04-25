@@ -28,7 +28,7 @@
 	<tr class='<?= $class; ?>'>
 	<td><?= kohana::lang($record['structure_name']); ?></td>
 	<td class="center"><?= kohana::lang($record['region_name']) ; ?></td>
-	<td class="center"><?= Character_Model::create_publicprofilelink( $record['owner_id'], null  );  ?></td>
+	<td class="center"><?= Model_Character::create_publicprofilelink( $record['owner_id'], null  );  ?></td>
 	<td class="right"><?= $record['silvercoins'] ; ?></td>
 	<td class="right"><?= $record['faithpoints'] ; ?></td>
 	</tr>

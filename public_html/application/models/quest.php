@@ -81,7 +81,7 @@ class Quest_Model
 		
 		// TODO: Controllo che non ci siano altri quest attivi
 		
-		$activequest = Character_Model::get_active_quest( $character -> id );
+		$activequest = Model_Character::get_active_quest( $character -> id );
 		if (!is_null($activequest))
 		{
 			$message = 'quests.error-thereisalreadyanactivequest';
@@ -193,14 +193,14 @@ class Quest_Model
 	}
 	
 	/**
-	* ritorna quando è stato attivato il test
+	* ritorna quando ï¿½ stato attivato il test
 	* @param none
 	* @return nome
 	*/
 	
 	function get_startdate ( $character_id ) 
 	{
-		$quest = Character_Model::get_stat_d( 
+		$quest = Model_Character::get_stat_d(
 			$character_id ,
 			'quest',
 			$this -> get_name() );
@@ -209,14 +209,14 @@ class Quest_Model
 	}
 	
 	/**
-	* ritorna quando è stato completato il test
+	* ritorna quando ï¿½ stato completato il test
 	* @param none
 	* @return nome
 	*/
 	
 	function get_enddate ( $character_id ) 
 	{
-		$quest = Character_Model::get_stat_d( 
+		$quest = Model_Character::get_stat_d(
 			$character_id,
 			'quest',
 			$this -> get_name() );
@@ -260,7 +260,7 @@ class Quest_Model
 	function get_steps ( $character_id ) 
 	{
 				
-		$quest = Character_Model::get_stat_d( 
+		$quest = Model_Character::get_stat_d(
 			$character_id ,
 			'quest',
 			$this -> name );
@@ -294,7 +294,7 @@ class Quest_Model
 	function get_status( $character_id )
 	{		
 		
-		$quest = Character_Model::get_stat_d( 
+		$quest = Model_Character::get_stat_d(
 			$character_id ,
 			'quest',
 			$this -> get_name() );
@@ -319,7 +319,7 @@ class Quest_Model
 	{
 		kohana::log('debug', '-> Quest: Completing step ' . $stepnumber . '... ' );
 		
-		// evitiamo di completare più volte lo stesso step
+		// evitiamo di completare piï¿½ volte lo stesso step
 		kohana::log('debug', "-> Quest: Checking if step $stepnumber is already completed...");
 		$str = (string) $instance -> stat2;				
 		if ( $str[$stepnumber] == 1 )
@@ -354,7 +354,7 @@ class Quest_Model
 
 	
 	/**
-	* Verifica se il quest è completato. Se è completato
+	* Verifica se il quest ï¿½ completato. Se ï¿½ completato
 	* @param $char oggetto char	
 	* @param $instance istanza quest (character_stat)
 	* @return none;

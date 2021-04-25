@@ -53,7 +53,7 @@ class CA_Rest_Model extends Character_Action_Model
 				
 				// don't add to counter if player trying to sleep is married to the one that is sleeping.
 				if ( 
-						Character_Model::is_marriedto( $par[0] -> id,
+						Model_Character::is_marriedto( $par[0] -> id,
 						$playersleeping -> character_id, $relationtype ) == true
 				)
 					;

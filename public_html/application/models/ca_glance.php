@@ -44,7 +44,7 @@ class CA_Glance_Model extends Character_Action_Model
 		{ $message = kohana::lang('charactions.error-notinsameregion'); return FALSE; }	
 
 		// il char target non può essere in prigione
-		if ( Character_Model::is_imprisoned( $par[1] -> id ) )
+		if ( Model_Character::is_imprisoned( $par[1] -> id ) )
 		{ $message = kohana::lang('charactions.error-charisimprisoned'); return FALSE; }		
 			
 	
@@ -60,7 +60,7 @@ class CA_Glance_Model extends Character_Action_Model
 		
 		// cooldown
 		
-		$cooldown = Character_Model::get_stat_d(
+		$cooldown = Model_Character::get_stat_d(
 			$par[0] -> id,
 			'lastglancedate'
 		);

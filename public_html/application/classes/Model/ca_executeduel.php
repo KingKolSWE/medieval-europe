@@ -22,7 +22,7 @@ class CA_Executeduel_Model extends Character_Action_Model
 		{ $message = kohana::lang('global.operation_not_allowed'); return FALSE; }
 		
 		// controllo che la richiesta non sia scaduta
-		$this -> duelinstance = Character_Model::get_stat_d(
+		$this -> duelinstance = Model_Character::get_stat_d(
 			$par[2] -> id, 'launchduel', 
 				$par[2] -> id,
 				$par[1] -> id );

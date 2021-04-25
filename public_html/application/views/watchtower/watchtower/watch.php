@@ -91,7 +91,7 @@ else
 ?>
 
 	<tr class='<?php echo $class;?>'>
-		<td class='center'><?php echo Character_Model::create_publicprofilelink( null, $presentchar['character_name'])?></td>
+		<td class='center'><?php echo Model_Character::create_publicprofilelink( null, $presentchar['character_name'])?></td>
 		<td class='center'><?php echo kohana::lang($presentchar['kingdom_name'])?></td>
 		<td class='center'><?php
 			if ( $presentchar['activity'] == 'NOACTION' ) 

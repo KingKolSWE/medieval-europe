@@ -281,7 +281,7 @@ $(document).ready(function() {
 		
 		<div class ='submenu center' class='center' style='margin:5px 0px;'> 
 		<?php
-			if ( Character_Model::get_premiumbonus( $character -> id, 'wardrobe') !== false )
+			if ( Model_Character::get_premiumbonus( $character -> id, 'wardrobe') !== false )
 				echo html::anchor( 'wardrobe/configureequipment', kohana::lang('wardrobe.configurelook'));
 		?>
 		</div>		

@@ -48,13 +48,13 @@ class CA_Freeprisoner_Model extends Character_Action_Model
 		
 		// modifico la stat
 		
-		$stat = Character_Model::get_stat_d(
+		$stat = Model_Character::get_stat_d(
 			$par[1] -> id,
 			'servejailtime');
 		
 		if (!is_null($stat))
 		{			
-			Character_Model::modify_stat_d(
+			Model_Character::modify_stat_d(
 				$par[1] -> id,
 				'servejailtime',
 				0,

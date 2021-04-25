@@ -16,7 +16,7 @@
 		or
 		Auth::instance() -> logged_in('doubloonreseller') )
 	{ 
-		$doubloon_id = Character_Model::find_item( $char -> id, 'doubloon' );
+		$doubloon_id = Model_Character::find_item( $char -> id, 'doubloon' );
 		if (!is_null( $doubloon_id ) )
 		{	
 ?>
@@ -46,9 +46,9 @@
 
 <div>
 	<div>
-	<?= Character_Model::create_publicprofilelink( null, $sendername) . 
+	<?= Model_Character::create_publicprofilelink( null, $sendername) .
 		' to ' . 
-		Character_Model::create_publicprofilelink( null, $recipient -> name ) . ' | ' . '<strong>' . $message -> subject . '</strong>';
+		Model_Character::create_publicprofilelink( null, $recipient -> name ) . ' | ' . '<strong>' . $message -> subject . '</strong>';
 	?>
 	</div>	
 
@@ -88,7 +88,7 @@
 <div>
 
 	<div style='float:left;margin-right:5px' id='frame_s'>
-	<?= Character_Model::display_avatar($sender -> id, 's', 'charpic_s	') ;?>
+	<?= Model_Character::display_avatar($sender -> id, 's', 'charpic_s	') ;?>
 	</div>
 
 	<div style='width:85%;float:left;border-left:1px solid #bbb;padding-left:5px;'>

@@ -83,10 +83,10 @@ class Kingdom_Model extends ORM
 	}
 	
 	/**
-	* Guerre in cui il regno è impegnato, sia come main attacker sia come alleato
+	* Guerre in cui il regno ï¿½ impegnato, sia come main attacker sia come alleato
 	* @param int $kingdom_id ID Regno
 	* @param str $status 'all' o 'running' 
-	* @return array $kingdomwars Tutte le guerre in cui il regno è coinvolto
+	* @return array $kingdomwars Tutte le guerre in cui il regno ï¿½ coinvolto
 	*/
 	
 	function get_kingdomwars( $kingdom_id, $status = 'all' )
@@ -260,7 +260,7 @@ class Kingdom_Model extends ORM
 	
 	public function get_article2()
 	{
-		$char = Character_Model::get_info( Session::instance()->get('char_id') ); 
+		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		if ( $char -> user -> language == 'en_US' )
 			return 'of ';
 		//print strstr( $this -> image, 'stato' ); exit();
@@ -435,7 +435,7 @@ class Kingdom_Model extends ORM
 		
 		$king = ORM::factory('character', $royalpalace->character_id );
 		
-		// se non c'è il Re, non c'è niente da fare.
+		// se non c'ï¿½ il Re, non c'ï¿½ niente da fare.
 		if ( ! $king -> loaded )
 			return;
 		
@@ -886,7 +886,7 @@ class Kingdom_Model extends ORM
 			
 			$assignableregions[ $i ]['region'] = $region;
 			$assignableregions[ $i ]['responsiblevassal'] = $region -> get_controllingvassal();
-			// se il castello è presente la regione non è assegnabile.
+			// se il castello ï¿½ presente la regione non ï¿½ assegnabile.
 			if ( !is_null( $castle ) )
 				$assignableregions[ $i ]['assignable'] = false;
 			else
@@ -1073,7 +1073,7 @@ class Kingdom_Model extends ORM
 			$info['spokenlanguages'] .= ', ' . $this -> language2;
 				
 		$info['kingdomheraldry'] = url::base() . 'media/images/heraldry/' . $this -> get_image('large');
-		// Nazionalità
+		// Nazionalitï¿½
 		
 		$res = $db -> query ( "select count(u.id) num , cc.country, cc.code 
 		from users u, characters c, regions r, cfgcountrycodes cc

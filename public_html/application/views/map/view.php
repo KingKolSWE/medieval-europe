@@ -57,7 +57,7 @@
 
 ?>
 
-<? if (0 and Character_Model::has_merole( $character, 'admin' )) { ?>
+<? if (0 and Model_Character::has_merole( $character, 'admin' )) { ?>
 <button id='disableregion' style='color:yellow'>Disable/Enable</button>
 <? } ?>
 

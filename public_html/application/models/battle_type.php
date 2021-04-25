@@ -65,7 +65,7 @@ class Battle_Type_Model
 		foreach ( $joinedsoldiers as $joinedsoldier )
 		{ 
 			$a[$joinedsoldier -> faction]['list'][] = 
-				Character_Model::create_publicprofilelink(null, $joinedsoldier -> name) ;
+				Model_Character::create_publicprofilelink(null, $joinedsoldier -> name) ;
 			$a[$joinedsoldier -> faction][$joinedsoldier -> categorization] += 1;	
 		}
 		
@@ -467,7 +467,7 @@ class Battle_Type_Model
 				if ($attacker['char']['type'] != 'npc')
 				{
 					
-					$stat = Character_Model::get_stat_d( $attacker['char']['obj']->id, 'staminaboost' );
+					$stat = Model_Character::get_stat_d( $attacker['char']['obj']->id, 'staminaboost' );
 					if ( $stat -> loaded == true and time() < $stat -> stat1  )
 					{
 							kohana::log('info', $attacker['char']['name'] . ' has stamina BOOST');
@@ -479,7 +479,7 @@ class Battle_Type_Model
 			foreach ($this -> defenders as $key => &$defender)
 			{
 				kohana::log('info', "Evaluating {$key} - {$defender['char']['name']}");
-				$stat = Character_Model::get_stat_d( $defender['char']['obj'] -> id, 'staminaboost' );
+				$stat = Model_Character::get_stat_d( $defender['char']['obj'] -> id, 'staminaboost' );
 				if ( $stat -> loaded == true and time() < $stat -> stat1  )
 				{
 					kohana::log('info', $defender['char']['name'] . ' has stamina BOOST');

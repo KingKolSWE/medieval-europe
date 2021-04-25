@@ -14,7 +14,7 @@ class CA_Donate_Model extends Character_Action_Model
 	
 	protected function check( $par, &$message )
 	{ 
-		if ( Character_Model::is_imprisoned( $par[3] -> id ) == false 
+		if ( Model_Character::is_imprisoned( $par[3] -> id ) == false
 			and 
 			! parent::check_( $par, $message ) )					
 			return false;
@@ -58,7 +58,7 @@ class CA_Donate_Model extends Character_Action_Model
 		{	$message = kohana::lang('global.operation_not_allowed'); return false;}
 		
 		// se imprigionato, si pu� donare solo alla prigione
-		if ( Character_Model::is_imprisoned( $par[3] -> id ) and $par[0] -> structure_type -> supertype != 'barracks' )
+		if ( Model_Character::is_imprisoned( $par[3] -> id ) and $par[0] -> structure_type -> supertype != 'barracks' )
 		{ $message = kohana::lang('ca_donate.error-imprisonedcandonateonlytoprison'); return false;	}
 		
 		if ( $storableweight < $itemsweight )

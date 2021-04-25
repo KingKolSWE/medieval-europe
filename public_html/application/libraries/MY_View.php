@@ -31,7 +31,7 @@ class ViewASDF extends View_Core {
 			// Set the filename
 			
 			$char_id = Session::instance()->get('char_id');			
-			$skinstat = Character_Model::get_stat_d( $char_id, 'skin');
+			$skinstat = Model_Character::get_stat_d( $char_id, 'skin');
 			if (!$skinstat -> loaded )
 				$skin = 'classic';
 			else
