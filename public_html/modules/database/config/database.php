@@ -24,9 +24,9 @@ return [
 			 *
 			 */
 			'hostname'   => 'localhost',
-			'database'   => 'koseven',
-			'username'   => FALSE,
-			'password'   => FALSE,
+			'database'   => 'medieval_prod',
+			'username'   => 'medievaleurope',
+			'password'   => 'ThisIsAPassword!1',
 			'persistent' => FALSE,
 			'ssl'        => NULL,
 		],

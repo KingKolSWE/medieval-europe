@@ -10,7 +10,7 @@ class Controller_Page extends Controller_Template
 	{
 		KO7::$log->add(KO7_Log::INFO, '-> in getpayoutstats...');
 		
-		$view = new View ('page/minedoubloons');
+		$view = View::factory ('page/minedoubloons');
 		$sheets  = array('gamelayout' => 'screen',  'character' => 'screen', 'submenu'=>'screen');		
 
 		if ( request::is_ajax() )
@@ -111,7 +111,7 @@ class Controller_Page extends Controller_Template
 		try
 		{
 		
-			$view = new view ('page/' . $page );
+			$view = View::factory('page/' . $page );
 			$title = 'Medieval Europe, a Free Online Role Playing Game  - ' . ucfirst($page);
 			
 			
@@ -124,7 +124,7 @@ class Controller_Page extends Controller_Template
 				'userregistered',				
 				) ) )
 			{
-				$this -> template = new View('template/homepage');
+				$this -> template = View::factory('template/homepage');
 				$sheets = array('home' => 'screen');
 			}
 			
@@ -134,7 +134,7 @@ class Controller_Page extends Controller_Template
 				array ( 
 					'custom_404',)))
 			{
-				$this -> template = new View('template/blank');
+				$this -> template = View::factory('template/blank');
 				$sheets = array('home' => 'screen');
 			}
 			elseif ( in_array( $page, 
@@ -144,7 +144,7 @@ class Controller_Page extends Controller_Template
 					'unsubscribe-nok',)
 				))
 			{
-				$this -> template = new View('template/blank');
+				$this -> template = View::factory('template/blank');
 				$sheets = array('home' => 'screen');
 			}
 			
@@ -153,7 +153,7 @@ class Controller_Page extends Controller_Template
 			else
 			{
 				KO7::$log->add(KO7_Log::INFO, '-> template/gamelayout view');
-				$this -> template = new View('template/gamelayout');
+				$this -> template = View::factory('template/gamelayout');
 				$sheets  = array(
 					'gamelayout' => 'screen', 
 					'submenu' => 'screen',
@@ -384,7 +384,7 @@ class Controller_Page extends Controller_Template
 	{
 		KO7::$log->add(KO7_Log::INFO, '-> in kingdomstats...');
 		
-		$view = new View ('page/kingdomstats');
+		$view = View::factory ('page/kingdomstats');
 		$sheets  = array('gamelayout' => 'screen',  'character' => 'screen', 'submenu'=>'screen');		
 		
 		if ( request::is_ajax() )
@@ -446,7 +446,7 @@ class Controller_Page extends Controller_Template
 		
 		// category
 		
-		$view = new View( 'page/rankings_category');
+		$view = View::factory( 'page/rankings_category');
 		
 		// limit
 		
@@ -568,12 +568,12 @@ class Controller_Page extends Controller_Template
 	{
 		KO7::$log->add(KO7_Log::INFO, '-> in serverinfo...');
 		
-		$view = new View ('page/serverinfo');
+		$view = View::factory ('page/serverinfo');
 		$sheets  = array(
 			'homepage' => 'screen', 
 			'character' => 'screen', 'pagination'=>'screen');
 		
-		$this -> template = new View('template/homepage');		
+		$this -> template = View::factory('template/homepage');
 		$this -> template -> sheets = $sheets;		
 		$this -> template -> content = $view;
 	
@@ -584,7 +584,7 @@ class Controller_Page extends Controller_Template
 		KO7::$log->add(KO7_Log::INFO, '-> in readnews...');
 		
 		$view = new view( 'page/readnews');
-		$this -> template = new View('template/blank');
+		$this -> template = View::factory('template/blank');
 		$sheets  = array('bootstrap_me' => 'screen');
 		
 		$message = ORM::factory('admin_message', $newsid);

@@ -2,13 +2,62 @@
 
 class Controller_User extends Controller
 {		
-	public $template = 'template/gamelayout';	
-	
-	/*	
-	 * Normal user registration
-	 * @param none
-	 * @return none
-	*/
+	public $template = 'template/gamelayout';
+
+
+    public function _checkcaptcha(Validation $array, $field, $value)
+    {
+        $valid = true;
+        return;
+
+        $query = http_build_query([
+            'secret' => '6Lf_v3MUAAAAANqZZNLdcnp61ux0aEXhCWkfPqkE',
+            'response' => $this -> request -> post('g-recaptcha-response'),
+        ]);
+
+        $url = "https://www.google.com/recaptcha/api/siteverify?" . $query;
+        KO7::$log->add(KO7_Log::DEBUG, kohana::debug($url));
+        $ch = curl_init( $url );
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        $response = json_decode(curl_exec($ch));
+        KO7::$log->add(KO7_Log::DEBUG, curl_error($ch));
+        KO7::$log->add(KO7_Log::DEBUG, kohana::debug($response));
+        $valid = false;
+        if ($response && $response -> success) {
+            $valid = true;
+        }
+        else
+        {
+            $valid = false;
+            $array -> error($field, 'captchaerror');
+            KO7::$log->add(KO7_Log::DEBUG, kohana::debug($array));
+        }
+
+    }
+
+    public function _fake_email(Validation $array, $field, $value)
+    {
+        $d = explode("@", $value);
+        // controllo il db
+        $fake_domain = (bool) ORM::factory('Blockedemailprovider') -> where('domain', $d[1])->count_all();
+
+        if ($fake_domain)
+        {
+            // aggiungo l' errore
+            $array -> error($field, 'blocked_domain');
+        }
+    }
+
+    /*
+     * Normal user registration
+     * @param none
+     * @return none
+    */
+    function action_register()
+    {
+        $this->register();
+    }
 	
 	function register()
 	{
@@ -24,7 +73,7 @@ class Controller_User extends Controller
 		$sheets = array( 'home' => 'screen',);	 	
 		$this -> template -> content = $view; 
 		$this -> template -> sheets = $sheets;  
-		$this -> auth = new Auth();      
+		$this -> auth = KO7_Auth::instance();
 			
 		$form = array(
 			'username' => '',
@@ -39,26 +88,51 @@ class Controller_User extends Controller
 		if ($_POST)
 		{
 			
-			$post = Validation::factory($this -> input -> post())
-				-> pre_filter('trim', TRUE)
-				-> add_rules('username','required', 'alpha_numeric', 'length[5,20]')
-				-> add_rules('email', 'required', 'email', 'length[1,60]')
-				-> add_rules('referral_id', 'numeric');
+			$post = Validation::factory($this -> request -> post())
+                ->rule('username',
+                    function(Validation $array, $field, $value) {
+                        if (!ctype_alnum($value)) {
+                            $array->error($field, 'not_alpha_numeric');
+                            return;
+                        } elseif (strlen($value) < 5 or strlen($value) > 20) {
+                            $array->error($field, 'too_long_or_short');
+                            return;
+                        }
+                    },
+                    array(':validation', ':field', ':value')
+                )-> rule('email',
+                    function(Validation $array, $field, $value) {
+				        if (strlen($value) < 1 or strlen($value) > 60) {
+				            $array->error($field, 'too_long_or_short');
+				            return;
+                        } elseif (filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                            $array->error($field, 'not_valid_email');
+                        }
+                    },
+                    array(':validation', ':field', ':value')
+                ) -> rule('referral_id',
+                    function(Validation $array, $field, $value) {
+                        if (!ctype_digit($value)) {
+                            $array->error($field, 'not_numeric');
+                        }
+                    },
+                    array(':validation', ':field', ':value')
+                );
 
-			$post -> add_callbacks('username', array($this, '_unique_username'));
-			$post -> add_callbacks('email', array($this, '_unique_email'));
-			$post -> add_callbacks('email', array($this, '_fake_email'));
-			$post -> add_callbacks('captchaanswer', array($this, '_checkcaptcha'));
-			$post -> add_callbacks( 'referral_id', array( $this, '_c_referral_id' ));
+			$post -> rule('username',function(Validation $array, $field, $value){ $this->_unique_username($array, $field, $value); }, array(':validation', ':field', ':value'));
+			$post -> rule('email', function(Validation $array, $field, $value){$this->_unique_email($array, $field, $value); }, array(':validation', ':field', ':value'));
+			$post -> rule('email', function(Validation $array, $field, $value){$this->_fake_email($array, $field, $value); }, array(':validation', ':field', ':value'));
+			$post -> rule('captchaanswer', function(Validation $array, $field, $value){$this->_checkcaptcha($array, $field, $value); }, array(':validation', ':field', ':value'));
+			$post -> rule( 'referral_id',  function(Validation $array, $field, $value){$this->_c_referral_id($array, $field, $value); }, array(':validation', ':field', ':value'));
+
+			$post->bind('birthday', null);
+			$post->bind('gender', null);
+			$post->bind('status', 'new');
+			$post->bind('ipaddress', Request::$client_ip);
+			$post->bind('request_ids', $this -> request -> param('request_ids'));
+			$post->bind('referrersite', null);
 			
-			$post['birthday'] = null;
-			$post['gender'] = null;
-			$post['status'] = 'new';
-			$post['ipaddress'] = $this -> input -> ip_address();
-			$post['request_ids'] = $this -> input -> get('request_ids');
-			$post['referrersite'] = null;
-			
-			if ( $post -> validate() )
+			if ( $post -> check() )
 			{
 				$rc = Model_User::registerorloginuser( $post, $message );
 				if ( $rc == false )
@@ -104,7 +178,7 @@ class Controller_User extends Controller
 		$this->template = new View('template/homepage');
 		$this->template->sheets = $sheets;
 		
-		$user = ORM::factory('user')->where( array( 
+		$user = ORM::factory('User')->where( array(
 		  'id' => $user_id, 
 		  'activationtoken' => $activationtoken,
 		  'status' => 'new'
@@ -114,8 +188,8 @@ class Controller_User extends Controller
   
 		if ( ! $user->loaded  )
 		{
-			$view->message = Kohana::lang('user.activate_userortokennotfound', 
-				html::anchor( "/user/resendvalidationtoken/", Kohana::lang('user.activate_resendtoken') ));
+			$view->message = __('user.activate_userortokennotfound',
+				html::anchor( "/user/resendvalidationtoken/", __('user.activate_resendtoken') ));
 			$this->template->content = $view;		
 			return;
 		}  
@@ -123,9 +197,9 @@ class Controller_User extends Controller
 		$user->status = 'active' ;
 		
 		if ( $user->save() )
-			$view->message = Kohana::lang('user.activate_useractivated', html::anchor('/', kohana::lang( 'menu_notlogged.login' ) ) );
+			$view->message = __('user.activate_useractivated', html::anchor('/', __( 'menu_notlogged.login' ) ) );
 		else
-			$view->message = Kohana::lang('user.activate_validationerror');
+			$view->message = __('user.activate_validationerror');
 
 		$this->template->content = $view;
 		$this->template->sheets = $sheets;
@@ -165,8 +239,8 @@ class Controller_User extends Controller
 		  if ($post->validate() )
 		  {
 
-				$user = ORM::factory('user')->where( array( 
-					'email' => $this -> input -> post('email'),
+				$user = ORM::factory('User')->where( array(
+					'email' => $this -> request -> post('email'),
 					'status' => 'new'
 				)) -> find();
 				
@@ -175,31 +249,31 @@ class Controller_User extends Controller
 					if (!in_array( $user -> referrersite, array( 'facebook', 'bbrelax') ) )
 					{
 						// email
-						$subject = Kohana::lang('user.resendvalidationtoken_emailsubject');				
-						$body    = sprintf (Kohana::lang('user.resendvalidationtoken_emailbody'),     
+						$subject = __('user.resendvalidationtoken_emailsubject');
+						$body    = sprintf (__('user.resendvalidationtoken_emailbody'),
 						'https://' . $this->input->server('SERVER_NAME') . "/index.php/user/activate/".$user->id."/".$user->activationtoken);				
 						$to = $post['email'];				
 						$result = Model_Utility::mail( $to, $subject, $body );
 						
 						if ( $result ) 
 						{                      
-							Session::set_flash('user_message', "<div class=\"info_msg\">".Kohana::lang('user.resendvalidationtoken_success')."</div>" );
+							Session::set_flash('user_message', "<div class=\"info_msg\">".__('user.resendvalidationtoken_success')."</div>" );
 						}
 						else
 						{
-								Session::set_flash('user_message', "<div class=\"error_msg\">".Kohana::lang('user.resendvalidationtoken_error')."</div>" );
+								Session::set_flash('user_message', "<div class=\"error_msg\">".__('user.resendvalidationtoken_error')."</div>" );
 						}        
 					}  
 					else
 					{
-						Session::set_flash('user_message', "<div class=\"info_msg\">".Kohana::lang('user.resendvalidationtoken_noneedtobevalidated')."</div>" );
+						Session::set_flash('user_message', "<div class=\"info_msg\">".__('user.resendvalidationtoken_noneedtobevalidated')."</div>" );
 						
 					}
 				}
 				// Nessun utente � stato trovato con l' email specificata
 				else
 				{	
-					Session::set_flash('user_message', "<div class=\"error_msg\">".Kohana::lang('user.resendvalidationtoken_nouserfound')."</div>" ); 
+					Session::set_flash('user_message', "<div class=\"error_msg\">".__('user.resendvalidationtoken_nouserfound')."</div>" );
 				}
   
 		  }
@@ -243,7 +317,7 @@ class Controller_User extends Controller
 		if ( $_POST )
 		{
 			
-			$this -> auth = new Auth();      
+			$this -> auth = KO7_Auth::instance();
 			$post = Validation::factory($_POST)
 				-> pre_filter('trim', TRUE)
 				-> add_rules( 'email', 'required', 'email', 'length[1,30]' );
@@ -251,9 +325,9 @@ class Controller_User extends Controller
 			if ($post->validate() )
 			{
 				
-				$user = ORM::factory('user') -> 
+				$user = ORM::factory('User') ->
 					where( array( 
-						'email' => $this -> input -> post('email')
+						'email' => $this -> request -> post('email')
 				)) -> find();
 
 				//var_dump($user);exit;
@@ -271,12 +345,12 @@ class Controller_User extends Controller
 
 					// email
 					
-					$subject = Kohana::lang('user.resendpassword_emailsubject');
-					$body    = sprintf (Kohana::lang('user.resendpassword_emailbody'), $newpassword_clr, $user->username );
+					$subject = __('user.resendpassword_emailsubject');
+					$body    = sprintf (__('user.resendpassword_emailbody'), $newpassword_clr, $user->username );
 					$to      = $post['email'];					
 					$result_email = Model_Utility::mail( $to, $subject, $body );
 								
-					Session::set_flash('user_message', "<div class=\"info_msg\">".Kohana::lang('user.resendpassword_success')."</div>");         
+					Session::set_flash('user_message', "<div class=\"info_msg\">".__('user.resendpassword_success')."</div>");
 					
 				}  
 				
@@ -284,7 +358,7 @@ class Controller_User extends Controller
 			
 				else
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">".Kohana::lang('user.resendpassword_nouserfound')."</div>");          
+					Session::set_flash('user_message', "<div class=\"error_msg\">".__('user.resendpassword_nouserfound')."</div>");
 				}
 			}
 			else
@@ -369,19 +443,19 @@ class Controller_User extends Controller
 				$post = new Validation( $this -> request-> post() );
 				$username = $this->request->post('username');
 				$password = $this->request->post('password');
-				$this -> auth = new Auth();
+				$this -> auth = KO7_Auth::instance();
 				$error = null;			
 				
 				// L' utente esiste?
 				
 				KO7::$log->add(KO7_Log::INFO, '-> Check: user: [' . $username . '], exists?');
 				// si può usare l' username.
-				$user = ORM::factory( 'user' ) -> where ( 'username', $username) -> find();
+				$user = ORM::factory( 'User' ) -> where ( 'username', $username) -> find();
 				
 				if ( !$user -> loaded )
 				{
 					$error = 'user.login_usernotfound';
-					Session::set_flash( 'user_message', "<div class=\"error_msg\">".Kohana::lang( $error )."</div>");
+					Session::set_flash( 'user_message', "<div class=\"error_msg\">".__( $error )."</div>");
 				}			
 				
 				if ( is_null( $error ) )
@@ -396,7 +470,7 @@ class Controller_User extends Controller
 						$data['referrersite'] = $user -> referrersite;
 						$data['username'] = $username;		
 						$data['email'] = $user -> email;
-						$data['ipaddress'] = $this -> input -> ip_address();
+						$data['ipaddress'] = Request::$client_ip;
 						$data['fb_id'] = 'normal';
 						
 						$rc = Model_User::registerorloginuser( $data, $message );
@@ -413,26 +487,26 @@ class Controller_User extends Controller
 					else
 					{
 						KO7::$log->add( KO7_Log::DEBUG, "-> Password [{$password}] is wrong." );
-						Session::set_flash( 'user_message', "<div class=\"error_msg\">".Kohana::lang("user.incorrectpassword")."</div>");			
+						Session::set_flash( 'user_message', "<div class=\"error_msg\">".__("user.incorrectpassword")."</div>");
 					}
 					
 				}
 				
 			}	
 			else
-				Session::set_flash( 'user_message', "<div class='error_msg'>".kohana::lang("user.login_autherror")."</div>");
+				Session::set_flash( 'user_message', "<div class='error_msg'>".__("user.login_autherror")."</div>");
 		}
 		else
 		{
 			KO7::$log->add( KO7_Log::DEBUG, '-> Called login, but POST is null.' );
-			//KO7::$log->add( KO7_Log::DEBUG, kohana::debug( $this -> input -> post() ) );
+			//KO7::$log->add( KO7_Log::DEBUG, kohana::debug( $this -> request -> post() ) );
 			HTTP::redirect( '/' );
 		}
 		
 		KO7::$log->add(KO7_Log::DEBUG, '-> Redirecting to view...' );
 		//$view -> facebook_login_url = $fb -> get_login_url();
 		$view -> google_login_url = $google -> get_google_login_url();
-		$view -> referrerurl = $this -> input -> post('referral');
+		$view -> referrerurl = $this -> request -> post('referral');
 				
 		$view -> form = $form;
 		
@@ -459,7 +533,7 @@ class Controller_User extends Controller
 		
 		$appID = "54d65aa2694862f28f003b6c";
 		$appSecret = "f7d251525ab35037d34429a7465215df92f10a1f820511163f8dbc6ee8fe0a53";			
-		$this -> auth = new Auth();
+		$this -> auth = KO7_Auth::instance();
 		$user = $character = null;
 		
 		if (isset($_GET['code'])) {
@@ -512,7 +586,7 @@ class Controller_User extends Controller
 		$data['status'] = 'active';
 		$data['activationtoken'] = null;
 		$data['created'] = time();
-		$data['ipaddress'] = $this -> input -> ip_address();
+		$data['ipaddress'] = Request::$client_ip;
 		$data['tutorialmode'] = 'Y';
 		
 		$rc = Model_User::registerorloginuser( $data, $message );
@@ -524,7 +598,7 @@ class Controller_User extends Controller
 			HTTP::redirect( 'boardmessage/index/europecrier');
 		}
 		
-		$view -> referrerurl = $this -> input -> post('referral');
+		$view -> referrerurl = $this -> request -> post('referral');
 		$this -> template -> content = $view;
 		$this -> template -> sheets = $sheets;  	
 		
@@ -549,7 +623,7 @@ class Controller_User extends Controller
 		// che invia la richiesta di connessione sia quello previsto.
 				
 		KO7::$log->add(KO7_Log::DEBUG, '-> Querying google...' );
-		//KO7::$log->add(KO7_Log::DEBUG, kohana::debug($this -> input -> get()));
+		//KO7::$log->add(KO7_Log::DEBUG, kohana::debug($this -> request -> param()));
 		
 		$google = new Model_GoogleBridge();
 		$service = $google -> get_service();
@@ -557,7 +631,7 @@ class Controller_User extends Controller
 		
 		KO7::$log->add(KO7_Log::DEBUG, '-> Authenticating...');
 		
-		$client -> authenticate($this -> input -> get('code'));
+		$client -> authenticate($this -> request -> param('code'));
 		//KO7::$log->add(KO7_Log::DEBUG, kohana::debug( $client ));
 		$accesstoken = $client->getAccessToken();
 		Session::set('googleaccesstoken', $accesstoken );
@@ -586,7 +660,7 @@ class Controller_User extends Controller
 		$data['status'] = 'active';
 		$data['activationtoken'] = null;
 		$data['created'] = time();
-		$data['ipaddress'] = $this -> input -> ip_address();
+		$data['ipaddress'] = Request::$client_ip;
 		$data['tutorialmode'] = 'Y';
 		$data['referrersite'] = 'google';
 		
@@ -635,7 +709,7 @@ class Controller_User extends Controller
 				'password' => ''	
 		);
 		
-		$this -> auth = new Auth();
+		$this -> auth = KO7_Auth::instance();
 		$user = $character = null;
 		
 		// load user.
@@ -662,7 +736,7 @@ class Controller_User extends Controller
 		$data['status'] = 'active';
 		$data['activationtoken'] = null;
 		$data['created'] = time();
-		$data['ipaddress'] = $this -> input -> ip_address();
+		$data['ipaddress'] = Request::$client_ip;
 		$data['tutorialmode'] = 'Y';
 		
 		$rc = Model_User::registerorloginuser( $data, $message );
@@ -727,9 +801,9 @@ class Controller_User extends Controller
 			$data['status'] = 'active';
 			$data['activationtoken'] = null;
 			$data['created'] = time();
-			$data['ipaddress'] = $this -> input -> ip_address();
+			$data['ipaddress'] = Request::$client_ip;
 			$data['tutorialmode'] = 'Y';
-			$data['request_ids'] = $this -> input -> get('requests_id');
+			$data['request_ids'] = $this -> request -> param('requests_id');
 			
 			// Leggo referrer dal cookie
 			
@@ -892,8 +966,8 @@ class Controller_User extends Controller
 			
 			if ($post -> validate() )
 			{
-				$user -> password = $this -> input -> post( 'password'); $user -> save();
-				Session::set_flash('user_message', "<div class=\"info_msg\">".Kohana::lang('user.change_password_ok')."</div>" );
+				$user -> password = $this -> request -> post( 'password'); $user -> save();
+				Session::set_flash('user_message', "<div class=\"info_msg\">".__('user.change_password_ok')."</div>" );
 				HTTP::redirect('user/profile');
 			}	
 			else
@@ -916,15 +990,15 @@ class Controller_User extends Controller
 	* @param  string      $field   nome del campo che deve essere validato
 	*/
 
-  public function _unique_username(Validation $array, $field)
+  public function _unique_username(Validation $array, $field, $value)
   {
      // controllo il db
-     $name_exists = (bool) ORM::factory('user')->where('username', $array[$field])->count_all();
+     $name_exists = (bool) ORM::factory('User')->where('username', $value)->count_all();
    
      if ($name_exists)
      {
          // aggiungo l' errore
-         $array->add_error($field, 'username_exists');
+         $array->error($field, 'username_exists');
      }
   }
 
@@ -935,15 +1009,15 @@ class Controller_User extends Controller
 	 * @param  string      $field   nome del campo che deve essere validato
 	 */
 
-  public function _unique_email(Validation $array, $field)
+  public function _unique_email(Validation $array, $field, $value)
   {
      // controllo il db
-     $email_exists = (bool) ORM::factory('user')->where('email', $array[$field])->count_all();
+     $email_exists = (bool) ORM::factory('User')->where('email', $value)->count_all();
    
      if ($email_exists)
      {
          // aggiungo l' errore
-         $array->add_error($field, 'email_exists');
+         $array->error($field, 'email_exists');
      }
   }
 
@@ -955,24 +1029,24 @@ class Controller_User extends Controller
 	* @param  string      $field   nome del campo che deve essere validato
 	*/
 
-  public function _c_referral_id(Validation $array, $field)
+  public function _c_referral_id(Validation $array, $field, $value)
   {
        
   
-     if ( empty($array[$field]) )
+     if ( empty($value) )
         return;
 				
      // controllo il db
-     $id_exists = (bool) ORM::factory('user')->where(
+     $id_exists = (bool) ORM::factory('User')->where(
       array( 
-        'id' => $array[$field],
+        'id' => $value,
         'status != '   => 'canceled'
         ))->count_all();
    
      if (! $id_exists)
      {
          // aggiungo l' errore
-         $array -> add_error($field, 'id_notexisting');
+         $array -> error($field, 'id_notexisting');
      }
   }
   
@@ -983,10 +1057,10 @@ class Controller_User extends Controller
 	* @param  string      $field   nome del campo che deve essere validato
 	*/
   
-  public function _c_accepttos(Validation $array, $field)
+  public function _c_accepttos(Validation $array, $field, $value)
   {
-    if ( $array[$field] != true )
-      $array->add_error($field, 'tos_notaccepted');    
+    if ( $value != true )
+      $array->error($field, 'tos_notaccepted');
   }
 
 	/*
@@ -996,12 +1070,12 @@ class Controller_User extends Controller
 	* @param  string      $field   nome del campo che deve essere validato
 	*/
 
-	public function _checkoldpassword (Validation $array, $field)
+	public function _checkoldpassword (Validation $array, $field, $value)
 	{
 	$user = Auth::instance()->get_user();			
 	$salt = Auth::instance()->find_salt( $user->password );
-	if ( strcmp($user->password , Auth::instance()->hash_password( $array[$field], $salt )) )
-		$array->add_error($field, 'matches');    
+	if ( strcmp($user->password , Auth::instance()->hash_password( $value, $salt )) )
+		$array->error($field, 'matches');
 	}  
 
 	/**
@@ -1053,7 +1127,7 @@ class Controller_User extends Controller
 	 {
 	 
 		$_user = Auth::instance()->get_user();							
-		$user = ORM::factory('user', $_user -> id);		
+		$user = ORM::factory('User', $_user -> id);
 		
 		$char = Character_Model::get_info( Session::instance()->get('char_id') );
 		$view = new View ( 'user/configure');
@@ -1061,38 +1135,38 @@ class Controller_User extends Controller
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		$lnkmenu = $char -> user -> get_account_submenu( 'configure' );	 
 		$titles = array(		
-			'notitle' => kohana::lang('global.title_notitle_b'),
-			'artisan' => kohana::lang('global.title_artisan_b'),
-			'bachelor' => kohana::lang('global.title_bachelor_b'),
-			'brother' => kohana::lang('global.title_brother_b'),
-			'burgher' => kohana::lang('global.title_burgher_b'),
-			'commoner' => kohana::lang('global.title_commoner_b'),
-			'don' => kohana::lang('global.title_don_b'),
-			'despot' => kohana::lang('global.title_despot_b'),
-			'esquire' => kohana::lang('global.title_esquire_b'),
-			'explorer' => kohana::lang('global.title_explorer_b'),
-			'father' => kohana::lang('global.title_father_b'),
-			'freeman' => kohana::lang('global.title_freeman_b'),
-			'gentleman' => kohana::lang('global.title_gentleman_b'),
-			'magister' => kohana::lang('global.title_magister_b'),
-			'monsignor' => kohana::lang('global.title_monsignor_b'),
-			'master' => kohana::lang('global.title_master_b'),
-			'mercenary' => kohana::lang('global.title_mercenary_b'),
-			'merchant' => kohana::lang('global.title_merchant_b'),
-			'peasant' => kohana::lang('global.title_peasant_b'),
-			'pirate' => kohana::lang('global.title_pirate_b'),
-			'rogue' => kohana::lang('global.title_rogue_b'),
-			'scholar' => kohana::lang('global.title_scholar_b'),
-			'sergeant' => kohana::lang('global.title_sergeant_b'),
-			'wanderer' => kohana::lang('global.title_wanderer_b'),
-			'warlord' => kohana::lang('global.title_warlord_b'),
-			'warrior' => kohana::lang('global.title_warrior_b'),
+			'notitle' => __('global.title_notitle_b'),
+			'artisan' => __('global.title_artisan_b'),
+			'bachelor' => __('global.title_bachelor_b'),
+			'brother' => __('global.title_brother_b'),
+			'burgher' => __('global.title_burgher_b'),
+			'commoner' => __('global.title_commoner_b'),
+			'don' => __('global.title_don_b'),
+			'despot' => __('global.title_despot_b'),
+			'esquire' => __('global.title_esquire_b'),
+			'explorer' => __('global.title_explorer_b'),
+			'father' => __('global.title_father_b'),
+			'freeman' => __('global.title_freeman_b'),
+			'gentleman' => __('global.title_gentleman_b'),
+			'magister' => __('global.title_magister_b'),
+			'monsignor' => __('global.title_monsignor_b'),
+			'master' => __('global.title_master_b'),
+			'mercenary' => __('global.title_mercenary_b'),
+			'merchant' => __('global.title_merchant_b'),
+			'peasant' => __('global.title_peasant_b'),
+			'pirate' => __('global.title_pirate_b'),
+			'rogue' => __('global.title_rogue_b'),
+			'scholar' => __('global.title_scholar_b'),
+			'sergeant' => __('global.title_sergeant_b'),
+			'wanderer' => __('global.title_wanderer_b'),
+			'warlord' => __('global.title_warlord_b'),
+			'warrior' => __('global.title_warrior_b'),
 		);
 			   		
 		// combo Linguaggi
 		
 		$view -> spokenlanguages = array(
-			'' => kohana::lang('global.select'),
+			'' => __('global.select'),
 			'Bulgarian' => 'Bulgarian',
 			'Croatian' => 'Croatian',
 			'Czech' => 'Czech',
@@ -1115,39 +1189,39 @@ class Controller_User extends Controller
 		
 			// ***** General Panel *****
 			
-			if ( $this -> input -> post('general') != '' )
+			if ( $this -> request -> post('general') != '' )
 			{
 				
-				$user -> nationality = $this -> input -> post('nationality' );
+				$user -> nationality = $this -> request -> post('nationality' );
 			
 				// Hide max stat badges
 			
-				if ( $this -> input -> post('hidemaxstatsbadges') == 'activate')
+				if ( $this -> request -> post('hidemaxstatsbadges') == 'activate')
 					$user -> hidemaxstatsbadges = 'Y';
 				else
 					$user -> hidemaxstatsbadges = 'N';
 
 				// available for religious functions
 			
-				if ( $this -> input -> post('availableregfunctions') == 'available')
+				if ( $this -> request -> post('availableregfunctions') == 'available')
 					$user -> availableregfunctions = 'Y';
 				else
 					$user -> availableregfunctions = 'N';
 									
 				// Spoken Languages
 				
-				//var_dump($this -> input -> post());exit;
+				//var_dump($this -> request -> post());exit;
 				
 				// linguaggi parlati, su user
 								
 				foreach ($user -> user_languages as $language )				
 				{
-					$language -> language = $this -> input -> post('spokenlanguage'.$language -> position);
+					$language -> language = $this -> request -> post('spokenlanguage'.$language -> position);
 					//var_dump($language);exit;
 					$language -> save();
 				}
 				
-				if ( $this -> input -> post('showlanguagesinpublicprofile') == 'show')
+				if ( $this -> request -> post('showlanguagesinpublicprofile') == 'show')
 					$user -> showlanguages = 'Y';
 				else
 					$user -> showlanguages = 'N';
@@ -1168,13 +1242,13 @@ class Controller_User extends Controller
 					null,
 					null,
 					true,
-					$this -> input -> post('skin')
+					$this -> request -> post('skin')
 				);
 			}
 			
 			// ***** BASIC PACKAGE OPTIONS *****
 			
-			if ( $this -> input -> post('basicpackage') != '' )
+			if ( $this -> request -> post('basicpackage') != '' )
 			{
 				Character_Model::modify_stat_d( 
 					$char -> id,
@@ -1183,34 +1257,34 @@ class Controller_User extends Controller
 					'title',
 					null,
 					true,					
-					$this -> input -> post('title') . '_' . strtolower($char -> sex),
-					$this -> input -> post('title')
+					$this -> request -> post('title') . '_' . strtolower($char -> sex),
+					$this -> request -> post('title')
 				);
 				
 			}
 			
 			// ***** EMAIL *****
 			
-			if ( $this -> input -> post('emailsection') == 'Modify' )
+			if ( $this -> request -> post('emailsection') == 'Modify' )
 			{				
 				
 				// newsletter
 			
-				if ( $this -> input -> post('newsletter') == 'send')
+				if ( $this -> request -> post('newsletter') == 'send')
 					$user -> newsletter = 'Y';
 				else
 					$user -> newsletter = 'N';
 			
 				// receive IG messages on email
 				
-				if ( $this -> input -> post('receiveigmessagesonemail') == 'receive')
+				if ( $this -> request -> post('receiveigmessagesonemail') == 'receive')
 					$user -> receiveigmessagesonemail = 'Y';
 				else
 					$user -> receiveigmessagesonemail = 'N';
 				
 /*
-				if ($user -> email != $this -> input -> post('email') )
-					User_model::modifyemail( $user, $this -> input -> post('email'));
+				if ($user -> email != $this -> request -> post('email') )
+					User_model::modifyemail( $user, $this -> request -> post('email'));
 */
 				
 				$user -> save();
@@ -1219,32 +1293,32 @@ class Controller_User extends Controller
 			
 			// ***** AUTOMATED REST *****
 			
-			if ( $this -> input -> post('automatedsleep') != '' )
+			if ( $this -> request -> post('automatedsleep') != '' )
 			{
 				// Automated Rest
 			
 				if ( Character_Model::get_premiumbonus( $char -> id, 'automatedsleep' ) !== false )
 				{
 				
-					if ( $this -> input -> post('disablesleepafteraction') == 'activate')
+					if ( $this -> request -> post('disablesleepafteraction') == 'activate')
 						$user -> disablesleepafteraction = 'Y';
 					else
 						$user -> disablesleepafteraction = 'N';		
 					
-					if ( $this -> input -> post('maxglut') < 1 or $this -> input -> post('maxglut') > 50 )
+					if ( $this -> request -> post('maxglut') < 1 or $this -> request -> post('maxglut') > 50 )
 					{
 					
-					Session::set_flash('user_message', "<div class=\"error_msg\">" . Kohana::lang('user.error-maxglutvalue')."</div>" );
+					Session::set_flash('user_message', "<div class=\"error_msg\">" . __('user.error-maxglutvalue')."</div>" );
 						HTTP::redirect('/user/configure');
 					}
 					
-					$user -> maxglut = 	$this -> input -> post('maxglut');
+					$user -> maxglut = 	$this -> request -> post('maxglut');
 					$user -> save();
 					
 				}
 			}
 			
-			Session::set_flash('user_message', "<div class=\"info_msg\">".Kohana::lang('user.customization_ok')."</div>" );
+			Session::set_flash('user_message', "<div class=\"info_msg\">".__('user.customization_ok')."</div>" );
 			
 		}
 		
@@ -1256,7 +1330,7 @@ class Controller_User extends Controller
 		
 		// reload user
 		
-		$user = ORM::factory('user', $user -> id);		
+		$user = ORM::factory('User', $user -> id);
 		$languages = array();
 		foreach ($user -> user_languages as $language)
 			$languages[$language -> position] = $language -> language;
@@ -1391,50 +1465,6 @@ class Controller_User extends Controller
 		$this -> template -> content = $view;
 		$this -> template -> sheets = $sheets;		
 	}
-	
-	public function _checkcaptcha(Validation $array, $field)
-	{
-		$valid = true;
-		return;
-		
-		$query = http_build_query([
-		 'secret' => '6Lf_v3MUAAAAANqZZNLdcnp61ux0aEXhCWkfPqkE',
-		 'response' => $this -> input -> post('g-recaptcha-response'),		 
-		]);
-		
-		$url = "https://www.google.com/recaptcha/api/siteverify?" . $query;
-		KO7::$log->add(KO7_Log::DEBUG, kohana::debug($url));
-		$ch = curl_init( $url );
-		curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-		$response = json_decode(curl_exec($ch));
-		KO7::$log->add(KO7_Log::DEBUG, curl_error($ch));
-		KO7::$log->add(KO7_Log::DEBUG, kohana::debug($response));
-		$valid = false;
-		if ($response && $response -> success) {
-			$valid = true;
-		}
-		else
-		{
-			$valid = false;
-			$array -> add_error($field, 'captchaerror');
-			KO7::$log->add(KO7_Log::DEBUG, kohana::debug($array));
-		}
-		
-	}
-
-	public function _fake_email(Validation $array, $field)
-	{
-		$d = explode("@", $array[$field]);
-		// controllo il db
-		$fake_domain = (bool) ORM::factory('Blockedemailprovider') -> where('domain', $d[1])->count_all();
-	   
-		if ($fake_domain)
-		{
-			// aggiungo l' errore
-			$array -> add_error($field, 'blocked_domain');
-		}
-	} 
 
   /**
   * unsubscribe from the newsletter
@@ -1446,7 +1476,7 @@ class Controller_User extends Controller
   public function unsubscribe ( $username, $hash )
   {
 	KO7::$log->add(KO7_Log::DEBUG, '-> Trying to unsubscribe {$username}, hash: {$hash}' );
-	$user = ORM::factory('user') -> where ( 
+	$user = ORM::factory('User') -> where (
 		array( 
 			'activationtoken' => $hash,
 			'username' => $username,

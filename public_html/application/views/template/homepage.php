@@ -7,7 +7,7 @@
 
 	<title><?php
 		if ( !isset( $title ))
-			echo kohana::lang('page-homepage.gameheader');
+			echo __('page-homepage.gameheader');
 		else
 			echo $title ?>
 	</title>
@@ -28,9 +28,9 @@
 	<!-- Bootstrap -->
 	<!-- Latest compiled and minified CSS -->
 
-	<?= HTML::style('https://code.jquery.com/ui/1.12.0/themes/base/jquery-ui', NULL, FALSE); ?>
-	<?= HTML::style("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min", NULL, FALSE); ?>
-	<?= HTML::style("media/css/homepage", NULL, FALSE); ?>
+	<?= HTML::style('https://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css'); ?>
+	<?= HTML::style("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"); ?>
+	<?= HTML::style("media/css/homepage.css"); ?>
 
 	<?= HTML::script('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'); ?>
 	<?= HTML::script('https://code.jquery.com/ui/1.12.0/jquery-ui.min.js'); ?>

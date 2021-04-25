@@ -23,7 +23,8 @@ RUN apt install -y \
 RUN curl -sS https://getcomposer.org/installer -o composer-setup.php && \
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
-COPY ./public_html/media /var/www/medieval-europe/public_html/media
+COPY ./public_html/media /var/www/medieval-europe/public_html/public/media
+#RUN chmod a+r -R /var/www/medieval-europe/public_html/media/
 COPY ./public_html/application/libraries     /var/www/medieval-europe/public_html/application/libraries
 COPY ./public_html/application/models        /var/www/medieval-europe/public_html/application/models
 RUN cd /var/www/medieval-europe/public_html/application/libraries/vendors/PHPMailer && \
@@ -69,7 +70,7 @@ COPY config/medieval-europe.conf /etc/apache2/sites-available/
 RUN a2dissite 000-default
 RUN a2ensite medieval-europe.conf
 RUN chmod a+w /var/www/medieval-europe/public_html/upload
-RUN chmod a+w /var/www/medieval-europe/public_html/media/images/characters
+RUN chmod a+w /var/www/medieval-europe/public_html/public/media/images/characters
 RUN mkdir /var/www/medieval-europe/public_html/application/logs
 RUN chmod a+w /var/www/medieval-europe/public_html/application/logs
 RUN mkdir /var/www/medieval-europe/public_html/application/cache
