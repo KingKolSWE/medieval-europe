@@ -37,10 +37,14 @@
 	echo html::stylesheet('media/css/structure.css?v=2.9.5', FALSE);
 	echo html::stylesheet('media/css/battlereport.css?v=2.9.5', FALSE);
 	echo html::stylesheet('media/css/map.css?v=2.9.5', FALSE);
-		// Scripts	
-		echo html::script('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js', FALSE);				echo html::script('https://code.jquery.com/ui/1.12.0/jquery-ui.min.js', FALSE);		
+	
+	// Scripts	
+	
+	echo html::script('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js', FALSE);			
+	echo html::script('https://code.jquery.com/ui/1.12.0/jquery-ui.min.js', FALSE);		
 	echo html::script("media/js/tooltipster-master/dist/js/tooltipster.bundle.min.js", FALSE);
-		echo html::script('media/js/jquery/plugins/cookie/js.cookie.js', FALSE);	echo html::script('media/js/common.js', FALSE);		
+	
+	echo html::script('media/js/jquery/plugins/cookie/js.cookie.js', FALSE);	echo html::script('media/js/common.js', FALSE);		
 	?>
 	<!-- Countdown: workaround per visualizzare il countdown nella title bar -->
 	<script type="text/javascript">$.noRequestAnimationFrame = true;</script>
@@ -399,7 +403,7 @@ function forceCompleteAction() {
 							<div class="healthstat" style="width:<?php echo round(100*(max(0,$health)/100))?>px"></div>
 						</div>						
 						<div style="text-align:right;font-size:0.8em;">
-							<?=round(100*(max(0,$health)/100));?>%
+							<?php echo round(100*(max(0,$health)/100));?>%
 						</div>						
 					</div>
 					
@@ -422,7 +426,7 @@ function forceCompleteAction() {
 						<div class="boxstat">
 							<div class="glutstat" style="width:<?php echo round(100*(max(0,$glut)/50))?>px"></div>
 						</div>
-						<div style="text-align:right;font-size:0.8em;"><?=round(100*(max(0,$glut)/50));?>%</div>						
+						<div style="text-align:right;font-size:0.8em;"><?php echo round(100*(max(0,$glut)/50));?>%</div>
 					</div>
 				
 				</div>
@@ -495,24 +499,23 @@ function forceCompleteAction() {
 						array('style' => 'height:50px;padding:1px;border:1px solid #999') )?>
 					</td>		
 					<td width="50%" class="center">
-					<?= kohana::lang('quests.activequest', 
+					<?php echo kohana::lang('quests.activequest',
 						kohana::lang('quests.'.$activequest['name'].'_name'),
 						kohana::lang('quests.'.$activequest['name'].'_description'));
 					?>
 					</td>
 					<td width="25%" class='center'>
-						<?	
+						<?php
 							$speedbonus = Character_Model::get_stat_from_cache($character -> id, 'speedbonus');
 							if ($speedbonus -> loaded and $speedbonus -> stat1 > time() )							
 							{
-						?>
-						<span class='evidence'>
-							<?= kohana::lang('quests.speedbonus',
+						        echo "<span class='evidence'>";
+							    echo kohana::lang('quests.speedbonus',
 									$speedbonus -> value,
 									Utility_Model::countdown($speedbonus -> stat1));
-							?>
-						</span>
-						<? } ?>
+						        echo "</span>";
+						    }
+                        ?>
 					</td>
 
 					<td width="20%" class="center">

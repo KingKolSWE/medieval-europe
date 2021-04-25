@@ -513,8 +513,8 @@ function forceCompleteAction() {
 
 			<!-- Current Quest -->
 
-			<?
-			kohana::log('info', '-> gamelayout.php line 509');
+			<?php
+			echo kohana::log('info', '-> gamelayout.php line 517');
 			if (!is_null($activequest)) { ?>
 			<div id="currentquest">
 				<table>
@@ -525,13 +525,14 @@ function forceCompleteAction() {
 						array('style' => 'height:50px;padding:1px;border:1px solid #999') )?>
 					</td>
 					<td width="50%" class="center">
-					<?= kohana::lang('quests.activequest',
+					<?php echo kohana::lang('quests.activequest',
 						kohana::lang('quests.'.$activequest['name'].'_name'),
 						kohana::lang('quests.'.$activequest['name'].'_description'));
 					?>
 					</td>
 					<td width="25%" class='center'>
-						<?
+						<?php
+                            echo kohana::log('info', '-> gamelayout.php line 535');
 							$speedbonus = Character_Model::get_stat_from_cache($character -> id, 'speedbonus');
 							if ($speedbonus -> loaded and $speedbonus -> stat1 > time() )
 							{
@@ -545,7 +546,7 @@ function forceCompleteAction() {
 					</td>
 
 					<td width="20%" class="center">
-						<?= html::anchor(
+						<?php echo html::anchor(
 							'quests/view/' . $activequest['name'],
 							kohana::lang('global.continue'),
 							array( 'class' => 'button button-small'));
@@ -554,16 +555,16 @@ function forceCompleteAction() {
 				</tr>
 				</table>
 			</div>
-			<? } ?>
+			<?php } ?>
 
 
 			<!-- Event Banner -->
-			<?
+			<?php
 			if (Kohana::config('medeur.displayeventbanner'))
 			{
 			?>
 			<div id='eventbanner'>
-			<?
+			<?php
 				echo html::anchor(
 					'https://docs.google.com/forms/d/e/1FAIpQLSdoDq44H7I6NzgPDcbQbJtXFTPEI2PZZkjHK20hzNPcCZb_oA/viewform',
 					html::image('media/images/template/eventbanner.png?v=2'),
@@ -574,7 +575,7 @@ function forceCompleteAction() {
 				);
 			?>
 			</div>
-			<?
+			<?php
 			}
 			?>
 			<!-- Promo -->
