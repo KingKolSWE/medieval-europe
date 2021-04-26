@@ -158,7 +158,7 @@ class CA_Declarewaraction_Model extends Character_Action_Model
 		)
 			$this -> warcost = 0;
 		elseif ( $par[2] == 'raid' or $par[2] == 'conquer_r' )
-			$this -> warcost = Battle_Type_Model::compute_costs_kingdom();
+			$this -> warcost = Model_BattleType::compute_costs_kingdom();
 
 		if ($this -> warcost > 0 )
 		{
@@ -213,7 +213,7 @@ class CA_Declarewaraction_Model extends Character_Action_Model
 
 		$attackingkingdomrunningwars = Kingdom_Model::get_kingdomwars( $par[1] -> kingdom_id, 'running');
 
-		$wd = new Battle_Model();
+		$wd = new Model_Battle();
 		$wd -> source_character_id = $par[0] -> id;
 		$wd -> kingdomwar_id = $attackingkingdomrunningwars[0]['war'] -> id;
 		if ( is_null($king_def) )
@@ -235,7 +235,7 @@ class CA_Declarewaraction_Model extends Character_Action_Model
 		$wd -> timestamp = time();
 		$wd -> save ();
 
-		$wdr = new Battle_Report_Model();
+		$wdr = new Model_BattleReport();
 		$wdr -> battle_id = $wd -> id;
 		$wdr -> save();
 

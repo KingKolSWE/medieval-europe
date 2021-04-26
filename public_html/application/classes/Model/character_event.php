@@ -19,7 +19,7 @@ class Character_Event_Model extends ORM
 	{		
 	
 		if ( $eventtype == 'announcement' )
-			Boardmessage_Model::systemadd( 1, 'europecrier', $text, $eventclass);
+			Model_Boardmessage::systemadd( 1, 'europecrier', $text, $eventclass);
 		else
 		{
 			$a = new Character_Event_Model();	

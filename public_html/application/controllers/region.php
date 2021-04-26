@@ -91,7 +91,7 @@ class Region_Controller extends Template_Controller
 		$view -> list_i = $list_i;
 		$view -> currentregion = $currentregion;
 		$view -> viewingchar = $char;		
-		// questo è per la vista nuova non rimuovere.
+		// questo ï¿½ per la vista nuova non rimuovere.
 		//$view -> structures2 = $structures;
 		$this -> template -> structures = $structures_arr;
 		$this -> template -> content = $view;
@@ -472,7 +472,7 @@ class Region_Controller extends Template_Controller
 		'region/info_laws/' . $region -> id => kohana::lang('regionview.submenu_laws')); 		
 		
 		//////////////////////////////////////////////////////
-		// Se si è nel mare, non si può vedere la lista 		
+		// Se si ï¿½ nel mare, non si puï¿½ vedere la lista 		
 		//////////////////////////////////////////////////////
 		
 		$currentcharposition = ORM::factory('region', $char -> position_id );
@@ -483,7 +483,7 @@ class Region_Controller extends Template_Controller
 		}
 		
 		// E' possibile vedere la lista dei char presenti
-		// in regione solo se si è in quella regione
+		// in regione solo se si ï¿½ in quella regione
 		
 		if ( $char -> position_id != $region -> id and $kind == 'regionpresentchars' )
 		{
@@ -786,7 +786,7 @@ class Region_Controller extends Template_Controller
 				
 				// add board
 				
-				$c = Board_Factory_Model::create('kingdom');
+				$c = Model_BoardFactory::create('kingdom');
 				//var_dump($post);exit;
 				$rc = $c -> add( $char, $this -> input -> post(), $message );
 				if ($rc == true )
@@ -859,7 +859,7 @@ class Region_Controller extends Template_Controller
 			{	
 				
 				
-				$c = Board_Factory_Model::create('kingdom');
+				$c = Model_BoardFactory::create('kingdom');
 				$rc = $c -> edit( $char, $currentboard, $this -> input -> post(), $message );
 			
 				if ($rc == true )
@@ -886,7 +886,7 @@ class Region_Controller extends Template_Controller
 		}
 		else
 		{
-			$c = Board_Factory_Model::create('kingdom');
+			$c = Model_BoardFactory::create('kingdom');
 			$rc = $c -> read( $char, $board_id, $data );
 			
 			if ($rc == true )
@@ -917,7 +917,7 @@ class Region_Controller extends Template_Controller
 		$char = Character_Model::get_info( Session::instance() -> get('char_id') );		
 		$board = ORM::factory('kingdom_forum_board', $board_id);
 		
-		$c = Board_Factory_Model::create('kingdom');
+		$c = Model_BoardFactory::create('kingdom');
 		$rc = $c -> delete( $char, $board, $message );
 		
 		if ($rc == true )
@@ -1197,7 +1197,7 @@ function info_laws( $region_id  )
 	}
 
 	/**
-	* Verifica se è possibile costruire la struttura
+	* Verifica se ï¿½ possibile costruire la struttura
 	* specificata nella regione specificata	
 	* @param: none
 	* @return: costo in FP

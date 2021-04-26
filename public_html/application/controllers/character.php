@@ -692,13 +692,13 @@ class Character_Controller extends Template_Controller
 
 		// Carica info per la difesa ecc.
 
-		$charcopy = Battle_Engine_Model::loadcharbattlecopy( $character -> id );
-		Battle_Engine_Model::get_fightstats( $charcopy );
+		$charcopy = Model_BattleEngine::loadcharbattlecopy( $character -> id );
+		Model_BattleEngine::get_fightstats( $charcopy );
 
 		// Applica logica armature
 		foreach ( array( 'head', 'torso', 'left_hand', 'right_hand', 'legs', 'feet' ) as $part )
 		{
-			$partinfo[$part] = Battle_Engine_Model::get_part_info( $part, $charcopy);
+			$partinfo[$part] = Model_BattleEngine::get_part_info( $part, $charcopy);
 		}
 
 		//kohana::log('debug', kohana::debug($partinfo));
@@ -796,15 +796,15 @@ class Character_Controller extends Template_Controller
 
 		// Carica info per la difesa ecc.
 
-		$charcopy = Battle_Engine_Model::loadcharbattlecopy( $character -> id );
+		$charcopy = Model_BattleEngine::loadcharbattlecopy( $character -> id );
 
 		//		var_dump($charcopy['char']); exit;
-		Battle_Engine_Model::get_fightstats( $charcopy );
+		Model_BattleEngine::get_fightstats( $charcopy );
 
 		// Applica logica armature
 		foreach ( array( 'head', 'armor', 'left_hand', 'right_hand', 'legs', 'feet' ) as $part )
 		{
-			$partinfo[$part] = Battle_Engine_Model::get_part_info( $part, $charcopy);
+			$partinfo[$part] = Model_BattleEngine::get_part_info( $part, $charcopy);
 		}
 
 		$header = new View( 'character/profileheader_' . $character->type );

@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Blockedemailprovider_Model extends ORM
+class Model_AdminBannedip extends ORM
 {
 
 

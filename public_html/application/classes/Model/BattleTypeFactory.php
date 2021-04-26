@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Battle_TypeFactory_Model
+class Model_BattleTypeFactory
 {
 	
 	public function create( $name )

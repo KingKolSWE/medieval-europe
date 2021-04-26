@@ -6,7 +6,7 @@ class CA_Battleround_Model extends Character_Action_Model
 	public function __construct()
 	{		
 		parent::__construct();
-		// questa azione non é bloccante per altre azioni del char.
+		// questa azione non ï¿½ bloccante per altre azioni del char.
 		$this -> blocking_flag = false;		
 		return $this;
 	}
@@ -26,7 +26,7 @@ class CA_Battleround_Model extends Character_Action_Model
 		
 		$battle = ORM::factory('battle', $data -> param2 );		
 		$battlereport = '';
-		$battletype = Battle_TypeFactory_Model::create( $battle -> type );
+		$battletype = Model_battletypefactoryBattle::create( $battle -> type );
 		
 		$par[0] = $battle;
 		$par[1] = $data;

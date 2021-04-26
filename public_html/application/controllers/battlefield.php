@@ -115,7 +115,7 @@ class Battlefield_Controller extends Template_Controller
 		$_attackers = array();
 		$_defenders = array();		
 		
-		$battletype = Battle_TypeFactory_Model::create( $battle -> type );		
+		$battletype = Model_battletypefactoryBattle::create( $battle -> type );
 		
 		$joinedcharacters = $battletype -> get_joined_characters( $battle -> id );
 		

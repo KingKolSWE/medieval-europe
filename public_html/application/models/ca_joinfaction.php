@@ -26,7 +26,7 @@ class CA_Joinfaction_Model extends Character_Action_Model
 		$battle = ORM::factory('battle', $par[1] -> attribute1 ); 
 		$attackingregion = ORM::factory('region', $battle -> source_region_id );
 		$attackedregion = ORM::factory('region', $battle -> dest_region_id );		
-		$battletype = Battle_TypeFactory_Model::create( $battle -> type );				
+		$battletype = Model_battletypefactoryBattle::create( $battle -> type );
 		
 		// � gi� schierato?
 		
@@ -214,7 +214,7 @@ class CA_Joinfaction_Model extends Character_Action_Model
 		where battle_id = " . $par[1] -> attribute1 . " 
 		and   character_id = " . $par[0] -> id ); 
 		
-		$part = new Battle_Participant_Model();		
+		$part = new Model_Battleparticipant();
 		$part -> battle_id = $par[1] -> attribute1;
 		$part -> character_id = $par[0] -> id;
 		$part -> faction = $par[2];

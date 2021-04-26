@@ -57,7 +57,7 @@ class CA_Executeduel_Model extends Character_Action_Model
 		{
 			// schedula un duello
 			
-			$b = new Battle_Model();
+			$b = new Model_Battle();
 			$b -> source_character_id = $par[2] -> id;
 			$b -> dest_character_id = $par[1] -> id;
 			$b -> source_region_id = $this -> duelinstance -> spare1;	
@@ -67,7 +67,7 @@ class CA_Executeduel_Model extends Character_Action_Model
 			$b -> timestamp = time();
 			$b -> save();
 			
-			$br = new Battle_Report_Model();
+			$br = new Model_BattleReport();
 			$br -> battle_id = $b->id;
 			$br -> save();
 			
@@ -152,7 +152,7 @@ class CA_Executeduel_Model extends Character_Action_Model
 		
 		$character = ORM::factory( 'character', $data -> character_id );		
 		$par[0] = ORM::factory( 'battle', $data -> param1 );
-		$battletype = Battle_TypeFactory_Model::create( $par[0] -> type );				
+		$battletype = Model_battletypefactoryBattle::create( $par[0] -> type );
 		$battletype -> run( $par, $report );		
 		
 		return;

@@ -68,7 +68,7 @@ class Batch_Controller extends Template_Controller
 			Database::instance() -> query("set autocommit = 0");
 			Database::instance() -> query("start transaction");
 			Database::instance() -> query("begin");
-			Batch_Model::mergeregions($securitykey, $regionname1, $regionname2, $resourcetomantain, $climatosave);
+			Model_Batch::mergeregions($securitykey, $regionname1, $regionname2, $resourcetomantain, $climatosave);
 
 			if (!$simulate)
 			{
@@ -99,7 +99,7 @@ class Batch_Controller extends Template_Controller
 			Database::instance() -> query("set autocommit = 0");
 			Database::instance() -> query("start transaction");
 			Database::instance() -> query("begin");
-			Batch_Model::respawnnpcs($securitykey);
+			Model_Batch::respawnnpcs($securitykey);
 			kohana::log('info', "Committing...");
 			Database::instance() -> query('commit');
 			kohana::log('info', "Committed.");
@@ -116,21 +116,21 @@ class Batch_Controller extends Template_Controller
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Batch_Model::rechargebasicresources($securitykey);
+		Model_Batch::rechargebasicresources($securitykey);
 	}
 
 	function splitkingdoms($securitykey=null, $kingdomname, $capitalname, $king, $title, $color )
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Batch_Model::splitkingdoms($securitykey, $kingdomname, $capitalname, $king, $title, $color );
+		Model_Batch::splitkingdoms($securitykey, $kingdomname, $capitalname, $king, $title, $color );
 	}
 
 	function mergekingdoms($securitykey=null, $kingdomsourcename, $kingdomtargetname, $newkingdomname = null, $newkingdomimage = null)
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Batch_Model::mergekingdoms($securitykey, $kingdomsourcename, $kingdomtargetname, $newkingdomname, $newkingdomimage);
+		Model_Batch::mergekingdoms($securitykey, $kingdomsourcename, $kingdomtargetname, $newkingdomname, $newkingdomimage);
 	}
 
 	function takedoubloons() {
@@ -188,7 +188,7 @@ class Batch_Controller extends Template_Controller
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Batch_Model::deleteavatar($securitykey, $character_id );
+		Model_Batch::deleteavatar($securitykey, $character_id );
 
 	}
 
@@ -196,7 +196,7 @@ class Batch_Controller extends Template_Controller
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Batch_Model::computekingdomsactivity($securitykey);
+		Model_Batch::computekingdomsactivity($securitykey);
 
 	}
 
@@ -204,14 +204,14 @@ class Batch_Controller extends Template_Controller
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Batch_Model::watchdog($securitykey);
+		Model_Batch::watchdog($securitykey);
 	}
 
 	function give_daily_revenues($securitykey=null)
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Batch_Model::give_daily_revenues($securitykey);
+		Model_Batch::give_daily_revenues($securitykey);
 	}
 
 	function initquest( $securitykey, $char_id, $questname )
@@ -232,35 +232,35 @@ class Batch_Controller extends Template_Controller
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Batch_Model::reduceintoxicationlevel($securitykey);
+		Model_Batch::reduceintoxicationlevel($securitykey);
 	}
 
 	function sendstarvingemail($securitykey=null)
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Batch_Model::sendstarvingemail($securitykey);
+		Model_Batch::sendstarvingemail($securitykey);
 	}
 
 	function checkpremiumexpiration($securitykey=null)
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Batch_Model::checkpremiumexpiration($securitykey);
+		Model_Batch::checkpremiumexpiration($securitykey);
 	}
 
 	function consumeitems($securitykey=null)
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Batch_Model::consumeitems($securitykey);
+		Model_Batch::consumeitems($securitykey);
 	}
 
 	function givereferralcoins($securitykey=null)
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Batch_Model::givereferralcoins($securitykey);
+		Model_Batch::givereferralcoins($securitykey);
 
 	}
 
@@ -268,7 +268,7 @@ class Batch_Controller extends Template_Controller
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Batch_Model::computestats($securitykey);
+		Model_Batch::computestats($securitykey);
 
 	}
 
@@ -276,7 +276,7 @@ class Batch_Controller extends Template_Controller
 	{
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
-		Batch_Model::cleanupdatabase($securitykey);
+		Model_Batch::cleanupdatabase($securitykey);
 
 	}
 

@@ -39,9 +39,9 @@ class CA_AttackIR_Model extends Character_Action_Model
 		{ $message = kohana::lang('ca_attackir.error-charisnotasheriff'); return FALSE; }
 		
 		// controllo che il char abbia l' ordine di conquistare
-		// la regione in cui è ora.
+		// la regione in cui ï¿½ ora.
 		
-		if ( Battle_Conquer_IR_Model::iscaptainallowedtoattack( $par[0] ) == false )
+		if ( Model_BattleConquerIRBattleType::iscaptainallowedtoattack( $par[0] ) == false )
 		{ $message = kohana::lang('ca_attackir.error-noattackorderavailable'); return FALSE; }		
 		
 		
@@ -64,7 +64,7 @@ class CA_AttackIR_Model extends Character_Action_Model
 	protected function append_action( $par, &$message )
 	{	
 		
-		$bm = new Battle_Model();
+		$bm = new Model_Battle();
 		$bm -> source_character_id = $par[0] -> character -> id; 
 		
 		// trova la capitale del regno del capitano della guardia
@@ -77,7 +77,7 @@ class CA_AttackIR_Model extends Character_Action_Model
 		$bm -> timestamp = time();
 		$bm -> save();
 
-		$wdr = new Battle_Report_Model();
+		$wdr = new Model_BattleReport();
 		$wdr -> battle_id = $bm -> id;
 		$wdr -> save();
 		
@@ -104,7 +104,7 @@ class CA_AttackIR_Model extends Character_Action_Model
 		$par[0] = ORM::factory( 'group', $data -> param1 );
 		$par[1] = ORM::factory( 'region', $data -> param2 );
 		$par[2] = ORM::factory( 'battle', $data -> param3 );
-		$battletype = Battle_TypeFactory_Model::create( $par[2] -> type );				
+		$battletype = Model_battletypefactoryBattle::create( $par[2] -> type );
 		$battletype -> run( $par, $report );
 		
 		return;

@@ -86,19 +86,19 @@ if ( !is_null($battlereport5) )
 <br style='clear:both'/>
 <br style='clear:both'/>
 <div id='battlereportround1' class='battlereportround'>
-<?php echo Battle_Engine_Model::format_fightreport ( $battlereport1, 'html') ;  ?>
+<?php echo Model_BattleEngine::format_fightreport ( $battlereport1, 'html') ;  ?>
 </div>
 <div id='battlereportround2' class='battlereportround'>
-<?php echo Battle_Engine_Model::format_fightreport ( $battlereport2, 'html') ;  ?>
+<?php echo Model_BattleEngine::format_fightreport ( $battlereport2, 'html') ;  ?>
 </div>
 <div id='battlereportround3'>
-<?php echo Battle_Engine_Model::format_fightreport ( $battlereport3, 'html') ;  ?>
+<?php echo Model_BattleEngine::format_fightreport ( $battlereport3, 'html') ;  ?>
 </div>
 <div id='battlereportround4'>
-<?php echo Battle_Engine_Model::format_fightreport ( $battlereport4, 'html') ;  ?>
+<?php echo Model_BattleEngine::format_fightreport ( $battlereport4, 'html') ;  ?>
 </div>
 <div id='battlereportround5'>
-<?php echo Battle_Engine_Model::format_fightreport ( $battlereport5, 'html') ;  ?>
+<?php echo Model_BattleEngine::format_fightreport ( $battlereport5, 'html') ;  ?>
 </div>
 
 
