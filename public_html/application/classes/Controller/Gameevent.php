@@ -43,9 +43,9 @@ class Controller_Gameevent extends Controller_Template
 		$character = Model_Character::get_info( Session::instance() -> get('char_id') );
 
 		$par[0] = $character;
-		$par[1] = $this -> input -> post('cfggameeventid');
+		$par[1] = $this -> request -> post('cfggameeventid');
 
-		if (null !== $this -> input -> post('subscribedoubloons'))
+		if (null !== $this -> request -> post('subscribedoubloons'))
 			$par[2] = 'doubloons';
 		else
 			$par[2] = 'silvercoins';
@@ -54,13 +54,13 @@ class Controller_Gameevent extends Controller_Template
 		
 		if ( $ca -> do_action( $par,  $message ) )
 		{ 				
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-			url::redirect ( 'gameevent/view/' .  $this -> input -> post('cfggameeventid'));
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			HTTP::redirect ( 'gameevent/view/' .  $this -> request -> post('cfggameeventid'));
 		}	
 		else	
 		{ 
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-			url::redirect ( 'gameevent/view/' . $this -> input -> post('cfggameeventid'));
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+			HTTP::redirect ( 'gameevent/view/' . $this -> request -> post('cfggameeventid'));
 		}	
 	}
 		

@@ -13,7 +13,7 @@ class Controller_Tavern extends Controller_Template
 	function wheeloffortune()
 	{
 		// Ruota della fortuna disabilitata
-		url::redirect('region/view/');
+		HTTP::redirect('region/view/');
 		
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');		
 		
@@ -21,17 +21,17 @@ class Controller_Tavern extends Controller_Template
 		
 		if ($char -> get_age() > 14 )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". 
 				__('structures_tavern.error-toooldtoplay') . "</div>");
-				url::redirect('region/view/');			
+				HTTP::redirect('region/view/');			
 		}
 		
 		// Check: il char non ha 10 sc
 		if ( ! $char -> check_money( 10 ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". 
 				__('charactions.global_notenoughmoney') . "</div>");
-				url::redirect('region/view/');
+				HTTP::redirect('region/view/');
 		}
 		
 		$view = View::factory ( 'tavern/wheeloffortune' );
@@ -72,7 +72,7 @@ class Controller_Tavern extends Controller_Template
 			$this -> auto_render = false;
 			$char = Character_Model::get_info( Session::instance()->get('char_id') ); 
 
-			$tag = $this -> input -> post('tag');
+			$tag = $this -> request -> post('tag');
 			
 			KO7::$log->add(KO7_Log::DEBUG, "-> Tag: {$tag}");
 
@@ -183,8 +183,8 @@ class Controller_Tavern extends Controller_Template
 		
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'public' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			
 			$data = ST_Tavern_1_Model::get_price( $character, $structure );
@@ -193,35 +193,35 @@ class Controller_Tavern extends Controller_Template
 		else
 		{	
 			
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id'));
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));
 			
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'public' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}	
 			
 			$ca = Character_Action_Model::factory("resttavern");		
 			$data = ST_Tavern_1_Model::get_price( $character, $structure );
 			
 			$par[0] = $character;
-			$par[1] = $this -> input -> post('percentage');	
+			$par[1] = $this -> request -> post('percentage');	
 			$par[2] = $structure;
 			
-			if ( $this -> input -> post('mode') == 'free' )
+			if ( $this -> request -> post('mode') == 'free' )
 				$par[3] = true;
 			else
 				$par[3] = false;
 			
 			$par[4] = $data['price'];			
-			$par[5] = $this -> input -> post('percentage');
+			$par[5] = $this -> request -> post('percentage');
 			$par[6] = $data['baseprice'];
 			
 			
 			if ( $ca -> do_action( $par, $message ) )
-			{ Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); }
+			{ Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); }
 			else	
-			{ Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");}
+			{ Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");}
 		}	
 		
 		if ( Model_Character::is_resting( $character -> id ) )
@@ -260,19 +260,19 @@ class Controller_Tavern extends Controller_Template
 			$structure = StructureFactory_Model::create( null, $structure_id );
 			if ( ! $structure->allowedaccess( $char, $structure -> getParentType(), $message, 'public' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure->allowedaccess( $char, $structure -> getParentType(), $message, 'public' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
-			$type = $this -> input -> post('type');
+			$type = $this -> request -> post('type');
 
 			$ca = Character_Action_Model::factory("game_dice" . $type );		
 
@@ -281,13 +281,13 @@ class Controller_Tavern extends Controller_Template
 			
 			if ( $ca -> do_action( $par,  $message ) )
 				{ 
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect( 'tavern/game_dice/' . $structure_id . '/' . $type ); 
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect( 'tavern/game_dice/' . $structure_id . '/' . $type ); 
 				}
 			else	
 				{ 
-					Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-					url::redirect( 'tavern/game_dice/' . $structure_id . '/' . $type ); 
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+					HTTP::redirect( 'tavern/game_dice/' . $structure_id . '/' . $type ); 
 				}
 		}
 		

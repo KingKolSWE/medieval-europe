@@ -13,8 +13,8 @@ class Controller_Quests extends Controller_Template
 	{
 		if ( isset($this -> disabledmodules['quests']) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('charactions.error-moduleisdisabled') . "</div>");						
-			url::redirect('character/details/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('charactions.error-moduleisdisabled') . "</div>");						
+			HTTP::redirect('character/details/');
 		}
 		
 		$character = ORM::factory("character", Session::instance()->get('char_id'));
@@ -23,13 +23,13 @@ class Controller_Quests extends Controller_Template
 		
 		if ( $rc == false )
 		{
-			Session::set_flash('user_message', 	"<div class=\"error_msg\">". __($message) . "</div>");
-			url::redirect( 'character/myquests');				
+			Session::instance()->set('user_message', 	"<div class=\"error_msg\">". __($message) . "</div>");
+			HTTP::redirect( 'character/myquests');				
 		}
 		else
 		{
-			Session::set_flash('user_message', 	"<div class=\"info_msg\">". __($message) . "</div>");			
-			url::redirect( 'quests/view/' . $name );		
+			Session::instance()->set('user_message', 	"<div class=\"info_msg\">". __($message) . "</div>");			
+			HTTP::redirect( 'quests/view/' . $name );		
 		}
 	}
 	
@@ -41,14 +41,14 @@ class Controller_Quests extends Controller_Template
 		
 		if ( Model_Character::has_achievement( $character -> id, 'stat_tutorialcompleted' ) == true )
 		{
-			Session::set_flash('user_message', 	"<div class=\"error_msg\">". __('quests.error-tutorialiscompleted') . "</div>");
-			url::redirect( 'boardmessage/index/europecrier');		
+			Session::instance()->set('user_message', 	"<div class=\"error_msg\">". __('quests.error-tutorialiscompleted') . "</div>");
+			HTTP::redirect( 'boardmessage/index/europecrier');		
 		}
 		
 		$quest = QuestFactory_Model::createQuest('accountconfiguration');		
 		$quest -> activate( $character );
 		
-		url::redirect('quests/tutorialentry');	
+		HTTP::redirect('quests/tutorialentry');	
 	}
 	
 	function endtutorial()
@@ -56,13 +56,13 @@ class Controller_Quests extends Controller_Template
 		$character = ORM::factory("character", Session::instance()->get('char_id'));
 		if ( Model_Character::has_achievement( $character -> id, 'stat_tutorialcompleted' ) == true )
 		{
-			Session::set_flash('user_message', 	"<div class=\"error_msg\">". __('quests.error-tutorialiscompleted') . "</div>");
-			url::redirect( 'boardmessage/index/europecrier');		
+			Session::instance()->set('user_message', 	"<div class=\"error_msg\">". __('quests.error-tutorialiscompleted') . "</div>");
+			HTTP::redirect( 'boardmessage/index/europecrier');		
 		}
 		
 		$par = array();
 		GameEvent_Model::process_event( $character, 'endtutorial', $par );
-		url::redirect('region/view');
+		HTTP::redirect('region/view');
 	}	
 	
 	/**
@@ -79,8 +79,8 @@ class Controller_Quests extends Controller_Template
 		
 		if ( Character_Model::has_achievement( $character -> id, 'stat_tutorialcompleted' ) == true )
 		{
-			Session::set_flash('user_message', 	"<div class=\"error_msg\">". __('quests.error-tutorialiscompleted') . "</div>");
-			url::redirect( 'boardmessage/index/europecrier');		
+			Session::instance()->set('user_message', 	"<div class=\"error_msg\">". __('quests.error-tutorialiscompleted') . "</div>");
+			HTTP::redirect( 'boardmessage/index/europecrier');		
 		}
 		
 		if ( $character -> user -> tutorialmode == 'Y' )
@@ -113,17 +113,17 @@ class Controller_Quests extends Controller_Template
 			{
 				$character -> user -> tutorialmode = 'N';
 				$character -> user -> save();
-				Session::set_flash('user_message', 
+				Session::instance()->set('user_message', 
 				"<div class=\"error_msg\">". 
 					__('quests.error-tutorialiscompleted') . "</div>");
-				url::redirect( 'boardmessage/index/europecrier');
+				HTTP::redirect( 'boardmessage/index/europecrier');
 			}
 			
 			// se non ha quest del tutorial attivi, 
 			// mostriamo una pagina di benvenuto
 			
 			if ( $c -> count() == 0 )						
-				url::redirect( 'page/display/welcomepage');			
+				HTTP::redirect( 'page/display/welcomepage');			
 				
 			// altrimenti, lo ridirezioniamo al quest attivo
 			
@@ -133,15 +133,15 @@ class Controller_Quests extends Controller_Template
 				$activequest = $character -> get_active_quest();
 				
 				if ( $activequest -> loaded  )
-					url::redirect('quests/view/' . $activequest -> param1 );
+					HTTP::redirect('quests/view/' . $activequest -> param1 );
 				else
 				{
-					url::redirect( 'boardmessage/index/europecrier');
+					HTTP::redirect( 'boardmessage/index/europecrier');
 				}
 			}
 		}		
 		else
-			url::redirect( 'boardmessage/index/europecrier');
+			HTTP::redirect( 'boardmessage/index/europecrier');
 	
 	}
 	*/
@@ -168,9 +168,9 @@ class Controller_Quests extends Controller_Template
 		
 		if ( $info['status'] != 'active' )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". 
 					__('quests.error-questisnotactive') . "</div>");
-			url::redirect('character/myquests' );
+			HTTP::redirect('character/myquests' );
 		}
 		
 		//var_dump( $info['currentstep'] );exit;
@@ -201,10 +201,10 @@ class Controller_Quests extends Controller_Template
 		$cfgquest = ORM::factory('cfgquest', $id );
 		if ( !$cfgquest -> loaded )
 		{			
-			Session::set_flash('user_message', 
+			Session::instance()->set('user_message', 
 				"<div class=\"error_msg\">". 
 					__('quests.error-questnotexists') . "</div>");
-			url::redirect('character/myquests' );
+			HTTP::redirect('character/myquests' );
 		}
 	
 	}

@@ -43,7 +43,7 @@ class Controller_Region extends Controller_Template
 		// pagina di viaggio
 		
 		if ( Model_Character::is_traveling( $char -> id ) )
-			url::redirect ( 'map/view');
+			HTTP::redirect ( 'map/view');
 		
 		$currentregion = ORM::factory('region', $char -> position_id );							
 		
@@ -167,8 +167,8 @@ class Controller_Region extends Controller_Template
 		
 		if ( !$region -> loaded )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>");		
-			url::redirect( 'map/view' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>");		
+			HTTP::redirect( 'map/view' );
 		}
 		
 		// si sta cercando di vedere le informazioni di una regione
@@ -176,8 +176,8 @@ class Controller_Region extends Controller_Template
 		
 		if ( $region -> kingdom -> get_name() == 'kingdoms.kingdom-independent' )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . __('regioninfo.error-infonotexisting') . "</div>");
-			url::redirect( 'map/view' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . __('regioninfo.error-infonotexisting') . "</div>");
+			HTTP::redirect( 'map/view' );
 		}
 		
 		// carico le relazioni diplomatiche
@@ -307,8 +307,8 @@ class Controller_Region extends Controller_Template
 		
 		if ($currentregion -> loaded == false )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . __('global.error-regionunknown') . "</div>");
-			url::redirect( 'region/info' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . __('global.error-regionunknown') . "</div>");
+			HTTP::redirect( 'region/info' );
 			
 		}
 		
@@ -402,8 +402,8 @@ class Controller_Region extends Controller_Template
 		
 		if ($currentregion -> loaded == false )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . __('global.error-regionunknown') . "</div>");
-			url::redirect( 'region/info' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . __('global.error-regionunknown') . "</div>");
+			HTTP::redirect( 'region/info' );
 			
 		}
 		
@@ -460,8 +460,8 @@ class Controller_Region extends Controller_Template
 		
 		if ( ! $region -> loaded )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>");					
-			url::redirect( 'map/view' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>");					
+			HTTP::redirect( 'map/view' );
 		}	
 		
 		$sheets  = array('gamelayout'=>'screen',  'submenu'=>'screen');		
@@ -478,8 +478,8 @@ class Controller_Region extends Controller_Template
 		$currentcharposition = ORM::factory('region', $char -> position_id );
 		if ( $currentcharposition -> type == 'sea' )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>");					
-			url::redirect( 'region/view' );		
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>");					
+			HTTP::redirect( 'region/view' );		
 		}
 		
 		// E' possibile vedere la lista dei char presenti
@@ -487,8 +487,8 @@ class Controller_Region extends Controller_Template
 		
 		if ( $char -> position_id != $region -> id and $kind == 'regionpresentchars' )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>");					
-			url::redirect( 'region/view' );						
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>");					
+			HTTP::redirect( 'region/view' );						
 		}
 		else
 		{
@@ -566,17 +566,17 @@ class Controller_Region extends Controller_Template
 		
 		if ( is_null($kingdom_id) or $char -> region -> kingdom_id != $kingdom_id )
 		{			
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>");					
-			url::redirect( 'region/view' );				
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>");					
+			HTTP::redirect( 'region/view' );				
 		}
 		
 		$kingdom = ORM::factory('kingdom', $kingdom_id);
 		if ( $kingdom -> loaded == false )
 		{
 			
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>");					
-			url::redirect( 'region/view' );				
+			HTTP::redirect( 'region/view' );				
 		}
 		
 		$rows = ORM::factory('kingdom_forum_board') -> where (
@@ -621,27 +621,27 @@ class Controller_Region extends Controller_Template
 		if ( is_null($kingdom_id) or is_null($board_id) or $char -> region -> kingdom_id != $kingdom_id )
 		{
 			
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>");					
-			url::redirect( 'region/view' );				
+			HTTP::redirect( 'region/view' );				
 		}
 		
 		$kingdom = ORM::factory('kingdom', $kingdom_id);
 		if ( $kingdom -> loaded == false )
 		{
 			
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>");					
-			url::redirect( 'region/view' );				
+			HTTP::redirect( 'region/view' );				
 		}
 		
 		$currentboard = ORM::factory('kingdom_forum_board', $board_id );
 		if ( $currentboard -> loaded == false )
 		{
 			
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>");					
-			url::redirect( 'region/view' );				
+			HTTP::redirect( 'region/view' );				
 		}
 		
 		$rows = ORM::factory('kingdom_forum_topic') -> where (
@@ -687,18 +687,18 @@ class Controller_Region extends Controller_Template
 		if ( is_null($kingdom_id) or is_null($topic_id) or $char -> region -> kingdom_id != $kingdom_id )
 		{
 			
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>");					
-			url::redirect( 'region/view' );				
+			HTTP::redirect( 'region/view' );				
 		}
 		
 		$kingdom = ORM::factory('kingdom', $kingdom_id);
 		if ( $kingdom -> loaded == false )
 		{
 			
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>");					
-			url::redirect( 'region/view' );				
+			HTTP::redirect( 'region/view' );				
 		}
 		
 		$currenttopic = ORM::factory('kingdom_forum_topic', $topic_id );
@@ -706,9 +706,9 @@ class Controller_Region extends Controller_Template
 		if ( $currenttopic -> loaded == false )
 		{
 			
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>");					
-			url::redirect( 'region/view' );				
+			HTTP::redirect( 'region/view' );				
 		}
 		
 		$sql = "SELECT id, title, body, created, updated, author 
@@ -765,18 +765,18 @@ class Controller_Region extends Controller_Template
 		{
 			
 			//var_dump($_POST);exit;
-			$post = Validation::factory($this->input->post())
+			$post = Validation::factory($this->request->post())
 				-> pre_filter('trim', TRUE)
 				-> add_rules('name','required', 'length[3,50]')
 				-> add_rules('boarddescription','required', 'length[5,255]');
 			
-			$kingdom = Kingdom_Model::load( $this -> input -> post('kingdom_id') );	
+			$kingdom = Kingdom_Model::load( $this -> request -> post('kingdom_id') );	
 			if ($kingdom -> loaded == false)
 			{
 				
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>");					
-				url::redirect( 'region/kingdomboards/' . $kingdom_id );
+				HTTP::redirect( 'region/kingdomboards/' . $kingdom_id );
 			
 			}
 			
@@ -788,16 +788,16 @@ class Controller_Region extends Controller_Template
 				
 				$c = Board_Factory_Model::create('kingdom');
 				//var_dump($post);exit;
-				$rc = $c -> add( $char, $this -> input -> post(), $message );
+				$rc = $c -> add( $char, $this -> request -> post(), $message );
 				if ($rc == true )
 				{
-					Session::set_flash('user_message', 
+					Session::instance()->set('user_message', 
 					"<div class=\"info_msg\">".__('kingdomforum.info-boardadded')."</div>"); 
-					url::redirect('/region/kingdomboards/' . $kingdom_id );
+					HTTP::redirect('/region/kingdomboards/' . $kingdom_id );
 				}
 				else
 				{
-					Session::set_flash('user_message', 
+					Session::instance()->set('user_message', 
 					"<div class=\"error_msg\">".__($message)."</div>"); 
 					$form = arr::overwrite($form, $post -> as_array());	
 				}
@@ -815,9 +815,9 @@ class Controller_Region extends Controller_Template
 			
 			if ($kingdom -> loaded == false)
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>");					
-				url::redirect( 'region/kingdomboards/' . $kingdom_id );
+				HTTP::redirect( 'region/kingdomboards/' . $kingdom_id );
 				
 			}
 		}
@@ -847,12 +847,12 @@ class Controller_Region extends Controller_Template
 		if ($_POST)
 		{
 			//var_dump($_POST);exit;
-			$post = Validation::factory($this->input->post())
+			$post = Validation::factory($this->request->post())
 				-> pre_filter('trim', TRUE)
 				-> add_rules('name','required', 'length[3,50]')
 				-> add_rules('boarddescription','required', 'length[5,255]');
 			
-			$board_id = $this -> input -> post('board_id');
+			$board_id = $this -> request -> post('board_id');
 			$currentboard = ORM::factory('kingdom_forum_board', $board_id);
 			
 			if ($post->validate() )
@@ -860,17 +860,17 @@ class Controller_Region extends Controller_Template
 				
 				
 				$c = Board_Factory_Model::create('kingdom');
-				$rc = $c -> edit( $char, $currentboard, $this -> input -> post(), $message );
+				$rc = $c -> edit( $char, $currentboard, $this -> request -> post(), $message );
 			
 				if ($rc == true )
 				{					
-					Session::set_flash('user_message', 
+					Session::instance()->set('user_message', 
 					"<div class=\"info_msg\">".__('kingdomforum.info-boardedited')."</div>"); 				
-					url::redirect('region/kingdomboards/' . $currentboard -> kingdom_id);					
+					HTTP::redirect('region/kingdomboards/' . $currentboard -> kingdom_id);					
 				}
 				else
 				{
-					Session::set_flash('user_message', 
+					Session::instance()->set('user_message', 
 					"<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>");
 					$form = arr::overwrite($form, $post -> as_array());				
 				}
@@ -897,9 +897,9 @@ class Controller_Region extends Controller_Template
 			}
 			else
 			{
-				Session::set_flash('user_message', 
+				Session::instance()->set('user_message', 
 				"<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>"); 		
-				url::redirect('region/kingdomboards/' . $data -> kingdom_id );
+				HTTP::redirect('region/kingdomboards/' . $data -> kingdom_id );
 			}
 		}
 		
@@ -922,16 +922,16 @@ class Controller_Region extends Controller_Template
 		
 		if ($rc == true )
 		{
-			Session::set_flash('user_message', 
+			Session::instance()->set('user_message', 
 			"<div class=\"info_msg\">".__('kingdomforum.info-boarddeleted')."</div>"); 		
-			url::redirect('region/kingdomboards/' . $board -> kingdom_id );
+			HTTP::redirect('region/kingdomboards/' . $board -> kingdom_id );
 			
 		}
 		else
 		{
-			Session::set_flash('user_message', 
+			Session::instance()->set('user_message', 
 			"<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>"); 		
-			url::redirect('region/kingdomboards/' . $board -> kingdom_id );
+			HTTP::redirect('region/kingdomboards/' . $board -> kingdom_id );
 		}
 	}
 	
@@ -950,27 +950,27 @@ class Controller_Region extends Controller_Template
 		if ($_POST)
 		{
 			
-			$post = Validation::factory($this->input->post())
+			$post = Validation::factory($this->request->post())
 				-> pre_filter('trim', TRUE)
 				-> add_rules('body', 'required')
 				-> add_rules('title','required', 'length[3,50]');			
 			
-			$currentboard = ORM::factory('kingdom_forum_board', $this -> input -> post('board_id'));
+			$currentboard = ORM::factory('kingdom_forum_board', $this -> request -> post('board_id'));
 			
 			if ($post->validate() )
 			{	
 				$c = Topic_Factory_Model::create('kingdom');
-				$rc = $c -> add( $char, $this -> input -> post(), $message );
+				$rc = $c -> add( $char, $this -> request -> post(), $message );
 				
 				if ($rc == true )
 				{					
-					Session::set_flash('user_message', 
+					Session::instance()->set('user_message', 
 					"<div class=\"info_msg\">".__('kingdomforum.info-topicadded')."</div>"); 				
-					url::redirect('region/kingdomboards/' . $currentboard -> kingdom_id);					
+					HTTP::redirect('region/kingdomboards/' . $currentboard -> kingdom_id);					
 				}
 				else
 				{
-					Session::set_flash('user_message', 
+					Session::instance()->set('user_message', 
 					"<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>");
 					$form = arr::overwrite($form, $post -> as_array());				
 				}				
@@ -1014,8 +1014,8 @@ class Controller_Region extends Controller_Template
 		if ($_POST)
 		{
 			
-			$currenttopic = ORM::factory('kingdom_forum_topic', $this -> input -> post('topic_id'));			
-			$post = Validation::factory($this->input->post())
+			$currenttopic = ORM::factory('kingdom_forum_topic', $this -> request -> post('topic_id'));			
+			$post = Validation::factory($this->request->post())
 				-> pre_filter('trim', TRUE)
 				-> add_rules('body', 'required')
 				-> add_rules('title','required', 'length[3,50]');				
@@ -1023,18 +1023,18 @@ class Controller_Region extends Controller_Template
 			if ($post->validate() )
 			{	
 				$c = Topic_Factory_Model::create('kingdom');
-				$rc = $c -> edit( $char, $currenttopic, $this -> input -> post(), $message );
+				$rc = $c -> edit( $char, $currenttopic, $this -> request -> post(), $message );
 				
 				if ($rc == true )
 				{					
-					Session::set_flash('user_message', 
+					Session::instance()->set('user_message', 
 					"<div class=\"info_msg\">".__('kingdomforum.info-topicedited')."</div>"); 				
-					url::redirect('region/kingdomtopics/' . $currenttopic -> kingdom_forum_board -> kingdom_id . '/' . 
+					HTTP::redirect('region/kingdomtopics/' . $currenttopic -> kingdom_forum_board -> kingdom_id . '/' . 
 						$currenttopic -> kingdom_forum_board_id);			
 				}
 				else
 				{
-					Session::set_flash('user_message', 
+					Session::instance()->set('user_message', 
 					"<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>");
 					$form = arr::overwrite($form, $post -> as_array());				
 				}				
@@ -1077,9 +1077,9 @@ class Controller_Region extends Controller_Template
 		if ( Kingdom_Forum_Topic_Model::haswriterights( $char, 
 			$topic -> kingdom_forum_board -> kingdom ) == false )
 		{
-			Session::set_flash('user_message', 
+			Session::instance()->set('user_message', 
 				"<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>"); 								
-			url::redirect('/region/kingdomreplies/' . $topic -> kingdom_forum_board -> kingdom_id . '/' . 
+			HTTP::redirect('/region/kingdomreplies/' . $topic -> kingdom_forum_board -> kingdom_id . '/' . 
 				$topic -> id);
 		}
 		
@@ -1088,19 +1088,19 @@ class Controller_Region extends Controller_Template
 		KO7::$log->add(KO7_Log::DEBUG, 'rc: ' . $rc);
 		if ($rc == true )
 		{
-			Session::set_flash('user_message', 
+			Session::instance()->set('user_message', 
 			"<div class=\"info_msg\">".__('kingdomforum.info-topicdeleted')."</div>"); 		
 			
-			url::redirect('region/kingdomtopics/' . $topic -> kingdom_forum_board -> kingdom_id . '/' .
+			HTTP::redirect('region/kingdomtopics/' . $topic -> kingdom_forum_board -> kingdom_id . '/' .
 				$topic -> kingdom_forum_board -> id );			
 		}
 		else
 		{
 			KO7::$log->add(KO7_Log::DEBUG, 'rc: ' . $rc);
-			Session::set_flash('user_message', 
+			Session::instance()->set('user_message', 
 			"<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>"); 		
 			
-			url::redirect('region/kingdomtopics/' . $topic -> kingdom_forum_board -> kingdom_id . '/' . 
+			HTTP::redirect('region/kingdomtopics/' . $topic -> kingdom_forum_board -> kingdom_id . '/' . 
 				$topic -> kingdom_forum_board -> id );			
 		}
 	}
@@ -1170,17 +1170,17 @@ function info_laws( $region_id  )
 	{
 		$ca = Character_Action_Model::factory("retire");		
 		$par[0] = Model_Character::get_info( Session::instance()->get('char_id') );
-		$par[1] = $this->input->post('days');
+		$par[1] = $this->request->post('days');
 		
 		if ( $ca->do_action( $par,  $message ) )
 		{
-		 	Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+		 	Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 		else			
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");					
-			url::redirect( 'region/retire');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");					
+			HTTP::redirect( 'region/retire');
 		}
 	}
 
@@ -1189,7 +1189,7 @@ function info_laws( $region_id  )
 		if ( request::is_ajax() )
 		{
 			KO7::$log->add(KO7_Log::DEBUG, 'Received an ajax call.'); 
-			KO7::$log->add(KO7_Log::DEBUG, kohana::debug($this -> input -> post())); 
+			KO7::$log->add(KO7_Log::DEBUG, kohana::debug($this -> request -> post())); 
 			$this->auto_render = false;
 			//echo json_encode( $a );
 			return;
@@ -1211,13 +1211,13 @@ function info_laws( $region_id  )
 			
 			$this -> auto_render = false;
 			
-			//KO7::$log->add(KO7_Log::DEBUG, kohana::debug( $this -> input -> post() )); 
+			//KO7::$log->add(KO7_Log::DEBUG, kohana::debug( $this -> request -> post() )); 
 			
-			$sourceregion = ORM::factory('region', $this -> input -> post('sourceregion_id'));			
-			$destregion = ORM::factory('region',   $this -> input -> post('destregion_id') );			
-			$cfgkingdomproject = ORM::factory('cfgkingdomproject', $this -> input -> post('cfgkingdomproject_id') );			
-			$structure_type  = ORM::factory('structure_type', $this -> input -> post('structure_type_id') );
-			$sourcestructure = ORM::factory('structure', $this ->input -> post( 'structure_id') );
+			$sourceregion = ORM::factory('region', $this -> request -> post('sourceregion_id'));			
+			$destregion = ORM::factory('region',   $this -> request -> post('destregion_id') );			
+			$cfgkingdomproject = ORM::factory('cfgkingdomproject', $this -> request -> post('cfgkingdomproject_id') );			
+			$structure_type  = ORM::factory('structure_type', $this -> request -> post('structure_type_id') );
+			$sourcestructure = ORM::factory('structure', $this ->request -> post( 'structure_id') );
 			
 			$result = CfgKingdomproject_Model::checkprojectfeasibility( 
 				$cfgkingdomproject, 
@@ -1228,7 +1228,7 @@ function info_laws( $region_id  )
 			
 			//KO7::$log->add(KO7_Log::DEBUG, kohana::debug( $result )); 
 			
-			$result['position'] = $this -> input -> post('position');
+			$result['position'] = $this -> request -> post('position');
 			
 			echo json_encode( $result ); 
 		}

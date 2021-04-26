@@ -13,9 +13,9 @@ class Controller_Newchat extends Controller_Template {
 		
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		if ( is_null( $char ) ) 
-			url::redirect( '/page/display/notauthorizedpage' );
+			HTTP::redirect( '/page/display/notauthorizedpage' );
 				
-		if ($this -> input -> get('type') == 'side')
+		if ($this -> request -> param('type') == 'side')
 			$this -> template = View::factory('template/sidechat');
 		
 		$view = View::factory('newchat/freechat');
@@ -26,9 +26,9 @@ class Controller_Newchat extends Controller_Template {
 		$chatban = Model_Character::get_stat_d(	$char -> id, 'chatban', null, null );
 		if ( $chatban -> loaded and $chatban -> stat1 > time())
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". 
 				__('character.bannedfromchat', date("d-m-y H:i:s", $chatban -> stat1), $chatban -> stat2 ). "</div>");			
-			url::redirect('region/view/');
+			HTTP::redirect('region/view/');
 		}		
 		
 		require_once( "application/libraries/vendors/phpfreechat-1.7/src/phpfreechat.class.php");
@@ -94,16 +94,16 @@ class Controller_Newchat extends Controller_Template {
 		
 		if ( is_null ( $currentregion ) )		
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
+			HTTP::redirect('region/view/');
 		}		
 		
 		$chatban = Model_Character::get_stat_d(	$char -> id, 'chatban', null, null );
 		if ( $chatban -> loaded and $chatban -> stat1 > time())
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". 
 				__('character.bannedfromchat', date("d-m-y H:i:s", $chatban -> stat1), $chatban -> stat2 ). "</div>");			
-			url::redirect('region/view/');
+			HTTP::redirect('region/view/');
 		}
 		
 		$kingdom = ORM::factory('kingdom', $currentregion -> kid );
@@ -162,8 +162,8 @@ class Controller_Newchat extends Controller_Template {
 		
 		if ( !$group -> loaded or $group -> search_a_member( $char -> id ) == false )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
+			HTTP::redirect('region/view/');
 		}
 		
 		$params["isadmin"] = false;

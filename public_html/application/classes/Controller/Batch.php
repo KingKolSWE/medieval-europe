@@ -26,7 +26,7 @@ class Controller_Batch extends Controller_Template
 
 
 		// get regions
-		$regions = Database::instance() -> query ('SELECT kingdom_id, id, name, status FROM regions group by kingdom_id');
+		$regions = Database::instance() -> query (Database::SELECT, 'SELECT kingdom_id, id, name, status FROM regions group by kingdom_id');
 		foreach($regions AS $row) {
 			//print_r($row);
 
@@ -53,7 +53,7 @@ class Controller_Batch extends Controller_Template
 		if(!empty($region) && !empty($item) && !empty($quantity)) {
 			$sql = "INSERT INTO `items` (`id`, `cfgitem_id`, `character_id`, `region_id`, `structure_id`, `npc_id`, `seller_id`, `lend_id`, `status`, `recipient_id`, `equipped`, `price`, `mindmg`, `maxdmg`, `persistent`, `defense`, `quantity`, `quality`, `salepostdate`, `tax_citizen`, `tax_neutral`, `tax_friendly`, `tax_allied`, `sendorder`, `color`, `hexcolor`, `locked`, `param1`, `param2`, `param3`) VALUES (NULL, '" . $item . "', NULL, '" . $region . "', NULL, NULL, NULL, NULL, 'New', NULL, 'unequipped', NULL, NULL, NULL, '0', NULL, '" . $quantity . "', '100.00', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL);";
 			//echo "<br>\n";
-			Database::instance() -> query ($sql);
+			Database::instance() -> query (Database::SELECT, $sql);
 		}
 	}
 
@@ -65,19 +65,19 @@ class Controller_Batch extends Controller_Template
 
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
 		try {
-			Database::instance() -> query("set autocommit = 0");
-			Database::instance() -> query("start transaction");
-			Database::instance() -> query("begin");
+			Database::instance() -> query(Database::UPDATE, "set autocommit = 0");
+			Database::instance() -> query(Database::UPDATE, "start transaction");
+			Database::instance() -> query(Database::UPDATE, "begin");
 			Batch_Model::mergeregions($securitykey, $regionname1, $regionname2, $resourcetomantain, $climatosave);
 
 			if (!$simulate)
 			{
-				Database::instance() -> query('commit');
+				Database::instance() -> query(Database::UPDATE, 'commit');
 				KO7::$log->add(KO7_Log::INFO, "Committed.");
 			}
 			else
 			{
-				Database::instance() -> query('rollback');
+				Database::instance() -> query(Database::UPDATE, 'rollback');
 				KO7::$log->add(KO7_Log::INFO, "Rollbacked.");
 			}
 		} catch (Exception $e)
@@ -86,7 +86,7 @@ class Controller_Batch extends Controller_Template
 			var_dump($e -> getTraceAsString());
 			KO7::$log->add(KO7_Log::ERROR, $e->getMessage());
 			KO7::$log->add(KO7_Log::ERROR, 	"-> An error occurred, rollbacking.");
-			Database::instance() -> query("rollback");
+			Database::instance() -> query(Database::UPDATE, "rollback");
 		}
 
 	}
@@ -96,19 +96,19 @@ class Controller_Batch extends Controller_Template
 		$this -> auto_render = false;
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
 		try {
-			Database::instance() -> query("set autocommit = 0");
-			Database::instance() -> query("start transaction");
-			Database::instance() -> query("begin");
+			Database::instance() -> query(Database::UPDATE, "set autocommit = 0");
+			Database::instance() -> query(Database::UPDATE, "start transaction");
+			Database::instance() -> query(Database::UPDATE, "begin");
 			Batch_Model::respawnnpcs($securitykey);
 			KO7::$log->add(KO7_Log::INFO, "Committing...");
-			Database::instance() -> query('commit');
+			Database::instance() -> commit();
 			KO7::$log->add(KO7_Log::INFO, "Committed.");
 		} catch (Exception $e)
 		{
 			var_dump($e -> getMessage());
 			KO7::$log->add(KO7_Log::ERROR, $e->getMessage());
 			KO7::$log->add(KO7_Log::ERROR, 	"-> An error occurred, rollbacking.");
-			Database::instance() -> query("rollback");
+			Database::instance() -> rollback();
 		}
 	}
 
@@ -136,7 +136,7 @@ class Controller_Batch extends Controller_Template
 	function takedoubloons() {
 
 			if (!Auth::instance()->logged_in('admin'))
-				url::redirect('/user/login');
+				HTTP::redirect('/user/login');
 
 				if(empty($_REQUEST['id'])) {
 					die('missing id');
@@ -168,8 +168,8 @@ class Controller_Batch extends Controller_Template
 					// check if char has enough doubloons
 					if ( $request -> character -> get_item_quantity( 'doubloon' ) < 150 )
 					{
-						Session::set_flash('user_message', "<div class=\"error_msg\">Il char non ha 150 dobloni.</div>");
-						url::redirect('admin/wardrobeapprovalrequests');
+						Session::instance()->set('user_message', "<div class=\"error_msg\">Il char non ha 150 dobloni.</div>");
+						HTTP::redirect('admin/wardrobeapprovalrequests');
 					}
 					// muovi immagini nella directory corretta
 
@@ -284,11 +284,11 @@ class Controller_Batch extends Controller_Template
 	{
 		$this -> auto_render = false;
 
-		$characters_plague_delete = Database::instance() -> query( " delete from character_stats where name ='disease' and param1='plague'; ");
+		$characters_plague_delete = Database::instance() -> query( Database::DELETE, " delete from character_stats where name ='disease' and param1='plague'; ");
 
 					// stabilisce quanti giocatori per ogni regno devono essere infettati (10%)
 
-					$characters_kingdom = Database::instance() -> query( "
+					$characters_kingdom = Database::instance() -> query(Database::SELECT, "
 						select r.kingdom_id,truncate(count(*)/100*7, 0) as count
 						from characters c
 						left outer join regions r on r.id=c.region_id
@@ -304,7 +304,7 @@ class Controller_Batch extends Controller_Template
 					//");
 
 					//metto il numero di regni attivi nella variabile per usarla nel ciclo
-					$rset = Database::instance() -> query(   "
+					$rset = Database::instance() -> query(Database::SELECT,   "
 					select * from kingdoms_v;
 					" ) ;
 
@@ -321,7 +321,7 @@ class Controller_Batch extends Controller_Template
 					$totalitem +=1;
 
 					//inserisco in $temp tutti i char id del regno selezionato a questo giro
-					$temp = Database::instance() -> query("select c.id from characters c
+					$temp = Database::instance() -> query(Database::SELECT, "select c.id from characters c
 							left outer join regions r on r.id=c.region_id
 							where r.kingdom_id= ". $row -> kingdom_id . "
 							ORDER BY RAND()

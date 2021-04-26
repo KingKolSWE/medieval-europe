@@ -32,8 +32,8 @@ class Controller_Court extends Controller_Template
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'opencrimeprocedure') )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 		
 		}
@@ -41,34 +41,34 @@ class Controller_Court extends Controller_Template
 		{					
 			//var_dump($_POST); exit; 		
 			
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'opencrimeprocedure') )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			
 			$ca = Character_Action_Model::factory("opencrimeprocedure");		
 			$par[0] = $character;
 			$par[1] = ORM::factory("character") -> 
-				where ( array ( 'name' => $this -> input -> post ('target') ) ) -> find(); 
-			$par[2] = $this -> input -> post('summary' );
+				where ( array ( 'name' => $this -> request -> post ('target') ) ) -> find(); 
+			$par[2] = $this -> request -> post('summary' );
 			$par[3] = $structure;
-			$par[4] = $this -> input -> post('trialurl' );
+			$par[4] = $this -> request -> post('trialurl' );
 			
-			$form['target'] = $this->input->post('target');
-			$form['summary'] = $this->input->post('summary');			
-			$form['trialurl'] = $this->input->post('trialurl');			
+			$form['target'] = $this->request->post('target');
+			$form['summary'] = $this->request->post('summary');			
+			$form['trialurl'] = $this->request->post('trialurl');			
 
 			if ( $ca->do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); 							
-				url::redirect('court/listcrimeprocedures/' . $structure -> id);
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); 							
+				HTTP::redirect('court/listcrimeprocedures/' . $structure -> id);
 			}	
 			else	
 			{ 			
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 			}
 		
 		}
@@ -104,8 +104,8 @@ class Controller_Court extends Controller_Template
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 			'private', 'listcrimeprocedure') )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 		
 		$db = Database::instance();
@@ -168,8 +168,8 @@ class Controller_Court extends Controller_Template
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'editcrimeprocedure') )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			
 			$crimeprocedure = ORM::factory('character_sentence', $crimeprocedure_id ); 		
@@ -180,30 +180,30 @@ class Controller_Court extends Controller_Template
 		else
 		{
 			
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'editcrimeprocedure' ) )	
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			
-			$crimeprocedure = ORM::factory('character_sentence', $this -> input -> post('crimeprocedure_id')); 		
+			$crimeprocedure = ORM::factory('character_sentence', $this -> request -> post('crimeprocedure_id')); 		
 			
 			if ( $crimeprocedure -> status != 'new' )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures_court.procedurenotvalid'). "</div>");
-				url::redirect('/court/listcrimeprocedures/' . $structure -> id ); 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures_court.procedurenotvalid'). "</div>");
+				HTTP::redirect('/court/listcrimeprocedures/' . $structure -> id ); 
 			}
 			
 			
-			$crimeprocedure -> text = $this -> input -> post('summary');
-			$crimeprocedure -> trialurl = $this -> input -> post('trialurl');
+			$crimeprocedure -> text = $this -> request -> post('summary');
+			$crimeprocedure -> trialurl = $this -> request -> post('trialurl');
 			$crimeprocedure -> save();
-			Session::set_flash('user_message', "<div class=\"info_msg\">". 
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". 
 				__('structures_court.info-modifiedok') . "</div>");			
-			url::redirect('/court/listcrimeprocedures/' . $structure_id ); 
+			HTTP::redirect('/court/listcrimeprocedures/' . $structure_id ); 
 		}
 				
 		$submenu = View::factory( 'structure/' . $structure -> getSubmenu() );
@@ -247,8 +247,8 @@ class Controller_Court extends Controller_Template
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'cancelcrimeprocedure' ) )		
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			$crimeprocedure = ORM::factory('character_sentence', $crimeprocedure_id ); 		
 			$form['cancelreason'] = $crimeprocedure -> cancelreason;
@@ -257,30 +257,30 @@ class Controller_Court extends Controller_Template
 		else
 		{					
 			
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'cancelcrimeprocedure' ) )		
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			
 			
-			$crimeprocedure = ORM::factory('character_sentence', $this -> input -> post('crimeprocedure_id')); 		
+			$crimeprocedure = ORM::factory('character_sentence', $this -> request -> post('crimeprocedure_id')); 		
 			
 			if ( $crimeprocedure -> status != 'new' )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures_court.procedurenotvalid'). "</div>");
-				url::redirect('/court/listcrimeprocedures/' . $structure -> id ); 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures_court.procedurenotvalid'). "</div>");
+				HTTP::redirect('/court/listcrimeprocedures/' . $structure -> id ); 
 			}			
 			
-			$crimeprocedure -> cancelreason = $this -> input -> post('cancelreason' ) ; 
+			$crimeprocedure -> cancelreason = $this -> request -> post('cancelreason' ) ; 
 			$crimeprocedure -> status = 'canceled' ; 			
 			$crimeprocedure -> save();
-			Session::set_flash('user_message', "<div class=\"info_msg\">". 
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". 
 				__('structures_court.info-canceledok') . "</div>");	
-			url::redirect('/court/listcrimeprocedures/' . $structure_id ); 
+			HTTP::redirect('/court/listcrimeprocedures/' . $structure_id ); 
 		}
 		
 		
@@ -317,8 +317,8 @@ class Controller_Court extends Controller_Template
 		$crimeprocedure = ORM::factory('character_sentence', $crimeprocedure_id ); 
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'viewcrimeprocedure' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 		
 		if ( !$crimeprocedure -> character -> loaded )
@@ -359,8 +359,8 @@ class Controller_Court extends Controller_Template
 		
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'writearrestwarrant' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 		
 		$ca = Character_Action_Model::factory("writearrestwarrant");				
@@ -370,13 +370,13 @@ class Controller_Court extends Controller_Template
 		
 		if ( $ca -> do_action( $par,  $message ) )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); 			
-			url::redirect('/court/listcrimeprocedures/' . $structure_id ); 
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); 			
+			HTTP::redirect('/court/listcrimeprocedures/' . $structure_id ); 
 		}	
 		else
 		{ 			
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('/court/listcrimeprocedures/' . $structure_id ); 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('/court/listcrimeprocedures/' . $structure_id ); 
 		}
 	
 	}	
@@ -403,41 +403,41 @@ class Controller_Court extends Controller_Template
 			$structure = StructureFactory_Model::create( null, $structure_id );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'imprison' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 		
 			$crimeprocedure = ORM::factory('character_sentence', $crimeprocedure_id );			
 		}
 		else
 		{			
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'imprison' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			
-			$crimeprocedure = ORM::factory('character_sentence', $this -> input -> post ('crimeprocedure_id' ));			
+			$crimeprocedure = ORM::factory('character_sentence', $this -> request -> post ('crimeprocedure_id' ));			
 			$par[0] = $character;
 			$par[1] = $crimeprocedure;
-			$par[2] = intval($this -> input -> post('hours')); 
-			$par[3] = ORM::factory('structure', $this -> input -> post('prison') ); 
+			$par[2] = intval($this -> request -> post('hours')); 
+			$par[3] = ORM::factory('structure', $this -> request -> post('prison') ); 
 			$par[4] = ORM::factory('structure', $crimeprocedure -> structure_id ); 
 		
-			$form['hours'] = $this -> input -> post('hours'); 
-			$form['prison'] = $this -> input -> post('prison'); 
+			$form['hours'] = $this -> request -> post('hours'); 
+			$form['prison'] = $this -> request -> post('prison'); 
 			
 			$ca = Character_Action_Model::factory("imprison");		
 
 			if ( $ca -> do_action( $par,  $message ) )
 			{ 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");				
-				url::redirect ( '/court/listcrimeprocedures/' . $par[4] -> id );				
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");				
+				HTTP::redirect ( '/court/listcrimeprocedures/' . $par[4] -> id );				
 			}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");												
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");												
 			}
 		
 		}
@@ -504,43 +504,43 @@ class Controller_Court extends Controller_Template
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}			
 		}
 		else
 		{	
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			$ca = Character_Action_Model::factory("assignrolerp");		
 			//var_dump( $_POST ); exit;
 			// Characther che nomina
 			$par[0] = $character;
 			// Character nominato
-			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->input->post('nominated')) )->find(); 
+			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->request->post('nominated')) )->find(); 
 			// Tag ruolo
-			$par[2] = $this->input->post( 'role' );
+			$par[2] = $this->request->post( 'role' );
 			// Regione dove avviene la nomina
-			$par[3] = ORM::factory( 'region', $this->input->post( 'region_id' ) ); 
+			$par[3] = ORM::factory( 'region', $this->request->post( 'region_id' ) ); 
 			// Struttura da dove avviene la nomina
-			$par[4] = ORM::factory( 'structure', $this->input->post( 'structure_id' ) );
+			$par[4] = ORM::factory( 'structure', $this->request->post( 'structure_id' ) );
 			// Nome del feudo da associare al titolo
-			$par[5] = $this->input->post( 'place' );
+			$par[5] = $this->request->post( 'place' );
 			
 			if ( $ca->do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect('court/assign_rolerp/' . $structure->id);
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect('court/assign_rolerp/' . $structure->id);
 			}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-				url::redirect ( 'court/assign_rolerp/' . $structure->id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+				HTTP::redirect ( 'court/assign_rolerp/' . $structure->id );
 			}
 		}
 		

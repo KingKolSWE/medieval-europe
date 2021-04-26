@@ -26,38 +26,38 @@ class Controller_Market extends Controller_Template
 			$structure = StructureFactory_Model::create( null, $structure_id );
 			if ($structure -> loaded == false )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
-				url::redirect('region/view/');		
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
+				HTTP::redirect('region/view/');		
 			}
 			$vat = Region_Model::get_tax( $structure -> region, 'valueaddedtax' );
 			//var_dump($vat); exit;
 		}		
 		else
 		{		
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			$vat = Region_Model::get_tax( $structure -> region, 'valueaddedtax' );			
 			
 			// creo un oggetto della classe di item scelta.
-			$cfgitem = Item_Model::factory( $this -> input-> post( 'item_id' ), null );
+			$cfgitem = Item_Model::factory( $this -> request-> post( 'item_id' ), null );
 			if ( is_null ( $cfgitem ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
-				url::redirect('region/view/');		
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
+				HTTP::redirect('region/view/');		
 			}
 			
 			$ca = Character_Action_Model::factory("marketsellitem");		
 			$par[0] = $structure;
 			$par[1] = $character; 
-			$par[2] = $cfgitem -> find( $this -> input -> post( 'item_id') );
-			$par[3] = $this -> input -> post( 'quantity' );			
-			$par[4] = $this -> input -> post( 'sellingprice' );			
+			$par[2] = $cfgitem -> find( $this -> request -> post( 'item_id') );
+			$par[3] = $this -> request -> post( 'quantity' );			
+			$par[4] = $this -> request -> post( 'sellingprice' );			
 			$par[5] = $vat;
-			$par[6] = $this -> input -> post( 'recipient'); 
+			$par[6] = $this -> request -> post( 'recipient'); 
 			
 			if ( $ca->do_action( $par,  $message ) )
-				{Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); }	
+				{Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); }	
 			else	
-				{ Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); }
+				{ Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); }
 		
 			$view->structure = $par[0];		
 		
@@ -89,62 +89,62 @@ class Controller_Market extends Controller_Template
 
 		// creo un oggetto della classe di item scelta.
 		
-		$cfgitem = Item_Model::factory( $this -> input-> post( 'item_id' ), null );		
+		$cfgitem = Item_Model::factory( $this -> request-> post( 'item_id' ), null );		
 		if ( is_null ( $cfgitem ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
-			url::redirect('region/view/');		
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
+			HTTP::redirect('region/view/');		
 		}
 		
 		// buy item
 		
-		if  ( $this -> input -> post('buy') )
+		if  ( $this -> request -> post('buy') )
 		{
 			$ca = Character_Action_Model::factory("marketbuyitem");								
 			
-			$par[0] = ORM::factory("structure",  $this->input->post( 'structure_id' ) );
+			$par[0] = ORM::factory("structure",  $this->request->post( 'structure_id' ) );
 			$par[1] = Model_Character::get_info( Session::instance()->get('char_id') );
-			$par[2] = $cfgitem -> find( $this -> input -> post( 'item_id') );
-			$par[3] = $this -> input -> post( 'quantity' );			
+			$par[2] = $cfgitem -> find( $this -> request -> post( 'item_id') );
+			$par[3] = $this -> request -> post( 'quantity' );			
 		}
 		
 		// cancel sale
 		
-		if  ( $this -> input -> post('marketcancelsell') )
+		if  ( $this -> request -> post('marketcancelsell') )
 		{
 			
 			$ca = Character_Action_Model::factory("marketcancellsell");		
 			
-			$par[0] = ORM::factory("structure",  $this->input->post( 'structure_id' ) );
+			$par[0] = ORM::factory("structure",  $this->request->post( 'structure_id' ) );
 			$par[1] = Model_Character::get_info( Session::instance()->get('char_id') );
-			$par[2] = $cfgitem ->find( $this->input->post( 'item_id') );
-			$par[3] = $this->input->post( 'quantity' );			
+			$par[2] = $cfgitem ->find( $this->request->post( 'item_id') );
+			$par[3] = $this->request->post( 'quantity' );			
 		}
 		
-		if  ( $this -> input -> post('confiscate') )
+		if  ( $this -> request -> post('confiscate') )
 		{
 			 // Disabled
-                        //Session::set_flash('user_message', "<div class=\"error_msg\">This function is temporary disabled.</div>");
-                        ////url::redirect( 'market/buy/' . $this -> input -> post( 'structure_id' ));
+                        //Session::instance()->set('user_message', "<div class=\"error_msg\">This function is temporary disabled.</div>");
+                        ////HTTP::redirect( 'market/buy/' . $this -> request -> post( 'structure_id' ));
 
 			$ca = Character_Action_Model::factory("confiscateitem");		
 			
 			$char = Model_Character::get_info( Session::instance()->get('char_id') );
-			$item = ORM::factory('item', $this -> input -> post('item_id'));
+			$item = ORM::factory('item', $this -> request -> post('item_id'));
 			$seller = ORM::factory('character', $item -> seller_id );			
 			$par[0] = $char;
 			$par[1] = $seller;
 			$par[2] = $item;
-			$par[3] = intval($this->input->post( 'quantity' ));			
-			$par[4] = $this->input->post( 'confiscatereason' );	
+			$par[3] = intval($this->request->post( 'quantity' ));			
+			$par[4] = $this->request->post( 'confiscatereason' );	
 		}		
 		
 		if ( $ca -> do_action( $par,  $message ) )
-		 	{Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); }	
+		 	{Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); }	
 		else	
-			{Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); }
+			{Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); }
 		
-		url::redirect( 'market/buy/' . $this -> input -> post( 'structure_id' ));
+		HTTP::redirect( 'market/buy/' . $this -> request -> post( 'structure_id' ));
 			
 	}
 		
@@ -172,8 +172,8 @@ class Controller_Market extends Controller_Template
 		// controllo permessi		
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'public' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}		
 		$vat = Region_Model::get_appliable_tax( $structure -> region, 'valueaddedtax', $character );
 		
@@ -233,7 +233,7 @@ class Controller_Market extends Controller_Template
 		if ( request::is_ajax() )
 		{
 			KO7::$log->add(KO7_Log::DEBUG, 'Received an ajax call.'); 
-			KO7::$log->add(KO7_Log::DEBUG, $this -> input -> post() ); 
+			KO7::$log->add(KO7_Log::DEBUG, $this -> request -> post() ); 
 			$this -> auto_render = false;
 			
 			$isadmin = Auth::instance()->logged_in('admin');
@@ -243,13 +243,13 @@ class Controller_Market extends Controller_Template
 			
 			if ( !$isadmin and 
 			(
-				$doubloons -> id == $this -> input -> post('id' ) 
+				$doubloons -> id == $this -> request -> post('id' ) 
 				or 
-				$silvercoins -> id == $this -> input -> post('id' ) 
+				$silvercoins -> id == $this -> request -> post('id' ) 
 			))
 				$id = 1;
 			else
-				$id = $this -> input -> post( 'id' ); 
+				$id = $this -> request -> post( 'id' ); 
 			
 			$db = Database::instance();
 			$data = $db -> query( "
@@ -302,7 +302,7 @@ class Controller_Market extends Controller_Template
 	
 	function info( $structure_id )
 	{
-		url::redirect( '/structure/info/' . $structure_id );
+		HTTP::redirect( '/structure/info/' . $structure_id );
 	}
 	
 }

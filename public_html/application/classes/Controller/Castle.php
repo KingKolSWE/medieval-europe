@@ -26,29 +26,29 @@ class Controller_Castle extends Controller_Template
 			//controllo accesso					
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'valueaddedtax' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}								
 		}
 		else
 		{
 		
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			
 			//controllo accesso			
 		
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'valueaddedtax' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}								
 			
-			$tax = ORM::factory('region_tax', $this -> input -> post('tax_id') ); 			
-			$hostile = $this -> input -> post('hostile');
-			$neutral = $this -> input -> post('neutral');
-			$friendly = $this -> input -> post('friendly');
-			$allied = $this -> input -> post('allied');
-			$citizen = $this -> input -> post('citizen');
+			$tax = ORM::factory('region_tax', $this -> request -> post('tax_id') ); 			
+			$hostile = $this -> request -> post('hostile');
+			$neutral = $this -> request -> post('neutral');
+			$friendly = $this -> request -> post('friendly');
+			$allied = $this -> request -> post('allied');
+			$citizen = $this -> request -> post('citizen');
 			
 			if (
 				($hostile < 0 or $hostile > 100) or 
@@ -58,11 +58,11 @@ class Controller_Castle extends Controller_Template
 				($citizen < 0 or $citizen > 100)
 			)
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('taxes.error-taxvaluesnotcorrect') . "</div>");				
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('taxes.error-taxvaluesnotcorrect') . "</div>");				
 			}
 			elseif ( $tax -> timestamp > time() - ( self::TAXCHANGECOOLDOWN * 24 * 3600 ) )
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('taxes.error-taxchangecooldown', self::TAXCHANGECOOLDOWN) . "</div>");
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('taxes.error-taxchangecooldown', self::TAXCHANGECOOLDOWN) . "</div>");
 			}
 			else
 			{
@@ -108,7 +108,7 @@ class Controller_Castle extends Controller_Template
 					'evidence' );
 
 					
-				Session::set_flash('user_message', "<div class=\"info_msg\">". __('taxes.info-taxesupdated') . "</div>");
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('taxes.info-taxesupdated') . "</div>");
 			
 			}
 			
@@ -150,8 +150,8 @@ class Controller_Castle extends Controller_Template
 	
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'revoke_role' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}								
 		
 		$par[0] = $character;
@@ -163,13 +163,13 @@ class Controller_Castle extends Controller_Template
 		
 		if ( $rec )
 		{		
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");								
-			url::redirect( 'castle/list_subordinates/' . $structure -> id );
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");								
+			HTTP::redirect( 'castle/list_subordinates/' . $structure -> id );
 		}
 		else
 		{					
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");				
-			url::redirect( 'castle/list_subordinates/' . $structure -> id );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");				
+			HTTP::redirect( 'castle/list_subordinates/' . $structure -> id );
 		}			
 		
 		$view -> role = $role;
@@ -218,44 +218,44 @@ class Controller_Castle extends Controller_Template
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'assignrole' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}			
 		
 		}		
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id'));			
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));			
 			
 			// controllo permessi		
 			
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'assignrole' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 				
 			$ca = Character_Action_Model::factory("assignrole");					
 			$par[0] = $character;
 			$par[1] = ORM::factory('character' ) -> where ( array( 
-				'name' => $this -> input -> post('nominated')) ) -> find(); 
-			$par[2] = $this -> input -> post('role');
-			$par[3] = ORM::factory('region',  $this -> input -> post('region') );		
-			$par[4] = ORM::factory('structure', $this -> input -> post( 'structure_id' ) ); 
+				'name' => $this -> request -> post('nominated')) ) -> find(); 
+			$par[2] = $this -> request -> post('role');
+			$par[3] = ORM::factory('region',  $this -> request -> post('region') );		
+			$par[4] = ORM::factory('structure', $this -> request -> post( 'structure_id' ) ); 
 			
 			$rc = $ca -> do_action( $par,  $message );				
 			KO7::$log->add(KO7_Log::INFO, '-> assignrole ***commit***.');
 			
 			if ( $rc )
 			{ 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");					
-				url::redirect ( 'castle/assignrole/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");					
+				HTTP::redirect ( 'castle/assignrole/' . $structure -> id );
 			}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-				url::redirect ( 'castle/assignrole/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+				HTTP::redirect ( 'castle/assignrole/' . $structure -> id );
 			}
 				
 		}
@@ -293,8 +293,8 @@ class Controller_Castle extends Controller_Template
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 			'private', 'list_subordinates' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}			
 	
 		$subordinates = null;
@@ -368,8 +368,8 @@ class Controller_Castle extends Controller_Template
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 			'private', 'propertyreport' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}	
 
 		$controlledregions = $character -> get_controlledregions();		
@@ -428,8 +428,8 @@ function basicresourcereport( $structure_id )
 	if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 		'private', 'basicresourcereport' ) )
 	{
-		Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-		url::redirect('region/view/');
+		Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+		HTTP::redirect('region/view/');
 	}	
 
 	$controlledregions = $character -> get_controlledregions();
@@ -518,21 +518,21 @@ function basicresourcereport( $structure_id )
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}			
 		}
 		else
 		{	
 			
-			$structure = StructureFactory_Model::create( null, $this->input->post('structure_id'));
+			$structure = StructureFactory_Model::create( null, $this->request->post('structure_id'));
 			
 			// controllo permessi		
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			
 			$ca = Character_Action_Model::factory("assignrolerp");		
@@ -540,25 +540,25 @@ function basicresourcereport( $structure_id )
 			// Characther che nomina
 			$par[0] = $character;
 			// Character nominato
-			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->input->post('nominated')) )->find(); 
+			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->request->post('nominated')) )->find(); 
 			// Tag ruolo
-			$par[2] = $this->input->post( 'role' );
+			$par[2] = $this->request->post( 'role' );
 			// Regione dove avviene la nomina
-			$par[3] = ORM::factory( 'region', $this->input->post( 'region_id' ) ); 
+			$par[3] = ORM::factory( 'region', $this->request->post( 'region_id' ) ); 
 			// Struttura da dove avviene la nomina
-			$par[4] = ORM::factory( 'structure', $this->input->post( 'structure_id' ) );
+			$par[4] = ORM::factory( 'structure', $this->request->post( 'structure_id' ) );
 			// Nome del feudo da associare al titolo
-			$par[5] = $this->input->post( 'place' );
+			$par[5] = $this->request->post( 'place' );
 			
 			if ( $ca->do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect('castle/assign_rolerp/' . $structure->id);
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect('castle/assign_rolerp/' . $structure->id);
 			}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-				url::redirect ( 'castle/assign_rolerp/' . $structure->id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+				HTTP::redirect ( 'castle/assign_rolerp/' . $structure->id );
 			}
 		}
 		

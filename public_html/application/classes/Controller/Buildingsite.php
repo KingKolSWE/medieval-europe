@@ -26,8 +26,8 @@ class Controller_Buildingsite extends Controller_Template
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
 				'public', 'manage' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 		
 			$project = ORM::factory('kingdomproject') ->where ( array( 'structure_id' => $structure_id ) ) -> find() ;
@@ -37,12 +37,12 @@ class Controller_Buildingsite extends Controller_Template
 		else
 		{
 		
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
 				'public', 'manage' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			$project = ORM::factory('kingdomproject') ->where ( array( 'structure_id' => $structure->id ) ) -> find() ;
 			$info = $project -> get_info();	
@@ -50,22 +50,22 @@ class Controller_Buildingsite extends Controller_Template
 			$o = Character_Action_Model::factory("workonproject");
 			$par[0] = $character;
 			$par[1] = $structure;				
-			$par[2] = $this->input->post('hours');
+			$par[2] = $this->request->post('hours');
 			$par[3] = $project;
-			$par[4] = $this->input->post('workingtype');
+			$par[4] = $this->request->post('workingtype');
 		
 			$rec = $o->do_action( $par, $message );			
 
 			if ( $rec )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect('/region/view/' . $character -> position_id );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect('/region/view/' . $character -> position_id );
 				return;
 				
 			}
 			else
 			{					
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");		
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");		
 			}			
 		}
 		

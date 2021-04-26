@@ -21,13 +21,13 @@ class Controller_Jobs extends Controller_Template
 		
 		if ( $rc )
 		{				
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");	
-			url::redirect( '/character/myjobs'); 
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");	
+			HTTP::redirect( '/character/myjobs'); 
 		}
 		else		
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( '/character/myjobs'); 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( '/character/myjobs'); 
 		}
 	}
 	
@@ -47,13 +47,13 @@ class Controller_Jobs extends Controller_Template
 		
 		if ( $rc )
 		{				
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");	
-			url::redirect( '/character/myjobs'); 
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");	
+			HTTP::redirect( '/character/myjobs'); 
 		}
 		else		
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( '/character/myjobs'); 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( '/character/myjobs'); 
 		}
 	}
 	
@@ -73,13 +73,13 @@ class Controller_Jobs extends Controller_Template
 		
 		if ( $rc )
 		{				
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");	
-			url::redirect( '/character/myjobs'); 
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");	
+			HTTP::redirect( '/character/myjobs'); 
 		}
 		else		
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( '/character/myjobs'); 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( '/character/myjobs'); 
 		}
 	}
 
@@ -101,13 +101,13 @@ class Controller_Jobs extends Controller_Template
 		
 		if ( $rc )
 		{				
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");	
-			url::redirect( '/character/myjobs'); 
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");	
+			HTTP::redirect( '/character/myjobs'); 
 		}
 		else		
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( '/character/myjobs'); 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( '/character/myjobs'); 
 		}
 	}
 	

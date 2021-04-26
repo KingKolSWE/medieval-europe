@@ -11,16 +11,16 @@ class Controller_FishShoal extends Controller_Template
 		// Controllo che la struttura sia effettivamente un branco di pesci
 		if ($structure->structure_type->type <> 'fish_shoal' ) 
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotvalid') . "</div>");
-			url::redirect( "region/view/" . Session::instance()->get("char_id"));			
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotvalid') . "</div>");
+			HTTP::redirect( "region/view/" . Session::instance()->get("char_id"));			
 		}
 
 		// Controllo che il branco di pesci si trovi nello stesso
 		// nodo dove si trova il char
 		if ($structure->region_id <>  Model_Character::get_info( Session::instance()->get('char_id') ) -> position_id)
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotinregion') . "</div>");
-			url::redirect( "region/view/" . Session::instance()->get("char_id"));			
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotinregion') . "</div>");
+			HTTP::redirect( "region/view/" . Session::instance()->get("char_id"));			
 		}
 
 		// Se tutti i controlli vengono superati allora
@@ -33,9 +33,9 @@ class Controller_FishShoal extends Controller_Template
 				
 		$ca = Character_Action_Model::factory("fish");
 		if ( $ca->do_action( $par,  $message ) )
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");		
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");		
 		else		
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");		
-		url::redirect( "region/view");	
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");		
+		HTTP::redirect( "region/view");	
 	}
 }

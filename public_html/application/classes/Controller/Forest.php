@@ -13,16 +13,16 @@ class Controller_Forest extends Controller_Template
 		// Controllo che la struttura sia effettivamente una foresta
 		if ($structure->structure_type->type <> 'forest' ) 
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotvalid') . "</div>");
-			url::redirect( "region/view/" . Session::instance()->get("char_id"));			
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotvalid') . "</div>");
+			HTTP::redirect( "region/view/" . Session::instance()->get("char_id"));			
 		}
 
 		// Controllo che la foresta si trovi nello stesso
 		// nodo dove si trova il char
 		if ($structure->region_id <>  Model_Character::get_info( Session::instance()->get('char_id') ) -> position_id)
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotinregion') . "</div>");
-			url::redirect( "region/view/" . Session::instance()->get("char_id"));			
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotinregion') . "</div>");
+			HTTP::redirect( "region/view/" . Session::instance()->get("char_id"));			
 		}
 
 		// Se tutti i controlli vengono superati allora
@@ -31,10 +31,10 @@ class Controller_Forest extends Controller_Template
 		$char = ORM::factory( "character" )->find( Session::instance()->get("char_id") );
 		$ca_getwood = Character_Action_Model::factory("getwood");
 		if ( $ca_getwood->do_action( array( $structure, $char, $qta ),  $message ) )
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");		
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");		
 		else		
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");		
-		url::redirect( "region/view");	
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");		
+		HTTP::redirect( "region/view");	
 	}
 
 	function searchplant( $structure_id, $qta = 1 )
@@ -45,16 +45,16 @@ class Controller_Forest extends Controller_Template
 		// Controllo che la struttura sia effettivamente una foresta
 		if ($structure->structure_type->type <> 'forest' ) 
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotvalid') . "</div>");
-			url::redirect( "region/view/" . Session::instance()->get("char_id"));			
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotvalid') . "</div>");
+			HTTP::redirect( "region/view/" . Session::instance()->get("char_id"));			
 		}
 
 		// Controllo che la foresta si trovi nello stesso
 		// nodo dove si trova il char
 		if ($structure->region_id <>  Model_Character::get_info( Session::instance()->get('char_id') ) -> position_id)
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotinregion') . "</div>");
-			url::redirect( "region/view/" . Session::instance()->get("char_id"));			
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotinregion') . "</div>");
+			HTTP::redirect( "region/view/" . Session::instance()->get("char_id"));			
 		}
 
 		// Se tutti i controlli vengono superati allora
@@ -63,9 +63,9 @@ class Controller_Forest extends Controller_Template
 		$char = ORM::factory( "character" )->find( Session::instance()->get("char_id") );
 		$ca_getwood = Character_Action_Model::factory("searchplant");
 		if ( $ca_getwood->do_action( array( $structure, $char, $qta ),  $message ) )
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");		
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");		
 		else		
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");		
-		url::redirect( "region/view");	
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");		
+		HTTP::redirect( "region/view");	
 	}
 }

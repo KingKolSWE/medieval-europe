@@ -16,7 +16,7 @@ class Controller_Item extends Controller_Template
 		$o = ORM::factory('character', Session::instance()->get('char_id'));
 		$o->add_item( $tag, 1 );
 		
-		url::redirect( '/character/inventory' );
+		HTTP::redirect( '/character/inventory' );
 	
 	}
 	
@@ -41,7 +41,7 @@ class Controller_Item extends Controller_Template
 		else		
 			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");		
 		
-		url::redirect( request::referrer() );
+		HTTP::redirect( request::referrer() );
 		
 	}
 	
@@ -69,7 +69,7 @@ class Controller_Item extends Controller_Template
 		else		
 			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");		
 		
-		url::redirect( '/region/view' );
+		HTTP::redirect( '/region/view' );
 	
 	}
 	
@@ -96,7 +96,7 @@ class Controller_Item extends Controller_Template
 		else		
 			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");		
 		
-		url::redirect( request::referrer() );		
+		HTTP::redirect( request::referrer() );		
 		
 	}
 
@@ -120,7 +120,7 @@ class Controller_Item extends Controller_Template
 		else		
 			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");		
 		
-		url::redirect( request::referrer() );			
+		HTTP::redirect( request::referrer() );			
 		
 	}
 
@@ -146,7 +146,7 @@ class Controller_Item extends Controller_Template
 			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");	
 		else		
 			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");		
-		url::redirect( "character/inventory");			
+		HTTP::redirect( "character/inventory");			
 	}
 	
 	/**
@@ -168,7 +168,7 @@ class Controller_Item extends Controller_Template
 			{
 				Session::set_flash('user_message', 
 					"<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");		
-				url::redirect('region/view');				
+				HTTP::redirect('region/view');				
 			}
 			
 			$recipient = ORM::factory('character', $this -> input -> post('recipient_id')); 
@@ -178,7 +178,7 @@ class Controller_Item extends Controller_Template
 				Session::set_flash('user_message', 
 					"<div class=\"error_msg\">". __('ca_senditem.error-sourceandreceiverarethesame') 
 						. "</div>");					
-				url::redirect('item/senddoubloons/'. $recipient->id);
+				HTTP::redirect('item/senddoubloons/'. $recipient->id);
 			}				
 			
 			// log purchase 
@@ -212,12 +212,12 @@ class Controller_Item extends Controller_Template
 			{ 								
 				$char -> modify_doubloons( - $this -> input -> post('quantity'), 'doubloonsalefromadr', 'Doubloon Sale');
 				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect('item/senddoubloons/'.$recipient->id);
+				HTTP::redirect('item/senddoubloons/'.$recipient->id);
 			}
 			else
 			{ 								
 				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");				
-				url::redirect('item/senddoubloons/'.$recipient->id);
+				HTTP::redirect('item/senddoubloons/'.$recipient->id);
 			}	
 		
 		}
@@ -260,7 +260,7 @@ class Controller_Item extends Controller_Template
 			if ( !$item -> loaded )
 			{ 								
 				Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.error-itemnotfound') . "</div>");
-				url::redirect('region/view/');
+				HTTP::redirect('region/view/');
 			}
 			
 			$form['quantity'] = $item -> quantity;
@@ -284,7 +284,7 @@ class Controller_Item extends Controller_Template
 			if ( $ca -> do_action( $par, $message ) )
 			{ 								
 				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				HTTP::redirect('region/view/');
 			}
 			else
 			{ 								
@@ -323,7 +323,7 @@ class Controller_Item extends Controller_Template
 			if ( ! $item -> loaded or $item -> cfgitem -> category != 'scroll'  ) 
 			{
 				Session::set_flash('user_message', "<div class=\"info_msg\">". __('global.operation_not_allowed') . "</div>");
-				url::redirect ( $this -> input -> server( 'HTTP_REFERER' ) ); 
+				HTTP::redirect ( $this -> input -> server( 'HTTP_REFERER' ) ); 
 			}
 						
 			
@@ -370,7 +370,7 @@ class Controller_Item extends Controller_Template
 				{
 					Session::set_flash('user_message', "<div class=\"error_msg\">". 
 						__('charactions.item_notininventory') . "</div>");
-					url::redirect ( request::referrer() ); 			
+					HTTP::redirect ( request::referrer() ); 			
 				}
 							
 				// Controllo il char possieda almeno 5 punti di intelligenza
@@ -379,7 +379,7 @@ class Controller_Item extends Controller_Template
 				{
 					Session::set_flash('user_message', "<div class=\"error_msg\">". 
 						__('message.not_enough_int') . "</div>");
-					url::redirect ( request::referrer() ); 
+					HTTP::redirect ( request::referrer() ); 
 				}
 				
 				// Controllo che il container possieda un sigillo di ceralacca
@@ -387,7 +387,7 @@ class Controller_Item extends Controller_Template
 				if ( ! Model_Character::has_item( $char -> id, 'waxseal', 1 ) )
 				{
 					Session::set_flash('user_message', "<div class=\"error_msg\">". __('message.missing_waxseal') . "</div>");
-					url::redirect ( request::referrer() ); 
+					HTTP::redirect ( request::referrer() ); 
 				}
 				
 			}
@@ -427,7 +427,7 @@ class Controller_Item extends Controller_Template
 					
 					Session::set_flash('user_message', "<div class=\"info_msg\">". __('charactions.info-scrollwritten') . "</div>");
 					
-					url::redirect( request::referrer() );
+					HTTP::redirect( request::referrer() );
 				
 				}
 				else
@@ -480,7 +480,7 @@ class Controller_Item extends Controller_Template
 		else
 		{			
 			
-			$post = Validation::factory($this->input->post())
+			$post = Validation::factory($this->request->post())
 				->pre_filter('trim', TRUE)
 				->add_rules('to','required');				
 			
@@ -488,7 +488,7 @@ class Controller_Item extends Controller_Template
 			{	
 				$targetchar = ORM::factory('character')
 					-> where (
-						array('name' => $this->input->post('to'))						
+						array('name' => $this->request->post('to'))						
 					)
 					-> find()	;				
 				
@@ -497,14 +497,14 @@ class Controller_Item extends Controller_Template
 				if ( !$targetchar->loaded )
 				{
 					Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.error-characterunknown') ."</div>");
-					url::redirect ( 'item/exhibit/' . $item->id );
+					HTTP::redirect ( 'item/exhibit/' . $item->id );
 					return;
 				}
 				
 				if ( $item->cfgitem->tag != 'scroll_generic' )
 				{
 					Session::set_flash('user_message', "<div class=\"error_msg\">". __('charactions.only_generic_scroll') ."</div>");
-					url::redirect ( 'character/inventory' );
+					HTTP::redirect ( 'character/inventory' );
 					return;
 				}
 								
@@ -535,7 +535,7 @@ class Controller_Item extends Controller_Template
 				);
 				
 				Session::set_flash('user_message', "<div class=\"info_msg\">". __('charactions.info-scrollshown') ."</div>");				
-				url::redirect ( 'character/inventory' );
+				HTTP::redirect ( 'character/inventory' );
 				
 				return;				
 			}
@@ -572,7 +572,7 @@ class Controller_Item extends Controller_Template
 			if ( $item -> loaded == false )
 			{
 				Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.error-itemnotfound') . "</div>");
-				url::redirect ( $this -> input -> server( 'HTTP_REFERER' ) ); 				
+				HTTP::redirect ( $this -> input -> server( 'HTTP_REFERER' ) ); 				
 			}
 			
 			// Controllo subito che il char possieda una dye bowl
@@ -580,7 +580,7 @@ class Controller_Item extends Controller_Template
 			if ( ! Model_Character::has_item( $char -> id, 'dyebowl', 1) )
 			{
 				Session::set_flash('user_message', "<div class=\"error_msg\">". __('charactions.missing_dyebowl') . "</div>");
-				url::redirect ( $this -> input -> server( 'HTTP_REFERER' ) ); 
+				HTTP::redirect ( $this -> input -> server( 'HTTP_REFERER' ) ); 
 			}		
 			
 			$subm    = View::factory ('template/submenu');
@@ -673,7 +673,7 @@ class Controller_Item extends Controller_Template
 				// Torno all'inventario del char
 				
 				Session::set_flash('user_message', "<div class=\"info_msg\">". __('charactions.dye_ok') . "</div>");
-				url::redirect( '/character/inventory');
+				HTTP::redirect( '/character/inventory');
 			}
 			else	
 				$item = ORM::factory('item', $item_id );			
@@ -698,7 +698,7 @@ class Controller_Item extends Controller_Template
 		if ( $item -> cfgitem -> tag != 'cart_3' )
 		{
 			Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");				
-			url::redirect ( 'character/inventory' );
+			HTTP::redirect ( 'character/inventory' );
 		}
 		
 		$par[0] = $character;
@@ -710,12 +710,12 @@ class Controller_Item extends Controller_Template
 		if ( $ca -> do_action( $par,  $message ) )
 		{ 				
 			Session::set_flash('user_message', "<div class=\"info_msg\">". __($message) . "</div>");
-			url::redirect ( 'character/inventory' );
+			HTTP::redirect ( 'character/inventory' );
 		}	
 		else	
 		{ 
 			Session::set_flash('user_message', "<div class=\"error_msg\">". __($message) . "</div>");	
-			url::redirect ( 'character/inventory' );
+			HTTP::redirect ( 'character/inventory' );
 		}
 		
 	
@@ -741,12 +741,12 @@ class Controller_Item extends Controller_Template
 		if ( $ca->do_action( $par,  $message ) )
 		{ 				
 			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");				
-			url::redirect ( 'character/inventory' );
+			HTTP::redirect ( 'character/inventory' );
 		}	
 		else	
 		{ 
 			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");	
-			url::redirect ( 'character/inventory' );
+			HTTP::redirect ( 'character/inventory' );
 		}
 		
 	}
@@ -804,7 +804,7 @@ class Controller_Item extends Controller_Template
 		else		
 			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
 		
-		url::redirect( "character/inventory");			
+		HTTP::redirect( "character/inventory");			
 	}
 	*/
 	
@@ -827,6 +827,6 @@ class Controller_Item extends Controller_Template
 		else		
 			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
 		
-		url::redirect( "character/inventory");			
+		HTTP::redirect( "character/inventory");			
 	}
 }

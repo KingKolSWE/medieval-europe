@@ -12,7 +12,7 @@ class Controller_Admin extends Controller_Template
 	{
 		
 		if ( !Auth::instance() -> logged_in('admin') and !Auth::instance()->logged_in('staff'))		
-			url::redirect('/user/login');		
+			HTTP::redirect('/user/login');
 
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$view = View::factory( 'admin/console');
@@ -24,7 +24,7 @@ class Controller_Admin extends Controller_Template
 			;
 		else {	
 			
-			if ( $this -> input-> post('skin') != '' )
+			if ( $this -> request-> post('skin') != '' )
 			{
 				Model_Character::modify_stat_d( $character -> id,
 					'skin', 
@@ -32,39 +32,39 @@ class Controller_Admin extends Controller_Template
 					null,
 					null,
 					true,
-					$this -> input -> post('skin')
+					$this -> request -> post('skin')
 				);
 			}
 		
-			if ( $this -> input-> post('unblockactions') != '' )
+			if ( $this -> request -> post('unblockactions') != '' )
 			{
 				$rc = $this -> unblockactions($message );	
 				if ( $rc == false )
-					{Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");}
+					{Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");}
 				else  
-					{Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");}	
+					{Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");}	
 			}
 			
-			if ( $this -> input-> post('bancharactergame') != '' )
+			if ( $this -> request-> post('bancharactergame') != '' )
 			{
 				$rc = $this -> bancharacter(
-					$this -> input -> post('charactername'), 
+					$this -> request -> post('charactername'), 
 					'game',
-					$this -> input -> post('bandate'), 
-					$this -> input -> post('banreason'), 
+					$this -> request -> post('bandate'), 
+					$this -> request -> post('banreason'), 
 					$message);
 				
 				if ( $rc == false )
-					{Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");}
+					{Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");}
 				else  
-					{Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");}	
+					{Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");}	
 			}
 			
-			if ( $this -> input-> post('resetpassword') != '' )
+			if ( $this -> request-> post('resetpassword') != '' )
 			{
 				
 				$character = ORM::factory('character') 
-					-> where( 'name', $this -> input -> post('charactername'))
+					-> where( 'name', $this -> request -> post('charactername'))
 					-> find();
 				
 				if ( $character -> loaded )
@@ -74,72 +74,72 @@ class Controller_Admin extends Controller_Template
 				}
 				
 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">Password per {$character->name} (user: {$character->user->username}) resettata a 1234.</div>");
+				Session::instance()->set('user_message', "<div class=\"info_msg\">Password per {$character->name} (user: {$character->user->username}) resettata a 1234.</div>");
 			}
 			
-			if ( $this -> input-> post('bancharacterchat') != '' )
+			if ( $this -> request-> post('bancharacterchat') != '' )
 			{
 				$rc = $this -> bancharacter(
-					$this -> input -> post('charactername'), 
+					$this -> request -> post('charactername'), 
 					'chat',
-					$this -> input -> post('bandate'), 
-					$this -> input -> post('banreason'), 
+					$this -> request -> post('bandate'), 
+					$this -> request -> post('banreason'), 
 					$message);
 				
 				if ( $rc == false )
-					{Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");}
+					{Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");}
 				else  
-					{Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");}	
+					{Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");}	
 			}
 			
-			if ( $this -> input-> post('kill') != '' )
+			if ( $this -> request-> post('kill') != '' )
 			{
-				$rc = $this -> killcharacter($this -> input -> post('character'), $message );	
+				$rc = $this -> killcharacter($this -> request -> post('character'), $message );	
 				if ( $rc == false )
-					{Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");}
+					{Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");}
 				else  
-					{Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");}	
+					{Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");}	
 			}
 			
-			if ( $this -> input-> post('restorechar') != '' )
+			if ( $this -> request-> post('restorechar') != '' )
 			{
 				
 				$rc = Admin_Model::restorechar(
-					$this -> input -> post('charactername'), 
-					$this -> input -> post('ispaid'), 
-					$this -> input -> post('anonymize'), 
-					$this -> input -> post('newname'), 
-					$this -> input -> post('regionname'), 
+					$this -> request -> post('charactername'), 
+					$this -> request -> post('ispaid'), 
+					$this -> request -> post('anonymize'), 
+					$this -> request -> post('newname'), 
+					$this -> request -> post('regionname'), 
 					$message );
 									
 				if ( $rc == false )
-					{Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");}
+					{Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");}
 				else  
-					{Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");}	
+					{Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");}	
 			}
 			
-			if ( $this -> input-> post('changename') != '' )
+			if ( $this -> request-> post('changename') != '' )
 			{
 				$rc = $this -> changecharname(
-					$this -> input -> post('oldcharactername'), 
-					$this -> input -> post('newcharactername'), $message );	
+					$this -> request -> post('oldcharactername'), 
+					$this -> request -> post('newcharactername'), $message );	
 				
 				if ( $rc == false )
-					{Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");}
+					{Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");}
 				else  
-					{Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");}	
+					{Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");}	
 			}
 			
-			if ( $this -> input-> post('changeemail') != '' )
+			if ( $this -> request-> post('changeemail') != '' )
 			{
 				$rc = $this -> changecharemail(
-					$this -> input -> post('charactername'), 
-					$this -> input -> post('newemail'), $message );	
+					$this -> request -> post('charactername'), 
+					$this -> request -> post('newemail'), $message );	
 				
 				if ( $rc == false )
-					{Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");}
+					{Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");}
 				else  
-					{Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");}
+					{Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");}
 			}					
 			
 		}
@@ -169,7 +169,7 @@ class Controller_Admin extends Controller_Template
 			return false;
 		}
 				
-		Database::instance() -> query("
+		Database::instance() -> query(Database::UPDATE, "
 			update character_actions set keylock = null 
 			where keylock is not null 
 			and status = 'running'
@@ -189,7 +189,7 @@ class Controller_Admin extends Controller_Template
 		if (!Auth::instance()->logged_in('admin') and !Auth::instance()->logged_in('staff'))
 		{
 			$message = __('global.operation_not_allowed' );
-			url::redirect('/');
+			HTTP::redirect('/');
 		}
 		
 		if ( $_POST )
@@ -197,7 +197,7 @@ class Controller_Admin extends Controller_Template
 			//var_dump($_POST);exit;
 			
 			$character = ORM::factory('character') -> where( 
-				'name', $this -> input -> post ('charactername') ) -> find();
+				'name', '=',$this -> request -> post ('charactername') ) -> find();
 				
 			$instr = array();
 			
@@ -205,16 +205,16 @@ class Controller_Admin extends Controller_Template
 			{
 				KO7::$log->add(KO7_Log::DEBUG, '-> Searching all IPs of lastlogin...');				
 				
-				if ($this -> input -> post('searchip'))	
+				if ($this -> request -> post('searchip'))	
 				{
 					$sql = "
 					SELECT distinct tu.ipaddress 
 					FROM trace_user_logins tu, users u, characters c
 					WHERE u.id = tu.user_id
 					AND   u.id = c.user_id 
-					AND   c.name = ?";
+					AND   c.name = {$character->name}";
 					
-					$res = Database::instance() -> query($sql, $character -> name );
+					$res = Database::instance() -> query(Database::SELECT, $sql);
 					foreach ($res as $row )			
 						$instr[] = "'{$row->ipaddress}'";
 					$instrtext = implode(",", $instr);
@@ -237,9 +237,9 @@ class Controller_Admin extends Controller_Template
 					FROM trace_user_logins tu, users u, characters c
 					WHERE u.id = tu.user_id
 					AND   u.id = c.user_id 					
-					AND   c.name = ?";
+					AND   c.name = {$character->name}";
 					
-					$res = Database::instance() -> query($sql, $character -> name );
+					$res = Database::instance() -> query(Database::SELECT, $sql);
 					foreach ($res as $row )			
 						$instr[] = "'{$row->logincookie}'";
 					$instrtext = implode(",", $instr);
@@ -256,12 +256,12 @@ class Controller_Admin extends Controller_Template
 					
 				}
 				
-				$res = Database::instance() -> query($sql);	
-				$characters = Database::instance() -> query($sql) -> as_array();
+				$res = Database::instance() -> query(Database::SELECT, $sql);
+				$characters = Database::instance() -> query(Database::SELECT, $sql) -> as_array();
 			}
 			else
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">Questo char non esiste.</div>");				
+				Session::instance()->set('user_message', "<div class=\"error_msg\">Questo char non esiste.</div>");				
 			}
 		}
 		
@@ -290,7 +290,7 @@ class Controller_Admin extends Controller_Template
 			return false;
 		}		
 		
-		$character = ORM::factory('character') -> where ( 'name', $name ) -> find();
+		$character = ORM::factory('character') -> where ( 'name', '=', $name ) -> find();
 		
 		if ( !$character -> loaded )
 		{
@@ -298,10 +298,10 @@ class Controller_Admin extends Controller_Template
 			return false;
 		}
 	
-		Database::instance()->query( "update characters set glut=-1, health=-1 where id = " . $character -> id );
+		Database::instance()->query(Database::UPDATE, "update characters set glut=-1, health=-1 where id = " . $character -> id );
 			
-		Database::instance()->query( "update character_actions set keylock=null, starttime = unix_timestamp(), endtime = unix_timestamp()
-		where action = 'consumeglut' and character_id = " . $character -> id ) ;
+		Database::instance()->query(Database::UPDATE, "update character_actions set keylock=null, starttime = unix_timestamp(), endtime = unix_timestamp()
+		where action = 'consumeglut' and character_id = " . $character -> id );
 		
 		$message = 'Il personaggio: ' . $name . ' &egrave; stato ucciso.'; 
 		
@@ -321,7 +321,7 @@ class Controller_Admin extends Controller_Template
 			return false;
 		}
 		
-		$character = ORM::factory('character') -> where ( 'name', $name ) -> find();
+		$character = ORM::factory('Character') -> where ( 'name', '=', $name ) -> find();
 		
 		if ( !$character -> loaded )
 		{
@@ -333,7 +333,7 @@ class Controller_Admin extends Controller_Template
 		
 		if ($context == 'game')
 		{					
-			Database::instance()->query( "
+			Database::instance()->query(Database::UPDATE, "
 				update users 
 				set status = 'banned', 
 				bandate = {$bandate},
@@ -355,7 +355,7 @@ class Controller_Admin extends Controller_Template
 	function changecharname( $oldname, $newname, &$message )
 	{
 		
-		$charold = ORM::factory('character') -> where ( 'name', $oldname ) -> find();
+		$charold = ORM::factory('Character') -> where ( 'name', '=', $oldname ) -> find();
 		$db = Database::instance();		
 		
 		if ( !$charold -> loaded )
@@ -364,7 +364,7 @@ class Controller_Admin extends Controller_Template
 			return false;			
 		}
 			
-		$charnew = ORM::factory('character') -> where ( 'name', $newname ) -> find();
+		$charnew = ORM::factory('Character') -> where ( 'name', '=', $newname ) -> find();
 		
 		if ( $charnew -> loaded )
 		{
@@ -384,8 +384,8 @@ class Controller_Admin extends Controller_Template
 		if ( kohana::config('medeur.deleteforumaccount' ) )
 		{
 			$dbforum = Database::instance('forum');		
-			$dbforum -> query ("update smf_members set real_name = ? where member_name = '" . 
-			$charold -> user -> username . "'", $newname ); 
+			$dbforum -> query (Database::UPDATE, "update smf_members set real_name = {$newname} where member_name = '" .
+			$charold -> user -> username . "'");
 		}
 		
 		$message = 'Il nome &egrave; stato cambiato.';
@@ -421,7 +421,7 @@ class Controller_Admin extends Controller_Template
 	{
 		
 		if (!Auth::instance()->logged_in('admin'))		
-			url::redirect('/user/login');		
+			HTTP::redirect('/user/login');		
 		
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$view = View::factory( 'admin/givedoubloons');
@@ -439,12 +439,12 @@ class Controller_Admin extends Controller_Template
 			;
 		else
 		{
-			$post = Validation::factory($this->input->post());
+			$post = Validation::factory($this->request->post());
 			
-			$par[0] = ORM::factory( 'character' ) -> where ( array( 'name' => $this->input->post('to_username' ) )) -> find(); 
-			$par[1] = $this->input->post('quantity');
+			$par[0] = ORM::factory( 'character' ) -> where ( 'name', '=', $this->request->post('to_username' ) ) -> find();
+			$par[1] = $this->request->post('quantity');
 			$par[2] = 'adminsend';
-			$par[3] = $this ->input -> post('reason');
+			$par[3] = $this ->request -> post('reason');
 			$par[4] = 'Administration';
 			$par[5] = $character;
 			
@@ -452,12 +452,12 @@ class Controller_Admin extends Controller_Template
 			
 			if ( $ca -> do_action( $par,  $message ) )
 			{ 				
-					Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-					url::redirect ( 'admin/givedoubloons' );
+					Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+					HTTP::redirect ( 'admin/givedoubloons' );
 			}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
 				$form = arr::overwrite($form, $post->as_array());								
 				$view->form = $form;					
 				$this->template->content = $view;										
@@ -479,9 +479,9 @@ class Controller_Admin extends Controller_Template
 	{
 		if (!Auth::instance()->logged_in('admin'))
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed' ). "</div>");			
-			url::redirect('admin/console'); 
+			HTTP::redirect('admin/console'); 
 		}
 		
 		$view = View::factory( 'admin/add_adminmessage');
@@ -498,28 +498,32 @@ class Controller_Admin extends Controller_Template
 		}
 		else
 		{
-			$post = Validation::factory($this -> input -> post( ))
-				->pre_filter('trim', TRUE)
-				->add_rules('summary','required', 'length[3,255]')
-				->add_rules('message','required');		
+			$post = Validation::factory($this -> request -> post( ))
+				->rule('summary',
+                    function(Validation $array, $field, $value) {
+				        if (is_null($value) or strlen($value) < 10 or strlen($value) > 255)  {
+				            $array->error($field, "must_be_between_10_and_233");
+                        }
+                    }, array(':validation', ':field', ':value'))
+				->rule('message','not_empty');
 			
-			if ($post->validate() )
+			if ($post->check())
 			{
 				$message = new Admin_Message_Model();					
-				$message -> summary = $this -> input -> post('summary');
-				$message -> message = $this -> input -> post('message');
-				$message -> message = $this -> input -> post('message');
+				$message -> summary = $this -> request -> post('summary');
+				$message -> message = $this -> request -> post('message');
+				$message -> message = $this -> request -> post('message');
 				$message -> timestamp = time();
 				$message -> save();	
 				
-				My_Cache_Model::set ( '-global_adminmessage', $message -> as_array() ); 
+				My_Cache_Model::set ( '-global_adminmessage', $message -> as_array() );
 				
 				Character_Event_Model::addrecord( 1, 'announcement', 
 					'__events.adminmessageposted' .				
 					';' .   html::anchor( 'admin/read_adminmessage/' . $message -> id, $message -> summary ), 		
 					'system' ); 		
 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">Hai inserito un nuovo messaggio.</div>");				
+				Session::instance()->set('user_message', "<div class=\"info_msg\">Hai inserito un nuovo messaggio.</div>");				
 			}
 			else
 			{
@@ -550,9 +554,9 @@ class Controller_Admin extends Controller_Template
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.messagenotfound') . "</div>");			
-			url::redirect('/');
+			HTTP::redirect('/');
 		}
 		
 		$view -> message = $message;
@@ -567,7 +571,7 @@ class Controller_Admin extends Controller_Template
 		$view = View::factory( 'admin/list_allmessages');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		
-		$messages = ORM::factory('admin_message') -> find_all();
+		$messages = ORM::factory('AdminMessage') -> find_all();
 		
 		$this -> pagination = new Pagination(array(
 			'base_url'=>'admin/list_allmessages',
@@ -576,7 +580,9 @@ class Controller_Admin extends Controller_Template
 			'total_items' => $messages -> count(),
 			'items_per_page'=> $limit));			
 		
-		$messages = ORM::factory('admin_message') -> find_all( $limit, $this->pagination->sql_offset);
+		$messages = ORM::factory('AdminMessage')
+            ->offset($this->pagination->sql_offset)
+            ->limit($limit);
 		
 		$view -> pagination = $this -> pagination;
 		$view -> messages = $messages;		
@@ -592,7 +598,7 @@ class Controller_Admin extends Controller_Template
 	{
 
 		if (!Auth::instance()->logged_in('admin') and !Auth::instance()->logged_in('staff'))
-			url::redirect('/user/login');
+			HTTP::redirect('/user/login');
 
 		$view = View::factory( 'admin/manage_npcs');
 		$sheets = array('gamelayout'=>'screen', 'submenu'=>'screen');
@@ -633,21 +639,21 @@ class Controller_Admin extends Controller_Template
 		if ($_POST)
 		{
 			var_dump( $_POST );// exit;
-			$post = Validation::factory($this->input->post());
+			$post = Validation::factory($this->request->post());
 
-			$n = intval($this->input->post('quantity'));
-			$npctag = $this->input->post('npc');
-			$region_name = $this->input->post('regions');
+			$n = intval($this->request->post('quantity'));
+			$npctag = $this->request->post('npc');
+			$region_name = $this->request->post('regions');
 			KO7::$log->add(KO7_Log::INFO, "-> Creating NEW NPC {$npctag}, n. {$n}.");
 
 			$names = array();
 
-			$npcs = ORM::factory('character')
-				-> where ('npctag', $npctag )
+			$npcs = ORM::factory('Character')
+				-> where ('npctag', '=', $npctag )
 				-> find_all();
 
 			$region = ORM::factory('region') -> where (
-					'name', strtolower('regions.' . $region_name)) -> find();
+					'name', '=', strtolower('regions.' . $region_name)) -> find();
 
 			echo $region->id;
 
@@ -680,7 +686,7 @@ class Controller_Admin extends Controller_Template
 			}
 
 			$message = 'NPCs modified successfully!';
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 			$form = arr::overwrite($form, $post -> as_array());
 		}
 
@@ -706,7 +712,7 @@ class Controller_Admin extends Controller_Template
 			and 
 			 !Auth::instance()->logged_in('staff')
 		)		
-			url::redirect('/user/login');				
+			HTTP::redirect('/user/login');				
 		
 		$view = View::factory('admin/giveitems');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
@@ -730,14 +736,14 @@ class Controller_Admin extends Controller_Template
 		if ($_POST)
 		{
 			//var_dump( $_POST ); exit; 
-			$post = Validation::factory($this->input->post());
+			$post = Validation::factory($this->request->post());
 	
 			$par[0] = ORM::factory( 'character' ) 
-				-> where ( array( 'name' => $this->input->post('to_username' ) )) -> find(); 
+				-> where ( array( 'name' => $this->request->post('to_username' ) )) -> find(); 
 			$par[1] = ORM::factory('cfgitem') 
-				-> where( 'id', $this -> input -> post('item'))->find();	
-			$par[2] = $this -> input -> post('quantity');				
-			$par[3] = $this -> input -> post('reason' );
+				-> where( 'id', $this -> request -> post('item'))->find();	
+			$par[2] = $this -> request -> post('quantity');				
+			$par[3] = $this -> request -> post('reason' );
 			$par[4] = $char;
 			
 			$ca = Character_Action_Model::factory("giveitem");							
@@ -760,13 +766,13 @@ class Controller_Admin extends Controller_Template
 					$par[2] . ' ' . __($par[1] -> name) . ' has been sent to: ' . $par[0] -> name . ' by: ' . 
 					$par[4] -> name );			
 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 				$form = arr::overwrite($form, $post -> as_array());												
 				
 		}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
 				$form = arr::overwrite($form, $post -> as_array());												
 			}		
 			
@@ -792,7 +798,7 @@ class Controller_Admin extends Controller_Template
 	public function wardrobeapprovalrequests()
 	{
 		if (!Auth::instance()->logged_in('admin'))		
-			url::redirect('/user/login');		
+			HTTP::redirect('/user/login');		
 		
 		$view = View::factory( 'admin/wardrobeapprovalrequests');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
@@ -820,7 +826,7 @@ class Controller_Admin extends Controller_Template
 		$licenses = array();	
 
 		if (!Auth::instance()->logged_in('admin'))		
-			url::redirect('/user/login');		
+			HTTP::redirect('/user/login');		
 		
 		$view = View::factory( 'admin/viewwardroberequest');
 		$sheets  = array(
@@ -844,7 +850,7 @@ class Controller_Admin extends Controller_Template
                         and   cb.character_Id = {$character -> id}
 			and cb.param1 = wc.tag";
 			
-			$res = Database::instance() -> query($sql); 
+			$res = Database::instance() -> query(Database::SELECT, $sql);
 			$i = 0;
 			
 			foreach ($res as $row)
@@ -862,26 +868,26 @@ class Controller_Admin extends Controller_Template
 		{
 		
 			
-			$request = ORM::factory('wardrobe_approvalrequest', $this -> input -> post('id') );
+			$request = ORM::factory('wardrobe_approvalrequest', $this -> request -> post('id') );
 			$path = DOCROOT . 'media/images/characters/wardrobe/' . $request -> character_id ;	
 			
 			
 			if ( $request -> loaded == false )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">Questa richiesta non esiste</div>"); 
-				url::redirect('admin/wardrobeapprovalrequests');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">Questa richiesta non esiste</div>"); 
+				HTTP::redirect('admin/wardrobeapprovalrequests');
 			}
 			
 			// Accept Request, Charge
 			
-			if ( $this -> input -> post('AcceptCharge') != '' )
+			if ( $this -> request -> post('AcceptCharge') != '' )
 			{
 			
 				// check if char has enough doubloons
 				if ( $request -> character -> get_item_quantity( 'doubloon' ) < 150 )
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">Il char non ha 150 dobloni.</div>"); 
-					url::redirect('admin/wardrobeapprovalrequests');
+					Session::instance()->set('user_message', "<div class=\"error_msg\">Il char non ha 150 dobloni.</div>"); 
+					HTTP::redirect('admin/wardrobeapprovalrequests');
 				}
 				// muovi immagini nella directory corretta
 				
@@ -901,7 +907,7 @@ class Controller_Admin extends Controller_Template
 			
 			// Accept request, don't charge
 			
-			if ( $this -> input -> post('AcceptNoCharge') != '' )
+			if ( $this -> request -> post('AcceptNoCharge') != '' )
 			{
 			
 				// muovi immagini nella directory corretta
@@ -917,23 +923,23 @@ class Controller_Admin extends Controller_Template
 			
 			}
 			
-			if ( $this -> input -> post('Refuse') != '' )			
+			if ( $this -> request -> post('Refuse') != '' )			
 			{
 				
 				// marca request come rifiutata
 				$request -> status = 'rejected';
-				$request -> reason = $this -> input -> post('reason');
+				$request -> reason = $this -> request -> post('reason');
 				$request -> save();
 	
 				// manda evento al player		
 				
 				Character_Event_Model::addrecord( $request -> character -> id, 'normal', 
-					'__wardrobe.requestrefusedrefund;' . $this -> input -> post('reason'));
+					'__wardrobe.requestrefusedrefund;' . $this -> request -> post('reason'));
 			
 			}
 						
-			Session::set_flash('user_message', "<div class=\"info_msg\">Richiesta processata.</div>"); 
-			url::redirect('admin/wardrobeapprovalrequests');
+			Session::instance()->set('user_message', "<div class=\"info_msg\">Richiesta processata.</div>");
+			HTTP::redirect('admin/wardrobeapprovalrequests');
 			
 		}
 		
@@ -963,14 +969,14 @@ class Controller_Admin extends Controller_Template
 			and
 			!Auth::instance()->logged_in('staff')
 		)		
-		{			
-			Session::set_flash('user_message', "<div class=\"info_msg\">Permessi insufficienti.</div>"); 
-			url::redirect('/user/login');		
+		{
+			Session::instance()->set('user_message', "<div class=\"info_msg\">Permessi insufficienti.</div>");
+			HTTP::redirect('/user/login');		
 		}
 		
 		if ( !in_array( $status, array( 'active', 'suspended', 'canceled' )))
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">Stato: {$status} non previsto.</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">Stato: {$status} non previsto.</div>");
 		}
 		
 		if ($status == 'active' )
@@ -985,11 +991,11 @@ class Controller_Admin extends Controller_Template
 			SET status = '{$status}'			
 			WHERE id = {$user_id}";
 		
-		Database::instance() -> query( $sql );
+		Database::instance() -> query( Database::UPDATE, $sql );
 		
-		Session::set_flash('user_message', "<div class=\"info_msg\">Stato utente modificato a: {$status}</div>"); 
+		Session::instance()->set('user_message', "<div class=\"info_msg\">Stato utente modificato a: {$status}</div>"); 
 		
-		url::redirect('admin/multicheck');
+		HTTP::redirect('admin/multicheck');
 		
 	}
 	

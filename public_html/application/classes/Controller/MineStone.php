@@ -14,16 +14,16 @@ class Controller_MineStone extends Controller_Template
 		// Controllo che la struttura sia effettivamente una miniera di ferro
 		if ($structure->structure_type->type <> 'mine_stone' ) 
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotvalid') . "</div>");
-			url::redirect( "region/view/" . Session::instance()->get("char_id"));			
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotvalid') . "</div>");
+			HTTP::redirect( "region/view/" . Session::instance()->get("char_id"));			
 		}
 
 		// Controllo che la miniera di ferro si trovi nello stesso
 		// nodo dove si trova il char
 		if ($structure->region_id <>  Model_Character::get_info( Session::instance()->get('char_id') ) -> position_id)
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotinregion') . "</div>");
-			url::redirect( "region/view/" . Session::instance()->get("char_id"));			
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotinregion') . "</div>");
+			HTTP::redirect( "region/view/" . Session::instance()->get("char_id"));			
 		}
 
 		// Se tutti i controlli vengono superati allora
@@ -33,10 +33,10 @@ class Controller_MineStone extends Controller_Template
 		
 		$ca_dig = Character_Action_Model::factory("dig");
 		if ( $ca_dig->do_action( array( $structure, $char, $qta ),  $message ) )
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");		
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");		
 		else		
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");		
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");		
 		
-		url::redirect( "region/view");	
+		HTTP::redirect( "region/view");	
 	}
 }

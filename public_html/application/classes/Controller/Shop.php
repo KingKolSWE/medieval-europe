@@ -51,8 +51,8 @@ class Controller_Shop extends Controller_Template
 		
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType() , $message, 'private', 'manage' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( 'region/view/' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( 'region/view/' );
 		}
 		
 		$submenu = View::factory( 'structure/' . $structure -> getSubmenu() );
@@ -91,16 +91,16 @@ class Controller_Shop extends Controller_Template
 			
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}	
 		
 		}	
 		else
 		{
 			
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
-			if ( $this -> input -> post('upgradeinventory' ) )
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			if ( $this -> request -> post('upgradeinventory' ) )
 			{
 				
 				$message = "";			
@@ -110,37 +110,37 @@ class Controller_Shop extends Controller_Template
 		
 				if ( $ca->do_action( $par,  $message ) )
 				{
-					Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); 
-					url::redirect( '/shop/upgrade/inventory/' . $structure -> id ); 
+					Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); 
+					HTTP::redirect( '/shop/upgrade/inventory/' . $structure -> id ); 
 				}	
 				else	
 				{ 
-					Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-					url::redirect( '/shop/upgrade/inventory/' . $structure -> id ); 
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+					HTTP::redirect( '/shop/upgrade/inventory/' . $structure -> id ); 
 				}
 			}
 			
-			if ( $this -> input -> post('upgradelevel' ) )
+			if ( $this -> request -> post('upgradelevel' ) )
 			{
 				$message = "";			
 				$ca = Character_Action_Model::factory("upgradestructurelevel");								
 				$par[0] = $structure;
 				$par[1] = $character; 
-				$par[2] = $this -> input -> post('hours'); 
+				$par[2] = $this -> request -> post('hours'); 
 		
 				if ( $ca->do_action( $par,  $message ) )
 				{
-					Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); 
-					url::redirect( '/shop/upgrade/level/' . $structure -> id ); 
+					Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); 
+					HTTP::redirect( '/shop/upgrade/level/' . $structure -> id ); 
 				}	
 				else	
 				{ 
-					Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-					url::redirect( '/shop/upgrade/level/' . $structure -> id ); 
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+					HTTP::redirect( '/shop/upgrade/level/' . $structure -> id ); 
 				}
 			}
 			
-			$structure_id = $this -> input -> post( 'structure_id' ) ; 
+			$structure_id = $this -> request -> post( 'structure_id' ) ; 
 	
 	}	
 	

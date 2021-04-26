@@ -10,7 +10,7 @@ class Controller_Message extends Controller_Template
 	
 	public function index()
 	{
-		url::redirect('message/received');		
+		HTTP::redirect('message/received');		
 	}
 
 	/**
@@ -37,8 +37,8 @@ class Controller_Message extends Controller_Template
 		
 		if ( !$bonus )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );				
-			url::redirect( '/message/received');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );				
+			HTTP::redirect( '/message/received');
 		}
 		
 		$capacity = Model_Character::get_stat_d( $char -> id, 'professionaldeskslot' );
@@ -107,8 +107,8 @@ class Controller_Message extends Controller_Template
 		
 		if ( $message -> char_id != $char -> id )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );				
-			url::redirect( '/message/' . $type );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );				
+			HTTP::redirect( '/message/' . $type );
 		}
 		
 		$capacity = Model_Character::get_stat_d( $char -> id, 'professionaldeskslot' );
@@ -124,14 +124,14 @@ class Controller_Message extends Controller_Template
 			
 			if ( $archivedmessages >= $capacity -> value )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">".	
+				Session::instance()->set('user_message', "<div class=\"error_msg\">".	
 					__('message.error-archivefull')."</div>" );	
 			}			
 			else
 			{
 				$message -> archived = 'Y';
 				$message -> save();
-				Session::set_flash('user_message', "<div class=\"info_msg\">".__('message.info-archivedok')."</div>" );					
+				Session::instance()->set('user_message', "<div class=\"info_msg\">".__('message.info-archivedok')."</div>" );					
 			}
 				
 		
@@ -140,11 +140,11 @@ class Controller_Message extends Controller_Template
 		{
 			$message -> archived = 'N';
 			$message -> save();
-			Session::set_flash('user_message', "<div class=\"info_msg\">".__('message.info-unarchivedok')."</div>" );	
+			Session::instance()->set('user_message', "<div class=\"info_msg\">".__('message.info-unarchivedok')."</div>" );	
 		
 		}
 			
-		url::redirect(request::referrer());
+		HTTP::redirect(request::referrer());
 	
 	}
 	
@@ -181,8 +181,8 @@ class Controller_Message extends Controller_Template
 			!$bonus
 			)
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );				
-			url::redirect( '/message/received');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );				
+			HTTP::redirect( '/message/received');
 		}
 		
 		if ( $this -> input -> get('subject') )
@@ -287,8 +287,8 @@ class Controller_Message extends Controller_Template
 			!$bonus
 			)
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );				
-			url::redirect( '/message/received');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );				
+			HTTP::redirect( '/message/received');
 		}
 		
 		if ( $this -> input -> get('subject') )
@@ -396,8 +396,8 @@ class Controller_Message extends Controller_Template
 		
 		if ( $char -> user -> status != 'active' )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">".__('charactions.userisnotactive')."</div>" );									
-			url::redirect('/message/received');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">".__('charactions.userisnotactive')."</div>" );									
+			HTTP::redirect('/message/received');
 		}
 		
 		if ( !$_POST )
@@ -427,8 +427,8 @@ class Controller_Message extends Controller_Template
 				
 				if ( !$message -> loaded or $message -> char_id != $char -> id )
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );				
-					url::redirect( '/message/sent');
+					Session::instance()->set('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );				
+					HTTP::redirect( '/message/sent');
 				}
 								
 				$recipient = ORM::factory('character', $message -> tochar_id );
@@ -485,7 +485,7 @@ class Controller_Message extends Controller_Template
 		else
 		{     
 			
-			$post = Validation::factory($this -> input -> post())				
+			$post = Validation::factory($this -> request -> post())				
 				->add_rules('subject', 'required', 'length[1,255]')
 				->add_rules('body', 'required')								
 				->add_callbacks('subject', array($this, '_checkbadwords'))
@@ -498,10 +498,10 @@ class Controller_Message extends Controller_Template
 				
 				$m = new Message_Model();
 				$sender = Model_Character::get_info( Session::instance()->get('char_id') );
-				$recipient = ORM::factory('character')->where( array('name' => $this->input->post('to')))->find();
-				$subject = $this->input -> post('subject');
+				$recipient = ORM::factory('character')->where( array('name' => $this->request->post('to')))->find();
+				$subject = $this->request -> post('subject');
 								
-				$body = $this -> input -> post('body');
+				$body = $this -> request -> post('body');
 				
 				// includi signature in fondo al body solo su nuovi messaggi.
 								
@@ -510,13 +510,13 @@ class Controller_Message extends Controller_Template
 				else			
 					$body .= "\r\n\r\n" . $sender -> signature;
 				
-				$massive = $this -> input -> post('massive');
-				$type = $this -> input -> post('type'); 
+				$massive = $this -> request -> post('massive');
+				$type = $this -> request -> post('type'); 
 				
 				if ( $sender -> id == $recipient -> id )
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );				
-					url::redirect( '/message/received');				
+					Session::instance()->set('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );				
+					HTTP::redirect( '/message/received');				
 				}
 				
 				// se la tipologia � weddingproposal, il messaggio può essere scritto solo da un maschio ad una donna
@@ -526,8 +526,8 @@ class Controller_Message extends Controller_Template
 					$param1 = null;
 					if ($sender -> sex != 'M' or $recipient -> sex != 'F' )
 					{
-						Session::set_flash('user_message', "<div class=\"error_msg\">".__('message.error-weddingproposalsex')."</div>" );				
-						url::redirect( '/message/received');
+						Session::instance()->set('user_message', "<div class=\"error_msg\">".__('message.error-weddingproposalsex')."</div>" );				
+						HTTP::redirect( '/message/received');
 					
 					}
 				}
@@ -540,10 +540,10 @@ class Controller_Message extends Controller_Template
 						$sender -> id,
 						$recipient -> id, $dummy) == false)								
 					{
-						Session::set_flash('user_message', 
+						Session::instance()->set('user_message', 
 							"<div class=\"error_msg\">".__('message.error-notmarriedto',
 								$recipient -> name)."</div>" );				
-						url::redirect( '/message/received');				
+						HTTP::redirect( '/message/received');				
 					}
 				}
 				
@@ -552,11 +552,11 @@ class Controller_Message extends Controller_Template
 			
 				if ( $ret == 'OK' )
 				{					
-					Session::set_flash('user_message', "<div class=\"info_msg\">".__('message.message_success')."</div>" );				
-					url::redirect( '/message/sent');
+					Session::instance()->set('user_message', "<div class=\"info_msg\">".__('message.message_success')."</div>" );				
+					HTTP::redirect( '/message/sent');
 				}
 				else
-					Session::set_flash('user_message', "<div class=\"error_msg\">".__( $ret )."</div>" );
+					Session::instance()->set('user_message', "<div class=\"error_msg\">".__( $ret )."</div>" );
 				
 				$form = arr::overwrite($form, $post->as_array()); 
 				
@@ -602,8 +602,8 @@ class Controller_Message extends Controller_Template
 		$message = ORM::factory('message', $message_id );
 		if ( $message -> loaded == false or ( $message -> char_id != $char -> id ))
 		{ 
-			Session::set_flash('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );				
-			url::redirect( '/message/' . $type );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );				
+			HTTP::redirect( '/message/' . $type );
 		}
 		
 		// Se il char � il destinatario e il messaggio non � stato ancora letto
@@ -649,14 +649,14 @@ class Controller_Message extends Controller_Template
 			or ( 
 			$message -> char_id != $char -> id) )
 		{				
-			Session::set_flash('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );							
+			Session::instance()->set('user_message', "<div class=\"error_msg\">".__('global.operation_not_allowed')."</div>" );							
 		}
 		
 		$message -> delete();		
 		My_Cache_Model::delete (  '-charinfo_' . $char -> id . '_unreadmessages' );
 
-		Session::set_flash('user_message', "<div class=\"info_msg\">".__('message.message_delete')."</div>" );						
-		url::redirect('/message/' . $type );		
+		Session::instance()->set('user_message', "<div class=\"info_msg\">".__('message.message_delete')."</div>" );						
+		HTTP::redirect('/message/' . $type );		
 	}
 	
 	// Funzione che cancella i messaggi selezionati
@@ -664,7 +664,7 @@ class Controller_Message extends Controller_Template
 	public function deleteselectedmessages (  )
 	{	
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
-		$selected_messages = $this -> input -> post('messages') ;		
+		$selected_messages = $this -> request -> post('messages') ;		
 		$messagestodelete = implode( ", ", array_keys ( $selected_messages ));
 		
 		Database::instance() -> query ( 
@@ -672,7 +672,7 @@ class Controller_Message extends Controller_Template
 		where char_id = " . $char -> id . " 
 		and   id in ( " . $messagestodelete . ")" );
 		
-		url::redirect(request::referrer() );
+		HTTP::redirect(request::referrer() );
 	}
 	
 	/*

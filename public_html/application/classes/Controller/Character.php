@@ -16,14 +16,14 @@ class Controller_Character extends Controller_Template
 
 	public function index()
 	{
-		kohana::log( 'debug', 'generating random names...' . $this -> input -> post('culture') . $this -> input -> post('sex'));
-		url::redirect('character/details');
+		kohana::log( 'debug', 'generating random names...' . $this -> request -> post('culture') . $this -> request -> post('sex'));
+		HTTP::redirect('character/details');
 	}
 
 	public function change_language( $lang = 'en_US' )
 	{
 		Model_User::change_language( $lang );
-		url::redirect(request::referrer());
+		HTTP::redirect(request::referrer());
 	}
 
 	/**
@@ -38,10 +38,10 @@ class Controller_Character extends Controller_Template
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$rc = Model_Character::unequip_all( $character->id, $message );
 		if ($rc)
-			Session::set_flash('user_message', "<div class=\"info_msg\">". __('charactions.info-unequippedall') . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". __('charactions.info-unequippedall') . "</div>");
 		else
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-		url::redirect('character/inventory');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+		HTTP::redirect('character/inventory');
 	}
 
 	/**
@@ -130,7 +130,7 @@ class Controller_Character extends Controller_Template
 		if ( $_POST )
 		{
 
-			$post = Validation::factory($this->input->post())
+			$post = Validation::factory($this->request->post())
 					->pre_filter('trim', TRUE)
 					->add_rules('choosenkingdom_id','required')
 					->add_rules('charname','required', 'length[3,15]')
@@ -151,24 +151,24 @@ class Controller_Character extends Controller_Template
 				$existchar = ORM::factory('character')->where( 'user_id', Session::instance()->get('user_id') ) -> find();
 				if ( $existchar -> loaded )
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
-					url::redirect('character/create');
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
+					HTTP::redirect('character/create');
 				}
 
 				// determina la regione del regno scelto pi� popolata
 
 				if (!isset($post['choosenkingdom_id']) )
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">". __('character.kingdomnotchosen') . "</div>");
-					url::redirect('character/create');
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". __('character.kingdomnotchosen') . "</div>");
+					HTTP::redirect('character/create');
 				}
 
 				$region_id = Kingdom_Model::get_capitalregion( $post['choosenkingdom_id'] ) -> id;
 
 				if ( is_null( $region_id ) )
 				{
-						Session::set_flash('user_message', "<div class=\"error_msg\">". __('character.kingdomisfull') . "</div>");
-						url::redirect('character/create');
+						Session::instance()->set('user_message', "<div class=\"error_msg\">". __('character.kingdomisfull') . "</div>");
+						HTTP::redirect('character/create');
 				}
 
 
@@ -372,7 +372,7 @@ class Controller_Character extends Controller_Template
 					Session::instance()->set( 'char_id', $char->id );
 					Session::instance()->set( 'position_id', $char->region_id );
 
-					url::redirect( 'region/view');
+					HTTP::redirect( 'region/view');
 
 				} catch (Kohana_Database_Exception $e)
 				{
@@ -380,9 +380,9 @@ class Controller_Character extends Controller_Template
 					KO7::$log->add(KO7_Log::ERROR, "An error occurred while creating char: {$char -> name}, error: {$e->getMessage()}, rollbacking.");
 					$db -> query("rollback");
 
-					Session::set_flash('user_message', "<div class=\"error_msg\">". __('character.register_createerror') . "</div>");
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". __('character.register_createerror') . "</div>");
 
-					url::redirect('character/create');
+					HTTP::redirect('character/create');
 
 				}
 
@@ -605,11 +605,11 @@ class Controller_Character extends Controller_Template
 		if ( $ca_move -> do_action( $par,  $message ) )
 			;
 		else
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 
 		KO7::$log->add(KO7_Log::INFO, '-> Redirecting to map view...');
 
-		url::redirect( "map/view");
+		HTTP::redirect( "map/view");
 
 	}
 
@@ -633,9 +633,9 @@ class Controller_Character extends Controller_Template
 		if ( $ca_sail -> do_action( $par,  $message ) )
 			;
 		else
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 
-		url::redirect( "map/view");
+		HTTP::redirect( "map/view");
 
 	}
 
@@ -654,11 +654,11 @@ class Controller_Character extends Controller_Template
 		$rc = Character_Action_Model::cancel_pending_action( null, false, $message );
 
 		if ( $rc )
-			Session::set_flash('user_message', "<div class=\"info_msg\">". __('global.action_canceled') . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". __('global.action_canceled') . "</div>");
 		else
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __($message) . "</div>");
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __($message) . "</div>");
 
-		url::redirect( '/character/details');
+		HTTP::redirect( '/character/details');
 
 	}
 
@@ -763,9 +763,9 @@ class Controller_Character extends Controller_Template
 
 		if ( ! $character -> loaded )
 		{
-			Session::set_flash('user_message',
+			Session::instance()->set('user_message',
 				"<div class=\"error_msg\">". __('global.error-characterunknown') . "</div>");
-			url::redirect( "region/view/" . Session::instance()->get("char_id"));
+			HTTP::redirect( "region/view/" . Session::instance()->get("char_id"));
 		}
 
 		$viewingchar = Model_Character::get_info( Session::instance()->get('char_id') );
@@ -854,19 +854,19 @@ class Controller_Character extends Controller_Template
 			$view->form = $form;
 		else
 		{
-			$post = Validation::factory($this->input->post())
+			$post = Validation::factory($this->request->post())
 					->pre_filter('trim', TRUE)
 					->add_rules('description',  'length[1,2048]');
 
 
 			if ($post->validate() )
 			{
-				$character->description = $this->input->post( 'description' );
+				$character->description = $this->request->post( 'description' );
 				$character->save();
-				$par[0] = $this->input->post( 'description' );
+				$par[0] = $this->request->post( 'description' );
 				GameEvent_Model::process_event( $character, 'changecharacterdescription', $par );
-				Session::set_flash('user_message', "<div class=\"info_msg\">". __('character.description_changed') . "</div>");
-				url::redirect( 'character/details');
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('character.description_changed') . "</div>");
+				HTTP::redirect( 'character/details');
 			}
 			else
 			{
@@ -932,7 +932,7 @@ class Controller_Character extends Controller_Template
 				$par = array();
 				GameEvent_Model::process_event( $character, 'changecharacteravatar', $par );
 
-				Session::set_flash('user_message', "<div class=\"info_msg\">". __('character.avatar_changed') . "</div>");
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('character.avatar_changed') . "</div>");
 
 				$filename = 'media/images/characters/' . $character -> id . '_l.jpg';
 
@@ -940,9 +940,9 @@ class Controller_Character extends Controller_Template
 
 			}
 			else
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('character.error-avatar_notchanged') . "</div>");
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('character.error-avatar_notchanged') . "</div>");
 
-			url::redirect( 'character/details/' );
+			HTTP::redirect( 'character/details/' );
 
 		}
 
@@ -961,8 +961,8 @@ class Controller_Character extends Controller_Template
 
 		if ( isset($this -> disabledmodules['changecitizenship']) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('charactions.error-moduleisdisabled') . "</div>");
-			url::redirect('region/view/' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('charactions.error-moduleisdisabled') . "</div>");
+			HTTP::redirect('region/view/' );
 		}
 
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
@@ -991,11 +991,11 @@ class Controller_Character extends Controller_Template
 			$par[2] = $cost;
 
 			if ( $ca->do_action( $par,  $message ) )
-				{ Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); }
+				{ Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); }
 			else
-				{ Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); }
+				{ Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); }
 
-			url::redirect( 'region/view/' . $char -> position_id  );
+			HTTP::redirect( 'region/view/' . $char -> position_id  );
 		}
 	}
 
@@ -1020,11 +1020,11 @@ class Controller_Character extends Controller_Template
 
 		if ( $_GET )
 		{
-			$name = $db -> escape_str($this->input->get('name'));
-			$online = $this->input->get('online');
+			$name = $db -> escape_str($this->request->get('name'));
+			$online = $this->request->get('online');
 
-			if ( $this->input->get('orderby') )
-				list($orderby, $direction) = explode(':', $this->input->get('orderby'));
+			if ( $this->request->get('orderby') )
+				list($orderby, $direction) = explode(':', $this->request->get('orderby'));
 		}
 
 		$view = View::factory( 'character/listall');
@@ -1094,11 +1094,11 @@ class Controller_Character extends Controller_Template
 		$par[0] = ORM::factory("character", Session::instance()->get("char_id") );
 		$par[1] = $avatar_id;
 		if ( $ca_move->do_action( $par,  $message ) )
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 		else
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 
-		url::redirect( "character/list_avatar");
+		HTTP::redirect( "character/list_avatar");
 
 	}
 
@@ -1123,20 +1123,20 @@ class Controller_Character extends Controller_Template
 			$view->form = $form;
 		else
 		{
-			$post = Validation::factory($this->input->post())
+			$post = Validation::factory($this->request->post())
 					->pre_filter('trim', TRUE)
 					->add_rules('slogan',  'length[1,45]');
 
 
 			if ($post->validate() )
 			{
-				$character->slogan = $this->input->post( 'slogan' );
+				$character->slogan = $this->request->post( 'slogan' );
 				$character->save();
-				$par[0] = $this->input->post( 'slogan' );
+				$par[0] = $this->request->post( 'slogan' );
 				GameEvent_Model::process_event( $character, 'changecharacterslogan', $par );
 
-				Session::set_flash('user_message', "<div class=\"info_msg\">". __('character.slogan_changed') . "</div>");
-				url::redirect( 'character/details');
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('character.slogan_changed') . "</div>");
+				HTTP::redirect( 'character/details');
 			}
 			else
 			{
@@ -1174,9 +1174,9 @@ class Controller_Character extends Controller_Template
 
 		if ( ! $character -> loaded )
 		{
-				Session::set_flash('user_message',
+				Session::instance()->set('user_message',
 					"<div class=\"error_msg\">". __('global.error-characterunknown') . "</div>");
-				url::redirect( "region/view/" . Session::instance()->get("char_id"));
+				HTTP::redirect( "region/view/" . Session::instance()->get("char_id"));
 		}
 
 		$viewingchar = Model_Character::get_info( Session::instance()->get('char_id') );
@@ -1212,10 +1212,10 @@ class Controller_Character extends Controller_Template
 			$view->form = $form;
 		else
 		{
-			$character->history = $this->input->post( 'history' );
+			$character->history = $this->request->post( 'history' );
 			$character->save();
-			Session::set_flash('user_message', "<div class=\"info_msg\">". __('character.history_changed') . "</div>");
-			url::redirect( 'character/details');
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". __('character.history_changed') . "</div>");
+			HTTP::redirect( 'character/details');
 		}
 
 		$this->template->content = $view;
@@ -1261,16 +1261,16 @@ class Controller_Character extends Controller_Template
 			$message = "";
 			$ca = Character_Action_Model::factory("charchangeattributes");
 			$par[0] = $character;
-			$par[1] = $this -> input -> post() ;
+			$par[1] = $this -> request -> post() ;
 			$par[2] = $sum;
 
 			if ( $ca->do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect( '/character/details');
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect( '/character/details');
 			}
 			else
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 
 
 
@@ -1330,7 +1330,7 @@ class Controller_Character extends Controller_Template
 			Model_Character::has_achievement( $char -> id, 'stat_tutorialcompleted')
 		)
 		{
-			url::redirect(kohana::config('medeur.officialrpforumurl'));
+			HTTP::redirect(kohana::config('medeur.officialrpforumurl'));
 		}
 		elseif ( $char -> rpforumregistered == false )
 		{
@@ -1380,9 +1380,9 @@ class Controller_Character extends Controller_Template
 	{
 		$a = Character_Action_Model::factory( 'sendearningsto' );
 		if ( $a -> do_action( $par,  $message ) )
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 		else
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 
 	}
 
@@ -1421,14 +1421,14 @@ class Controller_Character extends Controller_Template
 		else
 		{
 
-			$par[0] = $this -> input -> post('destination');
-			$par[1] = $this -> input -> post('id');
+			$par[0] = $this -> request -> post('destination');
+			$par[1] = $this -> request -> post('id');
 
 			$a = Character_Action_Model::factory( 'sendearningsto' );
 			if ( $a -> do_action( $par,  $message ) )
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 			else
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 
 
 		}
@@ -1464,15 +1464,15 @@ class Controller_Character extends Controller_Template
 
 		if ( $rec )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 		}
 		// Redirect alla region view
 
-		url::redirect( 'character/details' );
+		HTTP::redirect( 'character/details' );
 	}
 
 	/**
@@ -1550,19 +1550,19 @@ class Controller_Character extends Controller_Template
 			$view->form = $form;
 		else
 		{
-			$post = Validation::factory($this->input->post())
+			$post = Validation::factory($this->request->post())
 					->pre_filter('trim', TRUE)
 					->add_rules('signature',  'length[1,2048]');
 
 
 			if ($post->validate() )
 			{
-				$character->signature = $this->input->post( 'signature' );
+				$character->signature = $this->request->post( 'signature' );
 				$character->save();
-				$par[0] = $this->input->post( 'signature' );
+				$par[0] = $this->request->post( 'signature' );
 				GameEvent_Model::process_event( $character, 'changecharactersignature', $par );
-				Session::set_flash('user_message', "<div class=\"info_msg\">". __('character.signature_changed') . "</div>");
-				url::redirect( 'character/details');
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('character.signature_changed') . "</div>");
+				HTTP::redirect( 'character/details');
 			}
 			else
 			{
@@ -1597,8 +1597,8 @@ class Controller_Character extends Controller_Template
 
 		if ( isset($this -> disabledmodules['quests']) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('charactions.error-moduleisdisabled') . "</div>");
-			url::redirect('character/details/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('charactions.error-moduleisdisabled') . "</div>");
+			HTTP::redirect('character/details/');
 		}
 
 		// carico i quest configurati
@@ -1644,14 +1644,14 @@ class Controller_Character extends Controller_Template
 
 		if ( isset($this -> disabledmodules['duels']) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('charactions.error-moduleisdisabled') . "</div>");
-			url::redirect('character/publicprofile/' . $targetchar_id );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('charactions.error-moduleisdisabled') . "</div>");
+			HTTP::redirect('character/publicprofile/' . $targetchar_id );
 		}
 
 		if ( $_POST )
 		{
 			//var_dump($_POST); exit;
-			$post = Validation::factory($this -> input -> post())
+			$post = Validation::factory($this -> request -> post())
 				->add_rules('date', 'required')
 				->add_rules('time', 'required')
 				->add_rules('location', 'required');
@@ -1661,16 +1661,16 @@ class Controller_Character extends Controller_Template
 
 				$par[0] = $character;
 				$par[1] = $targetchar;
-				$par[2] = $this -> input -> post('date');
-				$par[3] = $this -> input -> post('time');
+				$par[2] = $this -> request -> post('date');
+				$par[3] = $this -> request -> post('time');
 				$par[4] = ORM::factory('region') -> where (
-					'name', strtolower('regions.' . $this -> input -> post('location'))) -> find();
+					'name', strtolower('regions.' . $this -> request -> post('location'))) -> find();
 
 				$a = Character_Action_Model::factory( 'launchduel' );
 				if ( $a -> do_action( $par,  $message ) )
-					Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+					Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 				else
-					Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 				$form = arr::overwrite($form, $post -> as_array());
 			}
 			else
@@ -1710,11 +1710,11 @@ class Controller_Character extends Controller_Template
 
 		$a = Character_Action_Model::factory( 'executeduel' );
 		if ( $a -> do_action( $par,  $message ) )
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 		else
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 
-		url::redirect( 'event/show/');
+		HTTP::redirect( 'event/show/');
 	}
 
 	function acceptweddingproposal( $response, $id )
@@ -1730,8 +1730,8 @@ class Controller_Character extends Controller_Template
 		{
 			if ( !is_null( $proposal -> param1 ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('charactions.error-proposalalreadyanswered'). "</div>");
-				url::redirect('/message/received');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('charactions.error-proposalalreadyanswered'). "</div>");
+				HTTP::redirect('/message/received');
 			}
 
 			if ( $response == 1 )
@@ -1760,19 +1760,19 @@ class Controller_Character extends Controller_Template
 			}
 			else
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('charactions.error-invalidresponse'). "</div>");
-				url::redirect('/message/received');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('charactions.error-invalidresponse'). "</div>");
+				HTTP::redirect('/message/received');
 			}
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('charactions.error-proposalnotfound'). "</div>");
-			url::redirect('/message/received');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('charactions.error-proposalnotfound'). "</div>");
+			HTTP::redirect('/message/received');
 		}
 
-		Session::set_flash('user_message', "<div class=\"info_msg\">". __('charactions.info-answered'). "</div>");
+		Session::instance()->set('user_message', "<div class=\"info_msg\">". __('charactions.info-answered'). "</div>");
 
-		url::redirect('/message/received');
+		HTTP::redirect('/message/received');
 
 	}
 
@@ -1800,8 +1800,8 @@ class Controller_Character extends Controller_Template
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( 'region/listchars/regionpresentchars' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( 'region/listchars/regionpresentchars' );
 		}
 
 
@@ -1825,7 +1825,7 @@ class Controller_Character extends Controller_Template
 		KO7::$log->add(KO7_Log::DEBUG, '-> called: ' . $character_id );
 		if ( $_POST )
 		{
-			$data = json_decode($this -> input -> post('itemstotransfer'), false);
+			$data = json_decode($this -> request -> post('itemstotransfer'), false);
 			KO7::$log->add(KO7_Log::DEBUG, kohana::debug( $data ));
 			$items = Character_Model::inventory( $data -> targetchar_id[0] );
 			$targetchar = ORM::factory('character', $data -> targetchar_id[0] );
@@ -1838,11 +1838,11 @@ class Controller_Character extends Controller_Template
 			$a = Character_Action_Model::factory( 'loot' );
 
 			if ( $a -> do_action( $par, $message ) )
-				Session::set_flash('user_message', "<div class='info_msg'>". $message . "</div>");
+				Session::instance()->set('user_message', "<div class='info_msg'>". $message . "</div>");
 			else
-				Session::set_flash('user_message', "<div class='error_msg'>". $message . "</div>");
+				Session::instance()->set('user_message', "<div class='error_msg'>". $message . "</div>");
 
-			url::redirect('character/loot/' . $targetchar -> id );
+			HTTP::redirect('character/loot/' . $targetchar -> id );
 
 		}
 		else
@@ -1853,15 +1853,15 @@ class Controller_Character extends Controller_Template
 
 			if ( $targetchar -> loaded == false or ($targetchar -> position_id != $character -> position_id ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
-				url::redirect('region/listchars/regionpresentchars');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
+				HTTP::redirect('region/listchars/regionpresentchars');
 			}
 
 			// check: il char � svenuto?
 			if ( Character_Model::is_recovering( $targetchar -> id ) != true )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
-				url::redirect('region/listchars/regionpresentchars');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
+				HTTP::redirect('region/listchars/regionpresentchars');
 			}
 
 		}
@@ -1906,13 +1906,13 @@ class Controller_Character extends Controller_Template
 		// Istanzio la corretta azione: curedisease/curehealth/curewounds
 		$a = Character_Action_Model::factory( $model_to_build );
 		if ( $a -> do_action( $par,  $message ) )
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 		else
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 
 		KO7::$log->add(KO7_Log::DEBUG, 'Redirecting to: ' . request::referrer() );
 
-		url::redirect( request::referrer() );
+		HTTP::redirect( request::referrer() );
 
 	}
 
@@ -1941,13 +1941,13 @@ class Controller_Character extends Controller_Template
 		$ca = Character_Action_Model::factory("initiate");
 		if ( $ca -> do_action( $par,  $message ) )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-			url::redirect ( 'region/view/' );
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			HTTP::redirect ( 'region/view/' );
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect ( request::referrer() );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect ( request::referrer() );
 		}
 	}
 
@@ -1961,13 +1961,13 @@ class Controller_Character extends Controller_Template
 
 		if ( $ca -> do_action( $par,  $message ) )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-			url::redirect ( 'region/view' );
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			HTTP::redirect ( 'region/view' );
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect ( 'region/view' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect ( 'region/view' );
 		}
 
 	}
@@ -1982,13 +1982,13 @@ class Controller_Character extends Controller_Template
 
 		if ( $ca -> do_action( $par,  $message ) )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-			url::redirect ( 'region/view' );
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			HTTP::redirect ( 'region/view' );
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect ( 'region/view' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect ( 'region/view' );
 		}
 
 	}
@@ -2001,10 +2001,10 @@ class Controller_Character extends Controller_Template
 		$rc = $skill -> remove($char);
 		if ($rc == true )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">".
+			Session::instance()->set('user_message', "<div class=\"info_msg\">".
 				__('charactions.info-skillremoved', __('character.skill_' . $tag . '_name')) . "</div>");
 		}
 
-		url::redirect ( 'character/details' );
+		HTTP::redirect ( 'character/details' );
 	}
 }

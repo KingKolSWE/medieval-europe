@@ -13,16 +13,16 @@ class Controller_Well extends Controller_Template
 		// Controllo che la struttura sia effettivamente un pozzo
 		if ($structure->structure_type->type <> 'well_1' ) 
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotvalid') . "</div>");
-			url::redirect( "region/view/" . Session::instance()->get("char_id"));			
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotvalid') . "</div>");
+			HTTP::redirect( "region/view/" . Session::instance()->get("char_id"));			
 		}
 
 		// Controllo che il pozzo si trovi nello stesso
 		// nodo dove si trova il char
 		if ($structure->region_id <>  Model_Character::get_info( Session::instance()->get('char_id') ) -> position_id)
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotinregion') . "</div>");
-			url::redirect( "region/view/" . Session::instance()->get("char_id"));			
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures.error_structurenotinregion') . "</div>");
+			HTTP::redirect( "region/view/" . Session::instance()->get("char_id"));			
 		}
 
 		// Se tutti i controlli vengono superati allora
@@ -31,10 +31,10 @@ class Controller_Well extends Controller_Template
 		$char = ORM::factory( "character" )->find( Session::instance()->get("char_id") );
 		$ca_cwater = Character_Action_Model::factory("collectwater");
 		if ( $ca_cwater->do_action( array( $structure, $char, $qta ),  $message ) )
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");		
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");		
 		else		
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");		
-		url::redirect( "region/view");	
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");		
+		HTTP::redirect( "region/view");	
 	}
 
 }

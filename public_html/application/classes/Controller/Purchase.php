@@ -26,10 +26,10 @@ class Controller_Purchase extends Controller
 
     if ($message_signature == $recalculated_message_signature) {
       KO7::$log->add(KO7_Log::DEBUG, 'message is autenthic.');
-      KO7::$log->add(KO7_Log::DEBUG, 'cid: ' . $this->input->post('cid') );
-      KO7::$log->add(KO7_Log::DEBUG, 'sid: ' . $this->input->post('sid') );
-      KO7::$log->add(KO7_Log::DEBUG, 'amount: ' . $this->input->post('reward_amount') );
-      KO7::$log->add(KO7_Log::DEBUG, 'char_id: ' . $this->input->post('char_id') );
+      KO7::$log->add(KO7_Log::DEBUG, 'cid: ' . $this->request->post('cid') );
+      KO7::$log->add(KO7_Log::DEBUG, 'sid: ' . $this->request->post('sid') );
+      KO7::$log->add(KO7_Log::DEBUG, 'amount: ' . $this->request->post('reward_amount') );
+      KO7::$log->add(KO7_Log::DEBUG, 'char_id: ' . $this->request->post('char_id') );
       // the message is authentic
     } else {
       KO7::$log->add(KO7_Log::DEBUG, 'message is not autenthic.');

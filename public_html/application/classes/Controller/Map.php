@@ -42,17 +42,17 @@ class Controller_Map extends Controller_Template
 		///////////////////////////////////////////////////
 		// tiro su tutte le informazioni delle regioni 
 		//////////////////////////////////////////////////
-		Database::instance() -> query("select '--regions_byid--'");
+		Database::instance() -> query(Database::SELECT, "select '--regions_byid--'");
 		$regions = Configuration_Model::get_cfg_regions_byid();		
-		Database::instance() -> query("select '--regions_withstructures--'");
+		Database::instance() -> query(Database::SELECT, "select '--regions_withstructures--'");
 		$regions_with_structures = Configuration_model::get_regions_structures();
-		Database::instance() -> query("select '--regions_resources--'");
+		Database::instance() -> query(Database::SELECT, "select '--regions_resources--'");
 		$resources = Configuration_Model::get_resources_all_regions();
-		Database::instance() -> query("select '--diplomaticrelations--'");
+		Database::instance() -> query(Database::SELECT, "select '--diplomaticrelations--'");
 		$diplomacy = Configuration_Model::get_cfg_diplomacyrelations();		
-		Database::instance() -> query("select '--kingdoms--'");
+		Database::instance() -> query(Database::SELECT, "select '--kingdoms--'");
 		$kingdoms = Configuration_Model::getcfg_kingdoms();
-		Database::instance() -> query("select '--regionpaths--'");
+		Database::instance() -> query(Database::SELECT, "select '--regionpaths--'");
 		$region_paths = Configuration_Model::get_cfg_regions_paths2();		
 
 		//$regions_str = print_r($regions, true);

@@ -28,11 +28,11 @@ class Controller_Battlefield extends Controller_Template
 		if ($_POST)
 		{			
 			
-			if (!is_null($this-> input->post('configurefightmode')))
+			if (!is_null($this-> request->post('configurefightmode')))
 			{
 				if 
 				(					
-					0 and in_array($this -> input -> post('fightmode'), array( 'normal', 'defend', 'attack') )
+					0 and in_array($this -> request -> post('fightmode'), array( 'normal', 'defend', 'attack') )
 				)
 				{
 					KO7::$log->add(KO7_Log::DEBUG, '-> Saving fightmode preference.');
@@ -44,7 +44,7 @@ class Controller_Battlefield extends Controller_Template
 						null,
 						null,
 						true,
-						$this -> input -> post('fightmode')
+						$this -> request -> post('fightmode')
 					);
 				}
 				else
@@ -84,9 +84,9 @@ class Controller_Battlefield extends Controller_Template
 				null,
 				true );
 				
-			Session::set_flash('user_message', 
+			Session::instance()->set('user_message', 
 				"<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
-			url::redirect ( 'region/view/' ); 
+			HTTP::redirect ( 'region/view/' ); 
 		}			
 		
 		$battle = ORM::factory('battle', $structure -> attribute1 );
@@ -172,13 +172,13 @@ class Controller_Battlefield extends Controller_Template
 		
 		if ( $ca -> do_action( $par,  $message ) )
 		{ 				
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");			
-			url::redirect ( 'battlefield/enter/' . $structure -> id);
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");			
+			HTTP::redirect ( 'battlefield/enter/' . $structure -> id);
 		}	
 		else	
 		{ 			
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-			url::redirect ( 'battlefield/enter/' . $structure -> id);
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+			HTTP::redirect ( 'battlefield/enter/' . $structure -> id);
 		}
 		
 	}
@@ -200,14 +200,14 @@ class Controller_Battlefield extends Controller_Template
 		
 		if ( $ca -> do_action( $par,  $message ) )
 		{ 				
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-			url::redirect('region/view/' . $char -> position_id ); 
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/' . $char -> position_id ); 
 
 		}	
 		else	
 		{ 
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-			url::redirect ( 'battlefield/enter/' . $structure -> id);
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+			HTTP::redirect ( 'battlefield/enter/' . $structure -> id);
 		}
 		
 	
@@ -216,7 +216,7 @@ class Controller_Battlefield extends Controller_Template
 	public function manage( $structure_id )
 	{
 		
-		url::redirect('/battlefield/raidloot/' . $structure_id);
+		HTTP::redirect('/battlefield/raidloot/' . $structure_id);
 	}
 	
 	/*
@@ -238,8 +238,8 @@ class Controller_Battlefield extends Controller_Template
 		
 		if ( !$structure -> loaded or $structure -> getParentType() != 'battlefield' )
 		{			
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
-			url::redirect ( 'battlefield/enter/' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
+			HTTP::redirect ( 'battlefield/enter/' );
 		}	
 
 		//////////////////////////////////////
@@ -248,8 +248,8 @@ class Controller_Battlefield extends Controller_Template
 		
 		if ( $battle -> status != 'completed' )
 		{			
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
-			url::redirect ( 'battlefield/enter/' ); 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
+			HTTP::redirect ( 'battlefield/enter/' ); 
 		}		
 		
 		//////////////////////////////////////
@@ -267,11 +267,11 @@ class Controller_Battlefield extends Controller_Template
 			($battle -> defender_wins > $battle -> attacker_wins 
 			and $char -> region -> kingdom -> id != $attackedregion -> kingdom -> id )	)
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
-			url::redirect ( 'battlefield/enter/' ); 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
+			HTTP::redirect ( 'battlefield/enter/' ); 
 		}				
 
-		url::redirect ( 'structure/inventory/' . $structure_id  ); 
+		HTTP::redirect ( 'structure/inventory/' . $structure_id  ); 
 		
 	}
 	

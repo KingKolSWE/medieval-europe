@@ -20,8 +20,8 @@ class Controller_WatchTower extends Controller_Template
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'watch') )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}	
 			
 			
@@ -34,19 +34,19 @@ class Controller_WatchTower extends Controller_Template
 		else
 		{
 			
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'watch') )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}			
 			
 			$adjacentregions[$structure -> region_id ] = __($structure -> region -> name );		
 			$_adjacentregions = Region_Model::find_adjacentregions( $structure -> region );
 			$adjacentregions = $adjacentregions + $_adjacentregions ;
 			
-			if ( $this -> input -> post('startwatch') ) 
+			if ( $this -> request -> post('startwatch') ) 
 			{							
 				$currentwatchedregion_id = $structure -> region_id;
 				
@@ -57,25 +57,25 @@ class Controller_WatchTower extends Controller_Template
 				if ( $ca -> do_action( $par,  $message ) )
 				{
 					$presentchars = Region_Model::get_characteractivity( $currentwatchedregion_id  );			
-					Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); 					
+					Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); 					
 				}	
 				else	
 				{ 
-					Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 					
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 					
 				}
 				
 			}
 			else
 			{
 				
-				$currentwatchedregion_id = $this -> input -> post('region_id');				
+				$currentwatchedregion_id = $this -> request -> post('region_id');				
 				if ( !array_key_exists( $currentwatchedregion_id, $adjacentregions ) )
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
-					url::redirect('watchtower/watch/');
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
+					HTTP::redirect('watchtower/watch/');
 				}
 			
-				$presentchars = Region_Model::get_characteractivity( $this -> input -> post('region_id')  );			
+				$presentchars = Region_Model::get_characteractivity( $this -> request -> post('region_id')  );			
 				
 			}
 		

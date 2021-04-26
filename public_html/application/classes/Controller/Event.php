@@ -84,8 +84,8 @@ public function accept_invite ($group_id)
 				'normal'
 				);
 				
-		Session::set_flash('user_message', "<div class=\"info_msg\">". __('events.flash_invite_accepted', $group->name) . "</div>");		
-		url::redirect( 'character/details/' );
+		Session::instance()->set('user_message', "<div class=\"info_msg\">". __('events.flash_invite_accepted', $group->name) . "</div>");		
+		HTTP::redirect( 'character/details/' );
 }
 
 }

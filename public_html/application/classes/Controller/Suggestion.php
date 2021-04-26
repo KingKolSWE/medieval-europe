@@ -59,9 +59,9 @@ class Controller_Suggestion extends Controller_Template
 		
 		if ( !$suggestion -> loaded )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('suggestions.suggestionnotfound') . "</div>" );
-			url::redirect(request::referrer());			
+			HTTP::redirect(request::referrer());			
 		}
 		
 		$stat = Model_Character::get_stat_d( $char -> id, 'votedsuggestion', $id );
@@ -107,7 +107,7 @@ class Controller_Suggestion extends Controller_Template
 		else
 		{
 			
-			$post = Validation::factory($this -> input -> post())
+			$post = Validation::factory($this -> request -> post())
 				-> add_rules('title','required', 'length[3,50]')
 				-> add_rules('body', 'required', 'length[20,4096]')
 				-> add_rules('discussionurl', 'required');	
@@ -119,15 +119,15 @@ class Controller_Suggestion extends Controller_Template
 				
 				if ($rc == true )
 				{
-					Session::set_flash('user_message', "<div class=\"info_msg\">" . 
+					Session::instance()->set('user_message', "<div class=\"info_msg\">" . 
 					$message . "</div>" );
-					url::redirect('suggestion/index/new');
+					HTTP::redirect('suggestion/index/new');
 				}
 				else
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+					Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 					$message .  "</div>" );
-					url::redirect('suggestion/index/new');					
+					HTTP::redirect('suggestion/index/new');					
 				}
 				
 			}
@@ -168,13 +168,13 @@ class Controller_Suggestion extends Controller_Template
 		
 		if ( $rc == false )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . $message . "</div>" );
-			url::redirect('suggestion/index/new');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . $message . "</div>" );
+			HTTP::redirect('suggestion/index/new');
 		}	
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">" . $message . "</div>" );
-			url::redirect('suggestion/index/new');
+			Session::instance()->set('user_message', "<div class=\"info_msg\">" . $message . "</div>" );
+			HTTP::redirect('suggestion/index/new');
 		}	
 		
 	}
@@ -216,9 +216,9 @@ class Controller_Suggestion extends Controller_Template
 		  	    !Auth::instance() -> logged_in('admin')
 			)
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 					__('suggestions.cannoteditsuggestion') . "</div>" );
-				url::redirect(request::referrer());			
+				HTTP::redirect(request::referrer());			
 			}		
 			
 			$form = array(
@@ -232,10 +232,10 @@ class Controller_Suggestion extends Controller_Template
 		}
 		else
 		{
-			$post = Validation::factory($this -> input -> post())
+			$post = Validation::factory($this -> request -> post())
 				-> add_rules('title','required', 'length[5,50]')
 				-> add_rules('body', 'required', 'length[20,4096]');				
-			$suggestion = ORM::factory('suggestion', $this -> input -> post('id') );
+			$suggestion = ORM::factory('suggestion', $this -> request -> post('id') );
 
 			if ( $post -> validate() )
 			{	
@@ -243,15 +243,15 @@ class Controller_Suggestion extends Controller_Template
 				
 				if ($rc == true )
 				{
-					Session::set_flash('user_message', "<div class=\"info_msg\">" . 
+					Session::instance()->set('user_message', "<div class=\"info_msg\">" . 
 					$message . "</div>" );
-					url::redirect('suggestion/index/new');
+					HTTP::redirect('suggestion/index/new');
 				}
 				else
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+					Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 					$message .  "</div>" );
-					url::redirect('suggestion/index/new');				
+					HTTP::redirect('suggestion/index/new');				
 				}			
 			}
 			else
@@ -279,14 +279,14 @@ class Controller_Suggestion extends Controller_Template
 
 		if ( $rc )
 		{				
-			Session::set_flash('user_message', "<div class=\"info_msg\">" . $message . "</div>" );			
-			url::redirect( request::referrer() );
+			Session::instance()->set('user_message', "<div class=\"info_msg\">" . $message . "</div>" );			
+			HTTP::redirect( request::referrer() );
 
 		}
 		else
 		{			
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . $message . "</div>" );
-			url::redirect( request::referrer() );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . $message . "</div>" );
+			HTTP::redirect( request::referrer() );
 		} 
 		
 	}
@@ -301,9 +301,9 @@ class Controller_Suggestion extends Controller_Template
 		
 		if ( ! $suggestion -> loaded )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('suggestions.error-suggestionnotfound') . "</div>" );
-			url::redirect( 'suggestion/view/'.$id);
+			HTTP::redirect( 'suggestion/view/'.$id);
 		}
 		
 		
@@ -339,35 +339,35 @@ class Controller_Suggestion extends Controller_Template
 			
 			if ( !$suggestion -> loaded )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 					__('suggestions.suggestionnotfound') . "</div>" );
-				url::redirect(request::referrer());			
+				HTTP::redirect(request::referrer());			
 			}
 						
 		}
 		else
 		{
 			
-			$suggestion = ORM::factory('suggestion', $this -> input -> post('id') );	
+			$suggestion = ORM::factory('suggestion', $this -> request -> post('id') );	
 			
 			
-			$post = Validation::factory($this -> input -> post())
+			$post = Validation::factory($this -> request -> post())
 				-> add_rules('reason','required');				
 			
 			if ( $post -> validate() )
 			{
-				$rc = Suggestion_Model::remove_model( $char, $this -> input -> post('id'), $this -> input -> post('reason'), $message );
+				$rc = Suggestion_Model::remove_model( $char, $this -> request -> post('id'), $this -> request -> post('reason'), $message );
 
 				if ( $rc )
 				{				
-					Session::set_flash('user_message', "<div class=\"info_msg\">" . $message . "</div>" );			
-					url::redirect( 'suggestion/index' );
+					Session::instance()->set('user_message', "<div class=\"info_msg\">" . $message . "</div>" );			
+					HTTP::redirect( 'suggestion/index' );
 
 				}
 				else
 				{			
-					Session::set_flash('user_message', "<div class=\"error_msg\">" . $message . "</div>" );
-					url::redirect( 'suggestion/index' );
+					Session::instance()->set('user_message', "<div class=\"error_msg\">" . $message . "</div>" );
+					HTTP::redirect( 'suggestion/index' );
 				}
 			}
 			else

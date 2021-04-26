@@ -64,11 +64,11 @@ class Controller_Trainingground extends Controller_Template
 			'armorshield2' => '',
 		);
 		
-		$armors = ORM::factory( 'cfgitem' ) -> 	where ( array( 'category' => 'armor' ) ) -> find_all();
+		$armors = ORM::factory( 'cfgitem' ) -> 	where ( 'category', '=', 'armor' ) -> find_all();
 		
-		$listweapons = ORM::factory( 'cfgitem' ) -> 
-			in ( 'category', array( 'weapon' ) ) -> 
-			orderby( 'id', 'ASC' ) -> find_all() -> select_list( 'id', 'name');
+		$listweapons = ORM::factory( 'cfgitem' )
+			-> where ( 'category', 'in', array( 'weapon' ) ) ->
+			order_by( 'id', 'ASC' ) -> find_all() -> select( 'id', 'name') ->as_array();
 		
 		$listweapons[0] = 'structures_trainingground.noweapon';
 		foreach ( $listweapons as $key => &$value )		
@@ -88,75 +88,75 @@ class Controller_Trainingground extends Controller_Template
 			$structure = StructureFactory_Model::create( null, $structure_id );
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 'public', 'trainwithsparring' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect( 'region/view/' );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect( 'region/view/' );
 			}
 		}
 		else
 		{	
 			//var_dump($_POST);exit;
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 'public', 'trainwithsparring' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect( 'region/view/' );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect( 'region/view/' );
 			}
 			
-			$debug = ($this -> input -> post('debugmode') == 'debug');			
+			$debug = ($this -> request -> post('debugmode') == 'debug');			
 			
-			if ( $this -> input -> post('repeats') > $maxrepeats )
+			if ( $this -> request -> post('repeats') > $maxrepeats )
 			{
-				Session::set_flash( 'user_message', "<div class=\"error_msg\">Please don't use more then {$maxrepeats} repeats.</div>");
-				url::redirect('trainingground/trainwithsparring/' . $structure -> id );	
+				Session::instance()->set( 'user_message', "<div class=\"error_msg\">Please don't use more then {$maxrepeats} repeats.</div>");
+				HTTP::redirect('trainingground/trainwithsparring/' . $structure -> id );	
 			}
 			
-			if ( $this -> input -> post('repeats') > 1  and $debug == true )
+			if ( $this -> request -> post('repeats') > 1  and $debug == true )
 			{
-				Session::set_flash( 'user_message', "<div class=\"error_msg\">Please don't use more then one repeats when using debug mode.</div>");
-				url::redirect('trainingground/trainwithsparring/' . $structure -> id );			
+				Session::instance()->set( 'user_message', "<div class=\"error_msg\">Please don't use more then one repeats when using debug mode.</div>");
+				HTTP::redirect('trainingground/trainwithsparring/' . $structure -> id );			
 			}		
 			
 			// check moneys
 			
-			if ( $this -> input -> post('fightd') )
+			if ( $this -> request -> post('fightd') )
 			{
-				if ( $this -> input -> post('debugmode') == true )
+				if ( $this -> request -> post('debugmode') == true )
 					$cost = 5;
 				else
 					$cost = 2;
 					
 				if ( $character -> get_item_quantity( 'doubloon' ) < $cost )
 				{ 	
-					Session::set_flash( 'user_message', "<div class=\"error_msg\">" . __('bonus.error-notenoughdoubloons') . "</div>");				url::redirect('trainingground/trainwithsparring/' . $structure -> id );
+					Session::instance()->set( 'user_message', "<div class=\"error_msg\">" . __('bonus.error-notenoughdoubloons') . "</div>");				HTTP::redirect('trainingground/trainwithsparring/' . $structure -> id );
 				}
 				else
 					$character -> modify_doubloons( -$cost, 'sparringpartner' );
 
 			}
 			
-			if ( $this -> input -> post('fightsc') )
+			if ( $this -> request -> post('fightsc') )
 			{
-				if ( $this -> input -> post('debugmode') == true )
+				if ( $this -> request -> post('debugmode') == true )
 					$cost = 15;
 				else
 					$cost = 6;
 					
 				if ( $character -> check_money( $cost ) == false )
 				{ 	
-					Session::set_flash( 'user_message', "<div class=\"error_msg\">" . __('charactions.global_notenoughmoney') . "</div>");		
-					url::redirect('trainingground/trainwithsparring/' . $structure -> id );
+					Session::instance()->set( 'user_message', "<div class=\"error_msg\">" . __('charactions.global_notenoughmoney') . "</div>");		
+					HTTP::redirect('trainingground/trainwithsparring/' . $structure -> id );
 				}
 				else
 					$character -> modify_coins( -$cost, 'sparringpartner' );
 
 			}			
 			
-			$data = ST_TrainingGround_1_Model::trainwithsparring( $this -> input -> post(), $debug );
+			$data = ST_TrainingGround_1_Model::trainwithsparring( $this -> request -> post(), $debug );
 			
 		}
 		
 				
-		$form = arr::overwrite($form, $this -> input -> post()); 		
+		$form = arr::overwrite($form, $this -> request -> post()); 		
 		$view -> form = $form;		
 		$view -> listarmors = $listarmors;
 		$view -> structure_id = $structure_id;
@@ -192,8 +192,8 @@ class Controller_Trainingground extends Controller_Template
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'public', 'train' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}				
 					
 			$model = StructureFactory_Model::create( $structure->structure_type->type, $structure_id );
@@ -203,13 +203,13 @@ class Controller_Trainingground extends Controller_Template
 		else
 		{
 		
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );			
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );			
 			
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'public', 'train' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			
 			$model = StructureFactory_Model::create( $structure->structure_type->type, $structure_id );			
@@ -218,21 +218,21 @@ class Controller_Trainingground extends Controller_Template
 			$o = Character_Action_Model::factory("study");
 			$par[0] = $character;
 			$par[1] = $model;				
-			$par[2] = $this -> input -> post('hours');			
-			$par[3] = $this -> input -> post('course');
+			$par[2] = $this -> request -> post('hours');			
+			$par[3] = $this -> request -> post('course');
 			
 			$rec = $o -> do_action( $par, $message );			
 
 			if ( $rec )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect( $structure -> getSuperType() . '/train/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect( $structure -> getSuperType() . '/train/' . $structure -> id );
 				
 			}
 			else
 			{					
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");		
-				url::redirect( $structure -> getSuperType() . '/train/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");		
+				HTTP::redirect( $structure -> getSuperType() . '/train/' . $structure -> id );
 			}					
 			
 		}
@@ -256,7 +256,7 @@ class Controller_Trainingground extends Controller_Template
 	
 	function info( $structure_id )
 	{
-		url::redirect( '/structure/info/' . $structure_id );
+		HTTP::redirect( '/structure/info/' . $structure_id );
 	}
 
 	// assign_rolerp
@@ -300,18 +300,18 @@ class Controller_Trainingground extends Controller_Template
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}			
 		}
 		else
 		{	
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 
 			$ca = Character_Action_Model::factory("assignrolerp");		
@@ -319,25 +319,25 @@ class Controller_Trainingground extends Controller_Template
 			// Characther che nomina
 			$par[0] = $character;
 			// Character nominato
-			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->input->post('nominated')) )->find(); 
+			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->request->post('nominated')) )->find(); 
 			// Tag ruolo
-			$par[2] = $this->input->post( 'role' );
+			$par[2] = $this->request->post( 'role' );
 			// Regione dove avviene la nomina
-			$par[3] = ORM::factory( 'region', $this->input->post( 'region_id' ) ); 
+			$par[3] = ORM::factory( 'region', $this->request->post( 'region_id' ) ); 
 			// Struttura da dove avviene la nomina
-			$par[4] = ORM::factory( 'structure', $this->input->post( 'structure_id' ) );
+			$par[4] = ORM::factory( 'structure', $this->request->post( 'structure_id' ) );
 			// Nome del feudo da associare al titolo
-			$par[5] = $this->input->post( 'place' );
+			$par[5] = $this->request->post( 'place' );
 			
 			if ( $ca->do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect('trainingground/manage/' . $structure->id);
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect('trainingground/manage/' . $structure->id);
 			}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-				url::redirect ( 'trainingground/assign_rolerp/' . $structure->id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+				HTTP::redirect ( 'trainingground/assign_rolerp/' . $structure->id );
 			}
 		}
 		

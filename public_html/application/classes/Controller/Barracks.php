@@ -25,18 +25,18 @@ class Controller_Barracks extends Controller_Template
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'armory' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}	
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'armory' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}	
 		}
 		
@@ -65,8 +65,8 @@ class Controller_Barracks extends Controller_Template
 		
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'manageprisoners') )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}			
 		
 		$prisoners = ORM::factory("character_sentence")
@@ -96,33 +96,33 @@ class Controller_Barracks extends Controller_Template
 	function freeprisoner()
 	{
 				
-		$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 				
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message
 		, 'private', 'freeprisoner') )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 		
 		$ca = Character_Action_Model::factory("freeprisoner");		
 		$par[0] = ORM::factory("character", Session::instance()->get('char_id')); 
-		$par[1] = ORM::factory("character", $this->input->post('imprisoned_id') );
-		$par[2] = $this->input->post('reason');
+		$par[1] = ORM::factory("character", $this->request->post('imprisoned_id') );
+		$par[2] = $this->request->post('reason');
 		$par[3] = $structure;
-		$par[4] = ORM::factory("character_sentence", $this->input->post('sentence_id'));
+		$par[4] = ORM::factory("character_sentence", $this->request->post('sentence_id'));
 
 	
 		if ( $ca->do_action( $par,  $message ) )
 		{ 
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); 
-			url::redirect( '/barracks/manageprisoners/' . $this->input->post('structure_id'));
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); 
+			HTTP::redirect( '/barracks/manageprisoners/' . $this->request->post('structure_id'));
 		}	
 		else	
 		{ 
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( '/barracks/manageprisoners/' . $this->input->post('structure_id'));
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( '/barracks/manageprisoners/' . $this->request->post('structure_id'));
 		}		
 		
 		return;
@@ -142,11 +142,11 @@ class Controller_Barracks extends Controller_Template
 		$par[2] = $qta;
 		
 		if ( $ca->do_action( $par,  $message ) )
-		 	Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");		
+		 	Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");		
 		else			
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");					
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");					
 		
-		url::redirect('region/view/');
+		HTTP::redirect('region/view/');
 		
 	}
 	
@@ -175,42 +175,42 @@ class Controller_Barracks extends Controller_Template
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'restrain') )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 		}
 		else
 		{
 		
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id'));
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));
 			
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'restrain') )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			
 			$par[0] = $character;
-			$par[1] = ORM::factory('character') -> where ( array( 'name' => $this->input->post('target') ) ) -> find(); 
-			$par[2] = $this->input->post('hours');
-			$par[3] = $this->input->post('reason');
+			$par[1] = ORM::factory('character') -> where ( array( 'name' => $this->request->post('target') ) ) -> find(); 
+			$par[2] = $this->request->post('hours');
+			$par[3] = $this->request->post('reason');
 			
-			$form['target'] = $this->input->post('target');
-			$form['reason'] = $this->input->post('reason');			
-			$form['hours'] = $this->input->post('hours');		
+			$form['target'] = $this->request->post('target');
+			$form['reason'] = $this->request->post('reason');			
+			$form['hours'] = $this->request->post('hours');		
 			
 			$ca = Character_Action_Model::factory("restrain");		
 			if ( $ca->do_action( $par,  $message ) )
 			{ 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");				
-				url::redirect ( 'barracks/managerestrained/' . $structure -> id);
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");				
+				HTTP::redirect ( 'barracks/managerestrained/' . $structure -> id);
 			}	
 			else	
 			{ 
-				$view -> hours =  $this -> input -> post('hours');
-				$view -> reason = $this -> input -> post('reason');
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				$view -> hours =  $this -> request -> post('hours');
+				$view -> reason = $this -> request -> post('reason');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 			}
 		
 		}
@@ -247,8 +247,8 @@ class Controller_Barracks extends Controller_Template
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'managerestrained') )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			
 			$db = Database::instance();
@@ -269,33 +269,33 @@ class Controller_Barracks extends Controller_Template
 		else
 		{
 			
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 
 			// controllo permessi		
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'managerestrained') )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			
 			$par[0] = $character;
-			$par[1] = ORM::factory ( 'character', $this -> input -> post('character_id' ) ); 
-			$par[2] = ORM::factory ( 'character_action', $this -> input -> post( 'action_id' ) ); 
-			$par[3] = $this -> input -> post( 'reason' ); 
+			$par[1] = ORM::factory ( 'character', $this -> request -> post('character_id' ) ); 
+			$par[2] = ORM::factory ( 'character_action', $this -> request -> post( 'action_id' ) ); 
+			$par[3] = $this -> request -> post( 'reason' ); 
 			
 			$ca = Character_Action_Model::factory("cancelrestrain");		
 			
 			if ( $ca->do_action( $par,  $message ) )
 			{ 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");				
-				url::redirect ( 'barracks/managerestrained/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");				
+				HTTP::redirect ( 'barracks/managerestrained/' . $structure -> id );
 				return;
 			}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");				
-				url::redirect ( 'barracks/managerestrained/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");				
+				HTTP::redirect ( 'barracks/managerestrained/' . $structure -> id );
 				return;
 			}
 		}
@@ -327,13 +327,13 @@ class Controller_Barracks extends Controller_Template
 
 		if ( $ca->do_action( $par,  $message ) )
 		{ 				
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");				
-			url::redirect ( 'region/view' );				
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");				
+			HTTP::redirect ( 'region/view' );				
 		}	
 		else	
 		{ 
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");	
-			url::redirect ( 'region/view');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");	
+			HTTP::redirect ( 'region/view');
 			
 		}
 		
@@ -349,32 +349,32 @@ class Controller_Barracks extends Controller_Template
 	{
 	
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id'));		
+		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));		
 		
 		// controllo permessi		
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 			'private', 'lend') )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 		
 		$par[0] = $character;
 		$par[1] = $structure;
-		$par[2] = ORM::factory('character') -> where ( 'name' , $this -> input -> post('target' ) ) -> find();
-		$par[3] = $this -> input -> post( 'armoryitems' );
+		$par[2] = ORM::factory('character') -> where ( 'name' , $this -> request -> post('target' ) ) -> find();
+		$par[3] = $this -> request -> post( 'armoryitems' );
 		
 		$ca = Character_Action_Model::factory("lendarmoryitem");		
 
 		if ( $ca->do_action( $par,  $message ) )
 		{ 				
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");				
-			url::redirect ( 'barracks/armory/' . $structure -> id );				
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");				
+			HTTP::redirect ( 'barracks/armory/' . $structure -> id );				
 		}	
 		else	
 		{ 
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");	
-			url::redirect ( 'barracks/armory/' . $structure -> id );				
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");	
+			HTTP::redirect ( 'barracks/armory/' . $structure -> id );				
 			
 		}
 		
@@ -400,8 +400,8 @@ class Controller_Barracks extends Controller_Template
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 		'private', 'viewlends' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 		// find lent items (excluding the cloned 1 for send)
@@ -466,25 +466,25 @@ class Controller_Barracks extends Controller_Template
 			
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'armory' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}			
 		}
 		
 		else
 		{
 			
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id'));
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));
 			// controllo permessi		
 			
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'armory' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			
 			
-			$target = ORM::factory('character') -> where ( 'name', $this -> input -> post( 'target' ) ) -> find();
+			$target = ORM::factory('character') -> where ( 'name', $this -> request -> post( 'target' ) ) -> find();
 			
 			$par[0] = $character;
 			$par[1] = $structure;
@@ -494,13 +494,13 @@ class Controller_Barracks extends Controller_Template
 
 			if ( $ca -> do_action( $par,  $message ) )
 			{ 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");				
-				url::redirect ( 'barracks/givearmoryaccess/' . $structure -> id );				
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");				
+				HTTP::redirect ( 'barracks/givearmoryaccess/' . $structure -> id );				
 			}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");	
-				url::redirect ( 'barracks/givearmoryaccess/' . $structure -> id );				
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");	
+				HTTP::redirect ( 'barracks/givearmoryaccess/' . $structure -> id );				
 				
 			}			
 
@@ -533,8 +533,8 @@ class Controller_Barracks extends Controller_Template
 		// controllo permessi		
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'armory' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}			
 						
 		$par[0] = $structure;
@@ -545,13 +545,13 @@ class Controller_Barracks extends Controller_Template
 
 		if ( $ca->do_action( $par,  $message ) )
 		{ 				
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");				
-			url::redirect ( 'barracks/givearmoryaccess/' . $structure -> id );				
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");				
+			HTTP::redirect ( 'barracks/givearmoryaccess/' . $structure -> id );				
 		}	
 		else	
 		{ 
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");	
-			url::redirect ( 'barracks/givearmoryaccess/' . $structure -> id );				
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");	
+			HTTP::redirect ( 'barracks/givearmoryaccess/' . $structure -> id );				
 			
 		}
 		
@@ -588,38 +588,38 @@ class Controller_Barracks extends Controller_Template
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}			
 		}
 		else
 		{				
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			
 			// controllo permessi		
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			$ca = Character_Action_Model::factory("assignrolerp");		
 			$par[0] = $character;
-			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->input->post('nominated')) )->find(); 
-			$par[2] = $this->input->post( 'role' );
-			$par[3] = ORM::factory( 'region', $this->input->post( 'region_id' ) ); 
-			$par[4] = ORM::factory( 'structure', $this->input->post( 'structure_id' ) );
-			$par[5] = $this->input->post( 'place' );
+			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->request->post('nominated')) )->find(); 
+			$par[2] = $this->request->post( 'role' );
+			$par[3] = ORM::factory( 'region', $this->request->post( 'region_id' ) ); 
+			$par[4] = ORM::factory( 'structure', $this->request->post( 'structure_id' ) );
+			$par[5] = $this->request->post( 'place' );
 			
 			if ( $ca->do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect('barracks/manage/' . $structure->id);
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect('barracks/manage/' . $structure->id);
 			}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-				url::redirect ( 'barracks/assign_rolerp/' . $structure->id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+				HTTP::redirect ( 'barracks/assign_rolerp/' . $structure->id );
 			}
 		}
 		

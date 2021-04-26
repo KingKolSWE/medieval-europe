@@ -19,10 +19,10 @@ class Controller_Affiliate extends Controller_Template
 		
 		//if a post exists, validate and process input
 		
-		if ($this -> input -> post())
+		if ($this -> request -> post())
 		{
 		
-			$post = Validation::factory($this -> input -> post())
+			$post = Validation::factory($this -> request -> post())
 				-> pre_filter('trim', TRUE)
 				-> add_rules('username','required', 'alpha_numeric', 'length[5,20]')
 				-> add_rules('email', 'required', 'email', 'length[1,60]')
@@ -37,14 +37,14 @@ class Controller_Affiliate extends Controller_Template
 				// Add user
 				$rc = Affiliate_Model::register($post);
 				if ( $rc == false )
-					Session::set_flash( 'user_message', "<div class=\"alert alert-danger\">" . $message . "</div>");										
+					Session::instance()->set( 'user_message', "<div class=\"alert alert-danger\">" . $message . "</div>");										
 				else
 				{
 					
-					$auth = new Auth();
-					$auth -> force_login( $this -> input -> post('username'));
+					$auth = Auth::instance();
+					$auth -> force_login( $this -> request -> post('username'));
 					header('P3P: CP="NOI ADM DEV COM NAV OUR STP"');
-					url::redirect( 'affiliate/dashboard');						
+					HTTP::redirect( 'affiliate/dashboard');						
 				}
 			}
 			else
@@ -68,7 +68,7 @@ class Controller_Affiliate extends Controller_Template
 		$sheets  = array( 'affiliates' => 'screen' );
 		$this -> template = View::factory('template/affiliates');
 		
-		if ( $this -> input -> post() )
+		if ( $this -> request -> post() )
 		{
 			
 			$post = Validation::factory($_POST)
@@ -78,10 +78,10 @@ class Controller_Affiliate extends Controller_Template
 							
 			if ($post -> validate() )
 			{
-				$post = new Validation( $this -> input -> post() );
-				$username = $this->input->post('username');
-				$password = $this->input->post('password');
-				$this -> auth = new Auth();
+				$post = new Validation( $this -> request -> post() );
+				$username = $this->request->post('username');
+				$password = $this->request->post('password');
+				$this -> auth = Auth::instance();
 				$error = null;			
 				
 				// L' utente esiste?
@@ -93,7 +93,7 @@ class Controller_Affiliate extends Controller_Template
 				if ( !$user -> loaded )
 				{
 					$error = 'user.login_usernotfound';
-					Session::set_flash( 'user_message', "<div class=\"error_msg\">".__( $error )."</div>");
+					Session::instance()->set( 'user_message', "<div class=\"error_msg\">".__( $error )."</div>");
 				}			
 				
 				if ( is_null( $error ) )
@@ -106,18 +106,18 @@ class Controller_Affiliate extends Controller_Template
 					if ( $rc )
 					{
 						header('P3P: CP="NOI ADM DEV COM NAV OUR STP"');
-						url::redirect( 'affiliate/dashboard');						
+						HTTP::redirect( 'affiliate/dashboard');						
 					}					
 					else
 					{
 						kohana::log( 'debug', "-> Password [{$password}] is wrong." ); 
-						Session::set_flash( 'user_message', "<div class=\"alert alert-warning\">".__("user.incorrectpassword")."</div>");			
+						Session::instance()->set( 'user_message', "<div class=\"alert alert-warning\">".__("user.incorrectpassword")."</div>");			
 					}
 					
 				}
 			}	
 			else
-				Session::set_flash( 'user_message', "<div class='error_msg'>".__("user.login_autherror")."</div>");
+				Session::instance()->set( 'user_message', "<div class='error_msg'>".__("user.login_autherror")."</div>");
 		}
 		
 		$this -> template -> sheets = $sheets;
@@ -138,7 +138,7 @@ class Controller_Affiliate extends Controller_Template
 
 		$form = array('email' => '');				
 		
-		if ( $this -> input -> post() )
+		if ( $this -> request -> post() )
 		{
 			  
 			$post = Validation::factory($_POST)
@@ -171,13 +171,13 @@ class Controller_Affiliate extends Controller_Template
 					$to      = $post['email'];					
 					$rc = Model_Utility::mail( $to, $subject, $body );
 					if ($rc)
-						Session::set_flash('user_message', "<div class=\"alert alert-info\">A new password has been emailed.</div>");        
+						Session::instance()->set('user_message', "<div class=\"alert alert-info\">A new password has been emailed.</div>");        
 					else
-						Session::set_flash('user_message', "<div class=\"alert alert-danger\">Something went wrong while sending email, please contact support.</div>");         
+						Session::instance()->set('user_message', "<div class=\"alert alert-danger\">Something went wrong while sending email, please contact support.</div>");         
 				}  							
 				else
 				{
-					Session::set_flash('user_message', "<div class=\"alert alert-warning\">No user found with this email.</div>");          
+					Session::instance()->set('user_message', "<div class=\"alert alert-warning\">No user found with this email.</div>");          
 				}
 			}
 			else
@@ -266,7 +266,7 @@ class Controller_Affiliate extends Controller_Template
 		
 		$user = Auth::instance() -> get_user();	
 			
-		if ( $this -> input -> post() )
+		if ( $this -> request -> post() )
 		{      
 			  
 							
@@ -281,9 +281,9 @@ class Controller_Affiliate extends Controller_Template
 			
 			if ($post -> validate() )
 			{
-				$user -> password = $this -> input -> post( 'password'); $user -> save();
-				Session::set_flash('user_message', "<div class=\"alert alert-warning\">".__('user.change_password_ok')."</div>" );
-				url::redirect('affiliate/dashboard');
+				$user -> password = $this -> request -> post( 'password'); $user -> save();
+				Session::instance()->set('user_message', "<div class=\"alert alert-warning\">".__('user.change_password_ok')."</div>" );
+				HTTP::redirect('affiliate/dashboard');
 			}	
 			else
 			{

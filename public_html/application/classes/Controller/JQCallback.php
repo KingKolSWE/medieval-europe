@@ -12,13 +12,13 @@ class Controller_JQCallback extends Controller_Template
 		{
 				$this -> auto_render = false;	
 				$char = Model_Character::get_info( Session::instance()->get('char_id') );
-				//KO7::$log->add(KO7_Log::DEBUG, "-> Request {$this -> input -> post('request')}");
-				//KO7::$log->add(KO7_Log::DEBUG, kohana::debug($this -> input -> post('to')));
-				$targets = $this -> input -> post('to');
+				//KO7::$log->add(KO7_Log::DEBUG, "-> Request {$this -> request -> post('request')}");
+				//KO7::$log->add(KO7_Log::DEBUG, kohana::debug($this -> request -> post('to')));
+				$targets = $this -> request -> post('to');
 				foreach ($targets as $key => $value)
 				{
 					$f = new Facebook_Inviterequest_Model();
-					$f -> request_id = $this -> input -> post('request');
+					$f -> request_id = $this -> request -> post('request');
 					$f -> user_id = $char -> user_id;
 					$f -> friend_id = $value;
 					$f -> status = '_new';
@@ -38,15 +38,15 @@ class Controller_JQCallback extends Controller_Template
 		if ( request::is_ajax() )
 		{
 			$this -> auto_render = false;	
-			KO7::$log->add(KO7_Log::DEBUG, "-> Disabling {$this -> input -> post('region_id')}");
-			$region = ORM::factory('region', $this -> input -> post('region_id')) ;
+			KO7::$log->add(KO7_Log::DEBUG, "-> Disabling {$this -> request -> post('region_id')}");
+			$region = ORM::factory('region', $this -> request -> post('region_id')) ;
 			KO7::$log->add(KO7_Log::DEBUG, $region -> status);
 			if ( $region -> status == 'disabled')
 				$newstatus = 'enabled';
 			else
 				$newstatus = 'disabled';
 			
-			Database::instance()->query("update regions set status='{$newstatus}' where id = {$this -> input -> post('region_id')}");			
+			Database::instance()->query("update regions set status='{$newstatus}' where id = {$this -> request -> post('region_id')}");			
 			MY_Cache_Model::delete('-cfg-regions-byid');
 			echo $newstatus;
 		}
@@ -72,9 +72,9 @@ class Controller_JQCallback extends Controller_Template
 				'tos.php',
 			); 
 			
-			KO7::$log->add(KO7_Log::DEBUG, '-> Language: ' . $this -> input -> post('language'));				
-			KO7::$log->add(KO7_Log::DEBUG, '-> Search Term: ' . $this -> input -> post('searchterm'));			
-			$i18n_directory = $_SERVER['DOCUMENT_ROOT'] . url::base() . "/application/i18n/{$this -> input -> post('language')}" ;
+			KO7::$log->add(KO7_Log::DEBUG, '-> Language: ' . $this -> request -> post('language'));				
+			KO7::$log->add(KO7_Log::DEBUG, '-> Search Term: ' . $this -> request -> post('searchterm'));			
+			$i18n_directory = $_SERVER['DOCUMENT_ROOT'] . url::base() . "/application/i18n/{$this -> request -> post('language')}" ;
 			KO7::$log->add(KO7_Log::DEBUG, "-> Directory: {$i18n_directory}");
 			$handle = dir( $i18n_directory ) ;
 			$x = array();
@@ -88,8 +88,8 @@ class Controller_JQCallback extends Controller_Template
 						
 						foreach ( $lang as $key => $translation )
 						{							
-							KO7::$log->add(KO7_Log::DEBUG, "-> Searching for [{$this -> input -> post('searchterm')}] in {$translation}");
-							if ( strstr( $translation, $this -> input -> post('searchterm') ) )							
+							KO7::$log->add(KO7_Log::DEBUG, "-> Searching for [{$this -> request -> post('searchterm')}] in {$translation}");
+							if ( strstr( $translation, $this -> request -> post('searchterm') ) )							
 							{
 								$x[$entry][$key] = $translation;
 								break;
@@ -120,11 +120,11 @@ class Controller_JQCallback extends Controller_Template
 			$ngp = new NGP();
 			
 			kohana::log( 'debug', '-> generating random names...' . 
-				$this -> input -> post('charculture') . 
-				$this -> input -> post('charsex')); 
+				$this -> request -> post('charculture') . 
+				$this -> request -> post('charsex')); 
 			
 			$rndname = $ngp -> generate_name( 
-				$this -> input -> post('charculture'), $this -> input -> post('charsex' )) ;									
+				$this -> request -> post('charculture'), $this -> request -> post('charsex' )) ;									
 
 			echo json_encode( $rndname );
 		}		
@@ -139,11 +139,11 @@ class Controller_JQCallback extends Controller_Template
 
 	public function get_kingdominfo( )
 	{
-		KO7::$log->add(KO7_Log::DEBUG, 'Kingdom id: ' . $this -> input -> post('id') ); 
+		KO7::$log->add(KO7_Log::DEBUG, 'Kingdom id: ' . $this -> request -> post('id') ); 
 		if ( request::is_ajax() )
 		{
 			$this -> auto_render = false;
-			$kingdom = ORM::factory('kingdom', $this -> input -> post('id') );
+			$kingdom = ORM::factory('kingdom', $this -> request -> post('id') );
 			$info = $kingdom -> get_info();
 			$info['kingmessage'] = Model_Utility::bbcode($info['kingmessage']);
 			echo json_encode( $info );
@@ -251,7 +251,7 @@ class Controller_JQCallback extends Controller_Template
 	public function bbcodepreview()
 	{		
 		$this -> auto_render = false;				
-		$preview = Model_Utility::bbcode( $this -> input -> post('text' ) );
+		$preview = Model_Utility::bbcode( $this -> request -> post('text' ) );
 		echo $preview;
 	}
 	
@@ -346,9 +346,9 @@ class Controller_JQCallback extends Controller_Template
 		$html="";
 		
 		$this -> auto_render = false;	
-		$char = Model_Character::get_info( $this -> input -> post('characterid'));
+		$char = Model_Character::get_info( $this -> request -> post('characterid'));
 		$viewingchar =  Model_Character::get_info( Session::instance()->get('char_id') );
-		//$currentregion = ORM::factory('region', $this -> input -> post('regionid'));
+		//$currentregion = ORM::factory('region', $this -> request -> post('regionid'));
 		
 		if ($char -> type == 'npc' )
 		{
@@ -406,7 +406,7 @@ class Controller_JQCallback extends Controller_Template
 			if ( $char -> id != $viewingchar -> id 
 				and !is_null( $viewingcharrole) 
 				and $viewingcharrole -> tag == 'sheriff' 
-				and $this -> input -> post('regiontype') != 'sea' )
+				and $this -> request -> post('regiontype') != 'sea' )
 			{
 				$html .= "<br/>" . html::anchor('/barracks/arrest/' . $char -> id, __('structures_barracks.arrest' ));			
 			}
@@ -485,7 +485,7 @@ class Controller_JQCallback extends Controller_Template
 		$html = '<table>';
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
-		$structureid = $this -> input -> post( 'structureid' ); 		
+		$structureid = $this -> request -> post( 'structureid' ); 		
 		
 		$structure = StructureFactory_Model::create( null, $structureid );
 		
@@ -587,12 +587,12 @@ class Controller_JQCallback extends Controller_Template
 		$html="";
 		
 		$this -> auto_render = false;	
-		KO7::$log->add(KO7_Log::DEBUG, '-> Querying item: ' . $this -> input -> post('itemid') );
+		KO7::$log->add(KO7_Log::DEBUG, '-> Querying item: ' . $this -> request -> post('itemid') );
 		
 		$item = ORM::factory('item')
 			-> where ( array( 
-				'id' => $this -> input -> post('itemid'),
-				'region_id' => $this -> input -> post('regionid'),
+				'id' => $this -> request -> post('itemid'),
+				'region_id' => $this -> request -> post('regionid'),
 			)			
 		) -> find();
 		
@@ -632,7 +632,7 @@ class Controller_JQCallback extends Controller_Template
 	{
 		$this -> auto_render = false;				
 				
-		$diplomacyrelations = Diplomacy_Relation_Model::get_diplomacyrelations( $this -> input -> post('kingdom_id') ); 
+		$diplomacyrelations = Diplomacy_Relation_Model::get_diplomacyrelations( $this -> request -> post('kingdom_id') ); 
 		
 		$kingdoms = Database::instance() -> query(
 			'select k.id, r.name, coords 
@@ -650,7 +650,7 @@ class Controller_JQCallback extends Controller_Template
 		$k = 0;
 		foreach ( $diplomacyrelations as $dr )
 		{	
-			if ( $dr -> kingdom1_id == $this -> input -> post('kingdom_id') )
+			if ( $dr -> kingdom1_id == $this -> request -> post('kingdom_id') )
 				$targetkingdom = $dr -> kingdom2_id ;
 			else
 				$targetkingdom = $dr -> kingdom1_id ;
@@ -673,13 +673,13 @@ class Controller_JQCallback extends Controller_Template
 	{
 		
 		$this -> auto_render = false;				
-		$pb = PremiumBonus_Factory_Model::create( $this -> input -> post('name') );		
+		$pb = PremiumBonus_Factory_Model::create( $this -> request -> post('name') );		
 		$info = $pb -> get_info();
 		$countdown = Model_Utility::secs2hmstostring($info['enddate']-time());
 		$data = array(
-			'id' => $this -> input -> post('name'),
-			'originalprice' => $info['cuts'][$this -> input -> post('cut')]['price'],
-			'discountedprice' => $info['cuts'][$this -> input -> post('cut')]['discountedprice'],
+			'id' => $this -> request -> post('name'),
+			'originalprice' => $info['cuts'][$this -> request -> post('cut')]['price'],
+			'discountedprice' => $info['cuts'][$this -> request -> post('cut')]['discountedprice'],
 			'discount' => $info['discount'],
 			'timeuntildiscountends' => $countdown
 		);

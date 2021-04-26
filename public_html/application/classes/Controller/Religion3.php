@@ -28,25 +28,25 @@ class Controller_Religion3 extends Controller_Template
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'managehierarchy' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			
-			if ( $this -> input -> post('revoke') )
+			if ( $this -> request -> post('revoke') )
 				$ca = Character_Action_Model::factory("revokerole");		
 			else
 				$ca = Character_Action_Model::factory("assignrole");		
 			
-			$childstructure = ORM::factory('structure', $this -> input -> post('childstructure_id'));
+			$childstructure = ORM::factory('structure', $this -> request -> post('childstructure_id'));
 			$par[0] = $character;
-			$par[1] = ORM::factory('character') -> where ( 'name' , $this -> input -> post('owner')) -> find(); 
+			$par[1] = ORM::factory('character') -> where ( 'name' , $this -> request -> post('owner')) -> find(); 
 			$par[2] = 'church_level_4';
 			
-			if ( $this -> input -> post('revoke') )
+			if ( $this -> request -> post('revoke') )
 			{
 				$ca = Character_Action_Model::factory("revokerole");		
 				$par[3] = $structure;
@@ -62,13 +62,13 @@ class Controller_Religion3 extends Controller_Template
 		
 			if ( $ca -> do_action( $par,  $message ) )
 			{ 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect ( 'religion_3/managehierarchy/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect ( 'religion_3/managehierarchy/' . $structure -> id );
 			}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-				url::redirect ( 'religion_3/managehierarchy/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+				HTTP::redirect ( 'religion_3/managehierarchy/' . $structure -> id );
 			}	
 		}
 		
@@ -125,38 +125,38 @@ class Controller_Religion3 extends Controller_Template
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 		}
 		else
 		{	
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 
 			$ca = Character_Action_Model::factory("assignrolerp");		
 			//var_dump( $_POST ); exit;
 			// Characther che nomina
 			$par[0] = $character;
 			// Character nominato
-			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->input->post('nominated')) )->find(); 
+			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->request->post('nominated')) )->find(); 
 			// Tag ruolo
-			$par[2] = $this->input->post( 'role' );
+			$par[2] = $this->request->post( 'role' );
 			// Regione dove avviene la nomina
-			$par[3] = ORM::factory( 'region', $this->input->post( 'region_id' ) ); 
+			$par[3] = ORM::factory( 'region', $this->request->post( 'region_id' ) ); 
 			// Struttura da dove avviene la nomina
-			$par[4] = ORM::factory( 'structure', $this->input->post( 'structure_id' ) );
+			$par[4] = ORM::factory( 'structure', $this->request->post( 'structure_id' ) );
 			// Nome del feudo da associare al titolo
-			$par[5] = $this->input->post( 'place' );
+			$par[5] = $this->request->post( 'place' );
 			
 			if ( $ca->do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect('religion_3/manage/' . $structure->id);
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect('religion_3/manage/' . $structure->id);
 			}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-				url::redirect ( 'religion_3/assign_rolerp/' . $structure->id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+				HTTP::redirect ( 'religion_3/assign_rolerp/' . $structure->id );
 			}
 		}
 

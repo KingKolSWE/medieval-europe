@@ -7,7 +7,7 @@ class Controller_Terrain extends Controller_Template
 
 	public function index()
 	{
-		url::redirect('region/view');
+		HTTP::redirect('region/view');
 	}
 
 	/**
@@ -55,8 +55,8 @@ class Controller_Terrain extends Controller_Template
 		
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType() , $message, 'private', 'manage' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 		
 		if ( $structure -> attribute1 == 0 )
@@ -112,35 +112,35 @@ class Controller_Terrain extends Controller_Template
 
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType() , $message, 'private', 'seed' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> input -> post( 'structure_id' ) ); 
+			$structure = StructureFactory_Model::create( null, $this -> request -> post( 'structure_id' ) ); 
 
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType() , $message, 'private', 'seed' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			
 			$ca = Character_Action_Model::factory("seed");
 			
 			$par[0] = $structure;
-			$par[1] = ORM::factory( "item", $this -> input -> post('item_id' )); 
+			$par[1] = ORM::factory( "item", $this -> request -> post('item_id' )); 
 			$par[2] = $character;
 			
 			if ( $ca->do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect('/terrain/seed/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect('/terrain/seed/' . $structure -> id );
 			}
 			else	
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('/terrain/seed/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('/terrain/seed/' . $structure -> id );
 			}
 					
 		}
@@ -172,8 +172,8 @@ class Controller_Terrain extends Controller_Template
 		
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType() , $message, 'private', 'harvest' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 		
 		$ca = Character_Action_Model::factory("harvest");
@@ -183,13 +183,13 @@ class Controller_Terrain extends Controller_Template
 		
 		if ( $ca -> do_action( $par,  $message ) )
 		{ 
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); 
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); 
 		}	
 		else	
 		{ 
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
 		}
 		
-		url::redirect( "terrain/manage/" . $structure -> id );			
+		HTTP::redirect( "terrain/manage/" . $structure -> id );			
 	}
 }

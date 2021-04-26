@@ -14,8 +14,7 @@
  * @copyright  (c) 2007-2008 Kohana Team
  * @license    https://kohanaphp.com/license.html
  */
- 
-abstract class Controller_Template extends Controller {
+abstract class Controller_Template extends KO7_Controller_Template {
 
 	// Template view name
 	public $template = 'template';
@@ -29,9 +28,9 @@ abstract class Controller_Template extends Controller {
 	/**
 	 * Template loading and setup routine.
 	 */
-	public function __construct()
+	public function before()
 	{
-		parent::__construct();
+	    parent::before();
 
 		// Load the template
 		$this->template = View::factory($this->template);
@@ -49,13 +48,14 @@ abstract class Controller_Template extends Controller {
 	/**
 	 * Render the loaded template.
 	 */
-	public function _render()
+	public function after()
 	{
-		if ($this->auto_render == TRUE)
-		{
-			// Render the template when the class is destroyed
-			$this->template->render(TRUE);
-		}
+        if ($this->auto_render === TRUE)
+        {
+            $this->response->body($this->template->render());
+        }
+
+        parent::after();
 	}
 
 } // End Template_Controller

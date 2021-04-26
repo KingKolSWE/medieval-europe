@@ -21,8 +21,8 @@ class Controller_Nativevillage extends Controller_Template
 		
 		if ( isset($this -> disabledmodules['declarehostileaction']) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('charactions.error-moduleisdisabled') . "</div>");						
-			url::redirect('region/view/' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('charactions.error-moduleisdisabled') . "</div>");						
+			HTTP::redirect('region/view/' );
 		}
 		
 		if ( ! $_POST )
@@ -31,21 +31,21 @@ class Controller_Nativevillage extends Controller_Template
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
-			$par[0] = ORM::factory('group', $this->input->post('attackwithgroup') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$par[0] = ORM::factory('group', $this->request->post('attackwithgroup') );
 			$par[1] = $structure -> region ; 			
 			
 			$ca = Character_Action_Model::factory("attackir");		
 
 			if ( $ca -> do_action( $par,  $message ) )
 			{ 
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); 	
-				url::redirect('region/view'); 			
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); 	
+				HTTP::redirect('region/view'); 			
 				return;
 			}	
 			else	
 			{ 				
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 	
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 	
 				$view -> structure = $structure ; 
 				$this -> template -> content = $view;
 			}

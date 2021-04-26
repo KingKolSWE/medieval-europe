@@ -30,8 +30,8 @@ class Controller_Toplist extends Controller_Template
 			$_toplist = ORM::factory('cfgtoplist', $toplist_id ); 
 			if ( $_toplist -> loaded == false or $_toplist -> status != 'active' )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __( 'global.operation_not_allowed') . "</div>");
-				url::redirect( '/region/view' );	
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __( 'global.operation_not_allowed') . "</div>");
+				HTTP::redirect( '/region/view' );	
 			}
 		}
 		
@@ -41,8 +41,8 @@ class Controller_Toplist extends Controller_Template
 		
 		if ( $type == 'coinbread' and $char -> is_newbie($char)==false  )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __( 'page.error-votedreservedfornewbies') . "</div>");
-			url::redirect( '/region/view' );		
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __( 'page.error-votedreservedfornewbies') . "</div>");
+			HTTP::redirect( '/region/view' );		
 		}
 		
 		////////////////////////////////////////////////////////////////////
@@ -56,8 +56,8 @@ class Controller_Toplist extends Controller_Template
 			$today = date('Y-m-d');
 			if ( $today == $lastvoteddate and $stat -> value >= 3 )
 			{			
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __( 'page.error-votedthreetimes') . "</div>");
-				url::redirect( '/region/view' );			
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __( 'page.error-votedthreetimes') . "</div>");
+				HTTP::redirect( '/region/view' );			
 			}
 		}
 		
@@ -148,10 +148,10 @@ class Controller_Toplist extends Controller_Template
 				;		
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
 			}			
 			
-			url::redirect(request::referrer());
+			HTTP::redirect(request::referrer());
 		}
 				
 		$view -> playercanvote = $playercanvote;
@@ -172,7 +172,7 @@ class Controller_Toplist extends Controller_Template
 	function obs_reward_arenatop100( )
 	{
 		KO7::$log->add(KO7_Log::INFO, '-> Received a reward from top100arena');
-		KO7::$log->add(KO7_Log::INFO, kohana::debug($this -> input -> post()));
+		KO7::$log->add(KO7_Log::INFO, kohana::debug($this -> request -> post()));
 		
 		$whitelist = array('dksajdasjdwuudsak'); 
 
@@ -229,11 +229,11 @@ class Controller_Toplist extends Controller_Template
 		
 		// apex web gaming sends i...
 		if ( $key == '' ) 
-			$key = $this -> input -> post('i');
+			$key = $this -> request -> post('i');
 		
 		// topwebgames.com, top100arena.com
 		if ( $key == '' )
-			$key = $this -> input -> post('uid');						
+			$key = $this -> request -> post('uid');						
 
 		if ( $key == '' )
 			$key = $this -> input -> get('cid');						
@@ -242,7 +242,7 @@ class Controller_Toplist extends Controller_Template
 			$key = $this -> input -> get('userid');						
 		
 		if ( $key == '' )
-			$key = $this -> input -> post('userid');		
+			$key = $this -> request -> post('userid');		
 		
 		if ( $key == '' )
 		{

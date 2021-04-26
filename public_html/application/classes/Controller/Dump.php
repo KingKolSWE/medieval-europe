@@ -17,11 +17,11 @@ class Controller_Dump extends Controller_Template
 		$ca = Character_Action_Model::factory("searchdump");
 		
 		if ( $ca->do_action( $par,  $message ) )
-		 	{ Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); }	
+		 	{ Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); }	
 		else	
-			{ Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); }
+			{ Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); }
 		
-		url::redirect( 'region/view/' . $char -> position_id );
+		HTTP::redirect( 'region/view/' . $char -> position_id );
 	}
 	
 }

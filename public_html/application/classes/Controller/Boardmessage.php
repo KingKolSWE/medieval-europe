@@ -80,7 +80,7 @@ class Controller_Boardmessage extends Controller_Template
 		
 		if ( Model_Character::is_traveling( $character -> id ))
 		{
-			url::redirect('map/view');
+			HTTP::redirect('map/view');
 			return;			
 		}
 		
@@ -89,9 +89,9 @@ class Controller_Boardmessage extends Controller_Template
 			
 			if ( ! $c -> is_commandallowed( 'add' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 					__('global.operation_not_allowed') . "</div>" );
-				url::redirect( 'boardmessage/index/' . $category );
+				HTTP::redirect( 'boardmessage/index/' . $category );
 			}						
 			
 			// costruisco il form specifico
@@ -105,12 +105,12 @@ class Controller_Boardmessage extends Controller_Template
 			
 			if ( ! $c -> is_commandallowed( 'add' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 					__('global.operation_not_allowed') . "</div>" );
-				url::redirect( 'boardmessage/index/' . $category );
+				HTTP::redirect( 'boardmessage/index/' . $category );
 			}
 			
-			$params[0] = $this -> input -> post();
+			$params[0] = $this -> request -> post();
 			$params[1] = $character;
 			$params[2] = $currentposition;	
 			$params[3] = $auth;
@@ -121,15 +121,15 @@ class Controller_Boardmessage extends Controller_Template
 			
 			if ( $rc )
 			{				
-				Session::set_flash('user_message', "<div class=\"info_msg\">" . $message . "</div>" );
-				url::redirect( 'boardmessage/index/' . $category);
+				Session::instance()->set('user_message', "<div class=\"info_msg\">" . $message . "</div>" );
+				HTTP::redirect( 'boardmessage/index/' . $category);
 
 			}
 			else
 			{
 				$form = arr::overwrite( $form, $params[0] ); 
 			
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . $message . "</div>" );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . $message . "</div>" );
 			}
 			
 			
@@ -161,7 +161,7 @@ class Controller_Boardmessage extends Controller_Template
 		
 		if ( Model_Character::is_traveling( $character -> id ))
 		{
-			url::redirect('map/view');
+			HTTP::redirect('map/view');
 			return;			
 		}
 		
@@ -176,25 +176,25 @@ class Controller_Boardmessage extends Controller_Template
 			
 			if ( ! $message -> loaded )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>" );
-				url::redirect( 'boardmessage/index/' );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>" );
+				HTTP::redirect( 'boardmessage/index/' );
 			}	
 			
 			// solo gli admin possono editare o aggiungere annunci di tipo suggestion
 			
 			if ( $message -> category == 'suggestion' and ! $auth -> logged_in('admin') )
 			{
-					Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+					Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 						__('global.operation_not_allowed') . "</div>" );
-					url::redirect( 'boardmessage/index/' . $message -> category );
+					HTTP::redirect( 'boardmessage/index/' . $message -> category );
 			}	
 			
 			$c = BoardMessage_Model::factory( $message -> category );
 			if ( ! $c -> is_commandallowed( 'edit' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 					__('global.operation_not_allowed') . "</div>" );
-				url::redirect( 'boardmessage/index/' . $message -> category );
+				HTTP::redirect( 'boardmessage/index/' . $message -> category );
 			}
 			
 			$form = $c -> get_form( 'edit' );
@@ -203,33 +203,33 @@ class Controller_Boardmessage extends Controller_Template
 		else
 		{
 		
-			$message = ORM::factory('boardmessage', $this -> input -> post('id') );
+			$message = ORM::factory('boardmessage', $this -> request -> post('id') );
 			
 			// Il messaggio esiste?			
 			if ( ! $message -> loaded )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>" );
-				url::redirect( 'boardmessage/index' );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>" );
+				HTTP::redirect( 'boardmessage/index' );
 			}	
 			
 			// solo gli admin possono editare o aggiungere annunci di tipo suggestion			
 			if ( $message -> category == 'suggestion' and ! $auth -> logged_in('admin') )
 			{
-					Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+					Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 						__('global.operation_not_allowed') . "</div>" );
-					url::redirect( 'boardmessage/index/' . $category );
+					HTTP::redirect( 'boardmessage/index/' . $category );
 			}	
 			
 			$c = BoardMessage_Model::factory( $message -> category );
 			if ( ! $c -> is_commandallowed( 'edit' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 					__('global.operation_not_allowed') . "</div>" );
-				url::redirect( 'boardmessage/index/' . $message -> category );
+				HTTP::redirect( 'boardmessage/index/' . $message -> category );
 			}
 			
 			$form = $c -> get_form( 'edit' );
-			$params[0] = $this -> input -> post();
+			$params[0] = $this -> request -> post();
 			$params[1] = $character;
 			$params[2] = $currentposition;	
 			$params[3] = $message;
@@ -239,14 +239,14 @@ class Controller_Boardmessage extends Controller_Template
 			
 			if ( $rc )
 			{				
-				Session::set_flash('user_message', "<div class=\"info_msg\">" . $m . "</div>" );
-				url::redirect('boardmessage/index/' . $message -> category );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">" . $m . "</div>" );
+				HTTP::redirect('boardmessage/index/' . $message -> category );
 			}
 			else
 			{
 				$form = arr::overwrite( $form, $params[0] ); 
 				//var_dump( $form ); exit; 
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . $m . "</div>" );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . $m . "</div>" );
 			}
 		}				
 		
@@ -277,24 +277,24 @@ class Controller_Boardmessage extends Controller_Template
 		
 		if ( Model_Character::is_traveling( $character -> id ))
 		{
-			url::redirect('map/view');
+			HTTP::redirect('map/view');
 			return;			
 		}
 		
 		//messaggio non trovato
 		if ( ! $message -> loaded )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>" );
-			url::redirect( 'boardmessage/index/' );
+			HTTP::redirect( 'boardmessage/index/' );
 		}
 		
 		$c = BoardMessage_Model::factory( $message -> category );
 		if ( ! $c -> is_commandallowed( 'give_globalvisibility' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>" );
-			url::redirect( 'boardmessage/index/' . $message -> category );
+			HTTP::redirect( 'boardmessage/index/' . $message -> category );
 		}
 		$params[0] = $currentposition;
 		$params[1] = $character;
@@ -304,14 +304,14 @@ class Controller_Boardmessage extends Controller_Template
 		
 		if ( $rc )
 		{				
-			Session::set_flash('user_message', "<div class=\"info_msg\">" . $m . "</div>" );			
+			Session::instance()->set('user_message', "<div class=\"info_msg\">" . $m . "</div>" );			
 		}
 		else
 		{			
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . $m . "</div>" );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . $m . "</div>" );
 		} 
 		
-		url::redirect('boardmessage/index/' . $message -> category );
+		HTTP::redirect('boardmessage/index/' . $message -> category );
 				
 		
 	}
@@ -332,24 +332,24 @@ class Controller_Boardmessage extends Controller_Template
 		
 		if ( Model_Character::is_traveling( $character -> id ))
 		{
-			url::redirect('map/view');
+			HTTP::redirect('map/view');
 			return;			
 		}
 		
 		// messaggio non esistente		
 		if ( ! $message -> loaded )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>" );
-			url::redirect( 'boardmessage/index/');
+			HTTP::redirect( 'boardmessage/index/');
 		}
 	
 		$c = BoardMessage_Model::factory( $message -> category );
 		if ( ! $c -> is_commandallowed( 'bump_up' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>" );
-			url::redirect( 'boardmessage/index/' . $message -> category );
+			HTTP::redirect( 'boardmessage/index/' . $message -> category );
 		}
 		$params[0] = $currentposition;
 		$params[1] = $character;
@@ -359,14 +359,14 @@ class Controller_Boardmessage extends Controller_Template
 		
 		if ( $rc )
 		{				
-			Session::set_flash('user_message', "<div class=\"info_msg\">" . $m . "</div>" );			
+			Session::instance()->set('user_message', "<div class=\"info_msg\">" . $m . "</div>" );			
 		}
 		else
 		{			
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . $m . "</div>" );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . $m . "</div>" );
 		} 
 		
-		url::redirect('boardmessage/index/' . $message -> category );
+		HTTP::redirect('boardmessage/index/' . $message -> category );
 		
 	}
 	
@@ -387,24 +387,24 @@ class Controller_Boardmessage extends Controller_Template
 		
 		if ( Model_Character::is_traveling( $character -> id ))
 		{
-			url::redirect('map/view');
+			HTTP::redirect('map/view');
 			return;			
 		}
 		
 		// messaggio non esistente
 		if ( ! $message -> loaded )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>" );
-			url::redirect( 'boardmessage/index' );
+			HTTP::redirect( 'boardmessage/index' );
 		}
 		
 		$c = BoardMessage_Model::factory( $message -> category );
 		if ( ! $c -> is_commandallowed( 'delete_message' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>" );
-			url::redirect( 'boardmessage/index/' . $message -> category );
+			HTTP::redirect( 'boardmessage/index/' . $message -> category );
 		}
 		$params[0] = $currentposition;
 		$params[1] = $character;
@@ -417,14 +417,14 @@ class Controller_Boardmessage extends Controller_Template
 		
 		if ( $rc )
 		{				
-			Session::set_flash('user_message', "<div class=\"info_msg\">" . $m . "</div>" );			
+			Session::instance()->set('user_message', "<div class=\"info_msg\">" . $m . "</div>" );			
 		}
 		else
 		{			
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . $m . "</div>" );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . $m . "</div>" );
 		} 
 		
-		url::redirect('boardmessage/index/' . $category );
+		HTTP::redirect('boardmessage/index/' . $category );
 				
 	}
 	
@@ -444,7 +444,7 @@ class Controller_Boardmessage extends Controller_Template
 		
 		if ( Model_Character::is_traveling( $character -> id ))
 		{
-			url::redirect('map/view');
+			HTTP::redirect('map/view');
 			return;			
 		}
 		
@@ -457,17 +457,17 @@ class Controller_Boardmessage extends Controller_Template
 			$message = ORM::factory('boardmessage', $message_id );
 			if ( ! $message -> loaded )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 					__('global.operation_not_allowed') . "</div>" );
-				url::redirect( 'boardmessage/index' );
+				HTTP::redirect( 'boardmessage/index' );
 			}		
 			
 			$c = BoardMessage_Model::factory( $message -> category );
 			if ( ! $c -> is_commandallowed( 'report' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 					__('global.operation_not_allowed') . "</div>" );
-				url::redirect( 'boardmessage/index/' . $message -> category );
+				HTTP::redirect( 'boardmessage/index/' . $message -> category );
 			}
 
 			$form = $c -> get_form('report');
@@ -476,39 +476,39 @@ class Controller_Boardmessage extends Controller_Template
 		}
 		else
 		{
-			$message = ORM::factory('boardmessage', $this -> input -> post('id') );
+			$message = ORM::factory('boardmessage', $this -> request -> post('id') );
 			if ( ! $message -> loaded )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 					__('global.operation_not_allowed') . "</div>" );
-				url::redirect( 'boardmessage/index' );
+				HTTP::redirect( 'boardmessage/index' );
 			}	
 			
 			$c = BoardMessage_Model::factory( $message -> category );
 			if ( ! $c -> is_commandallowed( 'report' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 					__('global.operation_not_allowed') . "</div>" );
-				url::redirect( 'boardmessage/index/' . $message -> category );
+				HTTP::redirect( 'boardmessage/index/' . $message -> category );
 			}
 			$form = $c -> get_form('report');
 			
 			$params[0] = $currentposition;
 			$params[1] = $character;
-			$params[2] = $this -> input -> post();
+			$params[2] = $this -> request -> post();
 			$params[3] = $message;
 		
 			$rc = $c -> report( $params, $m );
 		
 			if ( $rc )
 			{				
-				Session::set_flash('user_message', "<div class=\"info_msg\">" . $m . "</div>" );
-				url::redirect( 'boardmessage/index/' . $message -> category );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">" . $m . "</div>" );
+				HTTP::redirect( 'boardmessage/index/' . $message -> category );
 			}
 			else
 			{			
 				$form = arr::overwrite($form, $params[2]);				
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . $m . "</div>" );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . $m . "</div>" );
 			}				
 		}
 		
@@ -538,18 +538,18 @@ class Controller_Boardmessage extends Controller_Template
 		
 		if ( ! $message -> loaded )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>" );
-			url::redirect( 'boardmessage/index' );
+			HTTP::redirect( 'boardmessage/index' );
 		}
 		
 		
 		
 		if ( ! $c -> is_commandallowed( 'view' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('global.operation_not_allowed') . "</div>" );
-			url::redirect( 'boardmessage/index/' . $message -> category );
+			HTTP::redirect( 'boardmessage/index/' . $message -> category );
 		}
 			
 		$view = $c -> get_view('view');		
@@ -567,8 +567,8 @@ class Controller_Boardmessage extends Controller_Template
 		}
 		else
 		{			
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . $m . "</div>" );
-			url::redirect('boardmessage/index/' . $category );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . $m . "</div>" );
+			HTTP::redirect('boardmessage/index/' . $category );
 		} 
 		
 		$view -> auth = $auth;

@@ -26,34 +26,34 @@ class Controller_Structure extends Controller_Template
 				$char, $structure -> getParenttype(), $message,
 				'public', 'donate' ) )
 			{
-					Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-					url::redirect('region/view/');
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+					HTTP::redirect('region/view/');
 			}
 		}
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $char, $structure -> getParenttype(), $message, 'public', 'donate' ) )
 			{
-					Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-					url::redirect('region/view/');
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+					HTTP::redirect('region/view/');
 			}
 			$o = Character_Action_Model::factory("donate");
 			$par[0] = $structure;
-			$par[1] = ORM::factory('item', $this->input->post('item_id') );
-			$par[2] = $this -> input-> post('quantity');
+			$par[1] = ORM::factory('item', $this->request->post('item_id') );
+			$par[2] = $this -> request-> post('quantity');
 			$par[3] = $char;
 
 			$rec = $o->do_action( $par, $message );
 
 			if ( $rec )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 			}
 			else
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 			}
 
 		}
@@ -95,14 +95,14 @@ class Controller_Structure extends Controller_Template
 
 		if ( $rec )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 		}
 
-		url::redirect('region/view');
+		HTTP::redirect('region/view');
 
 	}
 
@@ -132,14 +132,14 @@ class Controller_Structure extends Controller_Template
 
 		if ( $rec )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 		}
 
-		url::redirect('region/view');
+		HTTP::redirect('region/view');
 
 	}
 
@@ -157,8 +157,8 @@ class Controller_Structure extends Controller_Template
 
 		if ( ! $structure->allowedaccess( $char, $structure -> getParenttype(), $message, 'public', null ) )
 		{
- 				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-    		url::redirect('region/view/');
+ 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+    		HTTP::redirect('region/view/');
 		}
 
 		$a = Character_Action_Model::factory("pray");
@@ -169,14 +169,14 @@ class Controller_Structure extends Controller_Template
 
 		if ( $rec )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 		}
 
-		url::redirect( 'region/view' );
+		HTTP::redirect( 'region/view' );
 
 
 	}
@@ -200,8 +200,8 @@ class Controller_Structure extends Controller_Template
 
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'inventory' ))
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 		// carico gli item della struttura e del personaggio
@@ -248,8 +248,8 @@ class Controller_Structure extends Controller_Template
 			//controllo accesso
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'taxes' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 		}
 		else
@@ -264,7 +264,7 @@ class Controller_Structure extends Controller_Template
 				{
 					// Validazione dell'input
 					// Required, numerico e compreso tra 0 e 100
-					$post = Validation::factory($this->input->post())
+					$post = Validation::factory($this->request->post())
 						->add_rules($tax_id,'required', 'numeric');
 					if ($post->validate() AND $tax_value <= 100 AND $tax_value >= 0)
 					{
@@ -276,13 +276,13 @@ class Controller_Structure extends Controller_Template
 					else
 					{
 						// Se non supero la validazione e il numero non � compreso tra 0 e 100
-						Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures.castle_taxeserror') . "</div>");
-						url::redirect('structure/taxes/'.$structure->id);
+						Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures.castle_taxeserror') . "</div>");
+						HTTP::redirect('structure/taxes/'.$structure->id);
 					}
 				}
 			}
 
-			Session::set_flash('user_message', "<div class=\"info_msg\">". __('structures.castle_taxesupdated') . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". __('structures.castle_taxesupdated') . "</div>");
 
 		}
 
@@ -325,14 +325,14 @@ class Controller_Structure extends Controller_Template
 
 		if ( $rec )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 		}
 
-		url::redirect( 'character/role' );
+		HTTP::redirect( 'character/role' );
 
 	}
 
@@ -349,32 +349,32 @@ class Controller_Structure extends Controller_Template
 		$items = null;
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 
-		$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'take' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 		$o = Character_Action_Model::factory("take");
 		$par[0] = $structure;
-		$par[1] = Item_Model::factory( $this->input->post( 'item_id'), null ) ->find( $this->input->post( 'item_id') );
-		$par[2] = $this->input->post('quantity');
+		$par[1] = Item_Model::factory( $this->request->post( 'item_id'), null ) ->find( $this->request->post( 'item_id') );
+		$par[2] = $this->request->post('quantity');
 		$par[3] = $character;
 
 		$rec = $o->do_action( $par, $message );
 
 		if ( $rec )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 		}
 
-		url::redirect('structure/inventory/' . $structure -> id );
+		HTTP::redirect('structure/inventory/' . $structure -> id );
 
 	}
 
@@ -389,32 +389,32 @@ class Controller_Structure extends Controller_Template
 
 		$message = "";
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'drop' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 		$o = Character_Action_Model::factory("drop");
 		$par[0] = $structure;
-		$par[1] = ORM::factory('item', $this -> input -> post('item_id'));
-		$par[2] = $this -> input->post('quantity');
+		$par[1] = ORM::factory('item', $this -> request -> post('item_id'));
+		$par[2] = $this -> request->post('quantity');
 		$par[3] = $character;
 
 		$rec = $o -> do_action( $par, $message );
 
 		if ( $rec )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 		}
 
-		url::redirect( 'structure/inventory/' . $structure -> id );
+		HTTP::redirect( 'structure/inventory/' . $structure -> id );
 
 	}
 
@@ -440,8 +440,8 @@ class Controller_Structure extends Controller_Template
 
 		if ( ! $structure -> allowedaccess( $char, $structure -> getParenttype(), $message, 'private', 'events' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-    		url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+    		HTTP::redirect('region/view/');
 		}
 
 		$events = ORM::factory("structure_event")->
@@ -495,22 +495,22 @@ class Controller_Structure extends Controller_Template
 				array( 'nativevillage') ))
 				if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'rest' ) )
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-					url::redirect('region/view/');
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+					HTTP::redirect('region/view/');
 				}
 
 		}
 		// post: invoco la azione
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			// controllo accesso
 			if ( !in_array( $structure -> getSuperType(),
 				array( 'nativevillage') ))
 				if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'rest' ) )
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-					url::redirect('region/view/');
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+					HTTP::redirect('region/view/');
 				}
 			$o = Character_Action_Model::factory("rest");
 
@@ -523,12 +523,12 @@ class Controller_Structure extends Controller_Template
 
 			if ( $rec )
 			{
-				url::redirect( '/structure/rest/' . $this->input->post('structure_id'));
+				HTTP::redirect( '/structure/rest/' . $this->request->post('structure_id'));
 			}
 			else
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __($message) . "</div>");
-				url::redirect( '/structure/rest/' . $this->input->post('structure_id') );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __($message) . "</div>");
+				HTTP::redirect( '/structure/rest/' . $this->request->post('structure_id') );
 			}
 		}
 
@@ -563,8 +563,8 @@ class Controller_Structure extends Controller_Template
 
 		if (is_null($structure))
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures.generic_structurenotfound') . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures.generic_structurenotfound') . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 		$parentstructure = ORM::factory( 'structure', $structure -> parent_structure_id );
@@ -575,8 +575,8 @@ class Controller_Structure extends Controller_Template
 		// controllo accesso
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'public', 'info' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 		$info = $structure -> get_info();
@@ -588,8 +588,8 @@ class Controller_Structure extends Controller_Template
 
 		if ( is_null ($info ))
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures.noinfofound') . "</div>");
-			url::redirect('region/view');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures.noinfofound') . "</div>");
+			HTTP::redirect('region/view');
 		}
 
 		$view -> character = $character;
@@ -625,8 +625,8 @@ class Controller_Structure extends Controller_Template
 
 			if ( ! $structure->allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'sethourlycost' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 
 			$priceperhourstat = Structure_Model::get_stat_d( $structure -> id, 'courseshourlycost');
@@ -638,17 +638,17 @@ class Controller_Structure extends Controller_Template
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure->allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'sethourlycost' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 
 			$region = ORM::factory('region', $structure -> region_id );
-			if ( $this -> input -> post('hourlycost' ) < 0 )
+			if ( $this -> request -> post('hourlycost' ) < 0 )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">".
+				Session::instance()->set('user_message', "<div class=\"error_msg\">".
 				__('structures.error-hourlycostincorrect') . "</div>");
 			}
 			else
@@ -659,15 +659,15 @@ class Controller_Structure extends Controller_Template
 					0,
 					null,
 					null,
-					$this -> input -> post('hourlycost'),
+					$this -> request -> post('hourlycost'),
 					null,
 					true);
 
-				Session::set_flash('user_message', "<div class=\"info_msg\">".
+				Session::instance()->set('user_message', "<div class=\"info_msg\">".
 					__('structures.info-hourlycostset') . "</div>");
 			}
 
-			$form['hourlycost'] = $this -> input -> post('hourlycost' );
+			$form['hourlycost'] = $this -> request -> post('hourlycost' );
 
 		}
 
@@ -721,33 +721,33 @@ class Controller_Structure extends Controller_Template
 
 			if ( is_null($structure_id ) )
 			{
-				Session::set_flash('user_message', "<div class='error_msg'>". __('global.operation_not_allowed') . "</div>");
-				url::redirect( 'region/view');
+				Session::instance()->set('user_message', "<div class='error_msg'>". __('global.operation_not_allowed') . "</div>");
+				HTTP::redirect( 'region/view');
 			}
 
 			$structure = StructureFactory_Model::create( null, $structure_id);
 
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'sell' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 
 		}
 		else
 		{
 
-			if ( !$this -> input -> post('structure_id') )
+			if ( !$this -> request -> post('structure_id') )
 			{
-				Session::set_flash('user_message', "<div class='info_msg'>". __('global.operation_not_allowed') . "</div>");
-				url::redirect( 'region/view');
+				Session::instance()->set('user_message', "<div class='info_msg'>". __('global.operation_not_allowed') . "</div>");
+				HTTP::redirect( 'region/view');
 			}
 
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id'));
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'sell' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 
 			$ca = Character_Action_Model::factory('sellstructure');
@@ -756,11 +756,11 @@ class Controller_Structure extends Controller_Template
 			$par[2] = ORM::factory('region', Model_Character::get_info( Session::instance()->get('char_id') ) -> position_id );
 
 			if ( $ca->do_action( $par,  $message ) )
-				{ Session::set_flash('user_message', "<div class='info_msg'>". $message . "</div>"); }
+				{ Session::instance()->set('user_message', "<div class='info_msg'>". $message . "</div>"); }
 			else
-				{ Session::set_flash('user_message', "<div class='error_msg'>". $message . "</div>"); }
+				{ Session::instance()->set('user_message', "<div class='error_msg'>". $message . "</div>"); }
 
-			url::redirect( 'region/view');
+			HTTP::redirect( 'region/view');
 		}
 
 		$sellingprice = $structure -> getSellingprice( $character, $structure -> region );
@@ -797,40 +797,40 @@ class Controller_Structure extends Controller_Template
 			$structure = StructureFactory_Model::create( null, $structure_id );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'public', 'build' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 
 			if ( $structure -> status != 'upgrading' )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('ca_upgradestructure.error-structureisnotupgrading') . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('ca_upgradestructure.error-structureisnotupgrading') . "</div>");
+				HTTP::redirect('region/view/');
 			}
 
 		}
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id'));
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'public', 'build' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 
 			$par[0] = $character;
 			$par[1] = $structure;
-			$par[2] = $this -> input -> post('hours');
+			$par[2] = $this -> request -> post('hours');
 
 			$ca = Character_Action_Model::factory("upgradestructurebuild");
 
 			if ( $ca -> do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 			}
 			else
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 			}
 
 		}
@@ -862,22 +862,22 @@ class Controller_Structure extends Controller_Template
 			$structure = StructureFactory_Model::create( null, $structure_id );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'managecourses' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'managecourses' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
-			$structure -> add_course( $this -> input -> post('course'));
-			Session::set_flash('user_message', "<div class=\"info_msg\">". __('structures.info-courseinstalled') . "</div>");
-			url::redirect('structure/managecourses/'.$structure -> id);
+			$structure -> add_course( $this -> request -> post('course'));
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". __('structures.info-courseinstalled') . "</div>");
+			HTTP::redirect('structure/managecourses/'.$structure -> id);
 		}
 
 		$availablecourses = $structure -> getAvailablecourses();
@@ -914,40 +914,40 @@ class Controller_Structure extends Controller_Template
 			$structure = StructureFactory_Model::create( null, $structure_id );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'buildproject' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 		}
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id_' . $this -> input -> post( 'position' )));
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id_' . $this -> request -> post( 'position' )));
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'buildproject' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 
 			$par[0] = $character;
-			$par[1] = ORM::factory('cfgkingdomproject', $this->input->post('cfgkingdomproject_id_' .
-				$this -> input -> post( 'position' ) ));
-			$par[2] = ORM::factory('structure_type', $this -> input -> post('structure_type_id_' .
-				$this -> input -> post( 'position' ) ));
+			$par[1] = ORM::factory('cfgkingdomproject', $this->request->post('cfgkingdomproject_id_' .
+				$this -> request -> post( 'position' ) ));
+			$par[2] = ORM::factory('structure_type', $this -> request -> post('structure_type_id_' .
+				$this -> request -> post( 'position' ) ));
 			$par[3] = $structure -> region;
-			$par[4] = ORM::factory('region', $this -> input -> post('region_id_' . $this -> input -> post( 'position' ) ) );
+			$par[4] = ORM::factory('region', $this -> request -> post('region_id_' . $this -> request -> post( 'position' ) ) );
 			$par[5] = $structure;
 
 			$ca = Character_Action_Model::factory("startkingdomproject");
 
 			if ( $ca -> do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect('region/view');
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect('region/view');
 			}
 			else
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('structure/buildproject/' . $structure -> id);
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('structure/buildproject/' . $structure -> id);
 			}
 		}
 
@@ -979,26 +979,26 @@ class Controller_Structure extends Controller_Template
 		if ( $_POST )
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 
 			// controllo permessi
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'runningprojects' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 
 			$par[0] = $character;
-			$par[1] = ORM::factory('kingdomproject', $this -> input -> post('kingdomproject_id'));
+			$par[1] = ORM::factory('kingdomproject', $this -> request -> post('kingdomproject_id'));
 			$ca = Character_Action_Model::factory("cancelkingdomproject");
 
 			if ( $ca->do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 			}
 			else
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 			}
 
 		}
@@ -1008,8 +1008,8 @@ class Controller_Structure extends Controller_Template
 			// controllo permessi
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'runningprojects' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 
 			// trova i progetti in corso d'opera legati
@@ -1048,8 +1048,8 @@ class Controller_Structure extends Controller_Template
 		// controllo permessi
 		if ( ! $structure->allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'completedprojects' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 		// trova i progetti in corso d'opera legati
@@ -1085,8 +1085,8 @@ class Controller_Structure extends Controller_Template
 
 		if ( ! $structure -> allowedaccess( $char, $structure -> getParenttype(), $message, 'private', 'listcraftableitems' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 		// Costruisce l'helper per la struttura
@@ -1161,8 +1161,8 @@ class Controller_Structure extends Controller_Template
 		if ( ! $structure -> allowedaccess( $character,
 			$structure -> getParenttype(), $message, 'private', 'craft' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 		$ca = Character_Action_Model::factory("craft");
@@ -1172,11 +1172,11 @@ class Controller_Structure extends Controller_Template
 		$par[3] = $worksessions;
 
 		if ( $ca->do_action( $par,  $message ) )
-			{ Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); }
+			{ Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); }
 		else
-			{ Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");}
+			{ Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");}
 
-		url::redirect('structure/listcraftableitems/' . $structure_id );
+		HTTP::redirect('structure/listcraftableitems/' . $structure_id );
 
 	}
 
@@ -1215,114 +1215,114 @@ class Controller_Structure extends Controller_Template
 			$structure = StructureFactory_Model::create( null, $structure_id);
 			if ( ! $structure->allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'manage' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect( 'region/view/' );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect( 'region/view/' );
 			}
 
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure->allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'manage' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect( 'region/view/' );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect( 'region/view/' );
 			}
-			if ( $this -> input -> post( 'edit_description' ) )
+			if ( $this -> request -> post( 'edit_description' ) )
 			{
-				$structure -> description = substr($this -> input -> post ('description' ), 0, 1023);
+				$structure -> description = substr($this -> request -> post ('description' ), 0, 1023);
 				$structure -> save();
 
-				Session::set_flash('user_message', "<div class=\"info_msg\">". __('structures.configuration_ok') . "</div>");
-				url::redirect( '/structure/manage/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('structures.configuration_ok') . "</div>");
+				HTTP::redirect( '/structure/manage/' . $structure -> id );
 			}
 
-			if ( $this -> input -> post('excommunicate' ) )
+			if ( $this -> request -> post('excommunicate' ) )
 			{
 				$ca = Character_Action_Model::factory("excommunicateplayer");
 				$par[0] = $character;
-				$par[1] = ORM::factory('character' ) -> where ( 'name', $this -> input -> post( 'character' ) ) -> find();
+				$par[1] = ORM::factory('character' ) -> where ( 'name', $this -> request -> post( 'character' ) ) -> find();
 				$par[2] = $structure;
-				$par[3] = $this -> input -> post('reason');
+				$par[3] = $this -> request -> post('reason');
 
 				if ( $ca -> do_action( $par,  $message ) )
 				{
-					Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-					url::redirect( 'structure/manage/' . $structure -> id  ) ;
+					Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+					HTTP::redirect( 'structure/manage/' . $structure -> id  ) ;
 				}
 				else
 				{
-					$form = arr::overwrite( $form, $this -> input -> post() );
-						Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-					url::redirect( 'structure/manage/' . $structure -> id  ) ;
+					$form = arr::overwrite( $form, $this -> request -> post() );
+						Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+					HTTP::redirect( 'structure/manage/' . $structure -> id  ) ;
 				}
 
 			}
 
-			if ( $this -> input -> post( 'setstructurename' ) )
+			if ( $this -> request -> post( 'setstructurename' ) )
 			{
-				$structure -> name = substr($this -> input -> post ('name' ), 0, 127);
+				$structure -> name = substr($this -> request -> post ('name' ), 0, 127);
 				$structure -> save();
-				Session::set_flash('user_message', "<div class=\"info_msg\">". __('structures.configuration_ok') . "</div>");
-				url::redirect( '/structure/manage/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('structures.configuration_ok') . "</div>");
+				HTTP::redirect( '/structure/manage/' . $structure -> id );
 			}
 
-			if ( $this -> input -> post( 'edit_informativemessage' ) )
+			if ( $this -> request -> post( 'edit_informativemessage' ) )
 			{
-				$structure -> message = substr($this -> input -> post ('informativemessage' ), 0, 1023);
+				$structure -> message = substr($this -> request -> post ('informativemessage' ), 0, 1023);
 				$structure -> save();
-				Session::set_flash('user_message', "<div class=\"info_msg\">". __('structures.configuration_ok') . "</div>");
-				url::redirect( '/structure/manage/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('structures.configuration_ok') . "</div>");
+				HTTP::redirect( '/structure/manage/' . $structure -> id );
 			}
 
-			if ( $this -> input -> post( 'setstructureimage' ) )
+			if ( $this -> request -> post( 'setstructureimage' ) )
 			{
 
-				$structure -> image = $this -> input -> post( 'structureimage' );
+				$structure -> image = $this -> request -> post( 'structureimage' );
 				$structure -> save();
 
-				Session::set_flash('user_message', "<div class=\"info_msg\">". __('structures.configuration_ok') . "</div>");
-				url::redirect( '/structure/manage/' . $this -> input -> post('structure_id') );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('structures.configuration_ok') . "</div>");
+				HTTP::redirect( '/structure/manage/' . $this -> request -> post('structure_id') );
 
 			}
 
-			if ( $this -> input -> post('transfer' ) )
+			if ( $this -> request -> post('transfer' ) )
 			{
 
 				$ca = Character_Action_Model::factory("transferfppoints");
 				$par[0] = $character;
 				$par[1] = $structure;
-				$par[2] = ORM::factory('structure', $this -> input -> post('targetstructure_id' ) );
-				$par[3] = $this -> input -> post('points');
+				$par[2] = ORM::factory('structure', $this -> request -> post('targetstructure_id' ) );
+				$par[3] = $this -> request -> post('points');
 
 				if ( $ca -> do_action( $par,  $message ) )
 				{
-					Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-					url::redirect( 'structure/manage/' . $structure -> id  ) ;
+					Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+					HTTP::redirect( 'structure/manage/' . $structure -> id  ) ;
 				}
 				else
 				{
-					$form = arr::overwrite( $form, $this -> input -> post() );
-						Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-					url::redirect( 'structure/manage/' . $structure -> id  ) ;
+					$form = arr::overwrite( $form, $this -> request -> post() );
+						Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+					HTTP::redirect( 'structure/manage/' . $structure -> id  ) ;
 				}
 			}
 
-			if ( $this -> input -> post('sethourlywage' ) )
+			if ( $this -> request -> post('sethourlywage' ) )
 			{
 
-				if ( $this -> input -> post('hourlywage') < 0 )
+				if ( $this -> request -> post('hourlywage') < 0 )
 				{
 
-					Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures_buildingsite.hourlywagemustbepositive') . "</div>");
-					url::redirect( 'structure/manage/' . $structure -> id  ) ;
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures_buildingsite.hourlywagemustbepositive') . "</div>");
+					HTTP::redirect( 'structure/manage/' . $structure -> id  ) ;
 				}
 
-				$structure -> hourlywage = $this -> input -> post('hourlywage');
+				$structure -> hourlywage = $this -> request -> post('hourlywage');
 				$structure -> save();
 
-				Session::set_flash('user_message', "<div class=\"info_msg\">". __('structures.configuration_ok') . "</div>");
-				url::redirect( '/structure/manage/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('structures.configuration_ok') . "</div>");
+				HTTP::redirect( '/structure/manage/' . $structure -> id );
 
 			}
 
@@ -1398,32 +1398,32 @@ class Controller_Structure extends Controller_Template
 			// controllo permessi
 			if ( ! $structure -> allowedaccess( $char, $structure -> getParenttype(), $message, 'private', 'configureitemprices' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 		}
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $char, $structure -> getParenttype(), $message, 'private', 'configureitemprices' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
-			if ( $this -> input -> post('price') < 0 )
+			if ( $this -> request -> post('price') < 0 )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('items.pricelessthanzero') . "</div>");
-				url::redirect('structure/configureitemprices/' . $structure -> id);
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('items.pricelessthanzero') . "</div>");
+				HTTP::redirect('structure/configureitemprices/' . $structure -> id);
 			}
 
-			$item = ORM::factory('item', $this -> input -> post('item_id'));
-			$item -> price = $this -> input -> post('price');
+			$item = ORM::factory('item', $this -> request -> post('item_id'));
+			$item -> price = $this -> request -> post('price');
 			$item -> save();
 
-			Session::set_flash('user_message', "<div class=\"info_msg\">". __('items.setprice-ok') . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". __('items.setprice-ok') . "</div>");
 
-			url::redirect('structure/configureitemprices/' . $structure -> id );
+			HTTP::redirect('structure/configureitemprices/' . $structure -> id );
 		}
 
 		// trovo gli item contenuti nella struttura
@@ -1474,29 +1474,29 @@ class Controller_Structure extends Controller_Template
 		}
 		else
 		{
-			//var_dump( $this -> input -> post() ); exit;
+			//var_dump( $this -> request -> post() ); exit;
 
 
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			$ca = Character_Action_Model::factory('buyitem');
-			$par[0] = ORM::factory("item", $this -> input -> post('item_id'));
+			$par[0] = ORM::factory("item", $this -> request -> post('item_id'));
 			$par[1] = $char;
 			$par[2] = ORM::factory('structure', $structure_id);
-			$par[3] = $this -> input -> post('quantity');
+			$par[3] = $this -> request -> post('quantity');
 
 			if ( $ca->do_action( $par,  $message ) )
-				{ Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); }
+				{ Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); }
 			else
-				{ Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");}
+				{ Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");}
 
-			url::redirect('structure/buyitems/' . $structure_id );
+			HTTP::redirect('structure/buyitems/' . $structure_id );
 
 		}
 
 		if ( ! $structure -> allowedaccess( $char, $structure -> getParenttype(), $message, 'public', 'buyitems' ) )
 		{
- 				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-    		url::redirect('region/view/');
+ 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+    		HTTP::redirect('region/view/');
 		}
 
 		// trovo gli item contenuti nella struttura
@@ -1548,8 +1548,8 @@ function manageaccess( $structure_id = null )
 	if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(),
 		$message, 'private', 'manageaccess' ) )
 	{
-		Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-		url::redirect('region/view/');
+		Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+		HTTP::redirect('region/view/');
 	}
 
 	$grants = $structure -> get_assignable_grants();
@@ -1577,31 +1577,31 @@ function assigngrant( )
 {
 
 	$character = Model_Character::get_info( Session::instance()->get('char_id') );
-	$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+	$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 
 	if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(),
 		$message, 'private', 'assigngrant' ) )
 	{
-		Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-		url::redirect('region/view/');
+		Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+		HTTP::redirect('region/view/');
 	}
 
-	$target = ORM::factory( 'character' ) -> where ( 'name', $this -> input -> post('character') ) -> find();
+	$target = ORM::factory( 'character' ) -> where ( 'name', $this -> request -> post('character') ) -> find();
 	$par[0] = $structure;
 	$par[1] = $target;
-	$par[2] = $this -> input -> post('grant');
+	$par[2] = $this -> request -> post('grant');
 
 	$ca = Character_Action_Model::factory("assignstructuregrant");
 
 	if ( $ca -> do_action( $par,  $message ) )
 	{
-		Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-		url::redirect( '/structure/manageaccess/' . $structure -> id );
+		Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+		HTTP::redirect( '/structure/manageaccess/' . $structure -> id );
 	}
 	else
 	{
-		Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-		url::redirect( '/structure/manageaccess/' . $structure -> id );
+		Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+		HTTP::redirect( '/structure/manageaccess/' . $structure -> id );
 	}
 
 }
@@ -1622,8 +1622,8 @@ function revokegrant( $structure_id, $target_id, $profile)
 
 	if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'revokegrant' ) )
 	{
-		Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-		url::redirect('region/view/');
+		Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+		HTTP::redirect('region/view/');
 	}
 
 	$target = ORM::factory( 'character', $target_id );
@@ -1636,13 +1636,13 @@ function revokegrant( $structure_id, $target_id, $profile)
 
 	if ( $ca -> do_action( $par,  $message ) )
 	{
-		Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-		url::redirect( '/structure/manageaccess/' . $structure -> id );
+		Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+		HTTP::redirect( '/structure/manageaccess/' . $structure -> id );
 	}
 	else
 	{
-		Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-		url::redirect( '/structure/manageaccess/' . $structure -> id );
+		Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+		HTTP::redirect( '/structure/manageaccess/' . $structure -> id );
 	}
 
 }
@@ -1666,19 +1666,19 @@ function upgradelevel( $structure_id = null)
 
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'upgradelevel' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 	}
 	else
 	{
 
-		$structure = StructureFactory_Model::create( null, $this->input->post('structure_id'));
+		$structure = StructureFactory_Model::create( null, $this->request->post('structure_id'));
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'upgradelevel' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 		$message = "";
@@ -1688,13 +1688,13 @@ function upgradelevel( $structure_id = null)
 
 		if ( $ca->do_action( $par,  $message ) )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-			url::redirect( '/structure/upgradelevel/' . $structure -> id );
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			HTTP::redirect( '/structure/upgradelevel/' . $structure -> id );
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( '/structure/upgradelevel/' . $structure -> id );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( '/structure/upgradelevel/' . $structure -> id );
 		}
 
 	}
@@ -1735,18 +1735,18 @@ function upgradeinventory( $structure_id = null)
 
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'upgradeinventory' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 	}
 	else
 	{
-		$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id'));
+		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'upgradeinventory' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 		$message = "";
 		$ca = Character_Action_Model::factory("upgradestructureinventory");
@@ -1755,13 +1755,13 @@ function upgradeinventory( $structure_id = null)
 
 		if ( $ca->do_action( $par,  $message ) )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-			url::redirect( '/structure/upgradeinventory/' . $structure -> id );
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			HTTP::redirect( '/structure/upgradeinventory/' . $structure -> id );
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( '/structure/upgradeinventory/' . $structure -> id );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( '/structure/upgradeinventory/' . $structure -> id );
 		}
 	}
 
@@ -1788,26 +1788,26 @@ function upgradeinventory( $structure_id = null)
 	{
 
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id'));
+		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));
 
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype() , $message, 'private', 'manage' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( 'region/view/' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( 'region/view/' );
 		}
 
-		if ( strlen( $this -> input -> post ('description') ) > 1024 )
+		if ( strlen( $this -> request -> post ('description') ) > 1024 )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures.error-descriptiontoolong', 1024) . "</div>");
-			url::redirect( 'structure/manage/' . $structure -> id );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures.error-descriptiontoolong', 1024) . "</div>");
+			HTTP::redirect( 'structure/manage/' . $structure -> id );
 		}
 		else
 		{
-			$structure -> description = $this -> input -> post ('description' );
+			$structure -> description = $this -> request -> post ('description' );
 			$structure -> save();
 
-			Session::set_flash('user_message', "<div class=\"info_msg\">". __('structures.configuration_ok') . "</div>");
-			url::redirect( $structure -> getParenttype() . '/manage/' . $structure -> id );
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". __('structures.configuration_ok') . "</div>");
+			HTTP::redirect( $structure -> getParenttype() . '/manage/' . $structure -> id );
 		}
 
 	}
@@ -1823,7 +1823,7 @@ function upgradeinventory( $structure_id = null)
 
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 		$subm    = View::factory ('template/submenu');
 		$lnkmenu = $structure -> get_horizontalmenu( 'manage' );
 		$view = View::factory( $structure -> getParenttype() . '/manage');
@@ -1831,14 +1831,14 @@ function upgradeinventory( $structure_id = null)
 
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype() , $message, 'private', 'change_infomessage' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( 'region/view/' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( 'region/view/' );
 		}
 
-		$structure -> message = substr($this -> input -> post ('message' ), 0, 1023);
+		$structure -> message = substr($this -> request -> post ('message' ), 0, 1023);
 		$structure -> save();
 
-		Session::set_flash('user_message', "<div class=\"info_msg\">". __('structures.configuration_ok') . "</div>");
+		Session::instance()->set('user_message', "<div class=\"info_msg\">". __('structures.configuration_ok') . "</div>");
 
 		$structureheader -> structure = $structure;
 		$view -> structureheader = $structureheader;
@@ -1866,8 +1866,8 @@ function upgradeinventory( $structure_id = null)
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(),
 			$message, 'private', 'list_roletitles' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 		$allroles = ORM::factory('character_role') ->
@@ -1904,8 +1904,8 @@ function upgradeinventory( $structure_id = null)
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(),
 			$message, 'private', 'revokerolerp' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 		$ca = Character_Action_Model::factory("revokerolerp");
@@ -1917,13 +1917,13 @@ function upgradeinventory( $structure_id = null)
 
 		if ( $rec )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-			url::redirect( 'structure/list_roletitles/' . $structure_id );
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			HTTP::redirect( 'structure/list_roletitles/' . $structure_id );
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( 'structure/list_roletitles/' . $structure_id );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( 'structure/list_roletitles/' . $structure_id );
 		}
 
 	}
@@ -1945,11 +1945,11 @@ function upgradeinventory( $structure_id = null)
 		$par[2] = ORM::factory('region', $character -> position_id );
 
 		if ( $ca -> do_action( $par,  $message ) )
-		 	{ Session::set_flash('user_message', "<div class='info_msg'>". $message . "</div>"); }
+		 	{ Session::instance()->set('user_message', "<div class='info_msg'>". $message . "</div>"); }
 		else
-			{ Session::set_flash('user_message', "<div class='error_msg'>". $message . "</div>"); }
+			{ Session::instance()->set('user_message', "<div class='error_msg'>". $message . "</div>"); }
 
-		url::redirect('region/view/');
+		HTTP::redirect('region/view/');
 
 	}
 
@@ -1963,7 +1963,7 @@ function upgradeinventory( $structure_id = null)
 	{
 
 		$character = Model_Character::get_info( Session::instance() -> get('char_id') );
-		$post = json_decode($this -> input -> post('itemstotransfer'), false);
+		$post = json_decode($this -> request -> post('itemstotransfer'), false);
 
 		KO7::$log->add(KO7_Log::DEBUG, ' -> Mass Depositing item Action is: ' . $post -> action );
 		KO7::$log->add(KO7_Log::DEBUG, kohana::debug($post));
@@ -1974,15 +1974,15 @@ function upgradeinventory( $structure_id = null)
 		// se non ci sono elementi, torno senza fare niente.
 
 		if ( count( $post -> items ) == 0 )
-			url::redirect('/structure/inventory/' . $structure -> id );
+			HTTP::redirect('/structure/inventory/' . $structure -> id );
 
 		// per le azioni drop e take, il char deve avere il permesso.
 
 		if ( $post -> action == 'drop' or $post -> action == 'take' )
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', $post -> action ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 
 		// Calcolo peso totale. Non calcoliamo il peso
@@ -2010,11 +2010,11 @@ function upgradeinventory( $structure_id = null)
 			{
 				KO7::$log->add(KO7_Log::INFO, 'Total weight, Storable Wright: ' .
 					$totalweight .'-' . $storableweight );
-				Session::set_flash('user_message', "<div class='error_msg'>". __('charactions.drop_storablecapacityfinished'). "</div>");
+				Session::instance()->set('user_message', "<div class='error_msg'>". __('charactions.drop_storablecapacityfinished'). "</div>");
 				if ( $post -> action == 'donate' )
-					url::redirect('/structure/donate/' . $structure -> id );
+					HTTP::redirect('/structure/donate/' . $structure -> id );
 				else
-					url::redirect('/structure/inventory/' . $structure -> id );
+					HTTP::redirect('/structure/inventory/' . $structure -> id );
 
 			}
 
@@ -2046,11 +2046,11 @@ function upgradeinventory( $structure_id = null)
 			if ( $totalweight > $storableweight )
 			{
 				//KO7::$log->add(KO7_Log::INFO, $totalweight .'-' . $storableweight );
-				Session::set_flash('user_message', "<div class='error_msg'>". __('structures.maxtransportableweightreached'). "</div>");
+				Session::instance()->set('user_message', "<div class='error_msg'>". __('structures.maxtransportableweightreached'). "</div>");
 				if ( $post -> action == 'donate' )
-					url::redirect('/structure/donate/' . $structure -> id );
+					HTTP::redirect('/structure/donate/' . $structure -> id );
 				else
-					url::redirect('/structure/inventory/' . $structure -> id );
+					HTTP::redirect('/structure/inventory/' . $structure -> id );
 
 			}
 
@@ -2083,16 +2083,16 @@ function upgradeinventory( $structure_id = null)
 				__($item -> cfgitem -> name)
 			) .
 				$message;
-		 	Session::set_flash('user_message', "<div class='error_msg'>". $m . "</div>");
+		 	Session::instance()->set('user_message', "<div class='error_msg'>". $m . "</div>");
 		}
 		else
-			Session::set_flash('user_message', "<div class='info_msg'>". $message . "</div>");
+			Session::instance()->set('user_message', "<div class='info_msg'>". $message . "</div>");
 
 
 		if ( $post -> action == 'donate' )
-			url::redirect('/structure/donate/' . $structure -> id );
+			HTTP::redirect('/structure/donate/' . $structure -> id );
 		else
-			url::redirect('/structure/inventory/' . $structure -> id );
+			HTTP::redirect('/structure/inventory/' . $structure -> id );
 
 	}
 

@@ -47,8 +47,8 @@ class Controller_House extends Controller_Template
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType() , 		
 			$message, 'private', 'manage' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( 'region/view/' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( 'region/view/' );
 		}
 		
 		$submenu = View::factory( 'structure/' . $structure -> getSubmenu() );

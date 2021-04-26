@@ -366,7 +366,7 @@ class Controller_Page extends Controller_Template
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				kohana::lang('battle.error-battlereportnotfound', $battle_id) . "</div>");
 			HTTP::redirect('boardmessage/index/europecrier');
 			
@@ -392,11 +392,11 @@ class Controller_Page extends Controller_Template
 			$this -> auto_render = false;
 						
 			// Carico i dati delle statistiche			
-			// KO7::$log->add('debug', kohana::debug( $this -> input -> post() ) );
+			// KO7::$log->add('debug', kohana::debug( $this -> request -> post() ) );
 			
 				$sql = "select * from stats_historical 	
 					where year( from_unixtime(period) ) > year(curdate()) - 3
-					and kingdom_id = " . $this -> input -> post('id') ;
+					and kingdom_id = " . $this -> request -> post('id') ;
 				
 			$data = Database::instance() -> query( $sql ) -> as_array();
 			
@@ -407,7 +407,7 @@ class Controller_Page extends Controller_Template
 		else
 		{
 		
-			$kingdoms = Database::instance()->query("select id, name from kingdoms_v
+			$kingdoms = Database::instance()->query(Database::SELECT, "select id, name from kingdoms_v
 			where name != 'kingdoms.kingdom-independent'") -> as_array();
 			
 			

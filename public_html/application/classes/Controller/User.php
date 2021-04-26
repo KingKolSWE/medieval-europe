@@ -649,7 +649,7 @@ class Controller_User extends Controller_Template
 		$client -> authenticate($this -> request -> param('code'));
 		//KO7::$log->add(KO7_Log::DEBUG, kohana::debug( $client ));
 		$accesstoken = $client->getAccessToken();
-		Session::set('googleaccesstoken', $accesstoken );
+		Session::instance()->set('googleaccesstoken', $accesstoken );
 		
 		// get user data
 		$info = $service -> people -> get ('me');		
@@ -1246,7 +1246,7 @@ class Controller_User extends Controller_Template
 			
 			// ***** SKIN *****
 			
-			if ( $this -> input-> post('skin') != '' )
+			if ( $this -> request-> post('skin') != '' )
 			{
 				Model_Character::modify_stat_d( $char -> id,
 					'skin', 

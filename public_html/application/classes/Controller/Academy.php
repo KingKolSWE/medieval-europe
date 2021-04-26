@@ -29,41 +29,41 @@ class Controller_Academy extends Controller_Template
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'public', 'study' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}					
 			
 		}
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'public', 'study' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}	
 			
 			$o = Character_Action_Model::factory("study");
 			$par[0] = $character;
 			$par[1] = $structure;				
-			$par[2] = $this->input->post('hours');			
-			$par[3] = $this->input->post('course');
+			$par[2] = $this->request->post('hours');			
+			$par[3] = $this->request->post('course');
 			
 			$rec = $o->do_action( $par, $message );			
 
 			if ( $rec )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect('/region/view/' . $character -> position_id );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect('/region/view/' . $character -> position_id );
 				return;
 				
 			}
 			else
 			{					
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");		
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");		
 			}			
 		
 		}
@@ -116,38 +116,38 @@ class Controller_Academy extends Controller_Template
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}			
 		}
 		else
 		{	
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			
 			$ca = Character_Action_Model::factory("assignrolerp");		
 			$par[0] = $character;
-			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->input->post('nominated')) )->find(); 
-			$par[2] = $this->input->post( 'role' );
-			$par[3] = ORM::factory( 'region', $this->input->post( 'region_id' ) ); 
-			$par[4] = ORM::factory( 'structure', $this->input->post( 'structure_id' ) );
-			$par[5] = $this->input->post( 'place' );
+			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->request->post('nominated')) )->find(); 
+			$par[2] = $this->request->post( 'role' );
+			$par[3] = ORM::factory( 'region', $this->request->post( 'region_id' ) ); 
+			$par[4] = ORM::factory( 'structure', $this->request->post( 'structure_id' ) );
+			$par[5] = $this->request->post( 'place' );
 			
 			if ( $ca->do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect('academy/manage/' . $structure->id);
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect('academy/manage/' . $structure->id);
 			}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-				url::redirect ( 'academy/assign_rolerp/' . $structure->id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+				HTTP::redirect ( 'academy/assign_rolerp/' . $structure->id );
 			}
 		}
 		

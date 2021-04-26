@@ -36,7 +36,7 @@ class Controller_Group extends Controller_Template
 		// ordinamento
 		if ( $this -> input -> get('orderby') )
 		{
-			list($orderby, $direction) = explode(':', $this->input->get('orderby'));
+			list($orderby, $direction) = explode(':', $this->request->get('orderby'));
 			$sql .= " order by $orderby $direction " ;		
 		}
 		
@@ -118,8 +118,8 @@ class Controller_Group extends Controller_Template
 		
 		if ($totgroups -> count_all() == 3)
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-no_more_groups') . "</div>");
-			url::redirect( '/group/mygroups/' );				
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-no_more_groups') . "</div>");
+			HTTP::redirect( '/group/mygroups/' );				
 		}		
 		
 		$errors = $form;
@@ -157,8 +157,8 @@ class Controller_Group extends Controller_Template
 				$group -> date = time();
 				$group -> save();
 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">". __('groups.info-groupcreated') . "</div>");
-				url::redirect('/group/mygroups');
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('groups.info-groupcreated') . "</div>");
+				HTTP::redirect('/group/mygroups');
 			}
 			else
 			{
@@ -209,8 +209,8 @@ class Controller_Group extends Controller_Template
 		// Controllo che il char sia il proprietario del gruppo
 		if ( !($group->character_id == $character->id) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-char_not_owner') . "</div>");
-			url::redirect( 'group/mygroups/' );			
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-char_not_owner') . "</div>");
+			HTTP::redirect( 'group/mygroups/' );			
 		}
 		
 		$form = array ('group_image' => '');		
@@ -239,8 +239,8 @@ class Controller_Group extends Controller_Template
  				// Remove the temporary file
 				unlink($filename);
 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">". __('groups.image_changed') . "</div>");
-				url::redirect( '/group/mygroups' );	
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('groups.image_changed') . "</div>");
+				HTTP::redirect( '/group/mygroups' );	
 			}
 			else
 			{
@@ -282,9 +282,9 @@ class Controller_Group extends Controller_Template
 		
 		if (! $group->loaded)
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". 
 				__('groups.error-group_not_found') . "</div>");
-			url::redirect( 'group/mygroups/' );
+			HTTP::redirect( 'group/mygroups/' );
 		}
 		
 		$form = array ('group_charname' => '');		
@@ -298,8 +298,8 @@ class Controller_Group extends Controller_Template
 						
 			if ( ! $group->search_a_member($character->id) )
 			{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-secret_char_not_owner') . "</div>");
-			url::redirect( 'group/mygroups/' );		
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-secret_char_not_owner') . "</div>");
+			HTTP::redirect( 'group/mygroups/' );		
 			}
 		}
 
@@ -313,18 +313,18 @@ class Controller_Group extends Controller_Template
 				// Se supero la validazione:
 				// Estraggo le informazioni del giocatore
 				
-				$char_to_add = ORM::factory('character')->where( array('name' => $this->input->post('group_charname')))->find();
+				$char_to_add = ORM::factory('character')->where( array('name' => $this->request->post('group_charname')))->find();
 				// Controllo che il char non abbia già una richiesta pendente per questo gruppo
 				if ( Group_model::check_pendent_request($group_id, $char_to_add->id ) )
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-char_has_request') . "</div>");
-					url::redirect( 'group/view/'.$group_id );
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-char_has_request') . "</div>");
+					HTTP::redirect( 'group/view/'.$group_id );
 				}
 				// Controllo che il giocatore non appartenga già al gruppo
 				if ( $group->search_a_member($char_to_add->id) )
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-char_already_in_group') . "</div>");
-					url::redirect( 'group/view/'.$group_id );
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-char_already_in_group') . "</div>");
+					HTTP::redirect( 'group/view/'.$group_id );
 				}
 				// Controllo che il gruppo non abbia già raggiunto il massimo dei giocatori
 				
@@ -338,16 +338,16 @@ class Controller_Group extends Controller_Template
 				
 				if ( $members -> count() >= $grouplimit )
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-reached_max_chars') . "</div>");
-					url::redirect( 'group/view/'.$group_id );
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-reached_max_chars') . "</div>");
+					HTTP::redirect( 'group/view/'.$group_id );
 				}
 				
 				// Controllo che la richiesta di aggiunta provenga solo dal gestore del gruppo
 				
 				if ($group->character_id != $character->id)
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-char_not_owner') . "</div>");
-					url::redirect( 'group/view/'.$group_id );
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-char_not_owner') . "</div>");
+					HTTP::redirect( 'group/view/'.$group_id );
 				}
 
 				// SUPERO TUTTI I CHECKS
@@ -451,15 +451,15 @@ class Controller_Group extends Controller_Template
 		// Controllo che il giocatore appartenga effettivamente al gruppo		
 		if ( ! $group -> search_a_member( $char_to_remove->id ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-char_not_in_group') . "</div>");
-			url::redirect( 'group/view/'.$group_id );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-char_not_in_group') . "</div>");
+			HTTP::redirect( 'group/view/'.$group_id );
 		}		
 		
 		// Controllo che il char sia il proprietario del gruppo
 		if ( $group -> character_id != $character -> id)
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-char_not_owner') . "</div>");
-			url::redirect( 'group/mygroups/' );			
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-char_not_owner') . "</div>");
+			HTTP::redirect( 'group/mygroups/' );			
 		}
 		
 		Group_Model::remove_a_member($group_id, $char_id);
@@ -483,9 +483,9 @@ class Controller_Group extends Controller_Template
 			'normal'
 			);
 	
-		Session::set_flash('user_message', "<div class=\"info_msg\">". __('groups.info-memberremoved') . "</div>");
+		Session::instance()->set('user_message', "<div class=\"info_msg\">". __('groups.info-memberremoved') . "</div>");
 			
-		url::redirect( 'group/view/'.$group_id );
+		HTTP::redirect( 'group/view/'.$group_id );
 	}
 	
 	
@@ -514,8 +514,8 @@ class Controller_Group extends Controller_Template
 		
 			if ( $group -> character_id != $char->id )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-char_not_owner') . "</div>");
-				url::redirect( 'group/mygroups/' );			
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-char_not_owner') . "</div>");
+				HTTP::redirect( 'group/mygroups/' );			
 			}
 			
 			$form['group_description'] = $group -> description;
@@ -527,39 +527,39 @@ class Controller_Group extends Controller_Template
 		{
 			//var_dump( $_POST ); exit; 
 			
-			$group = ORM::factory('group', $this -> input -> post( 'group_id' )); 
+			$group = ORM::factory('group', $this -> request -> post( 'group_id' )); 
 			
-			if ( strlen( $this -> input -> post('group_name' )) < 5 )
+			if ( strlen( $this -> request -> post('group_name' )) < 5 )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-groupnametooshort') . "</div>");
-				$form = arr::overwrite( $form, $this -> input -> post() );				
-				url::redirect( 'group/edit/' . $this -> input -> post( 'group_id' ));
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-groupnametooshort') . "</div>");
+				$form = arr::overwrite( $form, $this -> request -> post() );				
+				HTTP::redirect( 'group/edit/' . $this -> request -> post( 'group_id' ));
 			}
 			
-			if ( strlen( $this -> input -> post('group_description' ) ) < 15 )
+			if ( strlen( $this -> request -> post('group_description' ) ) < 15 )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-groupdescriptiontooshort') . "</div>");
-				$form = arr::overwrite( $form, $this -> input -> post() );				
-				url::redirect( 'group/edit/' . $this -> input -> post( 'group_id' ));
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-groupdescriptiontooshort') . "</div>");
+				$form = arr::overwrite( $form, $this -> request -> post() );				
+				HTTP::redirect( 'group/edit/' . $this -> request -> post( 'group_id' ));
 			}
 			
 			// controlliamo che il gruppo non esista già.
-			$egroup = ORM::factory('group') -> where ( 'name', $this -> input -> post('group_name') ) -> find();
+			$egroup = ORM::factory('group') -> where ( 'name', $this -> request -> post('group_name') ) -> find();
 			if ( $egroup -> loaded and $egroup -> id != $group -> id )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-groupalreadyexisting',
-					$this -> input -> post('group_name' ) ) . "</div>");
-				$form = arr::overwrite( $form, $this -> input -> post() );				
-				url::redirect( 'group/edit/' . $this -> input -> post( 'group_id' ));
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-groupalreadyexisting',
+					$this -> request -> post('group_name' ) ) . "</div>");
+				$form = arr::overwrite( $form, $this -> request -> post() );				
+				HTTP::redirect( 'group/edit/' . $this -> request -> post( 'group_id' ));
 			}
 			
-			$group -> name = $this -> input -> post('group_name' );
-			$group -> description = $this -> input -> post('group_description');
+			$group -> name = $this -> request -> post('group_name' );
+			$group -> description = $this -> request -> post('group_description');
 			$group -> save();
 			
-			Session::set_flash('user_message', "<div class=\"info_msg\">". __('groups.info-groupmodified') . "</div>");			
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". __('groups.info-groupmodified') . "</div>");			
 			
-			url::redirect('/group/mygroups');
+			HTTP::redirect('/group/mygroups');
 			
 		}
 		
@@ -589,8 +589,8 @@ class Controller_Group extends Controller_Template
 		// Controllo che il char sia il proprietario del gruppo
 		if ($group->character_id != $owner->id)
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-char_not_owner') . "</div>");
-			url::redirect( 'group/mygroups/' );			
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-char_not_owner') . "</div>");
+			HTTP::redirect( 'group/mygroups/' );			
 		}
 		
 		// Elimino tutti gli utenti del gruppo
@@ -623,9 +623,9 @@ class Controller_Group extends Controller_Template
 
 		// Elimino il gruppo dalla tabella
 		$group -> delete();
-		Session::set_flash('user_message', "<div class=\"info_msg\">". __('groups.info-groupdeleted') . "</div>");
+		Session::instance()->set('user_message', "<div class=\"info_msg\">". __('groups.info-groupdeleted') . "</div>");
 			
-		url::redirect( 'group/mygroups/' );	
+		HTTP::redirect( 'group/mygroups/' );	
 		
 	}
 	
@@ -673,8 +673,8 @@ class Controller_Group extends Controller_Template
 					$m = new Message_Model();
 					$sender = $char;
 					$recipient = ORM::factory('character', $member->character_id);
-					$subject = '[' . $group -> name . ']:' . $this->input->post('group_subject');
-					$body = $this->input->post('group_message') .
+					$subject = '[' . $group -> name . ']:' . $this->request->post('group_subject');
+					$body = $this->request->post('group_message') .
 						"\r\n" . $sender -> signature;
 					$ret = $m -> send( $sender, $recipient, $subject, $body, false, false, false );
 				}
@@ -684,12 +684,12 @@ class Controller_Group extends Controller_Template
 				$m = new Message_Model();
 				$sender = $char;
 				$recipient = ORM::factory('character', $group -> character_id);
-				$subject = '[' . $group -> name . ']:' . $this->input->post('group_subject');
-				$body = $this -> input -> post('group_message') . "\r\n" . $sender -> signature;
+				$subject = '[' . $group -> name . ']:' . $this->request->post('group_subject');
+				$body = $this -> request -> post('group_message') . "\r\n" . $sender -> signature;
 				$ret = $m -> send( $sender, $recipient, $subject, $body, false, false, false );
 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">".__('message.message_success')."</div>" );				
-				url::redirect('/group/mygroups');
+				Session::instance()->set('user_message', "<div class=\"info_msg\">".__('message.message_success')."</div>" );				
+				HTTP::redirect('/group/mygroups');
 			}
 			else
 			{
@@ -733,7 +733,7 @@ class Controller_Group extends Controller_Template
 		if ( !$_POST )
 			$group = ORM::factory('group', $group_id );		
 		if ( $_POST )
-			$group = ORM::factory('group', $this -> input -> post('group_id') );		
+			$group = ORM::factory('group', $this -> request -> post('group_id') );		
 		
 		/////////////////////////////////////////
 		// il gruppo esiste?		
@@ -741,8 +741,8 @@ class Controller_Group extends Controller_Template
 		
 		if ( !$group -> loaded )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-group_not_found') . "</div>");
-			url::redirect('/group/mygroups');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-group_not_found') . "</div>");
+			HTTP::redirect('/group/mygroups');
 		}
 		
 		/////////////////////////////////////////
@@ -751,8 +751,8 @@ class Controller_Group extends Controller_Template
 		
 		if ( $group -> character_id != $char -> id )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-secret_char_not_owner') . "</div>");
-			url::redirect('/group/mygroups');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-secret_char_not_owner') . "</div>");
+			HTTP::redirect('/group/mygroups');
 		}
 		
 		
@@ -768,7 +768,7 @@ class Controller_Group extends Controller_Template
 			if ($post->validate() )
 			{
 				
-				$newleader = ORM::factory('character') -> where ( array( 'name' => $this ->input -> post('group_charname') ) ) -> find();
+				$newleader = ORM::factory('character') -> where ( array( 'name' => $this ->request -> post('group_charname') ) ) -> find();
 								
 				/////////////////////////////////////////
 				// il char designato esiste?
@@ -776,8 +776,8 @@ class Controller_Group extends Controller_Template
 				
 				if ( !$newleader -> loaded )
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-secret_char_not_owner') . "</div>");
-					url::redirect('/group/mygroups');
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-secret_char_not_owner') . "</div>");
+					HTTP::redirect('/group/mygroups');
 				}
 				
 				
@@ -821,9 +821,9 @@ class Controller_Group extends Controller_Template
 					'__events.groupleadershiptransferednewleader;' . $char -> name . ';' . $group -> name		
 				);
 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">".__('groups.transfered_leadership'
+				Session::instance()->set('user_message', "<div class=\"info_msg\">".__('groups.transfered_leadership'
 				, $group -> name, $newleader ->name )."</div>" );				
-				url::redirect('/group/mygroups');
+				HTTP::redirect('/group/mygroups');
 			}
 			else
 			{
@@ -862,8 +862,8 @@ class Controller_Group extends Controller_Template
 		
 		if ( !$group -> loaded )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-group_not_found') . "</div>");
-			url::redirect('/group/mygroups');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-group_not_found') . "</div>");
+			HTTP::redirect('/group/mygroups');
 		}
 		
 		/////////////////////////////////////////
@@ -872,8 +872,8 @@ class Controller_Group extends Controller_Template
 		
 		if ( $group -> character_id == $char -> id )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-charisowner') . "</div>");
-			url::redirect('/group/mygroups');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-charisowner') . "</div>");
+			HTTP::redirect('/group/mygroups');
 		}
 		
 		/////////////////////////////////////////
@@ -881,8 +881,8 @@ class Controller_Group extends Controller_Template
 		/////////////////////////////////////////
 		if ( ! $group -> search_a_member( $char -> id ) )		
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('groups.error-notamembergroup') . "</div>");
-			url::redirect('/group/mygroups');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-notamembergroup') . "</div>");
+			HTTP::redirect('/group/mygroups');
 		}
 				
 		// evento al leader
@@ -897,8 +897,8 @@ class Controller_Group extends Controller_Template
 		$group -> remove_a_member( $group -> id, $char -> id ); 
 		
 		
-		Session::set_flash('user_message', "<div class=\"info_msg\">".__('groups.leftgroup_success')."</div>" );				
-		url::redirect('/group/mygroups');
+		Session::instance()->set('user_message', "<div class=\"info_msg\">".__('groups.leftgroup_success')."</div>" );				
+		HTTP::redirect('/group/mygroups');
 	
 	}
 	

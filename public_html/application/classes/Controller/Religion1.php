@@ -25,8 +25,8 @@ class Controller_Religion1 extends Controller_Template
 
 		if ( $church -> loaded == false )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('religion.nochurchinfo') . "</div>");
-			url::redirect('region/info');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('religion.nochurchinfo') . "</div>");
+			HTTP::redirect('region/info');
 		}
 
 		$info = Church_Model::get_info( $church_id );
@@ -121,21 +121,21 @@ class Controller_Religion1 extends Controller_Template
 				$structure -> getParentType(), $message,
 				'private', 'managehierarchy' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 		}
 		else
 		{
-			//var_dump( $this -> input -> post() ); exit;
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
-			$targetstructure = ORM::factory('structure', $this -> input -> post('targetstructure_id'));
+			//var_dump( $this -> request -> post() ); exit;
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$targetstructure = ORM::factory('structure', $this -> request -> post('targetstructure_id'));
 
 			$par[0] = $character;
-			$par[1] = ORM::factory('character') -> where ( 'name' , $this -> input -> post('owner')) -> find();
+			$par[1] = ORM::factory('character') -> where ( 'name' , $this -> request -> post('owner')) -> find();
 			$par[2] = $targetstructure -> structure_type -> associated_role_tag;
 
-			if ( $this -> input -> post('revoke') )
+			if ( $this -> request -> post('revoke') )
 			{
 				$ca = Character_Action_Model::factory("revokerole");
 				$par[3] = $structure;
@@ -151,13 +151,13 @@ class Controller_Religion1 extends Controller_Template
 
 			if ( $ca -> do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect ( 'religion_1/managehierarchy/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect ( 'religion_1/managehierarchy/' . $structure -> id );
 			}
 			else
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect ( 'religion_1/managehierarchy/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect ( 'religion_1/managehierarchy/' . $structure -> id );
 			}
 		}
 
@@ -218,39 +218,39 @@ class Controller_Religion1 extends Controller_Template
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'assign_rolerp' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 		}
 		else
 		{
 			var_dump(1); exit;
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 
 			$ca = Character_Action_Model::factory("assignrolerp");
 			//var_dump( $_POST ); exit;
 			// Characther che nomina
 			$par[0] = $character;
 			// Character nominato
-			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->input->post('nominated')) )->find();
+			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->request->post('nominated')) )->find();
 			// Tag ruolo
-			$par[2] = $this->input->post( 'role' );
+			$par[2] = $this->request->post( 'role' );
 			// Regione dove avviene la nomina
-			$par[3] = ORM::factory( 'region', $this->input->post( 'region_id' ) );
+			$par[3] = ORM::factory( 'region', $this->request->post( 'region_id' ) );
 			// Struttura da dove avviene la nomina
-			$par[4] = ORM::factory( 'structure', $this->input->post( 'structure_id' ) );
+			$par[4] = ORM::factory( 'structure', $this->request->post( 'structure_id' ) );
 			// Nome del feudo da associare al titolo
-			$par[5] = $this->input->post( 'place' );
+			$par[5] = $this->request->post( 'place' );
 
 			if ( $ca->do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect('religion_1/assign_rolerp/' . $structure->id);
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect('religion_1/assign_rolerp/' . $structure->id);
 			}
 			else
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect ( 'religion_1/assign_rolerp/' . $structure->id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect ( 'religion_1/assign_rolerp/' . $structure->id );
 			}
 		}
 
@@ -289,8 +289,8 @@ class Controller_Religion1 extends Controller_Template
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'managedogmas' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 
 			$church = ORM::factory("church", $structure->structure_type->church_id );
@@ -301,7 +301,7 @@ class Controller_Religion1 extends Controller_Template
 		{
 
 			$structure = StructureFactory_Model::create( null, $structure_id );
-			$dogmabonus = ORM::factory("cfgdogmabonus", $this -> input -> post('dogmabonus') );
+			$dogmabonus = ORM::factory("cfgdogmabonus", $this -> request -> post('dogmabonus') );
 			$church = ORM::factory("church", $structure->structure_type->church_id );
 			//var_dump( $dogmabonus ); exit;
 
@@ -318,13 +318,13 @@ class Controller_Religion1 extends Controller_Template
 
 			if ( $ca -> do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect ( 'religion_1/managedogmas/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect ( 'religion_1/managedogmas/' . $structure -> id );
 			}
 			else
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect ( 'religion_1/managedogmas/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect ( 'religion_1/managedogmas/' . $structure -> id );
 			}
 		}
 
@@ -357,8 +357,8 @@ class Controller_Religion1 extends Controller_Template
 		// controllo permessi
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'resourcereport' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 		// seleziono tutte le strutture della chiesa
@@ -426,8 +426,8 @@ public function removedogmabonus( $structure_id, $churchdogma_id )
 		if ( ! $structure -> allowedaccess( $char, $structure -> getParentType(), $message,
 			'private', 'removedogma' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}
 
 		// Azione leavereligion
@@ -442,13 +442,13 @@ public function removedogmabonus( $structure_id, $churchdogma_id )
 
 		if ( $rec )
 		{
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 		}
 		else
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 		}
 		// Redirect alla region view
-		url::redirect( 'religion_1/managedogmas/'.$structure->id );
+		HTTP::redirect( 'religion_1/managedogmas/'.$structure->id );
 	}
 }

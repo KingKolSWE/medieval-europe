@@ -30,8 +30,8 @@ class Controller_Breeding extends Controller_Template
 			
 			if ( is_null( $structure ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>");
-				url::redirect('region/view');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">" . __('global.operation_not_allowed') . "</div>");
+				HTTP::redirect('region/view');
 			}
 		
 		}
@@ -41,18 +41,18 @@ class Controller_Breeding extends Controller_Template
 			$ca = Character_Action_Model::factory('buyanimals');				
 			
 			$par[0] = $character;
-			$par[1] = $this -> input -> post('type'); 
+			$par[1] = $this -> request -> post('type'); 
 				
 			if ( $ca -> do_action( $par, $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 			}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
 			}
 			
-			url::redirect('region/view/');
+			HTTP::redirect('region/view/');
 		
 		}
 		
@@ -79,8 +79,8 @@ class Controller_Breeding extends Controller_Template
 		
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'gather' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( 'region/view/' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( 'region/view/' );
 		}
 		
 		// Istanzio l'azione "gather"		
@@ -90,11 +90,11 @@ class Controller_Breeding extends Controller_Template
 		$par[1] = $character;
 
 		if ( $ca->do_action( $par,  $message ) )
-		{ Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); }
+		{ Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); }
 		else	
-		{ Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); }
+		{ Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); }
 				
-		url::redirect('structure/manage/' . $structure -> id );
+		HTTP::redirect('structure/manage/' . $structure -> id );
 	
 	}	
 
@@ -113,8 +113,8 @@ class Controller_Breeding extends Controller_Template
 	
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'butcher' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( 'region/view/' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( 'region/view/' );
 		}
 		
 		// Istanzio l'azione "butcher"		
@@ -127,14 +127,14 @@ class Controller_Breeding extends Controller_Template
 		if ( $par[0]->loaded )
 		{
 			if ( $ca->do_action( $par,  $message ) )
-			{ Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); }
+			{ Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); }
 			else	
-			{ Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); }
+			{ Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); }
 		}
 		else
-		{	Session::set_flash('user_message', "<div class=\"error_msg\">". __('structures.milking_error1') . "</div>"); } 
+		{	Session::instance()->set('user_message', "<div class=\"error_msg\">". __('structures.milking_error1') . "</div>"); } 
 
-		url::redirect('structure/manage/' . $structure -> id );
+		HTTP::redirect('structure/manage/' . $structure -> id );
 
 	}
 
@@ -153,8 +153,8 @@ class Controller_Breeding extends Controller_Template
 		
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'feed' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect( 'region/view/' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect( 'region/view/' );
 		}
 		
 		// Istanzio l'azione "feed"		
@@ -164,11 +164,11 @@ class Controller_Breeding extends Controller_Template
 		$par[1] = $character;
 
 		if ( $ca->do_action( $par,  $message ) )
-			{ Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>"); }
+			{ Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); }
 		else	
-			{ Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); }
+			{ Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); }
 			
-		url::redirect('structure/manage/' . $structure -> id );
+		HTTP::redirect('structure/manage/' . $structure -> id );
 	}
 		
 }

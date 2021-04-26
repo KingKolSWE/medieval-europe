@@ -26,8 +26,8 @@ class Controller_Wardrobe extends Controller_Template
 
 		if ( Model_Character::get_premiumbonus( $char -> id, 'wardrobe' ) == false )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
-			url::redirect('/wardrobe/atelier_dynamo/avatars/avatar');		
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
+			HTTP::redirect('/wardrobe/atelier_dynamo/avatars/avatar');		
 		}
 		
 		if ( !$_POST )
@@ -41,7 +41,7 @@ class Controller_Wardrobe extends Controller_Template
 			// upload
 			///////////////////////////////////
 			
-			if ( key_exists('upload', $this -> input -> post()) )
+			if ( key_exists('upload', $this -> request -> post()) )
 			{
 				//var_dump($_FILES);exit;
 				$path = DOCROOT . 'media/images/characters/wardrobe/' . $char -> id ;
@@ -101,31 +101,31 @@ class Controller_Wardrobe extends Controller_Template
 				//KO7::$log->add(KO7_Log::DEBUG, kohana::debug($errors) ); 
 				
 				if ( count( $errs ) > 0 )
-					Session::set_flash('user_message', "<div class=\"error_msg\">". __('wardrobe.imagesloadederror') . "</div>");
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". __('wardrobe.imagesloadederror') . "</div>");
 				else
-					Session::set_flash('user_message', "<div class=\"info_msg\">". __('wardrobe.imagesloaded') . "</div>");				
+					Session::instance()->set('user_message', "<div class=\"info_msg\">". __('wardrobe.imagesloaded') . "</div>");				
 			}			
 			
 			///////////////////////////////////
 			// Send image for approval
 			///////////////////////////////////
 			
-			elseif ( key_exists('approval', $this -> input -> post() ))			
+			elseif ( key_exists('approval', $this -> request -> post() ))			
 			{
 			
 				if ( count($uploadedimages) == 0 )
-					Session::set_flash('user_message', "<div class=\"error_msg\">". __('wardrobe.nothingtoapprove') . "</div>");			
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". __('wardrobe.nothingtoapprove') . "</div>");			
 				elseif ( Wardrobe_Approvalrequest_Model::add_model( $char, $message ) == false )
-					Session::set_flash('user_message', "<div class=\"error_msg\">". __($message) . "</div>");					
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". __($message) . "</div>");					
 				else
-					Session::set_flash('user_message', "<div class=\"info_msg\">". __($message) . "</div>");					
+					Session::instance()->set('user_message', "<div class=\"info_msg\">". __($message) . "</div>");					
 			}
 			
 			///////////////////////////////////
 			// Colore della pelle
 			///////////////////////////////////
 			
-			elseif ( key_exists('setskincolor', $this -> input -> post()) )
+			elseif ( key_exists('setskincolor', $this -> request -> post()) )
 			{
 				//var_dump('hello');exit;
 				$char -> modify_stat( 
@@ -134,10 +134,10 @@ class Controller_Wardrobe extends Controller_Template
 					null,
 					null, 
 					true,
-					$this -> input -> post('skincolorset')
+					$this -> request -> post('skincolorset')
 				);
 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">". __('wardrobe.info-skincolorset') . "</div>");
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('wardrobe.info-skincolorset') . "</div>");
 			}
 			
 			
@@ -145,12 +145,12 @@ class Controller_Wardrobe extends Controller_Template
 			// switcha on/off le customizzazioni
 			///////////////////////////////////
 			
-			elseif ( key_exists('disablecustomization', $this -> input -> post()) )
+			elseif ( key_exists('disablecustomization', $this -> request -> post()) )
 			{				
 				
 				$char -> modify_stat( 
 					'disablecustomwardrobe', 
-					$this -> input -> post('disablewardrobecustomization'), 
+					$this -> request -> post('disablewardrobecustomization'), 
 					null,
 					null, 
 					true
@@ -158,7 +158,7 @@ class Controller_Wardrobe extends Controller_Template
 
 				$char -> modify_stat( 
 					'hideringunderclothes', 
-					$this -> input -> post('hideringunderclothes'), 
+					$this -> request -> post('hideringunderclothes'), 
 					null,
 					null, 
 					true
@@ -166,13 +166,13 @@ class Controller_Wardrobe extends Controller_Template
 				
 				$char -> modify_stat( 
 					'hidehairsunderclothes', 
-					$this -> input -> post('hidehairsunderclothes'), 
+					$this -> request -> post('hidehairsunderclothes'), 
 					null,
 					null, 
 					true
 				);
 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">". __('wardrobe.info-settingschanged') . "</div>");
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('wardrobe.info-settingschanged') . "</div>");
 				
 			}
 			
@@ -180,7 +180,7 @@ class Controller_Wardrobe extends Controller_Template
 			// reset uploaded
 			///////////////////////////////////
 			
-			elseif ( key_exists('reset', $this -> input -> post()) )
+			elseif ( key_exists('reset', $this -> request -> post()) )
 			{			
 				// Non � possibile pulire le immagini se esiste una 
 				// richiesta da approvare
@@ -192,12 +192,12 @@ class Controller_Wardrobe extends Controller_Template
 				
 				if ( $c > 0 )
 				{
-					Session::set_flash('user_message', "<div class=\"error_msg\">". __('wardrobe.error-unprocessedrequestexists') . "</div>");
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". __('wardrobe.error-unprocessedrequestexists') . "</div>");
 				}
 				else
 				{
 					Wardrobe_Model::removeuploadedimages( $char );	
-					Session::set_flash('user_message', "<div class=\"info_msg\">". __('wardrobe.cleanupok') . "</div>");
+					Session::instance()->set('user_message', "<div class=\"info_msg\">". __('wardrobe.cleanupok') . "</div>");
 				}
 				
 				
@@ -278,8 +278,8 @@ class Controller_Wardrobe extends Controller_Template
 		if ( Model_Character::get_premiumbonus( $char -> id, 'wardrobe') == false )
 		{	
 		 
-			Session::set_flash('user_message', "<div class=\"error_msg\">". __('global.operationnotallowed') . "</div>");
-			url::redirect( 'character/inventory' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operationnotallowed') . "</div>");
+			HTTP::redirect( 'character/inventory' );
 		}
 			
 		$lnkmenu = Wardrobe_Model::get_horizontalmenu('atelier_default');		
@@ -338,7 +338,7 @@ class Controller_Wardrobe extends Controller_Template
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
 		if ( $slot < 0 or $slot > 5 )
-			Session::set_flash('user_message', "<div class=\"error_msg\">" . 
+			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
 				__('wardrobe.error-incorrectslot') . "</div>");				
 		else
 			{
@@ -360,12 +360,12 @@ class Controller_Wardrobe extends Controller_Template
 				);		
 								
 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">" . 
+				Session::instance()->set('user_message', "<div class=\"info_msg\">" . 
 					__('wardrobe.slotset-ok', $slot, __(
 						'items.' . $tag . '_name') ) . "</div>");				
 			}
 		
-		url::redirect( 'wardrobe/configureequipment' );
+		HTTP::redirect( 'wardrobe/configureequipment' );
 
 	}
 	

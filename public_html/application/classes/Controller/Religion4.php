@@ -29,8 +29,8 @@ class Controller_Religion4 extends Controller_Template
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 			'private', 'manage') )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}	
 		
 		if ( !$_POST )
@@ -38,48 +38,48 @@ class Controller_Religion4 extends Controller_Template
 		else
 		{
 			
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			
 			// trasferisci FP
 			
-			if ( $this -> input -> post('transfer' ) )
+			if ( $this -> request -> post('transfer' ) )
 			{
 				$ca = Character_Action_Model::factory("transferfppoints");				
 				$par[0] = $character;		
 				$par[1] = $structure;
-				$par[2] = ORM::factory('structure', $this -> input -> post('targetstructure_id' ) );
-				$par[3] = $this -> input -> post('points');
+				$par[2] = ORM::factory('structure', $this -> request -> post('targetstructure_id' ) );
+				$par[3] = $this -> request -> post('points');
 				
 				if ( $ca -> do_action( $par,  $message ) )
 				{ 				
-					Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");					
+					Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");					
 				}	
 				else	
 				{ 
-					$form = arr::overwrite( $form, $this -> input -> post() ); 				
-					Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 									
+					$form = arr::overwrite( $form, $this -> request -> post() ); 				
+					Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 									
 				}	
 			
 			}
 			
 			// cambia descrizione
 			
-			if ( $this -> input -> post( 'submit_description' ) ) 
+			if ( $this -> request -> post( 'submit_description' ) ) 
 			{
-				$structure -> description = substr($this -> input -> post ('description' ), 0, 1023);
+				$structure -> description = substr($this -> request -> post ('description' ), 0, 1023);
 				$structure -> save();
-				Session::set_flash('user_message', "<div class=\"info_msg\">" . __('structures.configuration_ok') . "</div>");
+				Session::instance()->set('user_message', "<div class=\"info_msg\">" . __('structures.configuration_ok') . "</div>");
 				
 			}
 			
-			if ( $this -> input -> post( 'submit_message' ) ) 
+			if ( $this -> request -> post( 'submit_message' ) ) 
 			{
-				$structure -> message = substr($this -> input -> post ('message' ), 0, 1023); 				
+				$structure -> message = substr($this -> request -> post ('message' ), 0, 1023); 				
 				$structure -> save();
-				Session::set_flash('user_message', "<div class=\"info_msg\">" . __('structures.configuration_ok') . "</div>");
+				Session::instance()->set('user_message', "<div class=\"info_msg\">" . __('structures.configuration_ok') . "</div>");
 			}
 			
-			url::redirect('religion_4/manage/' . $structure -> id ) ;
+			HTTP::redirect('religion_4/manage/' . $structure -> id ) ;
 		
 		}
 		
@@ -122,8 +122,8 @@ class Controller_Religion4 extends Controller_Template
 			$structure = StructureFactory_Model::create( null, $structure_id );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'celebratemarriage' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}	
 			
 			$view -> annulmentchar = '';
@@ -134,51 +134,51 @@ class Controller_Religion4 extends Controller_Template
 		{
 		
 			
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'celebratemarriage' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 			
 			
-			if ( $this -> input -> post('startmarriage' ) )
+			if ( $this -> request -> post('startmarriage' ) )
 			{
 				$par[0] = $character;
 				$par[1] = $structure;
-				$par[2] = ORM::factory('character') -> where ('name', $this -> input -> post('celebratehusband')) -> find();
-				$par[3] = ORM::factory('character') -> where ('name', $this -> input -> post('celebratewife')) -> find();
+				$par[2] = ORM::factory('character') -> where ('name', $this -> request -> post('celebratehusband')) -> find();
+				$par[3] = ORM::factory('character') -> where ('name', $this -> request -> post('celebratewife')) -> find();
 				
 				$ca = Character_Action_Model::factory("celebratemarriage");		
-				$view -> celebratewife = $this -> input -> post('celebratewife');
-				$view -> celebratehusband = $this -> input -> post('celebratehusband');
+				$view -> celebratewife = $this -> request -> post('celebratewife');
+				$view -> celebratehusband = $this -> request -> post('celebratehusband');
 				$view -> annulmentchar = '';
 			}
-			elseif ( $this -> input -> post('cancelmarriage' ) )
+			elseif ( $this -> request -> post('cancelmarriage' ) )
 			{
 				$par[0] = $character;
 				$par[1] = $structure;
-				$par[2] = ORM::factory('character') -> where ('name', $this -> input -> post('annulmentchar')) -> find();				
+				$par[2] = ORM::factory('character') -> where ('name', $this -> request -> post('annulmentchar')) -> find();				
 				$ca = Character_Action_Model::factory("cancelmarriage");		
-				$view -> annulmentchar = $this -> input -> post('annulmentchar');
+				$view -> annulmentchar = $this -> request -> post('annulmentchar');
 				$view -> celebratehusband = '';
 				$view -> celebratewife = '';
 			}
 			else
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $__('global.operation_not_allowed') . "</div>");
-				url::redirect ( 'religion_4/celebratemarriage/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $__('global.operation_not_allowed') . "</div>");
+				HTTP::redirect ( 'religion_4/celebratemarriage/' . $structure -> id );
 			}			
 			
 			if ( $ca -> do_action( $par,  $message ) )
 			{ 				
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");				
-				//url::redirect ( 'religion_4/celebratemarriage/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");				
+				//HTTP::redirect ( 'religion_4/celebratemarriage/' . $structure -> id );
 			}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-				//url::redirect ( 'religion_4/celebratemarriage/' . $structure -> id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+				//HTTP::redirect ( 'religion_4/celebratemarriage/' . $structure -> id );
 			}
 		
 		}
@@ -207,8 +207,8 @@ class Controller_Religion4 extends Controller_Template
 		// controllo permessi
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'public', 'donatecoins' ) )
 		{
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-			url::redirect('region/view/');
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+			HTTP::redirect('region/view/');
 		}	
 		
 		$par[0] = $character;
@@ -217,13 +217,13 @@ class Controller_Religion4 extends Controller_Template
 		$ca = Character_Action_Model::factory("donatecoins");		
 		if ( $ca -> do_action( $par,  $message ) )
 		{ 				
-			Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-			url::redirect ( 'region/view/' );
+			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+			HTTP::redirect ( 'region/view/' );
 		}	
 		else	
 		{ 
-			Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-			url::redirect ( 'region/view/' );
+			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+			HTTP::redirect ( 'region/view/' );
 		}	
 	}
 	
@@ -264,38 +264,38 @@ class Controller_Religion4 extends Controller_Template
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
 			{
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>");
-				url::redirect('region/view/');
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
+				HTTP::redirect('region/view/');
 			}
 		}
 		else
 		{	
-			$structure = StructureFactory_Model::create( null, $this -> input -> post('structure_id') );
+			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
 
 			$ca = Character_Action_Model::factory("assignrolerp");		
 			//var_dump( $_POST ); exit;
 			// Characther che nomina
 			$par[0] = $character;
 			// Character nominato
-			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->input->post('nominated')) )->find(); 
+			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->request->post('nominated')) )->find(); 
 			// Tag ruolo
-			$par[2] = $this->input->post( 'role' );
+			$par[2] = $this->request->post( 'role' );
 			// Regione dove avviene la nomina
-			$par[3] = ORM::factory( 'region', $this->input->post( 'region_id' ) ); 
+			$par[3] = ORM::factory( 'region', $this->request->post( 'region_id' ) ); 
 			// Struttura da dove avviene la nomina
-			$par[4] = ORM::factory( 'structure', $this->input->post( 'structure_id' ) );
+			$par[4] = ORM::factory( 'structure', $this->request->post( 'structure_id' ) );
 			// Nome del feudo da associare al titolo
-			$par[5] = $this->input->post( 'place' );
+			$par[5] = $this->request->post( 'place' );
 			
 			if ( $ca->do_action( $par,  $message ) )
 			{
-				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
-				url::redirect('religion_3/manage/' . $structure->id);
+				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
+				HTTP::redirect('religion_3/manage/' . $structure->id);
 			}	
 			else	
 			{ 
-				Session::set_flash('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
-				url::redirect ( 'religion_3/assign_rolerp/' . $structure->id );
+				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>"); 
+				HTTP::redirect ( 'religion_3/assign_rolerp/' . $structure->id );
 			}
 		}
 		
