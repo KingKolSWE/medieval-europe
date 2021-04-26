@@ -228,48 +228,48 @@ $(document).ready(function(){
 	</ul>
 	
 	<div id='tab-all'>
-	<?= Item_Model::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'all');?>
+	<?= Model_Item::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'all');?>
 	</div>
 	
 	<div id='tab-currencies'>
-	<?= Item_Model::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'currencies');?>
+	<?= Model_Item::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'currencies');?>
 	</div>
 	
 	<div id='tab-consumables'>
-	<?= Item_Model::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'consumables');?>
+	<?= Model_Item::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'consumables');?>
 	</div>
 	
 	
 	<div id='tab-resources'>
-	<?= Item_Model::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'resources');?>
+	<?= Model_Item::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'resources');?>
 	</div>
 	
 	<div id='tab-tools'>
-	<?= Item_Model::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'tools');?>
+	<?= Model_Item::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'tools');?>
 	</div>
 	
 	<div id='tab-structuretool' class="itemdata">
-	<?= Item_Model::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'structuretool');?>
+	<?= Model_Item::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'structuretool');?>
 	</div>
 	
 	<div id='tab-weapons'>
-	<?= Item_Model::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'weapons');?>
+	<?= Model_Item::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'weapons');?>
 	</div>
 	
 	<div id='tab-armors'>
-	<?= Item_Model::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'armors');?>
+	<?= Model_Item::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'armors');?>
 	</div>
 
 	<div id='tab-clothes'>
-	<?= Item_Model::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'clothes');?>
+	<?= Model_Item::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'clothes');?>
 	</div>
 	
 	<div id='tab-scrolls'>
-	<?= Item_Model::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'scrolls');?>
+	<?= Model_Item::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'scrolls');?>
 	</div>
 	
 	<div id='tab-others'>
-	<?= Item_Model::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'others');?>
+	<?= Model_Item::helper_marketbuylistitems($structure, $character, $role, $valueaddedtax, $items, 'others');?>
 	</div>
 	
 </div>

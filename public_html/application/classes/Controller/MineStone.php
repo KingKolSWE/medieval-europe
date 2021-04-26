@@ -9,7 +9,7 @@ class Controller_MineStone extends Controller_Template
 	{
 	
 		// Carico la struttura
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		// Controllo che la struttura sia effettivamente una miniera di ferro
 		if ($structure->structure_type->type <> 'mine_stone' ) 
@@ -31,7 +31,7 @@ class Controller_MineStone extends Controller_Template
 		$message = "";
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
-		$ca_dig = Character_Action_Model::factory("dig");
+		$ca_dig = Model_CharacterAction::factory("dig");
 		if ( $ca_dig->do_action( array( $structure, $char, $qta ),  $message ) )
 			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");		
 		else		

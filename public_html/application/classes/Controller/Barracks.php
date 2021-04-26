@@ -20,7 +20,7 @@ class Controller_Barracks extends Controller_Template
 		
 		if ( !$_POST ) 
 		{			
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'armory' ) )
@@ -31,7 +31,7 @@ class Controller_Barracks extends Controller_Template
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'armory' ) )
 			{
@@ -46,7 +46,7 @@ class Controller_Barracks extends Controller_Template
 		$view->submenu = $submenu;
 		
 		$view -> bonus = $structure -> get_premiumbonus( 'armory' );
-		$items = Structure_Model::inventory( $structure -> id ); 
+		$items = Model_Structure::inventory( $structure -> id );
 		$view -> items = $items;
 		$view -> structure = $structure;
 		$this -> template -> content = $view;
@@ -57,7 +57,7 @@ class Controller_Barracks extends Controller_Template
 	function manageprisoners( $structure_id ) 
 	{
 	
-		$structure = StructureFactory_Model::create( null, $structure_id);
+		$structure = Model_StructureFactory::create( null, $structure_id);
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$subm    = View::factory ('template/submenu');
 		$sheets  = array('gamelayout' => 'screen', 'submenu' => 'screen', 'character'=>'screen' );
@@ -96,7 +96,7 @@ class Controller_Barracks extends Controller_Template
 	function freeprisoner()
 	{
 				
-		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+		$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 				
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message
@@ -106,7 +106,7 @@ class Controller_Barracks extends Controller_Template
 			HTTP::redirect('region/view/');
 		}
 		
-		$ca = Character_Action_Model::factory("freeprisoner");		
+		$ca = Model_CharacterAction::factory("freeprisoner");
 		$par[0] = ORM::factory("character", Session::instance()->get('char_id')); 
 		$par[1] = ORM::factory("character", $this->request->post('imprisoned_id') );
 		$par[2] = $this->request->post('reason');
@@ -136,7 +136,7 @@ class Controller_Barracks extends Controller_Template
 	
 	function clean($qta = 1)
 	{
-		$ca = Character_Action_Model::factory("cleanprisons");				
+		$ca = Model_CharacterAction::factory("cleanprisons");
 		$par[0] = Model_Character::get_info( Session::instance()->get('char_id') );
 		$par[1] = ORM::factory("region", $par[0]->position_id );
 		$par[2] = $qta;
@@ -171,7 +171,7 @@ class Controller_Barracks extends Controller_Template
 				
 		if  (!$_POST)
 		{		
-			$structure = StructureFactory_Model::create( null, $structure_id);
+			$structure = Model_StructureFactory::create( null, $structure_id);
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'restrain') )
 			{
@@ -182,7 +182,7 @@ class Controller_Barracks extends Controller_Template
 		else
 		{
 		
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id'));
 			
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'restrain') )
@@ -200,7 +200,7 @@ class Controller_Barracks extends Controller_Template
 			$form['reason'] = $this->request->post('reason');			
 			$form['hours'] = $this->request->post('hours');		
 			
-			$ca = Character_Action_Model::factory("restrain");		
+			$ca = Model_CharacterAction::factory("restrain");
 			if ( $ca->do_action( $par,  $message ) )
 			{ 				
 				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");				
@@ -241,7 +241,7 @@ class Controller_Barracks extends Controller_Template
 		
 		if ( ! $_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id);
+			$structure = Model_StructureFactory::create( null, $structure_id);
 		
 			// controllo permessi		
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
@@ -269,7 +269,7 @@ class Controller_Barracks extends Controller_Template
 		else
 		{
 			
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 			// controllo permessi		
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
@@ -284,7 +284,7 @@ class Controller_Barracks extends Controller_Template
 			$par[2] = ORM::factory ( 'character_action', $this -> request -> post( 'action_id' ) ); 
 			$par[3] = $this -> request -> post( 'reason' ); 
 			
-			$ca = Character_Action_Model::factory("cancelrestrain");		
+			$ca = Model_CharacterAction::factory("cancelrestrain");
 			
 			if ( $ca->do_action( $par,  $message ) )
 			{ 				
@@ -323,7 +323,7 @@ class Controller_Barracks extends Controller_Template
 		$par[0] = $char;
 		$par[1] = $criminal;
 		
-		$ca = Character_Action_Model::factory("arrest");		
+		$ca = Model_CharacterAction::factory("arrest");
 
 		if ( $ca->do_action( $par,  $message ) )
 		{ 				
@@ -349,7 +349,7 @@ class Controller_Barracks extends Controller_Template
 	{
 	
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));		
+		$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id'));
 		
 		// controllo permessi		
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
@@ -364,7 +364,7 @@ class Controller_Barracks extends Controller_Template
 		$par[2] = ORM::factory('character') -> where ( 'name' , $this -> request -> post('target' ) ) -> find();
 		$par[3] = $this -> request -> post( 'armoryitems' );
 		
-		$ca = Character_Action_Model::factory("lendarmoryitem");		
+		$ca = Model_CharacterAction::factory("lendarmoryitem");
 
 		if ( $ca->do_action( $par,  $message ) )
 		{ 				
@@ -390,7 +390,7 @@ class Controller_Barracks extends Controller_Template
 	{
 	
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$view = View::factory ( '/barracks/viewlends');		
 		$subm    = View::factory ('template/submenu');
 		$sheets  = array('gamelayout' => 'screen', 'submenu' => 'screen', 'character'=>'screen' );
@@ -460,7 +460,7 @@ class Controller_Barracks extends Controller_Template
 		
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 			// controllo permessi		
 			
@@ -474,7 +474,7 @@ class Controller_Barracks extends Controller_Template
 		else
 		{
 			
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id'));
 			// controllo permessi		
 			
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'armory' ) )
@@ -490,7 +490,7 @@ class Controller_Barracks extends Controller_Template
 			$par[1] = $structure;
 			$par[2] = $target;	
 			
-			$ca = Character_Action_Model::factory("givearmoryaccess");		
+			$ca = Model_CharacterAction::factory("givearmoryaccess");
 
 			if ( $ca -> do_action( $par,  $message ) )
 			{ 				
@@ -527,7 +527,7 @@ class Controller_Barracks extends Controller_Template
 	{
 	
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id);
+		$structure = Model_StructureFactory::create( null, $structure_id);
 		$target = ORM::factory('character') -> where( 'name', $target ) -> find(); 
 		
 		// controllo permessi		
@@ -541,7 +541,7 @@ class Controller_Barracks extends Controller_Template
 		$par[1] = $target;	
 		$par[2] = 'captain_assistant';
 		
-		$ca = Character_Action_Model::factory("revokestructuregrant");		
+		$ca = Model_CharacterAction::factory("revokestructuregrant");
 
 		if ( $ca->do_action( $par,  $message ) )
 		{ 				
@@ -582,7 +582,7 @@ class Controller_Barracks extends Controller_Template
 
 		if ( !$_POST ) 
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 			// controllo permessi		
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
@@ -594,7 +594,7 @@ class Controller_Barracks extends Controller_Template
 		}
 		else
 		{				
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			
 			// controllo permessi		
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
@@ -603,7 +603,7 @@ class Controller_Barracks extends Controller_Template
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 				HTTP::redirect('region/view/');
 			}
-			$ca = Character_Action_Model::factory("assignrolerp");		
+			$ca = Model_CharacterAction::factory("assignrolerp");
 			$par[0] = $character;
 			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->request->post('nominated')) )->find(); 
 			$par[2] = $this->request->post( 'role' );

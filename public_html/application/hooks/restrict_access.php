@@ -163,7 +163,7 @@ function Restrict_Access()
 		if ( time() - $lastactiontime > Kohana::config( 'medeur.maxidletime' ))
 		$db -> query( "update characters set lastactiontime = unix_timestamp() where id = " . $char -> id );
 		
-	My_Cache_Model::set ( '-charinfo_' . $char -> id . '_lastactiontime', time() ); 		
+	Model_MyCache::set ( '-charinfo_' . $char -> id . '_lastactiontime', time() );
 		
 		Model_Character::handle_char_specialstatus();
 	}

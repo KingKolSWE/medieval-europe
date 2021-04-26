@@ -28,7 +28,7 @@ class Controller_Court extends Controller_Template
 		if ( ! $_POST )
 		{
 		
-			$structure = StructureFactory_Model::create( null, $structure_id );	
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'opencrimeprocedure') )
 			{
@@ -41,7 +41,7 @@ class Controller_Court extends Controller_Template
 		{					
 			//var_dump($_POST); exit; 		
 			
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'opencrimeprocedure') )
 			{
@@ -49,7 +49,7 @@ class Controller_Court extends Controller_Template
 				HTTP::redirect('region/view/');
 			}
 			
-			$ca = Character_Action_Model::factory("opencrimeprocedure");		
+			$ca = Model_CharacterAction::factory("opencrimeprocedure");
 			$par[0] = $character;
 			$par[1] = ORM::factory("character") -> 
 				where ( array ( 'name' => $this -> request -> post ('target') ) ) -> find(); 
@@ -99,7 +99,7 @@ class Controller_Court extends Controller_Template
 		$view = View::factory('court/listcrimeprocedures');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');		
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 			'private', 'listcrimeprocedure') )
@@ -163,7 +163,7 @@ class Controller_Court extends Controller_Template
 		if ( !$_POST )
 		{
 		
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'editcrimeprocedure') )
@@ -180,7 +180,7 @@ class Controller_Court extends Controller_Template
 		else
 		{
 			
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'editcrimeprocedure' ) )	
@@ -243,7 +243,7 @@ class Controller_Court extends Controller_Template
 		if ( !$_POST )
 		{
 						
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'cancelcrimeprocedure' ) )		
 			{
@@ -257,7 +257,7 @@ class Controller_Court extends Controller_Template
 		else
 		{					
 			
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'cancelcrimeprocedure' ) )		
@@ -310,7 +310,7 @@ class Controller_Court extends Controller_Template
 	
 		$view = View::factory('court/viewcrimeprocedure');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');		
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$subm    = View::factory ('template/submenu');
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 
@@ -354,7 +354,7 @@ class Controller_Court extends Controller_Template
 	{
 	
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'writearrestwarrant' ) )
@@ -363,7 +363,7 @@ class Controller_Court extends Controller_Template
 			HTTP::redirect('region/view/');
 		}
 		
-		$ca = Character_Action_Model::factory("writearrestwarrant");				
+		$ca = Model_CharacterAction::factory("writearrestwarrant");
 		$par[0] = Model_Character::get_info( Session::instance()->get('char_id') );
 		$par[1] = ORM::factory('structure', $structure_id );
 		$par[2] = ORM::factory('character_sentence', $crimeprocedure_id );
@@ -400,7 +400,7 @@ class Controller_Court extends Controller_Template
 		
 		if ( !$_POST)
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'imprison' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -411,7 +411,7 @@ class Controller_Court extends Controller_Template
 		}
 		else
 		{			
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'imprison' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -428,7 +428,7 @@ class Controller_Court extends Controller_Template
 			$form['hours'] = $this -> request -> post('hours'); 
 			$form['prison'] = $this -> request -> post('prison'); 
 			
-			$ca = Character_Action_Model::factory("imprison");		
+			$ca = Model_CharacterAction::factory("imprison");
 
 			if ( $ca -> do_action( $par,  $message ) )
 			{ 				
@@ -499,7 +499,7 @@ class Controller_Court extends Controller_Template
 
 		if ( !$_POST ) 
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
@@ -510,14 +510,14 @@ class Controller_Court extends Controller_Template
 		}
 		else
 		{	
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 				HTTP::redirect('region/view/');
 			}
-			$ca = Character_Action_Model::factory("assignrolerp");		
+			$ca = Model_CharacterAction::factory("assignrolerp");
 			//var_dump( $_POST ); exit;
 			// Characther che nomina
 			$par[0] = $character;

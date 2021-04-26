@@ -346,7 +346,7 @@ class Model_BattleConquerIRBattleType extends Model_BattleType
 		
 			$this -> par[1] -> move( $this -> par[0] -> character -> region -> kingdom );
 		
-			Character_Event_Model::addrecord( 
+			Model_CharacterEvent::addrecord(
 				null,
 				'announcement', 
 				'__events.conquerirsuccess' . ';' .
@@ -359,7 +359,7 @@ class Model_BattleConquerIRBattleType extends Model_BattleType
 		
 		if  ($winners == 'defenders' or $winners == 'none' )
 		{
-			Character_Event_Model::addrecord( 
+			Model_CharacterEvent::addrecord(
 				null,
 				'announcement', 
 				'__events.conquerirfailure' . ';' .

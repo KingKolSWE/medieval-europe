@@ -115,7 +115,7 @@ function initquest( $securitykey, $char_id, $questname )
 	}
 
 	$character = ORM::factory('Character', $char_id );
-	$quest = QuestFactory_Model::createQuest($questname);
+	$quest = Model_QuestFactory::createQuest($questname);
 	$quest -> activate( $character );
 
 }

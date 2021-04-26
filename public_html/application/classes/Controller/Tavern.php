@@ -179,7 +179,7 @@ class Controller_Tavern extends Controller_Template
 		if ( !$_POST )
 		{
 			
-			$structure = StructureFactory_Model::create( null, $structure_id);
+			$structure = Model_StructureFactory::create( null, $structure_id);
 		
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'public' ) )
 			{
@@ -187,13 +187,13 @@ class Controller_Tavern extends Controller_Template
 				HTTP::redirect('region/view/');
 			}
 			
-			$data = ST_Tavern_1_Model::get_price( $character, $structure );
+			$data = Model_Structure_STTavern1::get_price( $character, $structure );
 			
 		}		
 		else
 		{	
 			
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id'));
 			
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'public' ) )
 			{
@@ -201,8 +201,8 @@ class Controller_Tavern extends Controller_Template
 				HTTP::redirect('region/view/');
 			}	
 			
-			$ca = Character_Action_Model::factory("resttavern");		
-			$data = ST_Tavern_1_Model::get_price( $character, $structure );
+			$ca = Model_CharacterAction::factory("resttavern");
+			$data = Model_Structure_STTavern1::get_price( $character, $structure );
 			
 			$par[0] = $character;
 			$par[1] = $this -> request -> post('percentage');	
@@ -257,7 +257,7 @@ class Controller_Tavern extends Controller_Template
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			if ( ! $structure->allowedaccess( $char, $structure -> getParentType(), $message, 'public' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -266,7 +266,7 @@ class Controller_Tavern extends Controller_Template
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure->allowedaccess( $char, $structure -> getParentType(), $message, 'public' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -274,7 +274,7 @@ class Controller_Tavern extends Controller_Template
 			}
 			$type = $this -> request -> post('type');
 
-			$ca = Character_Action_Model::factory("game_dice" . $type );		
+			$ca = Model_CharacterAction::factory("game_dice" . $type );
 
 			$par[0] = $char;							
 			$par[1] = $structure;
@@ -315,7 +315,7 @@ class Controller_Tavern extends Controller_Template
 		
 		$view = View::factory ( 'tavern/show_winners' );
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		
 		$winners = Database::instance() -> query( 
 			"select gw.*, r.name region_name 

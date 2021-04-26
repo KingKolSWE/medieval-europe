@@ -170,14 +170,14 @@ class Model_BattleDuelBattleType extends Model_BattleType
 				$this -> sourcechar -> modify_honorpoints( -1, 'duelabsence');
 				$this -> destchar -> modify_honorpoints( +1, 'duelpresence');
 				
-				Character_Event_Model::addrecord(
+				Model_CharacterEvent::addrecord(
 				$this -> destchar -> id, 
 				'normal',
 				'__events.duelopponentdidntshow;' . $this -> sourcechar -> name,
 				'evidence'				
 				);
 			
-				Character_Event_Model::addrecord(	
+				Model_CharacterEvent::addrecord(
 				null, 
 				'announcement', 
 				'__events.duelfinishedtowncriernoshow;' . 
@@ -193,14 +193,14 @@ class Model_BattleDuelBattleType extends Model_BattleType
 				$this -> destchar -> modify_honorpoints( -1, 'duelabsence');
 				$this -> sourcechar -> modify_honorpoints( +1, 'duelpresence');
 					
-				Character_Event_Model::addrecord(
+				Model_CharacterEvent::addrecord(
 				$this -> sourcechar -> id, 
 				'normal',
 				'__events.duelopponentdidntshow;' . $this -> destchar -> name,
 				'evidence'				
 				);
 							
-				Character_Event_Model::addrecord(	
+				Model_CharacterEvent::addrecord(
 				null, 
 				'announcement', 
 				'__events.duelfinishedtowncriernoshow;' . 
@@ -217,21 +217,21 @@ class Model_BattleDuelBattleType extends Model_BattleType
 				$this -> destchar -> modify_honorpoints( -1, 'duelabsence');
 				$this -> sourcechar -> modify_honorpoints( -1, 'duelabsence');
 				
-				Character_Event_Model::addrecord(
+				Model_CharacterEvent::addrecord(
 				$this -> destchar -> id, 
 				'normal',
 				'__events.duelopponentdidntshow;' . $this -> sourcechar -> name,
 				'evidence'				
 				);
 				
-				Character_Event_Model::addrecord(
+				Model_CharacterEvent::addrecord(
 				$this -> sourcechar -> id, 
 				'normal',
 				'__events.duelopponentdidntshow;' . $this -> destchar -> name,
 				'evidence'				
 				);
 				
-				Character_Event_Model::addrecord(	
+				Model_CharacterEvent::addrecord(
 				null, 
 				'announcement', 
 				'__events.duelfinishedtowncrierbothnoshow;' . 
@@ -284,21 +284,21 @@ class Model_BattleDuelBattleType extends Model_BattleType
 		
 				// event
 			
-				Character_Event_Model::addrecord(
+				Model_CharacterEvent::addrecord(
 					$winner -> id, 
 					'normal',
 					'__events.duelwinner;' . $loser -> name,
 					'evidence'				
 				);
 			
-				Character_Event_Model::addrecord(
+				Model_CharacterEvent::addrecord(
 					$loser -> id, 
 					'normal',
 					'__events.duellooser;' . $winner -> name,
 					'evidence'				
 				);
 			
-				Character_Event_Model::addrecord(	
+				Model_CharacterEvent::addrecord(
 				null, 
 				'announcement', 
 				'__events.duelfinishedtowncrier;' . 
@@ -312,21 +312,21 @@ class Model_BattleDuelBattleType extends Model_BattleType
 			else
 			{
 				
-				Character_Event_Model::addrecord(
+				Model_CharacterEvent::addrecord(
 					$this -> sourcechar -> id, 
 					'normal',
 					'__events.dueltie;' . $this -> destchar -> name,
 					'evidence'				
 				);
 			
-				Character_Event_Model::addrecord(
+				Model_CharacterEvent::addrecord(
 					$this -> destchar -> id, 
 					'normal',
 					'__events.dueltie;' . $this -> sourcechar -> name,
 					'evidence'				
 				);
 			
-				Character_Event_Model::addrecord(	
+				Model_CharacterEvent::addrecord(
 				null, 
 				'announcement', 
 				'__events.duelfinishedtietowncrier;' . 

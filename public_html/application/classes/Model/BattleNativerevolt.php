@@ -72,8 +72,8 @@ class Model_BattleNativerevoltBattleType extends Model_BattleType
 		kohana::log('debug', '-> Number of Loaded Natives: ' . $nativenumbers );
 		$pointstodistribute = intval($this -> compute_native_stats ( $nativenumbers ) );
 		kohana::log('debug', '-> Attribute Points to distribute: ' . $pointstodistribute ); 
-		$cfgarmors = Configuration_Model::get_armorscfg();
-		$cfgweapons = Configuration_Model::get_weaponscfg();
+		$cfgarmors = Model_Configuration::get_armorscfg();
+		$cfgweapons = Model_Configuration::get_weaponscfg();
 		
 		/////////////////////////////////
 		// Attaccanti creo nativi
@@ -323,10 +323,10 @@ class Model_BattleNativerevoltBattleType extends Model_BattleType
 			{
 				
 				kohana::log('info', "-> Resource is existing, destroying it...");
-				$structure = StructureFactory_Model::create( null, $rset[0] -> id );
+				$structure = Model_StructureFactory::create( null, $rset[0] -> id );
 				
 								
-				Character_Event_Model::addrecord( 
+				Model_CharacterEvent::addrecord(
 					null,
 					'announcement', 
 					'__events.nativerevoltsuccessdestroyedresource' . ';' .	
@@ -339,12 +339,12 @@ class Model_BattleNativerevoltBattleType extends Model_BattleType
 				$structure -> destroy();
 				
 				// Cache
-				My_Cache_Model::delete('-cfg-regions-resources');
+				Model_MyCache::delete('-cfg-regions-resources');
 				
 			}
 			else
 			{
-				Character_Event_Model::addrecord( 
+				Model_CharacterEvent::addrecord(
 					null,
 					'announcement', 
 					'__events.nativerevoltsuccess'.
@@ -358,7 +358,7 @@ class Model_BattleNativerevoltBattleType extends Model_BattleType
 		}
 		else
 		{
-			Character_Event_Model::addrecord( 
+			Model_CharacterEvent::addrecord(
 			null,
 			'announcement', 
 			'__events.nativerevoltfailure'.';' .	

@@ -98,7 +98,7 @@
 			
 			foreach ( (array) $diseases as $disease )
 			{
-				$dinstance = DiseaseFactory_Model::createDisease( $disease -> param1 );						
+				$dinstance = Model_DiseaseFactory::createDisease( $disease -> param1 );
 				
 				$title = kohana::lang('character.' . $disease -> param1 . '_diseasebadgedesc');
 				if ( $dinstance -> get_iscurable() == true )

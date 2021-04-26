@@ -3,7 +3,7 @@
 
 <div class='right'>
 <?php 
-if ( Kingdom_Forum_Topic_Model::haswriterights($char, $kingdom) == true  )
+if ( Model_KingdomForumTopic::haswriterights($char, $kingdom) == true  )
 {
 	echo html::anchor('region/addkingdomtopic/' . $currentboard -> id, kohana::lang('kingdomforum.addtopic'),
 		array('class' => 'button button-small')); 

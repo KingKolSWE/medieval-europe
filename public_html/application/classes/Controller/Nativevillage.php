@@ -17,7 +17,7 @@ class Controller_Nativevillage extends Controller_Template
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen', 'battlereport' => 'screen');
 		
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$groups = Group_Model::get_char_groups( $character, 'military' ); 
+		$groups = Model_Group::get_char_groups( $character, 'military' );
 		
 		if ( isset($this -> disabledmodules['declarehostileaction']) )
 		{
@@ -27,15 +27,15 @@ class Controller_Nativevillage extends Controller_Template
 		
 		if ( ! $_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			$par[0] = ORM::factory('group', $this->request->post('attackwithgroup') );
 			$par[1] = $structure -> region ; 			
 			
-			$ca = Character_Action_Model::factory("attackir");		
+			$ca = Model_CharacterAction::factory("attackir");
 
 			if ( $ca -> do_action( $par,  $message ) )
 			{ 

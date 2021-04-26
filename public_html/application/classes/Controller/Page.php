@@ -274,7 +274,7 @@ class Controller_Page extends Controller_Template
 		KO7::$log->add(KO7_Log::INFO, '-> in retire...');
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		if ( $char -> is_meditating($char -> id) )
-			$retireaction = Character_Action_Model::get_pending_action( $char -> id );
+			$retireaction = Model_CharacterAction::get_pending_action( $char -> id );
 		else
 			HTTP::redirect('boardmessage/index/europecrier');
 		$view = View::factory('page/retire');
@@ -318,7 +318,7 @@ class Controller_Page extends Controller_Template
 			return;
 		}
 		
-		$structure = StructureFactory_Model::create( null, $sentence -> prison_id  );
+		$structure = Model_StructureFactory::create( null, $sentence -> prison_id  );
 		$role = $structure -> character->get_current_role();
 		$view->structure = $structure;
 		$view->sentence = $sentence;

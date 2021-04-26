@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Model_CAAddlaw extends Character_Action_Model
+class Model_CharacterAction_CAAddlaw extends Model_CharacterAction
 {
 
 	protected $immediate_action = true;
@@ -45,7 +45,7 @@ class Model_CAAddlaw extends Character_Action_Model
 		
 		// Annuncio town-crier
 		
-		Character_Event_Model::addrecord( 
+		Model_CharacterEvent::addrecord(
 			null, 
 			'announcement', 
 			'__events.addlaw_announcement;' . 
@@ -53,7 +53,7 @@ class Model_CAAddlaw extends Character_Action_Model
 			$par[0] -> get_rolename() . 			
 			';' . $par[2]);
 		
-		$law = new Law_Model();		
+		$law = new Model_Law();
 		$law -> kingdom_id = $par[1] -> region -> kingdom -> id;
 		$law -> name = $par[2];
 		$law -> description = $par[3];		

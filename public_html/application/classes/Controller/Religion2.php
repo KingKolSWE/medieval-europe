@@ -23,7 +23,7 @@ class Controller_Religion2 extends Controller_Template
 		
 		if ( !$_POST )
 		{ 
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'manage' ) )
 			{
@@ -35,13 +35,13 @@ class Controller_Religion2 extends Controller_Template
 		{	
 			$ca = null;
 			
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			
 			// transfer points			
 			
 			if ( $this -> request -> post('transfer' ) )
 			{
-				$ca = Character_Action_Model::factory("transferfppoints");				
+				$ca = Model_CharacterAction::factory("transferfppoints");
 				$par[0] = $character;		
 				$par[1] = $structure;
 				$par[2] = ORM::factory('structure', $this -> request -> post('targetstructure_id' ) );
@@ -70,12 +70,12 @@ class Controller_Religion2 extends Controller_Template
 		}
 		
 		// controllo permessi	
-		$info = Church_Model::get_info($structure -> structure_type -> church_id);					
+		$info = Model_Church::get_info($structure -> structure_type -> church_id);
 		
 		// carichiamo tutte le strutture della chiesa
 		// e costruiamo il dropdown
 		
-		$churchstructures = Church_Model::helper_allchurchstructuresdropdown( $structure->structure_type->church_id, $structure->id);
+		$churchstructures = Model_Church::helper_allchurchstructuresdropdown( $structure->structure_type->church_id, $structure->id);
 		
 		$lnkmenu = $structure -> get_horizontalmenu( 'manage' );		
 		$view -> churchstructures = $churchstructures;
@@ -107,7 +107,7 @@ class Controller_Religion2 extends Controller_Template
 		
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 			// controllo permessi
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
@@ -127,20 +127,20 @@ class Controller_Religion2 extends Controller_Template
 				where ( 'name' , $this -> request -> post('owner')) -> find(); 
 			$par[2] = 'church_level_3';
 			
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			
 			$childstructure = ORM::factory('structure', $this -> request -> post('childstructure_id'));
 		 
 			if ( $this -> request -> post('revoke') )
 			{
-				$ca = Character_Action_Model::factory("revokerole");
+				$ca = Model_CharacterAction::factory("revokerole");
 				$par[3] = $structure;
 				$par[4] = null;
 				
 			}
 			else
 			{
-				$ca = Character_Action_Model::factory("assignrole");
+				$ca = Model_CharacterAction::factory("assignrole");
 				$par[3] = $childstructure -> region;				
 				$par[4] = $structure;
 			}
@@ -202,7 +202,7 @@ class Controller_Religion2 extends Controller_Template
 
 		if ( !$_POST ) 
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			// controllo permessi		
 			
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
@@ -214,9 +214,9 @@ class Controller_Religion2 extends Controller_Template
 		}
 		else
 		{	
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
-			$ca = Character_Action_Model::factory("assignrolerp");		
+			$ca = Model_CharacterAction::factory("assignrolerp");
 			//var_dump( $_POST ); exit;
 			// Characther che nomina
 			$par[0] = $character;

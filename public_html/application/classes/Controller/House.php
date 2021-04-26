@@ -41,7 +41,7 @@ class Controller_House extends Controller_Template
 		$view = View::factory('house/manage');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');		
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id);
+		$structure = Model_StructureFactory::create( null, $structure_id);
 		$section_description = View::factory('structure/section_description');		
 		
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType() , 		

@@ -25,8 +25,8 @@ class Model_BattleEngine
 	public function get_part_info($part, $charcopy)
 	{		
 		
-		$cfgarmors = Configuration_Model::get_armorscfg();
-		$cfgweapons = Configuration_Model::get_weaponscfg();
+		$cfgarmors = Model_Configuration::get_armorscfg();
+		$cfgweapons = Model_Configuration::get_weaponscfg();
 
 		$info  = array(
 			'hitpartdefense' => 0,
@@ -1368,7 +1368,7 @@ class Model_BattleEngine
 			foreach ( $rows as $row )
 			{
 				$row = explode( "#", $row );				
-				$output .= "<div class='" . $row[0] . "'>" . My_i18n_Model::translate($row[1]) . "</div>";
+				$output .= "<div class='" . $row[0] . "'>" . Model_MyI18n::translate($row[1]) . "</div>";
 				
 			}
 		}
@@ -1405,9 +1405,9 @@ class Model_BattleEngine
 		$charcopy['char']['cost'] = $char -> get_attribute( 'cost' ); 
 		$charcopy['char']['car'] = $char -> get_attribute( 'car' ); 
 		
-		if ( Skill_Model::character_has_skill( $char -> id, 'parry') )
+		if ( Model_Skill::character_has_skill( $char -> id, 'parry') )
 		{
-			$parry = SkillFactory_Model::create('parry'); 
+			$parry = Model_SkillFactory::create('parry');
 			$charcopy['char']['parry'] = $parry -> getProficiency($char->id);
 		}
 		
@@ -1429,7 +1429,7 @@ class Model_BattleEngine
 		$equippedarmorweight = 0;
 		$wornequipment = Model_Character::get_equipment( $char -> id );
 		//var_dump($wornequipment);exit;
-		$cfgarmors = Configuration_Model::get_armorscfg();		
+		$cfgarmors = Model_Configuration::get_armorscfg();
 		
 		//var_dump($equipment);exit;
 		
@@ -1453,10 +1453,10 @@ class Model_BattleEngine
 		
 		// Upload church-related bonuses
 		
-		if ( Church_Model::has_dogma_bonus($char -> church_id,'meditateanddefend') )
+		if ( Model_Church::has_dogma_bonus($char -> church_id,'meditateanddefend') )
 			$charcopy['char']['dogmabonus']['meditateanddefend'] = true;
 		
-		if ( Church_Model::has_dogma_bonus($char -> church_id,'killinfidels') )
+		if ( Model_Church::has_dogma_bonus($char -> church_id,'killinfidels') )
 			$charcopy['char']['dogmabonus']['killinfidels'] = true;		
 		
 		// faith level
@@ -1481,10 +1481,10 @@ class Model_BattleEngine
 	{
 		
 		if (is_null($cfgarmors))
-			$cfgarmors = Configuration_Model::get_armorscfg();		
+			$cfgarmors = Model_Configuration::get_armorscfg();
 		
 		if (is_null($cfgweapons))
-			$cfgweapons = Configuration_Model::get_weaponscfg();		
+			$cfgweapons = Model_Configuration::get_weaponscfg();
 			
 		Model_BattleEngine::battledebug( "<b>--- Computing defense and damage of char: {$charcopy['char']['name']} ---</b>", $debug);
 		
@@ -1705,8 +1705,8 @@ class Model_BattleEngine
 		$tied = 0;
 		$energy = $avg_energy = 0; 
 		$health = $avg_health = 0 ;
-		$this -> cfgarmors = Configuration_Model::get_armorscfg();		
-		$this -> cfgweapons = Configuration_Model::get_weaponscfg();				
+		$this -> cfgarmors = Model_Configuration::get_armorscfg();
+		$this -> cfgweapons = Model_Configuration::get_weaponscfg();
 		
 		$a = null;
 		$b = null;
@@ -2204,10 +2204,10 @@ class Model_BattleEngine
 			else
 				$par[3] = false;
 			
-			$c = Character_Action_Model::factory('recovering');								
+			$c = Model_CharacterAction::factory('recovering');
 			$c -> append_action( $par, $message );									
 			
-			My_Cache_Model::delete(  '-charinfo_' . $defeated['char']['obj'] -> id . '_currentpendingaction');
+			Model_MyCache::delete(  '-charinfo_' . $defeated['char']['obj'] -> id . '_currentpendingaction');
 		
 		}
 		

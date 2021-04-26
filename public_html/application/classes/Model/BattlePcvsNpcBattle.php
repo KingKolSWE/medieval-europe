@@ -158,7 +158,7 @@ class Model_BattlePcvsNpcBattleType extends Model_BattleType
 			$attackerwins = 0;
 			$defenderwins = 1;
 			
-			Character_Event_Model::addrecord(
+			Model_CharacterEvent::addrecord(
 				$this -> sourcechar -> id, 
 				'normal',
 				'__events.pcvsnpclost;' .
@@ -187,7 +187,7 @@ class Model_BattlePcvsNpcBattleType extends Model_BattleType
 			$attackerwins = 1;
 			$defenderwins = 0;
 			
-			Character_Event_Model::addrecord(
+			Model_CharacterEvent::addrecord(
 				$this -> sourcechar -> id, 
 				'normal',
 				'__events.pcvsnpcwon;' .
@@ -215,7 +215,7 @@ class Model_BattlePcvsNpcBattleType extends Model_BattleType
 			$loser  = null;
 			$attackerwins = 0;
 			$defenderwins = 0;
-			Character_Event_Model::addrecord(
+			Model_CharacterEvent::addrecord(
 				$this -> sourcechar -> id, 
 				'normal',
 				'__events.pcvsnpctie;' . 

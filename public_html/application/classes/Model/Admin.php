@@ -176,7 +176,7 @@ class Model_Admin
 				
 				if ( !is_null ( $king ) )
 				{
-					Character_Event_Model::addrecord( 
+					Model_CharacterEvent::addrecord(
 						$king->character_id, 
 						'normal', 
 						'__events.city_newcharacterborn;' . 
@@ -186,7 +186,7 @@ class Model_Admin
 					
 				if ( !is_null( $vassal) ) 
 				{
-					Character_Event_Model::addrecord( $vassal->character_id, 'normal', '__events.city_newcharacterborn;' . 
+					Model_CharacterEvent::addrecord( $vassal->character_id, 'normal', '__events.city_newcharacterborn;' .
 						'__' . $region->kingdom -> get_name()  . ';__'.$region->name  . ';' . $newname,
 						'evidence' );
 				}

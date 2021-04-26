@@ -21,7 +21,7 @@ class Controller_Structure extends Controller_Template
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			if ( ! $structure -> allowedaccess(
 				$char, $structure -> getParenttype(), $message,
 				'public', 'donate' ) )
@@ -33,13 +33,13 @@ class Controller_Structure extends Controller_Template
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $char, $structure -> getParenttype(), $message, 'public', 'donate' ) )
 			{
 					Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 					HTTP::redirect('region/view/');
 			}
-			$o = Character_Action_Model::factory("donate");
+			$o = Model_CharacterAction::factory("donate");
 			$par[0] = $structure;
 			$par[1] = ORM::factory('item', $this->request->post('item_id') );
 			$par[2] = $this -> request-> post('quantity');
@@ -84,9 +84,9 @@ class Controller_Structure extends Controller_Template
 
 		$message = "";
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
-		$a = Character_Action_Model::factory("damage");
+		$a = Model_CharacterAction::factory("damage");
 		$par[0] = $structure;
 		$par[1] = $char;
 		$par[2] = $qty;
@@ -120,10 +120,10 @@ class Controller_Structure extends Controller_Template
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$role = $character->get_current_role();
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 
-		$a = Character_Action_Model::factory("repair");
+		$a = Model_CharacterAction::factory("repair");
 		$par[0] = $structure;
 		$par[1] = $character;
 		$par[2] = $qty;
@@ -153,7 +153,7 @@ class Controller_Structure extends Controller_Template
 		$sheets  = array('gamelayout' => 'screen', 'submenu' => 'screen', 'character'=>'screen' );
 		$message = "";
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		if ( ! $structure->allowedaccess( $char, $structure -> getParenttype(), $message, 'public', null ) )
 		{
@@ -161,7 +161,7 @@ class Controller_Structure extends Controller_Template
     		HTTP::redirect('region/view/');
 		}
 
-		$a = Character_Action_Model::factory("pray");
+		$a = Model_CharacterAction::factory("pray");
 		$par[0] = $structure;
 		$par[1] = $char;
 		$par[2] = $qty;
@@ -190,7 +190,7 @@ class Controller_Structure extends Controller_Template
 	function inventory( $structure_id )
 	{
 
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$view = View::factory('structure/inventory');
@@ -206,7 +206,7 @@ class Controller_Structure extends Controller_Template
 
 		// carico gli item della struttura e del personaggio
 
-		$structure_items = Structure_Model::inventory( $structure -> id );
+		$structure_items = Model_Structure::inventory( $structure -> id );
 		$char_items = Model_Character::inventory( $character -> id );
 		$submenu = View::factory( 'structure/' . $structure -> getSubmenu() );
 		$submenu -> id = $structure -> id;
@@ -238,7 +238,7 @@ class Controller_Structure extends Controller_Template
 
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$view = View::factory( $structure -> getSuperType() . '/taxes' );
 		$subm = View::factory ('template/submenu');
 		$this->template->sheets = $sheets;
@@ -318,7 +318,7 @@ class Controller_Structure extends Controller_Template
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$role = $character->get_current_role();
 
-		$o = Character_Action_Model::factory("resignfromrole");
+		$o = Model_CharacterAction::factory("resignfromrole");
 		$par[0] = $character;
 		$par[1] = $role;
 		$rec = $o -> do_action( $par, $message );
@@ -349,7 +349,7 @@ class Controller_Structure extends Controller_Template
 		$items = null;
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 
-		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+		$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'take' ) )
 		{
@@ -357,9 +357,9 @@ class Controller_Structure extends Controller_Template
 			HTTP::redirect('region/view/');
 		}
 
-		$o = Character_Action_Model::factory("take");
+		$o = Model_CharacterAction::factory("take");
 		$par[0] = $structure;
-		$par[1] = Item_Model::factory( $this->request->post( 'item_id'), null ) ->find( $this->request->post( 'item_id') );
+		$par[1] = Model_Item::factory( $this->request->post( 'item_id'), null ) ->find( $this->request->post( 'item_id') );
 		$par[2] = $this->request->post('quantity');
 		$par[3] = $character;
 
@@ -389,7 +389,7 @@ class Controller_Structure extends Controller_Template
 
 		$message = "";
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+		$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'drop' ) )
 		{
@@ -397,7 +397,7 @@ class Controller_Structure extends Controller_Template
 			HTTP::redirect('region/view/');
 		}
 
-		$o = Character_Action_Model::factory("drop");
+		$o = Model_CharacterAction::factory("drop");
 		$par[0] = $structure;
 		$par[1] = ORM::factory('item', $this -> request -> post('item_id'));
 		$par[2] = $this -> request->post('quantity');
@@ -429,7 +429,7 @@ class Controller_Structure extends Controller_Template
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		$limit = 20	;
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		$lnkmenu = array(
 			'structure/inventory/'.$structure->id =>  __('global.inventory'),
@@ -488,7 +488,7 @@ class Controller_Structure extends Controller_Template
 
 		if ( ! $_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 			// controllo accesso
 			if ( !in_array( $structure -> getSuperType(),
@@ -503,7 +503,7 @@ class Controller_Structure extends Controller_Template
 		// post: invoco la azione
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			// controllo accesso
 			if ( !in_array( $structure -> getSuperType(),
 				array( 'nativevillage') ))
@@ -512,7 +512,7 @@ class Controller_Structure extends Controller_Template
 					Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 					HTTP::redirect('region/view/');
 				}
-			$o = Character_Action_Model::factory("rest");
+			$o = Model_CharacterAction::factory("rest");
 
 			$par[0] = $character;
 			$par[1] = $structure;
@@ -559,7 +559,7 @@ class Controller_Structure extends Controller_Template
 	{
 
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen', 'structure'=>'screen');
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		if (is_null($structure))
 		{
@@ -618,7 +618,7 @@ class Controller_Structure extends Controller_Template
 
 		if ( ! $_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			$region = ORM::factory('region', $structure -> region_id );
 
 			// controllo accesso
@@ -629,7 +629,7 @@ class Controller_Structure extends Controller_Template
 				HTTP::redirect('region/view/');
 			}
 
-			$priceperhourstat = Structure_Model::get_stat_d( $structure -> id, 'courseshourlycost');
+			$priceperhourstat = Model_Structure::get_stat_d( $structure -> id, 'courseshourlycost');
 			if ($priceperhourstat -> loaded == false )
 				$form['hourlycost'] = 3;
 			else
@@ -638,7 +638,7 @@ class Controller_Structure extends Controller_Template
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure->allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'sethourlycost' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -653,7 +653,7 @@ class Controller_Structure extends Controller_Template
 			}
 			else
 			{
-				Structure_Model::modify_stat_d(
+				Model_Structure::modify_stat_d(
 					$structure_id,
 					'courseshourlycost',
 					0,
@@ -725,7 +725,7 @@ class Controller_Structure extends Controller_Template
 				HTTP::redirect( 'region/view');
 			}
 
-			$structure = StructureFactory_Model::create( null, $structure_id);
+			$structure = Model_StructureFactory::create( null, $structure_id);
 
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'sell' ) )
 			{
@@ -743,14 +743,14 @@ class Controller_Structure extends Controller_Template
 				HTTP::redirect( 'region/view');
 			}
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id'));
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'sell' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 				HTTP::redirect('region/view/');
 			}
 
-			$ca = Character_Action_Model::factory('sellstructure');
+			$ca = Model_CharacterAction::factory('sellstructure');
 			$par[0] = $structure;
 			$par[1] = $character;
 			$par[2] = ORM::factory('region', Model_Character::get_info( Session::instance()->get('char_id') ) -> position_id );
@@ -794,7 +794,7 @@ class Controller_Structure extends Controller_Template
 		if (!$_POST)
 		{
 
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'public', 'build' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -811,7 +811,7 @@ class Controller_Structure extends Controller_Template
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id'));
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'public', 'build' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -822,7 +822,7 @@ class Controller_Structure extends Controller_Template
 			$par[1] = $structure;
 			$par[2] = $this -> request -> post('hours');
 
-			$ca = Character_Action_Model::factory("upgradestructurebuild");
+			$ca = Model_CharacterAction::factory("upgradestructurebuild");
 
 			if ( $ca -> do_action( $par,  $message ) )
 			{
@@ -859,7 +859,7 @@ class Controller_Structure extends Controller_Template
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'managecourses' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -869,7 +869,7 @@ class Controller_Structure extends Controller_Template
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'managecourses' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -911,7 +911,7 @@ class Controller_Structure extends Controller_Template
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'buildproject' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -921,7 +921,7 @@ class Controller_Structure extends Controller_Template
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id_' . $this -> request -> post( 'position' )));
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id_' . $this -> request -> post( 'position' )));
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'buildproject' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -937,7 +937,7 @@ class Controller_Structure extends Controller_Template
 			$par[4] = ORM::factory('region', $this -> request -> post('region_id_' . $this -> request -> post( 'position' ) ) );
 			$par[5] = $structure;
 
-			$ca = Character_Action_Model::factory("startkingdomproject");
+			$ca = Model_CharacterAction::factory("startkingdomproject");
 
 			if ( $ca -> do_action( $par,  $message ) )
 			{
@@ -979,7 +979,7 @@ class Controller_Structure extends Controller_Template
 		if ( $_POST )
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 			// controllo permessi
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'runningprojects' ) )
@@ -990,7 +990,7 @@ class Controller_Structure extends Controller_Template
 
 			$par[0] = $character;
 			$par[1] = ORM::factory('kingdomproject', $this -> request -> post('kingdomproject_id'));
-			$ca = Character_Action_Model::factory("cancelkingdomproject");
+			$ca = Model_CharacterAction::factory("cancelkingdomproject");
 
 			if ( $ca->do_action( $par,  $message ) )
 			{
@@ -1004,7 +1004,7 @@ class Controller_Structure extends Controller_Template
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			// controllo permessi
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'runningprojects' ) )
 			{
@@ -1041,7 +1041,7 @@ class Controller_Structure extends Controller_Template
 
 		$view = View::factory ( 'structure/completedprojects' );
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$subm    = View::factory ('template/submenu');
 
@@ -1081,7 +1081,7 @@ class Controller_Structure extends Controller_Template
 		$view = View::factory('structure/listcraftableitems');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		if ( ! $structure -> allowedaccess( $char, $structure -> getParenttype(), $message, 'private', 'listcraftableitems' ) )
 		{
@@ -1090,12 +1090,12 @@ class Controller_Structure extends Controller_Template
 		}
 
 		// Costruisce l'helper per la struttura
-		$ca_craft = new CA_Craft_Model();
+		$ca_craft = new Model_CharacterAction_CACraft();
 
 		$rt = __('items.'.$ca_craft -> get_required_tool( $structure -> getSupertype(),'right_hand').'_name');
 		$helper = __('structures.craft_helper', strtoupper($rt));
 
-		$craftableitems = Configuration_Model::get_craftableitems_structuretype();
+		$craftableitems = Model_Configuration::get_craftableitems_structuretype();
 
 		$structurecraftableitems = $craftableitems[$structure -> getSupertype().'_'.$structure -> getCurrentLevel()];
 
@@ -1110,7 +1110,7 @@ class Controller_Structure extends Controller_Template
 			$craftableitem['originalcraftingtime'] =
 				Model_Utility::secs2hmstostring( $craftableitem['craftingtime'] * 60, 'hours' );
 
-			$craftaction = new CA_Craft_Model();
+			$craftaction = new Model_CharacterAction_CACraft();
 			$craftaction -> set_basetime($craftableitem['craftingtime']/60);
 			KO7::$log->add(KO7_Log::DEBUG, "-> computing realtime for item: {$craftableitem['destination_item_name']}");
 			$craftableitem['realcraftingtime'] =
@@ -1118,7 +1118,7 @@ class Controller_Structure extends Controller_Template
 
 			// Energia e glut richiesta
 
-			$data = CA_Craft_Model::get_required_energyglut($craftableitem['craftingtime'], 1);
+			$data = Model_CharacterAction_CACraft::get_required_energyglut($craftableitem['craftingtime'], 1);
 
 			$craftableitem['requiredenergy'] = $data['requiredenergy'];
 			$craftableitem['requiredglut'] = $data['requiredglut'];
@@ -1156,7 +1156,7 @@ class Controller_Structure extends Controller_Template
 		$view = View::factory('structure/listcraftableitems');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		if ( ! $structure -> allowedaccess( $character,
 			$structure -> getParenttype(), $message, 'private', 'craft' ) )
@@ -1165,7 +1165,7 @@ class Controller_Structure extends Controller_Template
 			HTTP::redirect('region/view/');
 		}
 
-		$ca = Character_Action_Model::factory("craft");
+		$ca = Model_CharacterAction::factory("craft");
 		$par[0] = ORM::factory("cfgitem", $cfgitem_id );
 		$par[1] = $character;
 		$par[2] = $structure;
@@ -1200,7 +1200,7 @@ class Controller_Structure extends Controller_Template
 		$section_sethourlywage = View::factory('structure/section_sethourlywage');
 		$section_setstructurename = View::factory('structure/section_setstructurename');
 
-		$info = Church_Model::get_info( $character -> church_id );
+		$info = Model_Church::get_info( $character -> church_id );
 		$form = array(
 			'name' => '',
 			'points' => 0,
@@ -1212,7 +1212,7 @@ class Controller_Structure extends Controller_Template
 		if ( !$_POST and !$_FILES)
 		{
 
-			$structure = StructureFactory_Model::create( null, $structure_id);
+			$structure = Model_StructureFactory::create( null, $structure_id);
 			if ( ! $structure->allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'manage' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -1222,7 +1222,7 @@ class Controller_Structure extends Controller_Template
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure->allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'manage' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -1239,7 +1239,7 @@ class Controller_Structure extends Controller_Template
 
 			if ( $this -> request -> post('excommunicate' ) )
 			{
-				$ca = Character_Action_Model::factory("excommunicateplayer");
+				$ca = Model_CharacterAction::factory("excommunicateplayer");
 				$par[0] = $character;
 				$par[1] = ORM::factory('character' ) -> where ( 'name', $this -> request -> post( 'character' ) ) -> find();
 				$par[2] = $structure;
@@ -1289,7 +1289,7 @@ class Controller_Structure extends Controller_Template
 			if ( $this -> request -> post('transfer' ) )
 			{
 
-				$ca = Character_Action_Model::factory("transferfppoints");
+				$ca = Model_CharacterAction::factory("transferfppoints");
 				$par[0] = $character;
 				$par[1] = $structure;
 				$par[2] = ORM::factory('structure', $this -> request -> post('targetstructure_id' ) );
@@ -1363,7 +1363,7 @@ class Controller_Structure extends Controller_Template
 		{
 			$section_transferpoints -> structure =  $structure;
 			$section_transferpoints -> form = $form;
-			$churchstructures = Church_Model::helper_allchurchstructuresdropdown( $structure->structure_type -> church_id, $structure -> id );
+			$churchstructures = Model_Church::helper_allchurchstructuresdropdown( $structure->structure_type -> church_id, $structure -> id );
 			$section_transferpoints -> churchstructures = $churchstructures;
 			$view ->  section_transferpoints = $section_transferpoints;
 			$section_religiousheader -> info = $info;
@@ -1394,7 +1394,7 @@ class Controller_Structure extends Controller_Template
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			// controllo permessi
 			if ( ! $structure -> allowedaccess( $char, $structure -> getParenttype(), $message, 'private', 'configureitemprices' ) )
 			{
@@ -1405,7 +1405,7 @@ class Controller_Structure extends Controller_Template
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $char, $structure -> getParenttype(), $message, 'private', 'configureitemprices' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -1430,7 +1430,7 @@ class Controller_Structure extends Controller_Template
 		// e filtro in modo che risultino solo quelli
 		// che la struttura pu� craftare
 
-		$craftableitems = Configuration_Model::get_craftableitems_structuretype();
+		$craftableitems = Model_Configuration::get_craftableitems_structuretype();
 		$structurecraftableitems = $craftableitems[$structure -> getSuperType()];
 
 		$itemsinstructure = $structure -> get_items();
@@ -1470,15 +1470,15 @@ class Controller_Structure extends Controller_Template
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 		}
 		else
 		{
 			//var_dump( $this -> request -> post() ); exit;
 
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
-			$ca = Character_Action_Model::factory('buyitem');
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
+			$ca = Model_CharacterAction::factory('buyitem');
 			$par[0] = ORM::factory("item", $this -> request -> post('item_id'));
 			$par[1] = $char;
 			$par[2] = ORM::factory('structure', $structure_id);
@@ -1503,7 +1503,7 @@ class Controller_Structure extends Controller_Template
 		// e filtro in modo che risultino solo quelli
 		// che la struttura pu� craftare
 
-		$craftableitems = Configuration_Model::get_craftableitems_structuretype();
+		$craftableitems = Model_Configuration::get_craftableitems_structuretype();
 		$structurecraftableitems = $craftableitems[$structure -> getSuperType()];
 
 		$itemsinstructure = $structure -> get_items();
@@ -1515,7 +1515,7 @@ class Controller_Structure extends Controller_Template
 
 		// get kingdom vat
 
-		$vat = Region_Model::get_appliable_tax(
+		$vat = Model_Region::get_appliable_tax(
 			$structure -> region,
 			'valueaddedtax',
 			$char );
@@ -1542,7 +1542,7 @@ function manageaccess( $structure_id = null )
 	$view = View::factory ('/structure/manageaccess');
 	$sheets = array('gamelayout'=>'screen', 'submenu'=>'screen');
 	$character = Model_Character::get_info( Session::instance()->get('char_id') );
-	$structure = StructureFactory_Model::create( null, $structure_id);
+	$structure = Model_StructureFactory::create( null, $structure_id);
 	$grants = null;
 
 	if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(),
@@ -1577,7 +1577,7 @@ function assigngrant( )
 {
 
 	$character = Model_Character::get_info( Session::instance()->get('char_id') );
-	$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+	$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 	if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(),
 		$message, 'private', 'assigngrant' ) )
@@ -1591,7 +1591,7 @@ function assigngrant( )
 	$par[1] = $target;
 	$par[2] = $this -> request -> post('grant');
 
-	$ca = Character_Action_Model::factory("assignstructuregrant");
+	$ca = Model_CharacterAction::factory("assignstructuregrant");
 
 	if ( $ca -> do_action( $par,  $message ) )
 	{
@@ -1618,7 +1618,7 @@ function revokegrant( $structure_id, $target_id, $profile)
 {
 
 	$character = Model_Character::get_info( Session::instance()->get('char_id') );
-	$structure = StructureFactory_Model::create( null, $structure_id );
+	$structure = Model_StructureFactory::create( null, $structure_id );
 
 	if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'revokegrant' ) )
 	{
@@ -1632,7 +1632,7 @@ function revokegrant( $structure_id, $target_id, $profile)
 	$par[1] = $target;
 	$par[2] = $profile;
 
-	$ca = Character_Action_Model::factory("revokestructuregrant");
+	$ca = Model_CharacterAction::factory("revokestructuregrant");
 
 	if ( $ca -> do_action( $par,  $message ) )
 	{
@@ -1662,7 +1662,7 @@ function upgradelevel( $structure_id = null)
 
 	if ( ! $_POST )
 	{
-		$structure = StructureFactory_Model::create( null, $structure_id);
+		$structure = Model_StructureFactory::create( null, $structure_id);
 
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'upgradelevel' ) )
 		{
@@ -1674,7 +1674,7 @@ function upgradelevel( $structure_id = null)
 	else
 	{
 
-		$structure = StructureFactory_Model::create( null, $this->request->post('structure_id'));
+		$structure = Model_StructureFactory::create( null, $this->request->post('structure_id'));
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'upgradelevel' ) )
 		{
 			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -1682,7 +1682,7 @@ function upgradelevel( $structure_id = null)
 		}
 
 		$message = "";
-		$ca = Character_Action_Model::factory("upgradestructurelevel");
+		$ca = Model_CharacterAction::factory("upgradestructurelevel");
 		$par[0] = $character;
 		$par[1] = $structure;
 
@@ -1731,7 +1731,7 @@ function upgradeinventory( $structure_id = null)
 
 	if ( ! $_POST )
 	{
-		$structure = StructureFactory_Model::create( null, $structure_id);
+		$structure = Model_StructureFactory::create( null, $structure_id);
 
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'upgradeinventory' ) )
 		{
@@ -1742,14 +1742,14 @@ function upgradeinventory( $structure_id = null)
 	}
 	else
 	{
-		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));
+		$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id'));
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(), $message, 'private', 'upgradeinventory' ) )
 		{
 			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 			HTTP::redirect('region/view/');
 		}
 		$message = "";
-		$ca = Character_Action_Model::factory("upgradestructureinventory");
+		$ca = Model_CharacterAction::factory("upgradestructureinventory");
 		$par[0] = $structure;
 		$par[1] = $character;
 
@@ -1765,7 +1765,7 @@ function upgradeinventory( $structure_id = null)
 		}
 	}
 
-	$inventoryupgradeworkerhours = Structure_Model::get_stat_d( $structure -> id, 'inventoryupgradeworkerhours');
+	$inventoryupgradeworkerhours = Model_Structure::get_stat_d( $structure -> id, 'inventoryupgradeworkerhours');
 	$view -> inventoryupgradeworkerhours = is_null ( $inventoryupgradeworkerhours ) ? 0 : $inventoryupgradeworkerhours -> value;
 	$submenu = View::factory( 'structure/' . $structure -> getSubmenu() );
 	$submenu -> id = $structure -> id;
@@ -1788,7 +1788,7 @@ function upgradeinventory( $structure_id = null)
 	{
 
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));
+		$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id'));
 
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype() , $message, 'private', 'manage' ) )
 		{
@@ -1823,7 +1823,7 @@ function upgradeinventory( $structure_id = null)
 
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+		$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 		$subm    = View::factory ('template/submenu');
 		$lnkmenu = $structure -> get_horizontalmenu( 'manage' );
 		$view = View::factory( $structure -> getParenttype() . '/manage');
@@ -1859,7 +1859,7 @@ function upgradeinventory( $structure_id = null)
 	function list_roletitles( $structure_id )
 	{
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		$view = View::factory( '/structure/list_roletitles');
 
@@ -1899,7 +1899,7 @@ function upgradeinventory( $structure_id = null)
 	{
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$role = ORM::factory("character_role", $role_id );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParenttype(),
 			$message, 'private', 'revokerolerp' ) )
@@ -1908,7 +1908,7 @@ function upgradeinventory( $structure_id = null)
 			HTTP::redirect('region/view/');
 		}
 
-		$ca = Character_Action_Model::factory("revokerolerp");
+		$ca = Model_CharacterAction::factory("revokerolerp");
 
 		$par[0] = $role;
 		$par[1] = $structure;
@@ -1938,7 +1938,7 @@ function upgradeinventory( $structure_id = null)
 	{
 
 		$character = Model_Character::get_info( Session::instance() -> get('char_id') );
-		$ca = Character_Action_Model::factory('buystructure');
+		$ca = Model_CharacterAction::factory('buystructure');
 
 		$par[0] = $structure_type;
 		$par[1] = $character;
@@ -1969,7 +1969,7 @@ function upgradeinventory( $structure_id = null)
 		KO7::$log->add(KO7_Log::DEBUG, kohana::debug($post));
 		//KO7::$log->add(KO7_Log::DEBUG, $post->structureid[0]);
 
-		$structure = StructureFactory_Model::create( null, $post->structureid[0] );
+		$structure = Model_StructureFactory::create( null, $post->structureid[0] );
 
 		// se non ci sono elementi, torno senza fare niente.
 
@@ -2018,7 +2018,7 @@ function upgradeinventory( $structure_id = null)
 
 			}
 
-			$o = Character_Action_Model::factory( $post -> action );
+			$o = Model_CharacterAction::factory( $post -> action );
 			foreach ( $post -> items as $itemtodeposit )
 			{
 
@@ -2054,7 +2054,7 @@ function upgradeinventory( $structure_id = null)
 
 			}
 
-			$o = Character_Action_Model::factory( $post -> action );
+			$o = Model_CharacterAction::factory( $post -> action );
 
 			KO7::$log->add(KO7_Log::DEBUG, kohana::debug($post -> items));
 

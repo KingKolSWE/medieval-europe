@@ -38,10 +38,10 @@
 				// se c'� una action pending in sessione stampala
 				if (Session::instance()->get('pendingaction_s_message'))
 				{
-					if (strlen( My_i18n_Model::translate(Session::instance()->get('pendingaction_s_message' ) ) ) > 13 )
-						$message = substr( My_i18n_Model::translate(Session::instance()->get('pendingaction_s_message')), 0, 13 ) . '... ';
+					if (strlen( Model_MyI18n::translate(Session::instance()->get('pendingaction_s_message' ) ) ) > 13 )
+						$message = substr( Model_MyI18n::translate(Session::instance()->get('pendingaction_s_message')), 0, 13 ) . '... ';
 					else
-						$message = My_i18n_Model::translate(Session::instance()->get('pendingaction_s_message'));
+						$message = Model_MyI18n::translate(Session::instance()->get('pendingaction_s_message'));
 					echo "var message = '" . $message . "';" ;
 				}
 				else
@@ -226,7 +226,7 @@ $char = Model_Character::get_info( Session::instance()->get('char_id') );
 							<?php
 							$message = Session::instance()->get('pendingaction_l_message') ;
 							if ( $message )
-								$tooltip_text = My_I18n_Model::translate( $message ) .
+								$tooltip_text = Model_MyI18n::translate( $message ) .
 									'</br>' .
 									html::anchor ( '/character/cancel_action',	kohana::lang('global.cancel_action'), array( 'class' => 'st_common_command') );
 									else
@@ -306,8 +306,8 @@ $char = Model_Character::get_info( Session::instance()->get('char_id') );
 							<div style='width:168px;text-align:center'>
 							<?php
 
-							$toplist_id_c = Cfgtoplist_Model::hook_toplist('silvercoin');
-							$toplist_id_e = Cfgtoplist_Model::hook_toplist('energy');
+							$toplist_id_c = Model_Cfgtoplist::hook_toplist('silvercoin');
+							$toplist_id_e = Model_Cfgtoplist::hook_toplist('energy');
 
 							if ( !is_null( $toplist_id_c ) or !is_null( $toplist_id_e ) )
 								echo '<br/><b>' . kohana::lang('page.toplistvote') . '</b><br/><br/>' ;

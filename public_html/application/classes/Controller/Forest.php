@@ -8,7 +8,7 @@ class Controller_Forest extends Controller_Template
 	function getwood( $structure_id, $qta = 1 )
 	{
 		// Carico la struttura "Foresta"
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		// Controllo che la struttura sia effettivamente una foresta
 		if ($structure->structure_type->type <> 'forest' ) 
@@ -29,7 +29,7 @@ class Controller_Forest extends Controller_Template
 		// inizializzo l'azione getwood
 		$message = "";
 		$char = ORM::factory( "character" )->find( Session::instance()->get("char_id") );
-		$ca_getwood = Character_Action_Model::factory("getwood");
+		$ca_getwood = Model_CharacterAction::factory("getwood");
 		if ( $ca_getwood->do_action( array( $structure, $char, $qta ),  $message ) )
 			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");		
 		else		
@@ -40,7 +40,7 @@ class Controller_Forest extends Controller_Template
 	function searchplant( $structure_id, $qta = 1 )
 	{
 		// Carico la struttura "Foresta"
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		// Controllo che la struttura sia effettivamente una foresta
 		if ($structure->structure_type->type <> 'forest' ) 
@@ -61,7 +61,7 @@ class Controller_Forest extends Controller_Template
 		// inizializzo l'azione searchplant
 		$message = "";
 		$char = ORM::factory( "character" )->find( Session::instance()->get("char_id") );
-		$ca_getwood = Character_Action_Model::factory("searchplant");
+		$ca_getwood = Model_CharacterAction::factory("searchplant");
 		if ( $ca_getwood->do_action( array( $structure, $char, $qta ),  $message ) )
 			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");		
 		else		

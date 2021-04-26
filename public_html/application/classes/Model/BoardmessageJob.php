@@ -160,7 +160,7 @@ class Model_JobBoardmessage extends Model_Boardmessage
 		if ( $params[0]['spare3'] != 0 )
 		{
 			
-			$structure = StructureFactory_Model::create( null, $params[0]['spare3'] );
+			$structure = Model_StructureFactory::create( null, $params[0]['spare3'] );
 
 			
 			if ( ( in_array( $structure -> structure_type, array( 'shop', 'terrain' ) ) and  $structure -> structure_type -> level < 2 )
@@ -194,11 +194,11 @@ class Model_JobBoardmessage extends Model_Boardmessage
 		$this -> created = time();		
 		$this -> save();	
 		
-		My_Cache_Model::set(  '-global-boardmessagelastpost', time() );
+		Model_MyCache::set(  '-global-boardmessagelastpost', time() );
 		
 		// aggiungi un evento
 		
-		Character_Event_Model::addrecord( 1, 'announcement', 
+		Model_CharacterEvent::addrecord( 1, 'announcement',
 			'__events.jobposted' .
 			';__boardmessage.messagecategory' . $params[0]['category'].
 			';' .   $params[0]['title'] .
@@ -209,7 +209,7 @@ class Model_JobBoardmessage extends Model_Boardmessage
 		
 		// rimuovi il pezzo di carta
 		
-		$item = Item_Model::factory( null, 'paper_piece' );
+		$item = Model_Item::factory( null, 'paper_piece' );
 		$item -> removeitem ( 'character', $params[1] -> id , 1 );
 		
 		
@@ -279,7 +279,7 @@ class Model_JobBoardmessage extends Model_Boardmessage
 		if ( $params[0]['spare3'] != 0 )
 		{
 			
-			$structure = StructureFactory_Model::create( null, $params[0]['spare3'] );			
+			$structure = Model_StructureFactory::create( null, $params[0]['spare3'] );
 			
 			if ( ( in_array( $structure -> structure_type, array( 'shop', 'terrain' ) ) and  $structure -> structure_type -> level < 2 )
 						and $structure -> structure_type != 'breeding' )

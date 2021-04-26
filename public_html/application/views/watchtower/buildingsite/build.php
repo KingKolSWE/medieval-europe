@@ -22,7 +22,7 @@
 <?php 
 if ( $info['project'] -> is_buildable() )
 {
-$workedhours = Structure_Model::get_stat_d(  $structure -> id, 'workedhours', $character -> id ); 
+$workedhours = Model_Structure::get_stat_d(  $structure -> id, 'workedhours', $character -> id );
 if ( !is_null( $workedhours ) )
 	echo kohana::lang('structures_buildingsite.workedhours', $workedhours -> value );
 else

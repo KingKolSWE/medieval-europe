@@ -280,7 +280,7 @@
 <? 
 foreach ((array)$skills as $skill) { ?>
 <div style='width:50%;float:left'>
-<? $skillobj = SkillFactory_Model::create($skill->param1);?>
+<? $skillobj = Model_SkillFactory::create($skill->param1);?>
 <?= $skillobj -> helper_view( $character ); ?>
 </div>
 <? } ?>

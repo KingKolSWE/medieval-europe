@@ -179,7 +179,7 @@ class Model_User extends Model_Auth_User
 							// Evento 
 							if ($character -> loaded() )
 							{
-								Character_Event_Model::addrecord( 
+								Model_CharacterEvent::addrecord(
 								$character -> id,
 								'normal', 
 								'__events.proxywarning' . ';' .	$ipaddress,					
@@ -423,7 +423,7 @@ class Model_User extends Model_Auth_User
 		
 		// salvo l' ora di log in (per controllo multi)
 		
-		$ul = new Trace_User_Login_Model();
+		$ul = new Model_TraceUserLogin();
 		$ul -> user_id = $user -> id;
 		$ul -> logintime = time();
 		$ul -> ipaddress = $ipaddress;	

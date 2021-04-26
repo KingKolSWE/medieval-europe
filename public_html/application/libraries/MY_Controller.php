@@ -14,7 +14,7 @@ class ControllerASDF extends Controller_Core
 			//$this -> char = Character_Model::get_info( Session::instance()->get('char_id') );
 			//$this -> currentregion = ORM::factory('region', $this -> char -> position_id);
 			//kohana::log('debug', "Char: {$this -> char -> name}, Position: {$this -> currentregion -> name}");
-			$this -> disabledmodules = Configuration_Model::get_disabledmodules();
+			$this -> disabledmodules = Model_Configuration::get_disabledmodules();
 			$db -> query("select '--my_controller--'");
 	}
 

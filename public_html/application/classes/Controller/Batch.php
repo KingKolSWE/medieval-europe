@@ -311,7 +311,7 @@ class Controller_Batch extends Controller_Template
 					//azzero la varaibile del ciclo
 				$totalitem = 0;
 
-				$disease = DiseaseFactory_Model::createDisease( 'plague');
+				$disease = Model_DiseaseFactory::createDisease( 'plague');
 
 
 				foreach ( $characters_kingdom  as $row)

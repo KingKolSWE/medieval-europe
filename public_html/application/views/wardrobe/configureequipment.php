@@ -193,7 +193,7 @@ echo kohana::lang('wardrobe.pendingapprovalrequestinfo',
 					)
 					{						
 					
-						echo Wardrobe_Model::helper_ownwardrobe(
+						echo Model_Wardrobe::helper_ownwardrobe(
 							'items', $char, $item -> parentcategory, $item -> tag, $item -> name );	
 					}
 				}
@@ -209,7 +209,7 @@ echo kohana::lang('wardrobe.pendingapprovalrequestinfo',
 				{					
 					if ( $item -> parentcategory == 'armors' )
 					{						
-						echo Wardrobe_Model::helper_ownwardrobe(
+						echo Model_Wardrobe::helper_ownwardrobe(
 							'items', $char, $item -> parentcategory, $item -> tag, $item -> name );	
 					}
 				}
@@ -224,7 +224,7 @@ echo kohana::lang('wardrobe.pendingapprovalrequestinfo',
 				{				
 					if ( $item -> parentcategory == 'tools' )
 					{						
-						echo Wardrobe_Model::helper_ownwardrobe(
+						echo Model_Wardrobe::helper_ownwardrobe(
 							'items', $char, $item -> parentcategory, $item -> tag, $item -> name );
 					}
 				}
@@ -239,7 +239,7 @@ echo kohana::lang('wardrobe.pendingapprovalrequestinfo',
 				{				
 					if ( $item -> parentcategory == 'weapons' )
 					{						
-						echo Wardrobe_Model::helper_ownwardrobe(
+						echo Model_Wardrobe::helper_ownwardrobe(
 							'items', $char, $item -> parentcategory, $item -> tag, $item -> name );
 					}
 				}
@@ -250,15 +250,15 @@ echo kohana::lang('wardrobe.pendingapprovalrequestinfo',
 	<div id='tabs-aspect'>
 		<table border='0'>
 			<?php 
-				echo Wardrobe_Model::helper_ownwardrobe(
+				echo Model_Wardrobe::helper_ownwardrobe(
 					'characters', $char, 'aspect', 'face', 'wardrobe.face' );
 			?>
 			<?php 
-				echo Wardrobe_Model::helper_ownwardrobe(
+				echo Model_Wardrobe::helper_ownwardrobe(
 					'characters', $char, 'aspect', 'hair', 'wardrobe.hair' );
 			?>
 			<?php 
-				echo Wardrobe_Model::helper_ownwardrobe(
+				echo Model_Wardrobe::helper_ownwardrobe(
 					'characters', $char, 'aspect', 'background', 'wardrobe.background' );
 			?>	
 		</table>

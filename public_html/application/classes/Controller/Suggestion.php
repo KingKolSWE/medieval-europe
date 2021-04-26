@@ -115,7 +115,7 @@ class Controller_Suggestion extends Controller_Template
 			if ( $post -> validate() )
 			{
 				
-				$rc = Suggestion_Model::add_model( $char, $post, $message);
+				$rc = Model_Suggestion::add_model( $char, $post, $message);
 				
 				if ($rc == true )
 				{
@@ -159,7 +159,7 @@ class Controller_Suggestion extends Controller_Template
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');				
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
-		$rc = Suggestion_Model::vote( 
+		$rc = Model_Suggestion::vote(
 			$char, 
 			$id, 
 			$rating,
@@ -239,7 +239,7 @@ class Controller_Suggestion extends Controller_Template
 
 			if ( $post -> validate() )
 			{	
-				$rc = Suggestion_Model::edit( $char, $suggestion, $post, $message );
+				$rc = Model_Suggestion::edit( $char, $suggestion, $post, $message );
 				
 				if ($rc == true )
 				{
@@ -275,7 +275,7 @@ class Controller_Suggestion extends Controller_Template
 		$message = '';
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
-		$rc = Suggestion_Model::sponsor( $char, $id, $doubloons, $message );
+		$rc = Model_Suggestion::sponsor( $char, $id, $doubloons, $message );
 
 		if ( $rc )
 		{				
@@ -356,7 +356,7 @@ class Controller_Suggestion extends Controller_Template
 			
 			if ( $post -> validate() )
 			{
-				$rc = Suggestion_Model::remove_model( $char, $this -> request -> post('id'), $this -> request -> post('reason'), $message );
+				$rc = Model_Suggestion::remove_model( $char, $this -> request -> post('id'), $this -> request -> post('reason'), $message );
 
 				if ( $rc )
 				{				

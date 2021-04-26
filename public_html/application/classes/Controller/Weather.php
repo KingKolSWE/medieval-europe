@@ -20,7 +20,7 @@ class Controller_Weather extends Controller_Template
     }
 
 
-    $output = My_Cache_Model::get('weather' . md5($_REQUEST['region']));
+    $output = Model_MyCache::get('weather' . md5($_REQUEST['region']));
     if(empty($output)) {
       $ch = curl_init("http://api.openweathermap.org/data/2.5/weather?q=" . urlencode($_REQUEST['region']) . "&appid=9eb73f43a15087716c7fc95cf2d70e84&units=metric");
       curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -44,7 +44,7 @@ class Controller_Weather extends Controller_Template
       exit;
     }
 
-    My_Cache_Model::set('weather' . md5($_REQUEST['region']), $output);
+    Model_MyCache::set('weather' . md5($_REQUEST['region']), $output);
 
     echo json_encode(array('status' => true, 'msg' => $weather_data->weather[0]->description . ', ' . str_replace(",", ".", $weather_data->main->temp) . '&#176; <!-- ' . (($cached) ? '' : 'not') . ' cached -- >'));
 

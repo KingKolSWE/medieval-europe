@@ -8,7 +8,7 @@ class Controller_MineCoal extends Controller_Template
 	function dig( $structure_id, $qta = 1 )
 	{
 		// Carico la struttura "Miniera di carbone"
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		// Controllo che la struttura sia effettivamente una miniera di carbone
 		if ($structure->structure_type->type <> 'mine_coal' ) 
@@ -29,7 +29,7 @@ class Controller_MineCoal extends Controller_Template
 		// inizializzo l'azione dig
 		$message = "";
 		$char = ORM::factory( "character" )->find( Session::instance()->get("char_id") );
-		$ca_dig = Character_Action_Model::factory("dig");
+		$ca_dig = Model_CharacterAction::factory("dig");
 		if ( $ca_dig->do_action( array( $structure, $char, $qta ),  $message ) )
 			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");		
 		else		

@@ -18,7 +18,7 @@ $k = 0;
 
 foreach ( $houses as $house )
 {
-	$structureinstance = StructureFactory_Model::create( $house -> type ); 
+	$structureinstance = Model_StructureFactory::create( $house -> type );
 	$class = ( $k % 2 == 0 ) ? 'alternaterow_1' : 'alternaterow_2';
 ?>
 

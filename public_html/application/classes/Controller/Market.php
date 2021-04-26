@@ -23,29 +23,29 @@ class Controller_Market extends Controller_Template
 
 		if ( !$_POST )
 		{			
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			if ($structure -> loaded == false )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
 				HTTP::redirect('region/view/');		
 			}
-			$vat = Region_Model::get_tax( $structure -> region, 'valueaddedtax' );
+			$vat = Model_Region::get_tax( $structure -> region, 'valueaddedtax' );
 			//var_dump($vat); exit;
 		}		
 		else
 		{		
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
-			$vat = Region_Model::get_tax( $structure -> region, 'valueaddedtax' );			
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
+			$vat = Model_Region::get_tax( $structure -> region, 'valueaddedtax' );
 			
 			// creo un oggetto della classe di item scelta.
-			$cfgitem = Item_Model::factory( $this -> request-> post( 'item_id' ), null );
+			$cfgitem = Model_Item::factory( $this -> request-> post( 'item_id' ), null );
 			if ( is_null ( $cfgitem ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
 				HTTP::redirect('region/view/');		
 			}
 			
-			$ca = Character_Action_Model::factory("marketsellitem");		
+			$ca = Model_CharacterAction::factory("marketsellitem");
 			$par[0] = $structure;
 			$par[1] = $character; 
 			$par[2] = $cfgitem -> find( $this -> request -> post( 'item_id') );
@@ -89,7 +89,7 @@ class Controller_Market extends Controller_Template
 
 		// creo un oggetto della classe di item scelta.
 		
-		$cfgitem = Item_Model::factory( $this -> request-> post( 'item_id' ), null );		
+		$cfgitem = Model_Item::factory( $this -> request-> post( 'item_id' ), null );
 		if ( is_null ( $cfgitem ) )
 		{
 			Session::instance()->set('user_message', "<div class=\"error_msg\">". __('global.operation_not_allowed') . "</div>");
@@ -100,7 +100,7 @@ class Controller_Market extends Controller_Template
 		
 		if  ( $this -> request -> post('buy') )
 		{
-			$ca = Character_Action_Model::factory("marketbuyitem");								
+			$ca = Model_CharacterAction::factory("marketbuyitem");
 			
 			$par[0] = ORM::factory("structure",  $this->request->post( 'structure_id' ) );
 			$par[1] = Model_Character::get_info( Session::instance()->get('char_id') );
@@ -113,7 +113,7 @@ class Controller_Market extends Controller_Template
 		if  ( $this -> request -> post('marketcancelsell') )
 		{
 			
-			$ca = Character_Action_Model::factory("marketcancellsell");		
+			$ca = Model_CharacterAction::factory("marketcancellsell");
 			
 			$par[0] = ORM::factory("structure",  $this->request->post( 'structure_id' ) );
 			$par[1] = Model_Character::get_info( Session::instance()->get('char_id') );
@@ -127,7 +127,7 @@ class Controller_Market extends Controller_Template
                         //Session::instance()->set('user_message', "<div class=\"error_msg\">This function is temporary disabled.</div>");
                         ////HTTP::redirect( 'market/buy/' . $this -> request -> post( 'structure_id' ));
 
-			$ca = Character_Action_Model::factory("confiscateitem");		
+			$ca = Model_CharacterAction::factory("confiscateitem");
 			
 			$char = Model_Character::get_info( Session::instance()->get('char_id') );
 			$item = ORM::factory('item', $this -> request -> post('item_id'));
@@ -164,7 +164,7 @@ class Controller_Market extends Controller_Template
 		$subm    = View::factory ('template/submenu');		
 		$result = null;
 				
-		$structure = StructureFactory_Model::create( 'market', $structure_id );
+		$structure = Model_StructureFactory::create( 'market', $structure_id );
 		
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$role = $character -> get_current_role(); 		
@@ -175,10 +175,10 @@ class Controller_Market extends Controller_Template
 			Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
 			HTTP::redirect('region/view/');
 		}		
-		$vat = Region_Model::get_appliable_tax( $structure -> region, 'valueaddedtax', $character );
+		$vat = Model_Region::get_appliable_tax( $structure -> region, 'valueaddedtax', $character );
 		
 		// Pulisce eventuali vendite private expired
-		Item_Model::cleanupexpiredprivatesales();
+		Model_Item::cleanupexpiredprivatesales();
 		
 		$message=null;
 		$db = Database::instance();
@@ -206,7 +206,7 @@ class Controller_Market extends Controller_Template
 		$view -> submenu = $subm;
 		$view -> role = $role; 
 		$view -> structure = $structure;
-		$view -> items = Structure_Model::inventory( $structure -> id, true );	
+		$view -> items = Model_Structure::inventory( $structure -> id, true );
 		$view -> valueaddedtax = $vat;
 		$view -> character = $character;		
 		$view -> char_transportableweight = $character -> get_transportableweight() ; 
@@ -270,7 +270,7 @@ class Controller_Market extends Controller_Template
 		else
 		{
 		
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			
 			$items = ORM::factory('cfgitem') -> find_all();
 			$isadmin = Auth::instance()->logged_in('admin');

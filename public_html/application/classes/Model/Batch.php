@@ -118,8 +118,8 @@ class Model_Batch
 			kohana::log('info', '-> Giving silver coins: ' . $silvercoins . ', copper coins: ' . $coppercoins . ' to royalpalace.'  );
 			// give coins
 
-			$ccoins = Item_Model::factory( null, 'coppercoin' );
-			$scoins = Item_Model::factory( null, 'silvercoin' );
+			$ccoins = Model_Item::factory( null, 'coppercoin' );
+			$scoins = Model_Item::factory( null, 'silvercoin' );
 
 			$kingdom = ORM::factory('kingdom', $kingdom -> id );
 			$royalpalace = $kingdom -> get_structure('royalpalace');
@@ -130,7 +130,7 @@ class Model_Batch
 			// event
 
 			$text = '__events.structurecastledailyrevenue;' . $silvercoins . ';' . $coppercoins ;
-			Structure_Event_Model::newadd( $royalpalace -> id, $text );
+			Model_StructureEvent::newadd( $royalpalace -> id, $text );
 
 			$totalcoins += $silvercoins;
 
@@ -138,7 +138,7 @@ class Model_Batch
 
 		kohana::log('info', "-> Total Silver coins given: {$totalcoins}");
 
-		Trace_Sink_Model::add_model( 'silvercoin', -1, $totalcoins, 'dailyrevenue');
+		Model_TraceSink::add_model( 'silvercoin', -1, $totalcoins, 'dailyrevenue');
 
 	}
 
@@ -214,7 +214,7 @@ class Model_Batch
 			return;
 		}
 
-		$s = new Stats_Model();
+		$s = new Model_Stats();
 		$s -> compute_all_stats();
 
 	}
@@ -252,7 +252,7 @@ class Model_Batch
 					kohana::log('info', '-> Destroying jewel: ' . $i -> cfgitem -> tag );
 					if ( $i -> loaded )
 					{
-						Character_Event_Model::addrecord(
+						Model_CharacterEvent::addrecord(
 							$i -> character_id,
 							'normal',
 							'__events.jewellost'. ';__' . $i -> cfgitem -> name,
@@ -263,7 +263,7 @@ class Model_Batch
 					}
 				}
 
-				My_Cache_Model::delete( '-charinfo_' . $i -> character_id . '_' . $i -> cfgitem -> tag );
+				Model_MyCache::delete( '-charinfo_' . $i -> character_id . '_' . $i -> cfgitem -> tag );
 
 			}
 
@@ -352,10 +352,10 @@ class Model_Batch
 			)
 			{
 				kohana::log('info', '-> reduceil: char: ' . $row -> name . ' curing  tipsyness... ' );
-				$obj = DiseaseFactory_Model::createDisease('tipsyness');
+				$obj = Model_DiseaseFactory::createDisease('tipsyness');
 				$obj -> cure_disease( $char );
 				kohana::log('info', '-> reduceil: char: ' . $row -> name . ' curing  drunkness... ' );
-				$obj = DiseaseFactory_Model::createDisease('drunkness');
+				$obj = Model_DiseaseFactory::createDisease('drunkness');
 				$obj -> cure_disease( $char );
 			}
 
@@ -418,7 +418,7 @@ class Model_Batch
 
 			// create new kingdom
 
-			$kingdom = new Kingdom_Model();
+			$kingdom = new Model_Kingdom();
 			$kingdom -> name = 'kingdoms.' . $newkingdomname;
 			$kingdom -> image = $newkingdomname;
 			$kingdom -> title = 'global.title_' . $title;
@@ -428,7 +428,7 @@ class Model_Batch
 			$kingdom -> activityscore = 0;
 			$kingdom -> save();
 
-			$kingdomhistory = new Kingdom_history_Model();
+			$kingdomhistory = new Model_KingdomHistory();
 			$kingdomhistory -> id = $kingdom -> id;
 			$kingdomhistory -> name = 'kingdoms.' . $newkingdomname;
 			$kingdomhistory -> kingdom_id = $kingdom -> id;
@@ -504,7 +504,7 @@ class Model_Batch
 
 			}
 
-			Character_Event_Model::addrecord(
+			Model_CharacterEvent::addrecord(
 				1,
 				'announcement',
 				'__kingdoms.newkingdom' .
@@ -570,7 +570,7 @@ class Model_Batch
 
 				kohana::log('info', "-> Sending Premium Package Warning Email to: " . $r -> character_name );
 
-				Character_Event_Model::addrecord(
+				Model_CharacterEvent::addrecord(
 					$r -> character_id,
 					'normal',
 					'__events.basicpackageexpires;' . Model_Utility::secs2hmstostring( $r -> secs ),
@@ -708,9 +708,9 @@ class Model_Batch
 			// refresh cache
 
 			$cachetag = '-diplomacyrelations';
-			My_Cache_Model::delete( $cachetag );
+			Model_MyCache::delete( $cachetag );
 			$cachetag = '-cfg-regions';
-			My_Cache_Model::delete( $cachetag );
+			Model_MyCache::delete( $cachetag );
 
 
 		} catch (Kohana_Database_Exception $e)
@@ -967,7 +967,7 @@ class Model_Batch
 
 					// event
 
-					Character_Event_Model::addrecord(
+					Model_CharacterEvent::addrecord(
 						$referral -> id, 'normal', '__events.referralcoinsgiven;' . $value['total'] );
 				}
 			}
@@ -1130,7 +1130,7 @@ class Model_Batch
 		}
 
 		// Cache
-		My_Cache_Model::delete('-cfg-regions-resources');
+		Model_MyCache::delete('-cfg-regions-resources');
 
 		kohana::log('info', '-> ------ END RECHARGING RESOURCES ------');
 

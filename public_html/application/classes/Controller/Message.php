@@ -87,7 +87,7 @@ class Controller_Message extends Controller_Template
 		$view -> capacity = $capacity -> value;
 		$view -> archivedmessages = $archivedmessages;
 		$view -> bonus = $bonus;
-		$subm -> submenu = Message_Model::get_horizontalmenu('archiveindex');
+		$subm -> submenu = Model_Message::get_horizontalmenu('archiveindex');
 		$view -> submenu = $subm;		
 		$view -> messages = $messages;
 		$this -> template -> content = $view;
@@ -250,7 +250,7 @@ class Controller_Message extends Controller_Template
 		
 		$view -> criteria = $criteria;
 		$view -> bonus = Model_Character::get_premiumbonus( $char -> id, 'professionaldesk' );
-		$subm -> submenu = Message_Model::get_horizontalmenu('received');
+		$subm -> submenu = Model_Message::get_horizontalmenu('received');
 		$view -> submenu = $subm;
 		$view -> pagination = $this->pagination;
 		$view -> messages = $messages;		
@@ -355,7 +355,7 @@ class Controller_Message extends Controller_Template
 		// Visualizzo i messaggi
 		$view -> criteria = $criteria;
 		$view -> bonus = $bonus;
-		$subm -> submenu = Message_Model::get_horizontalmenu('sent');		
+		$subm -> submenu = Model_Message::get_horizontalmenu('sent');
 		$view -> submenu = $subm;
 		$view -> pagination = $this -> pagination;
 		$view -> messages = $messages;		
@@ -496,7 +496,7 @@ class Controller_Message extends Controller_Template
 			if ( $post -> validate() )
 			{
 				
-				$m = new Message_Model();
+				$m = new Model_Message();
 				$sender = Model_Character::get_info( Session::instance()->get('char_id') );
 				$recipient = ORM::factory('character')->where( array('name' => $this->request->post('to')))->find();
 				$subject = $this->request -> post('subject');
@@ -576,7 +576,7 @@ class Controller_Message extends Controller_Template
 		$view -> char = $char;
 		$view -> bonus = Model_Character::get_premiumbonus( $char -> id, 'professionaldesk' );
 		$view -> bind ('form', $form );
-		$subm -> submenu = Message_Model::get_horizontalmenu('write');
+		$subm -> submenu = Model_Message::get_horizontalmenu('write');
 		$view -> submenu = $subm;
 		$this -> template->content = $view;
 		$this -> template->sheets = $sheets;
@@ -596,7 +596,7 @@ class Controller_Message extends Controller_Template
 		$view = View::factory('message/view');
 		$subm    = View::factory ('template/submenu');
 		$sheets  = array('gamelayout' => 'screen', 'pagination'=>'screen', 'submenu'=>'screen');
-		$lnkmenu = Message_Model::get_horizontalmenu('view'); 		
+		$lnkmenu = Model_Message::get_horizontalmenu('view');
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
 		$message = ORM::factory('message', $message_id );
@@ -613,7 +613,7 @@ class Controller_Message extends Controller_Template
 		{
 			$message -> isread = true;
 			$message -> save();			
-			My_Cache_Model::delete( '-charinfo_' . $char -> id . '_unreadmessages' );			
+			Model_MyCache::delete( '-charinfo_' . $char -> id . '_unreadmessages' );
 		}
 
 		// Visualizzo il messaggio
@@ -653,7 +653,7 @@ class Controller_Message extends Controller_Template
 		}
 		
 		$message -> delete();		
-		My_Cache_Model::delete (  '-charinfo_' . $char -> id . '_unreadmessages' );
+		Model_MyCache::delete (  '-charinfo_' . $char -> id . '_unreadmessages' );
 
 		Session::instance()->set('user_message', "<div class=\"info_msg\">".__('message.message_delete')."</div>" );						
 		HTTP::redirect('/message/' . $type );		
@@ -683,7 +683,7 @@ class Controller_Message extends Controller_Template
 	
 	public function _checkbadwords(Validation $array, $field)
 	{
-		$badwords = Configuration_Model::get_badwordscfg();
+		$badwords = Model_Configuration::get_badwordscfg();
 		
 		//var_dump($badwords);exit;
 		

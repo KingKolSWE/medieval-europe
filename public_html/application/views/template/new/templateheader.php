@@ -68,7 +68,7 @@
 		$char_id = Session::instance()->get('char_id');
 		$currentpendingaction = Model_Character::get_currentpendingaction( $char_id );
 		$charobj = Model_Character::get_data( $char_id );
-		$promo = Configuration_Model::get_valid_promo();
+		$promo = Model_Configuration::get_valid_promo();
 		$currentposition = Model_Character::get_currentposition_d( $charobj -> id);
 		//var_dump($promo);exit;
 

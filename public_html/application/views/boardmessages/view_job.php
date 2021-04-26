@@ -45,7 +45,7 @@ echo html::anchor(
 			<h2><?php echo $message -> title ?></h2>		
 			<p style='max-width:600px;word-wrap:break-word;'>
 			<?php 
-				$structure = StructureFactory_Model::create( null, $message -> spare3 ); 
+				$structure = Model_StructureFactory::create( null, $message -> spare3 );
 				if ( !is_null($structure) )
 					echo kohana::lang('boardmessage.jobstructure') . ': ' 
 						. kohana::lang( $structure -> structure_type -> name ) . ' - ' . kohana::lang( $structure -> region -> name );

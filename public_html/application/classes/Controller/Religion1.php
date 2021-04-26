@@ -29,7 +29,7 @@ class Controller_Religion1 extends Controller_Template
 			HTTP::redirect('region/info');
 		}
 
-		$info = Church_Model::get_info( $church_id );
+		$info = Model_Church::get_info( $church_id );
 
 		// pagina tutti i follower
 
@@ -114,7 +114,7 @@ class Controller_Religion1 extends Controller_Template
 		if ( !$_POST )
 		{
 
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 			// controllo permessi
 			if ( ! $structure -> allowedaccess( $character,
@@ -128,7 +128,7 @@ class Controller_Religion1 extends Controller_Template
 		else
 		{
 			//var_dump( $this -> request -> post() ); exit;
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			$targetstructure = ORM::factory('structure', $this -> request -> post('targetstructure_id'));
 
 			$par[0] = $character;
@@ -137,14 +137,14 @@ class Controller_Religion1 extends Controller_Template
 
 			if ( $this -> request -> post('revoke') )
 			{
-				$ca = Character_Action_Model::factory("revokerole");
+				$ca = Model_CharacterAction::factory("revokerole");
 				$par[3] = $structure;
 				$par[4] = null;
 			}
 			else
 			{
 
-				$ca = Character_Action_Model::factory("assignrole");
+				$ca = Model_CharacterAction::factory("assignrole");
 				$par[3] = $targetstructure -> region;
 				$par[4] = $structure;
 			}
@@ -212,7 +212,7 @@ class Controller_Religion1 extends Controller_Template
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			// controllo permessi
 
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
@@ -225,9 +225,9 @@ class Controller_Religion1 extends Controller_Template
 		else
 		{
 			var_dump(1); exit;
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
-			$ca = Character_Action_Model::factory("assignrolerp");
+			$ca = Model_CharacterAction::factory("assignrolerp");
 			//var_dump( $_POST ); exit;
 			// Characther che nomina
 			$par[0] = $character;
@@ -283,7 +283,7 @@ class Controller_Religion1 extends Controller_Template
 		if ( !$_POST )
 		{
 			// Carico la struttura
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 			// Check: permessi struttura
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
@@ -300,7 +300,7 @@ class Controller_Religion1 extends Controller_Template
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			$dogmabonus = ORM::factory("cfgdogmabonus", $this -> request -> post('dogmabonus') );
 			$church = ORM::factory("church", $structure->structure_type->church_id );
 			//var_dump( $dogmabonus ); exit;
@@ -314,7 +314,7 @@ class Controller_Religion1 extends Controller_Template
 			// FP Costo per il bonus
 			$par[3] = $church->get_cost_next_dogma_bonus();
 			// Istanzio l'azione del char
-			$ca = Character_Action_Model::factory("adddogmabonus");
+			$ca = Model_CharacterAction::factory("adddogmabonus");
 
 			if ( $ca -> do_action( $par,  $message ) )
 			{
@@ -351,7 +351,7 @@ class Controller_Religion1 extends Controller_Template
 
 		$view = View::factory('religion_1/resourcereport' );
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 
 		// controllo permessi
@@ -381,8 +381,8 @@ class Controller_Religion1 extends Controller_Template
 			$info[$i]['structure_name'] = $churchstructure -> structure_name;
 			$info[$i]['region_name'] = $churchstructure -> region_name;
 			$info[$i]['owner_id'] = $churchstructure -> owner_id;
-			$info[$i]['silvercoins'] = Structure_Model::get_item_quantity_s( $churchstructure -> id, 'silvercoin');
-			$stat = Structure_Model::get_stat_d( $churchstructure -> id, 'faithpoints' );
+			$info[$i]['silvercoins'] = Model_Structure::get_item_quantity_s( $churchstructure -> id, 'silvercoin');
+			$stat = Model_Structure::get_stat_d( $churchstructure -> id, 'faithpoints' );
 			if (is_null($stat))
 				$info[$i]['faithpoints'] = 0;
 			else
@@ -419,7 +419,7 @@ public function removedogmabonus( $structure_id, $churchdogma_id )
 	{
 		//$message = "";
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$dogma = ORM::factory( 'church_dogmabonus', $churchdogma_id );
 
 		// Check: permessi struttura
@@ -431,7 +431,7 @@ public function removedogmabonus( $structure_id, $churchdogma_id )
 		}
 
 		// Azione leavereligion
-		$a = Character_Action_Model::factory("removedogmabonus");
+		$a = Model_CharacterAction::factory("removedogmabonus");
 		// Parametri
 		$par[0] = $structure;
 		$par[1] = $char;

@@ -21,8 +21,8 @@ class Controller_Wardrobe extends Controller_Template
 		$path = DOCROOT . 'media/images/characters/wardrobe/' . $char -> id ;
 		$sheets  = array('gamelayout' => 'screen','character'=>'screen', 'pagination'=>'screen', 'submenu'=>'screen');		
 		
-		$pendingapprovalrequest = Wardrobe_Model::listpendingapprovalrequest( $char );		
-		$uploadedimages = Wardrobe_Model::listuploadedimages( $char );	
+		$pendingapprovalrequest = Model_Wardrobe::listpendingapprovalrequest( $char );
+		$uploadedimages = Model_Wardrobe::listuploadedimages( $char );
 
 		if ( Model_Character::get_premiumbonus( $char -> id, 'wardrobe' ) == false )
 		{
@@ -115,7 +115,7 @@ class Controller_Wardrobe extends Controller_Template
 			
 				if ( count($uploadedimages) == 0 )
 					Session::instance()->set('user_message', "<div class=\"error_msg\">". __('wardrobe.nothingtoapprove') . "</div>");			
-				elseif ( Wardrobe_Approvalrequest_Model::add_model( $char, $message ) == false )
+				elseif ( Model_WardrobeApprovalrequest::add_model( $char, $message ) == false )
 					Session::instance()->set('user_message', "<div class=\"error_msg\">". __($message) . "</div>");					
 				else
 					Session::instance()->set('user_message', "<div class=\"info_msg\">". __($message) . "</div>");					
@@ -196,7 +196,7 @@ class Controller_Wardrobe extends Controller_Template
 				}
 				else
 				{
-					Wardrobe_Model::removeuploadedimages( $char );	
+					Model_Wardrobe::removeuploadedimages( $char );
 					Session::instance()->set('user_message', "<div class=\"info_msg\">". __('wardrobe.cleanupok') . "</div>");
 				}
 				
@@ -206,8 +206,8 @@ class Controller_Wardrobe extends Controller_Template
 				
 		}
 		// refresh uploaded images data
-		$uploadedimages = Wardrobe_Model::listuploadedimages( $char );	
-		$lnkmenu = Wardrobe_Model::get_horizontalmenu('configureequipment');				
+		$uploadedimages = Model_Wardrobe::listuploadedimages( $char );
+		$lnkmenu = Model_Wardrobe::get_horizontalmenu('configureequipment');
 		
 		$items = ORM::factory('cfgitem') -> 
 			in( 'parentcategory', array( 
@@ -282,7 +282,7 @@ class Controller_Wardrobe extends Controller_Template
 			HTTP::redirect( 'character/inventory' );
 		}
 			
-		$lnkmenu = Wardrobe_Model::get_horizontalmenu('atelier_default');		
+		$lnkmenu = Model_Wardrobe::get_horizontalmenu('atelier_default');
 		$items = ORM::factory('cfgitem') -> 
 			in( 'parentcategory', array( 'armors', 'weapons', 'clothes' )) -> find_all();
 		
@@ -313,7 +313,7 @@ class Controller_Wardrobe extends Controller_Template
 			'submenu'=>'screen');		
 				
 		$char   = Model_Character::get_info( Session::instance() -> get('char_id') );
-		$lnkmenu = Wardrobe_Model::get_horizontalmenu('atelier_dynamo');
+		$lnkmenu = Model_Wardrobe::get_horizontalmenu('atelier_dynamo');
 		
 		// load files 
 		

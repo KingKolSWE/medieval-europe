@@ -71,7 +71,7 @@ class Controller_Region extends Controller_Template
 		{	
 			$structureinstance = ORM::factory ('structure', $structure -> id );
 			$churchname = $structureinstance->structure_type->church->name;
-			$structure -> cannotmanage = Structure_Grant_Model::get_chargrant( $structureinstance, $char, 'none' ); 
+			$structure -> cannotmanage = Model_StructureGrant::get_chargrant( $structureinstance, $char, 'none' );
 			$structures_arr[ $structure -> subtype ][$i] = $structure;			
 			$i ++;
 		}
@@ -81,10 +81,10 @@ class Controller_Region extends Controller_Template
 		$list_i = ORM::factory('item')
 			-> where( 
 				array('region_id' => $char -> position_id )) -> find_all() -> as_array();
-		$list_c = Region_Model::get_chars( $char -> position_id, $char -> region -> kingdom_id, 'regionpresentchars' );
+		$list_c = Model_Region::get_chars( $char -> position_id, $char -> region -> kingdom_id, 'regionpresentchars' );
 		
-		$structures2 = Region_Model::get_structures_d( $char -> position_id );		
-		$view -> isadjacenttosea = Region_Model::isadjacenttosea( $char -> position_id );		
+		$structures2 = Model_Region::get_structures_d( $char -> position_id );
+		$view -> isadjacenttosea = Model_Region::isadjacenttosea( $char -> position_id );
 		$view -> structures = $structures_arr; 	
 		$view -> char = $char;
 		$view -> list_c = $list_c;			
@@ -102,7 +102,7 @@ class Controller_Region extends Controller_Template
 	public function find_paths()
 	{
 		$this -> auto_render = false;
-		Region_Model::find_paths();
+		Model_Region::find_paths();
 	
 	}
 	
@@ -124,7 +124,7 @@ class Controller_Region extends Controller_Template
 		$kingdoms = Database::instance() -> 
 			query ( "select * from kingdoms_v where name != 'kingdoms.kingdom-independent'") -> as_array();
 				
-		$relations = Configuration_Model::get_cfg_diplomacyrelations();
+		$relations = Model_Configuration::get_cfg_diplomacyrelations();
 		
 		$lnkmenu = array(
 		'region/info/' . $region -> id => __('regionview.submenu_generalinfo'), 
@@ -185,7 +185,7 @@ class Controller_Region extends Controller_Template
 		if ( $character -> region -> kingdom_id != $region -> kingdom_id )
 		{			
 			
-			$relations = Diplomacy_Relation_Model::get_diplomacy_relations ( $character -> region -> kingdom_id );
+			$relations = Model_DiplomacyRelation::get_diplomacy_relations ( $character -> region -> kingdom_id );
 			
 			$view -> diplomacyrelationsourcedest = $relations[ $character -> region -> kingdom_id ][$region -> kingdom_id];		
 			
@@ -256,12 +256,12 @@ class Controller_Region extends Controller_Template
 		
 		// Calcolo le informazioni relative ai terreni
 		
-		$view -> terrains_info = Region_Model::get_terrains_info( $region );
+		$view -> terrains_info = Model_Region::get_terrains_info( $region );
 		
 		// Estraggo le tasse relative al nodo
 		
-		$view -> vat = Region_Model::get_tax( $region -> id, 'valueaddedtax');
-		$view -> propertyprice = Region_Model::get_tax( $region, 'propertyprice');		
+		$view -> vat = Model_Region::get_tax( $region -> id, 'valueaddedtax');
+		$view -> propertyprice = Model_Region::get_tax( $region, 'propertyprice');
 		
 		$lnkmenu = array(
 		'region/info/' . $region -> id => 
@@ -541,8 +541,8 @@ class Controller_Region extends Controller_Template
 			 
 		foreach ( $privatestructures as $privatestructure )
 		{
-			$structure = StructureFactory_Model::create( null, $privatestructure -> id );
-			$privatestructure -> cannotmanage = Structure_Grant_Model::get_chargrant( $structure, $char, 'none' ); 
+			$structure = Model_StructureFactory::create( null, $privatestructure -> id );
+			$privatestructure -> cannotmanage = Model_StructureGrant::get_chargrant( $structure, $char, 'none' );
 		}		
 		
 		$submenu = View::factory("region/privatestructuressubmenu");
@@ -770,7 +770,7 @@ class Controller_Region extends Controller_Template
 				-> add_rules('name','required', 'length[3,50]')
 				-> add_rules('boarddescription','required', 'length[5,255]');
 			
-			$kingdom = Kingdom_Model::load( $this -> request -> post('kingdom_id') );	
+			$kingdom = Model_Kingdom::load( $this -> request -> post('kingdom_id') );
 			if ($kingdom -> loaded == false)
 			{
 				
@@ -811,7 +811,7 @@ class Controller_Region extends Controller_Template
 		}
 		else
 		{
-			$kingdom = Kingdom_Model::load( $kingdom_id );	
+			$kingdom = Model_Kingdom::load( $kingdom_id );
 			
 			if ($kingdom -> loaded == false)
 			{
@@ -959,7 +959,7 @@ class Controller_Region extends Controller_Template
 			
 			if ($post->validate() )
 			{	
-				$c = Topic_Factory_Model::create('kingdom');
+				$c = Model_TopicFactory::create('kingdom');
 				$rc = $c -> add( $char, $this -> request -> post(), $message );
 				
 				if ($rc == true )
@@ -1022,7 +1022,7 @@ class Controller_Region extends Controller_Template
 
 			if ($post->validate() )
 			{	
-				$c = Topic_Factory_Model::create('kingdom');
+				$c = Model_TopicFactory::create('kingdom');
 				$rc = $c -> edit( $char, $currenttopic, $this -> request -> post(), $message );
 				
 				if ($rc == true )
@@ -1050,7 +1050,7 @@ class Controller_Region extends Controller_Template
 		{
 			
 			
-			$c = Topic_Factory_Model::create('kingdom');
+			$c = Model_TopicFactory::create('kingdom');
 			$rc = $c -> read( $char, $topic_id, $data );
 			$currenttopic = ORM::factory('kingdom_forum_topic', $topic_id);			
 			//var_dump($data);exit;
@@ -1074,7 +1074,7 @@ class Controller_Region extends Controller_Template
 	{
 		$char = Model_Character::get_info( Session::instance() -> get('char_id') );
 		$topic = ORM::factory('kingdom_forum_topic', $topic_id);			
-		if ( Kingdom_Forum_Topic_Model::haswriterights( $char, 
+		if ( Model_KingdomForumTopic::haswriterights( $char,
 			$topic -> kingdom_forum_board -> kingdom ) == false )
 		{
 			Session::instance()->set('user_message', 
@@ -1083,7 +1083,7 @@ class Controller_Region extends Controller_Template
 				$topic -> id);
 		}
 		
-		$c = Topic_Factory_Model::create('kingdom');
+		$c = Model_TopicFactory::create('kingdom');
 		$rc = $c -> delete( $char, $topic, $message );
 		KO7::$log->add(KO7_Log::DEBUG, 'rc: ' . $rc);
 		if ($rc == true )
@@ -1168,7 +1168,7 @@ function info_laws( $region_id  )
 
 	function confirm_retire()
 	{
-		$ca = Character_Action_Model::factory("retire");		
+		$ca = Model_CharacterAction::factory("retire");
 		$par[0] = Model_Character::get_info( Session::instance()->get('char_id') );
 		$par[1] = $this->request->post('days');
 		
@@ -1219,7 +1219,7 @@ function info_laws( $region_id  )
 			$structure_type  = ORM::factory('structure_type', $this -> request -> post('structure_type_id') );
 			$sourcestructure = ORM::factory('structure', $this ->request -> post( 'structure_id') );
 			
-			$result = CfgKingdomproject_Model::checkprojectfeasibility( 
+			$result = Model_CfgKingdomproject::checkprojectfeasibility(
 				$cfgkingdomproject, 
 				$structure_type, 
 				$sourceregion, 

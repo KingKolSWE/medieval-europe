@@ -181,11 +181,11 @@ class Model_OtherBoardmessage extends Model_Boardmessage
 		$this -> created = time();		
 		$this -> save();	
 		
-		My_Cache_Model::set(  '-global-boardmessagelastpost', time() );
+		Model_MyCache::set(  '-global-boardmessagelastpost', time() );
 		
 		// aggiungi un evento
 		
-		Character_Event_Model::addrecord( 1, 'announcement', 
+		Model_CharacterEvent::addrecord( 1, 'announcement',
 			'__events.jobposted' .
 			';__boardmessage.messagecategoryother' . 			
 			';' .   $params[0]['title'] .
@@ -196,7 +196,7 @@ class Model_OtherBoardmessage extends Model_Boardmessage
 		
 		// rimuovi il pezzo di carta
 		
-		$item = Item_Model::factory( null, 'paper_piece' );
+		$item = Model_Item::factory( null, 'paper_piece' );
 		$item -> removeitem ( 'character', $params[1] -> id , 1 );
 		
 		

@@ -53,7 +53,7 @@ foreach ( $courses_info as $course )
 				
 				// Processa evento study
 				$_par[0] = $course['info'] -> tag;
-				GameEvent_Model::process_event( $character, 'study', $_par );	
+				Model_GameEvent::process_event( $character, 'study', $_par );
 		
 			}
 				

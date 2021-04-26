@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Model_CAAddannouncement extends Character_Action_Model
+class Model_CharacterAction_CAAddannouncement extends Model_CharacterAction
 {
 
 	protected $immediate_action = true;
@@ -43,7 +43,7 @@ class Model_CAAddannouncement extends Character_Action_Model
 	{
 	
 		$role = $par[0]->get_current_role() ;			
-		$announcement = new Region_Announcement_Model();				
+		$announcement = new Model_RegionAnnouncement();
 		
 		if ( $role -> tag == 'king' )
 			$type = 'kingdom';

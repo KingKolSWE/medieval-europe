@@ -61,7 +61,7 @@ class Controller_Group extends Controller_Template
 		$submenu = View::factory("character/submenu");
 		$submenu -> action = 'mygroups';		
 		$view -> groups = $groups;
-		$view -> secondarymenu = Group_Model::get_groupmenu( 'listall' );		
+		$view -> secondarymenu = Model_Group::get_groupmenu( 'listall' );
 		$view -> submenu = $submenu;
 		$view -> pagination = $this->pagination; 
 		$this -> template->content = $view;
@@ -81,7 +81,7 @@ class Controller_Group extends Controller_Template
 		$view    = View::factory ('group/mygroups');
 		$sheets  = array('gamelayout' => 'screen', 'character'=>'screen', 'pagination'=>'screen', 'submenu'=>'screen');		
 		
-		$view -> secondarymenu = Group_Model::get_groupmenu( 'mygroups' );		
+		$view -> secondarymenu = Model_Group::get_groupmenu( 'mygroups' );
 		$submenu = View::factory("character/submenu");
 		$submenu -> action = 'mygroups';
 		$view -> submenu = $submenu;
@@ -168,7 +168,7 @@ class Controller_Group extends Controller_Template
 				$form = arr::overwrite($form, $post->as_array());
 			}
 		}
-		$view -> secondarymenu = Group_Model::get_groupmenu( 'mygroups' );
+		$view -> secondarymenu = Model_Group::get_groupmenu( 'mygroups' );
 		$lnkmenu = $char -> get_details_submenu( 'group_create' ); 		
 		$subm->submenu = $lnkmenu;		
 		$view->submenu = $subm;
@@ -253,7 +253,7 @@ class Controller_Group extends Controller_Template
 		
 		$submenu = View::factory("character/submenu");
 		$submenu -> action = 'mygroups';		
-		$view -> secondarymenu = Group_Model::get_groupmenu( 'upload_image' );
+		$view -> secondarymenu = Model_Group::get_groupmenu( 'upload_image' );
 		$view -> group = $group;
 		$view->submenu = $submenu;
 		$this->template->content = $view;
@@ -315,7 +315,7 @@ class Controller_Group extends Controller_Template
 				
 				$char_to_add = ORM::factory('character')->where( array('name' => $this->request->post('group_charname')))->find();
 				// Controllo che il char non abbia già una richiesta pendente per questo gruppo
-				if ( Group_model::check_pendent_request($group_id, $char_to_add->id ) )
+				if ( Model_Group::check_pendent_request($group_id, $char_to_add->id ) )
 				{
 					Session::instance()->set('user_message', "<div class=\"error_msg\">". __('groups.error-char_has_request') . "</div>");
 					HTTP::redirect( 'group/view/'.$group_id );
@@ -328,7 +328,7 @@ class Controller_Group extends Controller_Template
 				}
 				// Controllo che il gruppo non abbia già raggiunto il massimo dei giocatori
 				
-				$members = Group_model::get_all_members("all", $group_id);
+				$members = Model_Group::get_all_members("all", $group_id);
 				$currentrole = $character -> get_current_role();
 				
 				if (!is_null($currentrole) and $currentrole -> tag == 'king')
@@ -354,10 +354,10 @@ class Controller_Group extends Controller_Template
 				
 				// Aggiungo il giocatore come pendente nella lista
 				
-				Group_model::add_member($group_id, $char_to_add->id);
+				Model_Group::add_member($group_id, $char_to_add->id);
 				
 				// Invio la richiesta di adesione al giocatore tramite evento
-				Character_Event_Model::addrecord( 
+				Model_CharacterEvent::addrecord(
 					$char_to_add -> id, 
 					'normal', 
 					'__events.char_invite_join_group'.
@@ -396,7 +396,7 @@ class Controller_Group extends Controller_Template
 					'joined' => true) )
 						-> find_all($limit, $this->pagination->sql_offset);	
 		
-		$view -> secondarymenu = Group_Model::get_groupmenu( 'mygroups' );
+		$view -> secondarymenu = Model_Group::get_groupmenu( 'mygroups' );
 		
 		$submenu = View::factory("character/submenu");
 		$submenu -> action = 'mygroups';
@@ -462,10 +462,10 @@ class Controller_Group extends Controller_Template
 			HTTP::redirect( 'group/mygroups/' );			
 		}
 		
-		Group_Model::remove_a_member($group_id, $char_id);
+		Model_Group::remove_a_member($group_id, $char_id);
 		
 		// Eventi
-		Character_Event_Model::addrecord ( 		
+		Model_CharacterEvent::addrecord (
 			$char_to_remove -> id, 
 			'normal', 
 			'__events.charremovedfromgroupremoved'.
@@ -474,7 +474,7 @@ class Controller_Group extends Controller_Template
 			'normal'
 			);
 		
-		Character_Event_Model::addrecord ( 		
+		Model_CharacterEvent::addrecord (
 			$character -> id,
 			'normal', 
 			'__events.charremovedfromgroupleader'.
@@ -563,7 +563,7 @@ class Controller_Group extends Controller_Template
 			
 		}
 		
-		$view -> secondarymenu = Group_Model::get_groupmenu( 'mygroups' );
+		$view -> secondarymenu = Model_Group::get_groupmenu( 'mygroups' );
 		$view -> form = $form;
 		$submenu = View::factory("character/submenu");
 		$submenu -> action = 'mygroups';		
@@ -603,7 +603,7 @@ class Controller_Group extends Controller_Template
 			if ($member->joined)
 			{
 				
-				Character_Event_Model::addrecord( 
+				Model_CharacterEvent::addrecord(
 				$member->character_id, 
 				'normal', 
 				'__events.cancelling_group'.
@@ -670,7 +670,7 @@ class Controller_Group extends Controller_Template
 				
 				foreach ( $members as $member )
 				{
-					$m = new Message_Model();
+					$m = new Model_Message();
 					$sender = $char;
 					$recipient = ORM::factory('character', $member->character_id);
 					$subject = '[' . $group -> name . ']:' . $this->request->post('group_subject');
@@ -681,7 +681,7 @@ class Controller_Group extends Controller_Template
 				
 				// Spedisco il messaggio anche al proprietario del gruppo
 				
-				$m = new Message_Model();
+				$m = new Model_Message();
 				$sender = $char;
 				$recipient = ORM::factory('character', $group -> character_id);
 				$subject = '[' . $group -> name . ']:' . $this->request->post('group_subject');
@@ -703,7 +703,7 @@ class Controller_Group extends Controller_Template
 			}
 		}
 
-		$view -> secondarymenu = Group_Model::get_groupmenu( 'mygroups' );
+		$view -> secondarymenu = Model_Group::get_groupmenu( 'mygroups' );
 		$submenu = View::factory("character/submenu");
 		$submenu -> action = 'mygroups';		
 		$view->submenu = $submenu;
@@ -801,7 +801,7 @@ class Controller_Group extends Controller_Template
 				foreach ( $members as $member )
 				{
 										
-					$m = new Message_Model();
+					$m = new Model_Message();
 					$sender = $char;
 					$recipient = ORM::factory('character', $member -> character_id);
 					$subject = __('groups.massive_message_subject', $group -> name);
@@ -811,12 +811,12 @@ class Controller_Group extends Controller_Template
 				
 				// eventi
 				
-				Character_Event_Model::addrecord( $char -> id, 
+				Model_CharacterEvent::addrecord( $char -> id,
 					'normal',
 					'__events.groupleadershiptransferedoldleader;' . $group -> name . ';' . $newleader -> name					
 				);
 				
-				Character_Event_Model::addrecord( $newleader -> id, 
+				Model_CharacterEvent::addrecord( $newleader -> id,
 					'normal',
 					'__events.groupleadershiptransferednewleader;' . $char -> name . ';' . $group -> name		
 				);
@@ -835,7 +835,7 @@ class Controller_Group extends Controller_Template
 			}
 		
 		}
-		$view -> secondarymenu = Group_Model::get_groupmenu( 'mygroups' );
+		$view -> secondarymenu = Model_Group::get_groupmenu( 'mygroups' );
 		$submenu = View::factory("character/submenu");
 		$submenu -> action = 'mygroups';		
 		$view->submenu = $submenu;
@@ -886,7 +886,7 @@ class Controller_Group extends Controller_Template
 		}
 				
 		// evento al leader
-		$m = new Message_Model();
+		$m = new Model_Message();
 		$sender = $group -> character;
 		$recipient = $group -> character;
 		$subject = __('groups.massive_message_subject', $group -> name);

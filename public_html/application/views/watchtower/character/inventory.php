@@ -188,47 +188,47 @@ $(document).ready(function() {
 			</ul>
 			
 			<div id='tab-all' class='itemdata'>
-			<?= Item_Model::helper_characterlistitems($character, $items,  'all');?>
+			<?= Model_Item::helper_characterlistitems($character, $items,  'all');?>
 			</div>
 			
 			<div id='tab-currencies' class='itemdata'>
-			<?= Item_Model::helper_characterlistitems($character, $items, 'currencies');?>
+			<?= Model_Item::helper_characterlistitems($character, $items, 'currencies');?>
 			</div>
 			
 			<div id='tab-consumables' class='itemdata'>
-			<?= Item_Model::helper_characterlistitems($character, $items,  'consumables');?>
+			<?= Model_Item::helper_characterlistitems($character, $items,  'consumables');?>
 			</div>						
 			
 			<div id='tab-resources' class='itemdata'>
-			<?= Item_Model::helper_characterlistitems($character, $items,  'resources');?>
+			<?= Model_Item::helper_characterlistitems($character, $items,  'resources');?>
 			</div>
 			
 			<div id='tab-tools' class='itemdata'>
-			<?= Item_Model::helper_characterlistitems($character, $items,  'tools');?>
+			<?= Model_Item::helper_characterlistitems($character, $items,  'tools');?>
 			</div>
 			
 			<div id='tab-structuretool' class="itemdata">
-			<?= Item_Model::helper_characterlistitems($character, $items, 'structuretool');?>
+			<?= Model_Item::helper_characterlistitems($character, $items, 'structuretool');?>
 			</div>
 			
 			<div id='tab-weapons' class='itemdata'>
-			<?= Item_Model::helper_characterlistitems($character, $items,  'weapons');?>
+			<?= Model_Item::helper_characterlistitems($character, $items,  'weapons');?>
 			</div>
 		
 			<div id='tab-armors' class='itemdata'>
-			<?= Item_Model::helper_characterlistitems($character, $items,  'armors');?>			
+			<?= Model_Item::helper_characterlistitems($character, $items,  'armors');?>
 			</div>
 			
 			<div id='tab-clothes' class='itemdata'>
-			<?= Item_Model::helper_characterlistitems($character, $items,  'clothes');?>			
+			<?= Model_Item::helper_characterlistitems($character, $items,  'clothes');?>
 			</div>
 			
 			<div id='tab-scrolls' class='itemdata'>
-			<?= Item_Model::helper_characterlistitems($character, $items,  'scrolls');?>			
+			<?= Model_Item::helper_characterlistitems($character, $items,  'scrolls');?>
 			</div>
 			
 			<div id='tab-others' class='itemdata'>
-			<?= Item_Model::helper_characterlistitems($character, $items,  'others');?>			
+			<?= Model_Item::helper_characterlistitems($character, $items,  'others');?>
 			</div>
 			
 		</div>

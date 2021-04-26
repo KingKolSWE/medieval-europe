@@ -29,18 +29,18 @@ echo kohana::lang('structures.' . $structure -> structure_type -> type . '_' .
 	<fieldset>
 	<legend><?php echo kohana::lang('religion.structurestats')?></legend>
 	<?php echo kohana::lang('religion.faithpoints') . ': <b>' ;
-	if ( ! Structure_Model::get_stat_d( $structure -> id, 'faithpoints' ) -> loaded )
+	if ( ! Model_Structure::get_stat_d( $structure -> id, 'faithpoints' ) -> loaded )
 		echo 0 ;
 	else
-		echo Structure_Model::get_stat_d( $structure -> id, 'faithpoints' ) -> value ; 
+		echo Model_Structure::get_stat_d( $structure -> id, 'faithpoints' ) -> value ;
 	echo  '</b>';?>
 	<br/>
 	<?php 
 	echo kohana::lang('religion.accumulatedfaithpoints') . ': <b>' ; 
-	if ( ! Structure_Model::get_stat_d( $structure -> id, 'fpcontribution' ) -> loaded )
+	if ( ! Model_Structure::get_stat_d( $structure -> id, 'fpcontribution' ) -> loaded )
 		echo 0 ;
 	else
-		echo Structure_Model::get_stat_d( $structure -> id, 'fpcontribution' ) -> value ; 
+		echo Model_Structure::get_stat_d( $structure -> id, 'fpcontribution' ) -> value ;
 	echo  '</b>'; ?>
 	</fieldset>
 </div>

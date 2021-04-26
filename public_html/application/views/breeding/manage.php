@@ -14,7 +14,7 @@
 	<br/>
 	<p>
 	<?php 
-		$object = Structure_Type_Model::factory( $structure -> structure_type -> type );
+		$object = Model_StructureType::factory( $structure -> structure_type -> type );
 		echo $object::info_breeding( $structure ); 		
 	?>
 	</p>		

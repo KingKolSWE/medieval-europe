@@ -115,10 +115,10 @@ class Model_BattleRevoltBattleType extends Model_BattleType
 			$newking = ORM::factory('character', $this -> bm -> source_character_id );
 			
 			$message='';					
-			if ( $newking -> loaded and Character_Role_Model::check_eligibility( $newking, 'king', null, $message ) )					
+			if ( $newking -> loaded and Model_CharacterRole::check_eligibility( $newking, 'king', null, $message ) )
 			{
 				$this -> attackedregion -> kingdom -> crown_king( $newking );									
-				Character_Event_Model::addrecord( 
+				Model_CharacterEvent::addrecord(
 				null,
 				'announcement', 
 				'__events.revoltsuccessnewking'.';' . 					
@@ -128,7 +128,7 @@ class Model_BattleRevoltBattleType extends Model_BattleType
 			}
 			else
 			{				
-				Character_Event_Model::addrecord( 
+				Model_CharacterEvent::addrecord(
 				null,
 				'announcement', 
 				'__events.revoltsuccessnoking'.';' . 					
@@ -144,7 +144,7 @@ class Model_BattleRevoltBattleType extends Model_BattleType
 		if  ($winners != 'attackers' )
 		{
 		
-			Character_Event_Model::addrecord( 			
+			Model_CharacterEvent::addrecord(
 				null,
 				'announcement', 
 				'__events.revoltfailure'.';' . 
@@ -170,7 +170,7 @@ class Model_BattleRevoltBattleType extends Model_BattleType
 			$leader = ORM::factory('character', $this -> bm -> source_character_id );
 			$leader -> car -= 1;
 			
-			Character_Event_Model::addrecord( 						
+			Model_CharacterEvent::addrecord(
 				$this -> bm -> source_character_id,
 				'normal', 
 				'__events.revoltleaderlostcharisma',
@@ -200,7 +200,7 @@ class Model_BattleRevoltBattleType extends Model_BattleType
 	
 		// schedule action for destroying the cdb
 		
-		$a = new Character_Action_Model();
+		$a = new Model_CharacterAction();
 		$a->character_id = $this -> bm -> source_character_id ;
 		$a->param1 = $this -> battlefield -> id ;
 		$a->blocking_flag = false;

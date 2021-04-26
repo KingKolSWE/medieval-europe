@@ -161,7 +161,7 @@ class Model_BattleConquerRBattleType extends Model_BattleType
 
 					// Announcement before relationships change.		
 					
-					Character_Event_Model::addrecord( 
+					Model_CharacterEvent::addrecord(
 					null,
 					'announcement', 
 					'__events.conquerrsuccess'.';' .	
@@ -189,7 +189,7 @@ class Model_BattleConquerRBattleType extends Model_BattleType
 					// Announcement before relationships change.		
 					
 					kohana::log('info', "-> Case: Castle, no royal palace." );
-					Character_Event_Model::addrecord( 
+					Model_CharacterEvent::addrecord(
 						null,
 						'announcement', 
 						'__events.conquerrsuccess'.';' .	
@@ -200,7 +200,7 @@ class Model_BattleConquerRBattleType extends Model_BattleType
 						'evidence'
 					);					
 					
-					$c = new ST_Castle_1_Model();					
+					$c = new Model_Structure_STCastle1();
 					$controlledregions = $c -> get_controlled_regions( $castle -> id, $castle -> region -> id ); 
 					foreach	($controlledregions as $controlledregion )
 						$controlledregion -> move( $this -> attackingregion -> kingdom ); 					
@@ -233,10 +233,10 @@ class Model_BattleConquerRBattleType extends Model_BattleType
 					if ( 
 						$newking -> loaded and 						
 						$newking -> position_id == $this -> attackedregion -> id and 
-						Character_Role_Model::check_eligibility( $newking, 'king', null, $message ) )					
+						Model_CharacterRole::check_eligibility( $newking, 'king', null, $message ) )
 					{
 						$this -> attackedregion -> kingdom -> crown_king( $newking );									
-						Character_Event_Model::addrecord( 
+						Model_CharacterEvent::addrecord(
 							null,
 							'announcement', 
 							'__events.conquerrsuccessnewking'.';' . 					
@@ -249,7 +249,7 @@ class Model_BattleConquerRBattleType extends Model_BattleType
 					}
 					else
 					{
-						Character_Event_Model::addrecord( 
+						Model_CharacterEvent::addrecord(
 							null,
 							'announcement', 
 							'__events.conquerrsuccessnoking'.';' . 					
@@ -267,7 +267,7 @@ class Model_BattleConquerRBattleType extends Model_BattleType
 			else if ( $battlewinners == 'defenders' or $battlewinners == 'none' ) 
 			{
 			
-				Character_Event_Model::addrecord( 
+				Model_CharacterEvent::addrecord(
 					null,
 					'announcement', 
 					'__events.conquerrfailure'.';' . 
@@ -307,7 +307,7 @@ class Model_BattleConquerRBattleType extends Model_BattleType
 			
 			// Add an event @ town crier
 		
-			$e = Character_Event_Model::addrecord( 
+			$e = Model_CharacterEvent::addrecord(
 			null,
 			'announcement', 
 			'__events.roundended'.';' . 
@@ -320,7 +320,7 @@ class Model_BattleConquerRBattleType extends Model_BattleType
 						
 			kohana::log('debug', 'Scheduling another round.' ); 
 			
-			$a = new Character_Action_Model();
+			$a = new Model_CharacterAction();
 			$a->character_id = $this -> par[0] -> source_character_id ;
 			$a->param1 = $currentround + 1; 
 			$a->param2 = $this -> par[1] -> param2;

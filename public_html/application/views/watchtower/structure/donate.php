@@ -104,7 +104,7 @@ foreach ($items['items']['all'] as $item)
 		echo form::hidden('w-' . $item -> item_id , $item -> weight);
 		echo form::hidden('sc-' . $item -> item_id , $item -> subcategory);
 		
-		$title = Item_Model::helper_tooltip( $item, $structure -> id ); 
+		$title = Model_Item::helper_tooltip( $item, $structure -> id );
 		
 		echo "<tr class='$class'>";				
 		echo "<td>" . form::checkbox( array( 'id' => $item -> item_id, 'name' => 'charitemcheckbox', 'value' => $item -> item_id )) . "</td>";

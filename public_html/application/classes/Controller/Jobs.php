@@ -17,7 +17,7 @@ class Controller_Jobs extends Controller_Template
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		$job = ORM::factory( 'job', $job_id );
 		
-		$rc = Job_Model::delete( $char, $job, $message ); 
+		$rc = Model_Job::delete( $char, $job, $message );
 		
 		if ( $rc )
 		{				
@@ -43,7 +43,7 @@ class Controller_Jobs extends Controller_Template
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		$job = ORM::factory( 'job', $job_id );
 		
-		$rc = Job_Model::close( $char, $job, $message ); 
+		$rc = Model_Job::close( $char, $job, $message );
 		
 		if ( $rc )
 		{				
@@ -69,7 +69,7 @@ class Controller_Jobs extends Controller_Template
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		$job = ORM::factory( 'job', $job_id );
 		
-		$rc = Job_Model::republish( $char, $job, $message ); 
+		$rc = Model_Job::republish( $char, $job, $message );
 		
 		if ( $rc )
 		{				
@@ -97,7 +97,7 @@ class Controller_Jobs extends Controller_Template
 		$employer = ORM::factory('character', $announce -> character_id );		
 		$structure = is_null( $announce -> spare3 ) ? null : ORM::factory('structure', $announce -> spare3 );
 		
-		$rc = Job_Model::accept( $employee, $employer, $announce, $structure, $message ); 
+		$rc = Model_Job::accept( $employee, $employer, $announce, $structure, $message );
 		
 		if ( $rc )
 		{				

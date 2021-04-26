@@ -122,7 +122,7 @@ class Controller_Character extends Controller_Template
 
 		// Inizializzo la combo per L'araldica
 
-		$subscribable_kingdoms = Kingdom_Model::get_subscribable_kingdoms();
+		$subscribable_kingdoms = Model_Kingdom::get_subscribable_kingdoms();
 		$view -> subscribable_kingdoms = $subscribable_kingdoms;
 
 		// Controllo se la form � stata inviata
@@ -163,7 +163,7 @@ class Controller_Character extends Controller_Template
 					HTTP::redirect('character/create');
 				}
 
-				$region_id = Kingdom_Model::get_capitalregion( $post['choosenkingdom_id'] ) -> id;
+				$region_id = Model_Kingdom::get_capitalregion( $post['choosenkingdom_id'] ) -> id;
 
 				if ( is_null( $region_id ) )
 				{
@@ -205,27 +205,27 @@ class Controller_Character extends Controller_Template
 
 				// linguaggi parlati, su user
 
-				$language1 = new User_Language_Model();
+				$language1 = new Model_UserLanguage();
 				$language1 -> user_id = $char -> user_id;
 				$language1 -> position = 1;
 				$language1 -> language = $post['charspokenlanguage1'];
 
-				$language2 = new User_Language_Model();
+				$language2 = new Model_UserLanguage();
 				$language2 -> user_id = $char -> user_id;
 				$language2 -> position = 2;
 				$language2 -> language = $post['charspokenlanguage2'];
 
-				$language3 = new User_Language_Model();
+				$language3 = new Model_UserLanguage();
 				$language3 -> user_id = $char -> user_id;
 				$language3 -> position = 3;
 				$language3 -> language = $post['charspokenlanguage3'];
 
-				$language4 = new User_Language_Model();
+				$language4 = new Model_UserLanguage();
 				$language4 -> user_id = $char -> user_id;
 				$language4 -> position = 4;
 				$language4 -> language = '';
 
-				$language5 = new User_Language_Model();
+				$language5 = new Model_UserLanguage();
 				$language5 -> user_id = $char -> user_id;
 				$language5 -> position = 5;
 				$language5 -> language = '';
@@ -251,7 +251,7 @@ class Controller_Character extends Controller_Template
 					// Startup Kit
 					///////////////////////////////////////////////////////////////////////
 
-					$bread = Item_Model::factory(null, 'bread');
+					$bread = Model_Item::factory(null, 'bread');
 					$bread -> additem( "character", $char -> id, 1);
 					$char -> modify_coins(10, 'startup kit');
 
@@ -273,15 +273,15 @@ class Controller_Character extends Controller_Template
 
 					if ( $char -> sex == 'M' )
 					{
-						$rags_shirt = Item_Model::factory(null, "rags_shirt");
-						$rags_trousers = Item_Model::factory(null, "rags_trousers");
+						$rags_shirt = Model_Item::factory(null, "rags_shirt");
+						$rags_trousers = Model_Item::factory(null, "rags_trousers");
 
 						$rags_shirt -> additem( "character", $char->id, 1, true);
 						$rags_trousers -> additem( "character", $char->id, 1, true);
 					}
 					else
 					{
-						$rags_robe = Item_Model::factory(null, "rags_robe");
+						$rags_robe = Model_Item::factory(null, "rags_robe");
 						$rags_robe -> additem( "character", $char->id, 1, true );
 					}
 
@@ -289,7 +289,7 @@ class Controller_Character extends Controller_Template
 					// Istanzio l'azione ciclica della fame
 					///////////////////////////////////////////////////////////////////////
 
-					$ca = Character_Action_Model::factory("consumeglut");
+					$ca = Model_CharacterAction::factory("consumeglut");
 					$ca -> character_id = $char -> id;
 					$ca -> action = 'consumeglut';
 					$ca -> blocking_flag = 0;
@@ -312,7 +312,7 @@ class Controller_Character extends Controller_Template
 
 					if ( !is_null ( $king ) )
 					{
-						Character_Event_Model::addrecord(
+						Model_CharacterEvent::addrecord(
 							$king->character_id,
 							'normal',
 							'__events.city_newcharacterborn;' .
@@ -322,7 +322,7 @@ class Controller_Character extends Controller_Template
 
 					if ( !is_null( $vassal) )
 					{
-						Character_Event_Model::addrecord( $vassal->character_id, 'normal', '__events.city_newcharacterborn;' .
+						Model_CharacterEvent::addrecord( $vassal->character_id, 'normal', '__events.city_newcharacterborn;' .
 							'__' . $region->kingdom -> get_name()  . ';__'.$region->name  . ';' . $char->name,
 							'evidence' );
 					}
@@ -343,7 +343,7 @@ class Controller_Character extends Controller_Template
 						{
 							$welcomemessagesubject = $welcomemessage -> title;
 							$welcomemessagetext = $welcomemessage -> text;
-							$m = new Message_Model;
+							$m = new Model_Message;
 							$m -> send( $king -> character, $char, $welcomemessagesubject, $welcomemessagetext );
 
 
@@ -352,7 +352,7 @@ class Controller_Character extends Controller_Template
 
 					// evento permanente
 
-					Character_Permanentevent_Model::add_model(
+					Model_CharacterPermanentevent::add_model(
 					$char -> id,
 					'__permanentevents.birth' . ';' .
 					'__' . $region -> name );
@@ -539,7 +539,7 @@ class Controller_Character extends Controller_Template
 
 		// parentele
 
-		$view -> kinrelations = Character_Relationship_Model::get_kinrelations( $char -> id );
+		$view -> kinrelations = Model_CharacterRelationship::get_kinrelations( $char -> id );
 
 		// intox. level
 
@@ -601,7 +601,7 @@ class Controller_Character extends Controller_Template
 		$par[1] = $movetobattlefield;
 		$par[2] = $char;
 
-		$ca_move = Character_Action_Model::factory("move");
+		$ca_move = Model_CharacterAction::factory("move");
 		if ( $ca_move -> do_action( $par,  $message ) )
 			;
 		else
@@ -625,7 +625,7 @@ class Controller_Character extends Controller_Template
 
 		$message = "";
 
-		$ca_sail = Character_Action_Model::factory("sail");
+		$ca_sail = Model_CharacterAction::factory("sail");
 
 		$par[0] = ORM::factory('region', $region_id );
 		$par[1] = $movetobattlefield;
@@ -651,7 +651,7 @@ class Controller_Character extends Controller_Template
 	{
 		$message = '';
 
-		$rc = Character_Action_Model::cancel_pending_action( null, false, $message );
+		$rc = Model_CharacterAction::cancel_pending_action( null, false, $message );
 
 		if ( $rc )
 			Session::instance()->set('user_message', "<div class=\"info_msg\">". __('global.action_canceled') . "</div>");
@@ -755,7 +755,7 @@ class Controller_Character extends Controller_Template
 		$character = ORM::factory("character", $character_id);
 
 		if ($character -> type == 'npc')
-			$npc = NPCFactory_Model::create( null, $character_id );
+			$npc = Model_NpcFactory::create( null, $character_id );
 
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen', 'character'=>'screen');
 
@@ -819,7 +819,7 @@ class Controller_Character extends Controller_Template
 		$view -> character = $character;
 		$view -> groups = $character -> get_my_groups();
 		$view -> titles = $character -> get_alltitles();
-		$view -> kinrelations = Character_Relationship_Model::get_kinrelations( $character -> id );
+		$view -> kinrelations = Model_CharacterRelationship::get_kinrelations( $character -> id );
 		$view -> viewingchar = $viewingchar;
 		$view -> viewingcharrole = $viewingcharrole;
 		$view -> residenceregion = ORM::factory('region', $character -> region_id );
@@ -864,7 +864,7 @@ class Controller_Character extends Controller_Template
 				$character->description = $this->request->post( 'description' );
 				$character->save();
 				$par[0] = $this->request->post( 'description' );
-				GameEvent_Model::process_event( $character, 'changecharacterdescription', $par );
+				Model_GameEvent::process_event( $character, 'changecharacterdescription', $par );
 				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('character.description_changed') . "</div>");
 				HTTP::redirect( 'character/details');
 			}
@@ -930,7 +930,7 @@ class Controller_Character extends Controller_Template
 				unlink($filename);
 
 				$par = array();
-				GameEvent_Model::process_event( $character, 'changecharacteravatar', $par );
+				Model_GameEvent::process_event( $character, 'changecharacteravatar', $par );
 
 				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('character.avatar_changed') . "</div>");
 
@@ -985,7 +985,7 @@ class Controller_Character extends Controller_Template
 		}
 		else
 		{
-			$ca = Character_Action_Model::factory("changecity");
+			$ca = Model_CharacterAction::factory("changecity");
 			$par[0] = $char;
 			$par[1] = $dest_region;
 			$par[2] = $cost;
@@ -1090,7 +1090,7 @@ class Controller_Character extends Controller_Template
 	public function buy_avatar( $avatar_id )
 	{
 		$message = "";
-		$ca_move = Character_Action_Model::factory("buy_avatar");
+		$ca_move = Model_CharacterAction::factory("buy_avatar");
 		$par[0] = ORM::factory("character", Session::instance()->get("char_id") );
 		$par[1] = $avatar_id;
 		if ( $ca_move->do_action( $par,  $message ) )
@@ -1133,7 +1133,7 @@ class Controller_Character extends Controller_Template
 				$character->slogan = $this->request->post( 'slogan' );
 				$character->save();
 				$par[0] = $this->request->post( 'slogan' );
-				GameEvent_Model::process_event( $character, 'changecharacterslogan', $par );
+				Model_GameEvent::process_event( $character, 'changecharacterslogan', $par );
 
 				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('character.slogan_changed') . "</div>");
 				HTTP::redirect( 'character/details');
@@ -1259,7 +1259,7 @@ class Controller_Character extends Controller_Template
 		{
 			//KO7::$log->add(KO7_Log::DEBUG, kohana::debug( $_POST)); exit();
 			$message = "";
-			$ca = Character_Action_Model::factory("charchangeattributes");
+			$ca = Model_CharacterAction::factory("charchangeattributes");
 			$par[0] = $character;
 			$par[1] = $this -> request -> post() ;
 			$par[2] = $sum;
@@ -1301,7 +1301,7 @@ class Controller_Character extends Controller_Template
 
 		KO7::$log->add(KO7_Log::INFO, '-> *** Completing actions ***' );
 
-		$o = new Character_Action_Model();
+		$o = new Model_CharacterAction();
 		$nactions = $o -> complete_expired_actions( $charflag );
 		$end = time();
 
@@ -1335,18 +1335,18 @@ class Controller_Character extends Controller_Template
 		elseif ( $char -> rpforumregistered == false )
 		{
 
-			if ( ForumBridge_Model::create_account( $char, 'forum', $data ) == true )
+			if ( Model_ForumBridge::create_account( $char, 'forum', $data ) == true )
 			{
 				$char -> rpforumregistered = true;
 				$char -> save();
 				$par[0] = null;
-				GameEvent_Model::process_event( $char, 'forumregistration', $par );
+				Model_GameEvent::process_event( $char, 'forumregistration', $par );
 			}
 		}
 		else
 		{
 			$par[0] = null;
-			GameEvent_Model::process_event( $char, 'forumregistration', $par );
+			Model_GameEvent::process_event( $char, 'forumregistration', $par );
 		}
 
 
@@ -1378,7 +1378,7 @@ class Controller_Character extends Controller_Template
 
 	public function sendearningsto( $destination, $id )
 	{
-		$a = Character_Action_Model::factory( 'sendearningsto' );
+		$a = Model_CharacterAction::factory( 'sendearningsto' );
 		if ( $a -> do_action( $par,  $message ) )
 			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 		else
@@ -1424,7 +1424,7 @@ class Controller_Character extends Controller_Template
 			$par[0] = $this -> request -> post('destination');
 			$par[1] = $this -> request -> post('id');
 
-			$a = Character_Action_Model::factory( 'sendearningsto' );
+			$a = Model_CharacterAction::factory( 'sendearningsto' );
 			if ( $a -> do_action( $par,  $message ) )
 				Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 			else
@@ -1454,7 +1454,7 @@ class Controller_Character extends Controller_Template
 
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		// Azione leavereligion
-		$a = Character_Action_Model::factory("leavereligion");
+		$a = Model_CharacterAction::factory("leavereligion");
 
 		// Parametri
 		$par[0] = $char;
@@ -1560,7 +1560,7 @@ class Controller_Character extends Controller_Template
 				$character->signature = $this->request->post( 'signature' );
 				$character->save();
 				$par[0] = $this->request->post( 'signature' );
-				GameEvent_Model::process_event( $character, 'changecharactersignature', $par );
+				Model_GameEvent::process_event( $character, 'changecharactersignature', $par );
 				Session::instance()->set('user_message', "<div class=\"info_msg\">". __('character.signature_changed') . "</div>");
 				HTTP::redirect( 'character/details');
 			}
@@ -1603,9 +1603,9 @@ class Controller_Character extends Controller_Template
 
 		// carico i quest configurati
 
-		$cfgquests = Configuration_Model::get_questscfg();
+		$cfgquests = Model_Configuration::get_questscfg();
 		foreach ( $cfgquests as $cfgquest )
-			$infos[] = Cfgquest_Model::get_info ( $cfgquest -> name, $character );
+			$infos[] = Model_Cfgquest::get_info ( $cfgquest -> name, $character );
 
 		//var_dump( $infos );	exit;
 
@@ -1666,7 +1666,7 @@ class Controller_Character extends Controller_Template
 				$par[4] = ORM::factory('region') -> where (
 					'name', strtolower('regions.' . $this -> request -> post('location'))) -> find();
 
-				$a = Character_Action_Model::factory( 'launchduel' );
+				$a = Model_CharacterAction::factory( 'launchduel' );
 				if ( $a -> do_action( $par,  $message ) )
 					Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 				else
@@ -1708,7 +1708,7 @@ class Controller_Character extends Controller_Template
 		$par[1] = ORM::factory('character', $target_id );
 		$par[2] = ORM::factory('character', $source_id );
 
-		$a = Character_Action_Model::factory( 'executeduel' );
+		$a = Model_CharacterAction::factory( 'executeduel' );
 		if ( $a -> do_action( $par,  $message ) )
 			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 		else
@@ -1739,7 +1739,7 @@ class Controller_Character extends Controller_Template
 				$proposal -> param1 = $response;
 				$proposal -> save();
 
-				Character_Event_Model::addrecord(
+				Model_CharacterEvent::addrecord(
 				$proposal -> fromchar_id,
 				'normal',
 				'__events.weddingproposalaccepted' .
@@ -1751,7 +1751,7 @@ class Controller_Character extends Controller_Template
 				$proposal -> param1 = $response;
 				$proposal -> save();
 
-				Character_Event_Model::addrecord(
+				Model_CharacterEvent::addrecord(
 				$proposal -> fromchar_id,
 				'normal',
 				'__events.weddingproposalrefused' .
@@ -1904,7 +1904,7 @@ class Controller_Character extends Controller_Template
 		//var_dump($disease);exit;
 
 		// Istanzio la corretta azione: curedisease/curehealth/curewounds
-		$a = Character_Action_Model::factory( $model_to_build );
+		$a = Model_CharacterAction::factory( $model_to_build );
 		if ( $a -> do_action( $par,  $message ) )
 			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
 		else
@@ -1938,7 +1938,7 @@ class Controller_Character extends Controller_Template
 		$par[1] = $character_target;
 		$par[2] = $structure;
 
-		$ca = Character_Action_Model::factory("initiate");
+		$ca = Model_CharacterAction::factory("initiate");
 		if ( $ca -> do_action( $par,  $message ) )
 		{
 			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
@@ -1957,7 +1957,7 @@ class Controller_Character extends Controller_Template
 
 		$par[0] = ORM::factory('character', $attacker_id );
 		$par[1] = ORM::factory('character', $defender_id );
-		$ca = Character_Action_Model::factory("attackchar");
+		$ca = Model_CharacterAction::factory("attackchar");
 
 		if ( $ca -> do_action( $par,  $message ) )
 		{
@@ -1978,7 +1978,7 @@ class Controller_Character extends Controller_Template
 		$par[0] = Model_Character::get_info( Session::instance()->get('char_id') );
 		$par[1] = ORM::factory('character', $character_id );
 
-		$ca = Character_Action_Model::factory("steal");
+		$ca = Model_CharacterAction::factory("steal");
 
 		if ( $ca -> do_action( $par,  $message ) )
 		{
@@ -1997,7 +1997,7 @@ class Controller_Character extends Controller_Template
 	{
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 
-		$skill = SkillFactory_Model::create($tag);
+		$skill = Model_SkillFactory::create($tag);
 		$rc = $skill -> remove($char);
 		if ($rc == true )
 		{

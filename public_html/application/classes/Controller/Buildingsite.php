@@ -22,7 +22,7 @@ class Controller_Buildingsite extends Controller_Template
 		{
 			// trovo il progetto del nodo che ha come target la struttura corrente
 			
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
 				'public', 'manage' ) )
 			{
@@ -37,7 +37,7 @@ class Controller_Buildingsite extends Controller_Template
 		else
 		{
 		
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
 				'public', 'manage' ) )
 			{
@@ -47,7 +47,7 @@ class Controller_Buildingsite extends Controller_Template
 			$project = ORM::factory('kingdomproject') ->where ( array( 'structure_id' => $structure->id ) ) -> find() ;
 			$info = $project -> get_info();	
 
-			$o = Character_Action_Model::factory("workonproject");
+			$o = Model_CharacterAction::factory("workonproject");
 			$par[0] = $character;
 			$par[1] = $structure;				
 			$par[2] = $this->request->post('hours');

@@ -51,7 +51,7 @@ else { ?>
 			
 		$employer = ORM::factory('character', $job -> employer_id );
 		if ( !is_null( $job -> structure_id ) ) 
-			$structure = StructureFactory_Model::create( null, $job -> structure_id );
+			$structure = Model_StructureFactory::create( null, $job -> structure_id );
 		else
 			$structure = null;
 			

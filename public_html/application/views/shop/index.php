@@ -29,7 +29,7 @@ $k = 0;
 foreach ( $shops as $shop )
 {
 	$class = ( $k % 2 == 0 ) ? 'alternaterow_1' : 'alternaterow_2';	
-	$structureinstance = StructureFactory_Model::create( $shop -> type );
+	$structureinstance = Model_StructureFactory::create( $shop -> type );
 ?>
 	<tr class='<?= $class; ?>'>
 	<td class='center'><?= html::image('media/images/structures/'. $structureinstance -> structure_type -> image, 

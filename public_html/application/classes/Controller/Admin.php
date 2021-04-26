@@ -374,7 +374,7 @@ class Controller_Admin extends Controller_Template
 		
 		$charold -> name = $newname;
 		$charold -> save();
-		$pe = new Character_PermanentEvent_Model();
+		$pe = new Model_CharacterPermanentevent();
 		$pe -> character_id = $charold -> id;
 		$pe -> type = 'normal';
 		$pe -> description = "__permanentevents.namechange;$oldname;$newname";
@@ -448,7 +448,7 @@ class Controller_Admin extends Controller_Template
 			$par[4] = 'Administration';
 			$par[5] = $character;
 			
-			$ca = Character_Action_Model::factory("givedoubloons");		
+			$ca = Model_CharacterAction::factory("givedoubloons");
 			
 			if ( $ca -> do_action( $par,  $message ) )
 			{ 				
@@ -517,9 +517,9 @@ class Controller_Admin extends Controller_Template
 				$message -> timestamp = time();
 				$message -> save();	
 				
-				My_Cache_Model::set ( '-global_adminmessage', $message -> as_array() );
+				Model_MyCache::set ( '-global_adminmessage', $message -> as_array() );
 				
-				Character_Event_Model::addrecord( 1, 'announcement', 
+				Model_CharacterEvent::addrecord( 1, 'announcement',
 					'__events.adminmessageposted' .				
 					';' .   html::anchor( 'admin/read_adminmessage/' . $message -> id, $message -> summary ), 		
 					'system' ); 		
@@ -673,13 +673,13 @@ class Controller_Admin extends Controller_Template
 
 				KO7::$log->add(KO7_Log::DEBUG, "-> Creating NEW NPC: {$name}");
 
-				$npcclass = NpcFactory_Model::create($npctag);
+				$npcclass = Model_NpcFactory::create($npctag);
 				$npcclass->create($name);
 				$npcclass->setRegion_id($region->id);
 				$npcclass->setPosition_id($region->id);
 				$npcclass->save();
 
-				$action_ai = Character_Action_Model::factory('npcai');
+				$action_ai = Model_CharacterAction::factory('npcai');
 				$action_ai -> character_id = $npcclass -> id;
 				$action_ai -> save();
 				//VAR_DUMP($npcclass);
@@ -747,12 +747,12 @@ class Controller_Admin extends Controller_Template
 			$par[3] = $this -> request -> post('reason' );
 			$par[4] = $char;
 			
-			$ca = Character_Action_Model::factory("giveitem");							
+			$ca = Model_CharacterAction::factory("giveitem");
 			if ( $ca -> do_action( $par, $message ) )
 			{ 				
 				// traccia invio 		
 				
-				Character_Event_Model::addrecord( 
+				Model_CharacterEvent::addrecord(
 					$par[4] -> id, 
 					'normal', 
 					'__events.itemsent_event' . 
@@ -892,7 +892,7 @@ class Controller_Admin extends Controller_Template
 				}
 				// muovi immagini nella directory corretta
 				
-				Wardrobe_Model::approvecustomizeditems( $request );
+				Model_Wardrobe::approvecustomizeditems( $request );
 				
 				// take off doubloons				
 				$request -> character -> modify_doubloons( -150, 'wardrobeapprovalfree' );
@@ -902,7 +902,7 @@ class Controller_Admin extends Controller_Template
 				$request -> save();
 				
 				// manda evento al player				
-				Character_Event_Model::addrecord( $request -> character -> id, 'normal', '__wardrobe.requestaccepted' );
+				Model_CharacterEvent::addrecord( $request -> character -> id, 'normal', '__wardrobe.requestaccepted' );
 			
 			}
 			
@@ -913,14 +913,14 @@ class Controller_Admin extends Controller_Template
 			
 				// muovi immagini nella directory corretta
 				
-				Wardrobe_Model::approvecustomizeditems( $request );
+				Model_Wardrobe::approvecustomizeditems( $request );
 								
 				// marca request come accettata
 				$request -> status = 'accepted';
 				$request -> save();
 				
 				// manda evento al player				
-				Character_Event_Model::addrecord( $request -> character -> id, 'normal', '__wardrobe.requestaccepted' );
+				Model_CharacterEvent::addrecord( $request -> character -> id, 'normal', '__wardrobe.requestaccepted' );
 			
 			}
 			
@@ -934,7 +934,7 @@ class Controller_Admin extends Controller_Template
 	
 				// manda evento al player		
 				
-				Character_Event_Model::addrecord( $request -> character -> id, 'normal', 
+				Model_CharacterEvent::addrecord( $request -> character -> id, 'normal',
 					'__wardrobe.requestrefusedrefund;' . $this -> request -> post('reason'));
 			
 			}

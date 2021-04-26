@@ -38,7 +38,7 @@ foreach ($vassals as $vassal )
 	$class = ( $k % 2 == 0 ? 'alternaterow_1' : 'alternaterow_2' );	
 	$char = ORM::factory('character', $vassal -> id );
 	$costforremoval = 
-		Character_Role_Model::get_requiredcoins( $char, 'revoke', 'vassal' );
+		Model_CharacterRole::get_requiredcoins( $char, 'revoke', 'vassal' );
 	echo "<tr class='" . $class . "'>";
 	echo "<td class='center'>" . html::anchor('character/publicprofile/' . $vassal -> id, $vassal -> charname) . "</td>";
 	echo "<td class='center'>" . kohana::lang( $vassal -> regionname ) . "</td>";

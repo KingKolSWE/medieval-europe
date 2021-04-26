@@ -34,7 +34,7 @@
 $k = 0 ;
 foreach ( $controlledregions as $controlledregion )
 {
-	$tax = Region_Model::get_tax( $controlledregion -> id, 'valueaddedtax' );
+	$tax = Model_Region::get_tax( $controlledregion -> id, 'valueaddedtax' );
 	$class = ( $k % 2 == 0 ) ? 'alternaterow_1' : 'alternaterow_2';
 	echo form::open();		
 	echo form::hidden( 'tax_id', $tax -> id );

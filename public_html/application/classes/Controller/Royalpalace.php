@@ -20,7 +20,7 @@ class Controller_Royalpalace extends Controller_Template
 
 		if ( ! $_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			//controllo accesso
 
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
@@ -32,7 +32,7 @@ class Controller_Royalpalace extends Controller_Template
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
@@ -79,7 +79,7 @@ class Controller_Royalpalace extends Controller_Template
 
 		$view = View::factory ( 'royalpalace/assign_roles' );
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 
 		// controllo permessi
@@ -160,7 +160,7 @@ class Controller_Royalpalace extends Controller_Template
 	function appoint()
 	{
 
-		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+		$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$db = Database::instance();
 
@@ -177,7 +177,7 @@ class Controller_Royalpalace extends Controller_Template
 		$par[3] = ORM::factory('region', $this -> request -> post( 'region_id' ) );
 		$par[4] = ORM::factory('structure', $this -> request -> post( 'structure_id' ) );
 
-		$ca = Character_Action_Model::factory("assignrole");
+		$ca = Model_CharacterAction::factory("assignrole");
 		$rc = $ca -> do_action( $par, $message );
 
 		if ( $rc )
@@ -205,8 +205,8 @@ class Controller_Royalpalace extends Controller_Template
 		$roleowner = ORM::factory("character", $character_id );
 		$role = $roleowner -> get_current_role();
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$ca = Character_Action_Model::factory("revokerole");
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$ca = Model_CharacterAction::factory("revokerole");
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
 			'private', 'revoke_role') )
@@ -250,7 +250,7 @@ class Controller_Royalpalace extends Controller_Template
 		$view = View::factory ('royalpalace/showwelcomeannouncement');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$capital = Kingdom_Model::get_capitalregion( $character -> region -> kingdom_id );
+		$capital = Model_Kingdom::get_capitalregion( $character -> region -> kingdom_id );
 		//var_dump($capital); exit;
 		$welcomeannouncement = ORM::factory('region_announcement')
 			-> where ( array(
@@ -286,7 +286,7 @@ class Controller_Royalpalace extends Controller_Template
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,	'private', 'announcements') )
 			{
@@ -315,7 +315,7 @@ class Controller_Royalpalace extends Controller_Template
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,	'private', 'announcements') )
 			{
@@ -336,7 +336,7 @@ class Controller_Royalpalace extends Controller_Template
 			}
 			else
 			{
-				$welcomemessage = new Region_Announcement_Model();
+				$welcomemessage = new Model_RegionAnnouncement();
 				$welcomemessage -> region_id = $structure -> region -> id;
 				$welcomemessage -> character_id = $character -> id;
 				$welcomemessage -> type = 'kingdom';
@@ -381,7 +381,7 @@ class Controller_Royalpalace extends Controller_Template
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,	'private', 'announcements') )
 			{
@@ -397,7 +397,7 @@ class Controller_Royalpalace extends Controller_Template
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,	'private', 'announcements') )
 			{
@@ -456,7 +456,7 @@ class Controller_Royalpalace extends Controller_Template
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,	'private', 'announcements') )
 			{
@@ -468,7 +468,7 @@ class Controller_Royalpalace extends Controller_Template
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,	'private', 'announcements') )
 			{
@@ -577,7 +577,7 @@ class Controller_Royalpalace extends Controller_Template
 		$view = View::factory ('royalpalace/list_roles');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		$limit = 25 ; // records per page
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 
 		$subm    = View::factory ('template/submenu');
@@ -590,7 +590,7 @@ class Controller_Royalpalace extends Controller_Template
 			HTTP::redirect('region/view/');
 		}
 
-		$o = new Kingdom_Model();
+		$o = new Model_Kingdom();
 		$kingdom = $o->find( $character -> region -> kingdom -> id );
 
 		$db = Database::instance();
@@ -650,7 +650,7 @@ class Controller_Royalpalace extends Controller_Template
 	{
 
 		$view = View::factory ( 'royalpalace/declarehostileaction' );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 
@@ -669,7 +669,7 @@ class Controller_Royalpalace extends Controller_Template
 			HTTP::redirect('region/view/');
 		}
 
-		$kingdoms = Configuration_Model::getcfg_kingdoms();
+		$kingdoms = Model_Configuration::getcfg_kingdoms();
 		foreach($kingdoms as $kingdomname => $kingdomdata)
 			$kingdomlist[$kingdomdata -> id] = __($kingdomname);
 
@@ -678,7 +678,7 @@ class Controller_Royalpalace extends Controller_Template
 		$submenu -> action = 'declarehostileaction';
 		$view -> submenu = $submenu;
 		$view -> kingdomlist = $kingdomlist;
-		$view -> kingdomwars = Kingdom_Model::get_kingdomwars( $character -> region -> kingdom_id, 'running');
+		$view -> kingdomwars = Model_Kingdom::get_kingdomwars( $character -> region -> kingdom_id, 'running');
 		$view -> structure = $structure;
 		$this -> template->sheets = $sheets;
 		$this -> template->content = $view;
@@ -712,7 +712,7 @@ class Controller_Royalpalace extends Controller_Template
 			HTTP::redirect('region/view/');
 		}
 
-		$ca = Character_Action_Model::factory("declarewar");
+		$ca = Model_CharacterAction::factory("declarewar");
 		$par[0] = Model_Character::get_info( Session::instance()->get('char_id') );
 		$par[1] = ORM::factory('kingdom', $this -> request -> post('kingdom'));
 		$par[2] = $structure;
@@ -739,7 +739,7 @@ class Controller_Royalpalace extends Controller_Template
 	function finishwar()
 	{
 
-		$ca = Character_Action_Model::factory("finishwar");
+		$ca = Model_CharacterAction::factory("finishwar");
 		$par[0] = Model_Character::get_info( Session::instance()->get('char_id') );
 		$par[1] = $this -> request -> post('war_id');
 
@@ -780,7 +780,7 @@ class Controller_Royalpalace extends Controller_Template
 		if ( !$_POST )
 		{
 
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			// controllo permessi
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), 	'private', 'declarewaraction', $message ) )
 			{
@@ -800,7 +800,7 @@ class Controller_Royalpalace extends Controller_Template
 				->pre_filter('trim', TRUE)
 				->add_rules('city','required');
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 			// controllo permessi
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), 	'private', 'declarewaraction', $message ) )
@@ -815,7 +815,7 @@ class Controller_Royalpalace extends Controller_Template
 				$par[1] = ORM::factory( 'region', $structure -> region -> id );
 				$par[2] = $this -> request -> post( 'attacktype');
 				$par[3] = ORM::factory( 'region', $this -> request -> post( 'region_id' ) );
-				$ca = Character_Action_Model::factory("declarewaraction");
+				$ca = Model_CharacterAction::factory("declarewaraction");
 				if ( $ca->do_action( $par,  $message ) )
 				{
 					Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
@@ -859,7 +859,7 @@ class Controller_Royalpalace extends Controller_Template
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 
 		// Carico la struttura "Palazzo Reale"
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		$regionnames = array();
 		foreach ($structure->region->kingdom->regions as $region)
@@ -894,7 +894,7 @@ class Controller_Royalpalace extends Controller_Template
 		foreach ($par[1]->region->kingdom->regions as $region)
 			$regionnames[] = __($region->name);
 
-		$ca = Character_Action_Model::factory("becomeking");
+		$ca = Model_CharacterAction::factory("becomeking");
 		if ( $ca -> do_action( $par,  $message ) )
 		{
 			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
@@ -921,7 +921,7 @@ class Controller_Royalpalace extends Controller_Template
 
 		$view = View::factory('royalpalace/manage');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$subm    = View::factory ('template/submenu');
 		$structureheader = View::factory('template/structureheader');
@@ -956,7 +956,7 @@ class Controller_Royalpalace extends Controller_Template
 
 		$view = View::factory('royalpalace/resourcereport' );
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$subm    = View::factory ('template/submenu');
 
@@ -1039,7 +1039,7 @@ class Controller_Royalpalace extends Controller_Template
 
 		$view = View::factory('royalpalace/propertyreport' );
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$role = $character -> get_current_role();
 		$subm    = View::factory ('template/submenu');
@@ -1107,7 +1107,7 @@ class Controller_Royalpalace extends Controller_Template
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 
 			// controllo permessi
@@ -1122,7 +1122,7 @@ class Controller_Royalpalace extends Controller_Template
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 			// controllo permessi
 
@@ -1143,7 +1143,7 @@ class Controller_Royalpalace extends Controller_Template
 			$par[5] = $this -> request -> post('maxattackers');
 			$par[6] = $this -> request -> post('relictoraid');
 
-			$ca = Character_Action_Model::factory("declarewaraction");
+			$ca = Model_CharacterAction::factory("declarewaraction");
 
 			if ( $ca->do_action( $par,  $message ) )
 			{
@@ -1186,7 +1186,7 @@ class Controller_Royalpalace extends Controller_Template
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 			// controllo permessi
 
@@ -1199,7 +1199,7 @@ class Controller_Royalpalace extends Controller_Template
 		else
 			{
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 			// controllo permessi
 
@@ -1209,7 +1209,7 @@ class Controller_Royalpalace extends Controller_Template
 				HTTP::redirect('region/view/');
 			}
 
-			$ca = Character_Action_Model::factory("orderconquerir");
+			$ca = Model_CharacterAction::factory("orderconquerir");
 			$par[0] = Model_Character::get_info( Session::instance()->get('char_id') );
 			$par[1] = $this -> request -> post('captain');
 			$par[2] = $this -> request -> post('independentregion');
@@ -1267,7 +1267,7 @@ class Controller_Royalpalace extends Controller_Template
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 			// controllo permessi
 
@@ -1281,7 +1281,7 @@ class Controller_Royalpalace extends Controller_Template
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 			// controllo permessi
 
@@ -1301,9 +1301,9 @@ class Controller_Royalpalace extends Controller_Template
 			$par[5] = $this -> request -> post( 'maxattackers' );
 			$par[6] = null;
 
-			$ca = Character_Action_Model::factory('declarewaraction');
+			$ca = Model_CharacterAction::factory('declarewaraction');
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 			if ( $ca->do_action( $par,  $message ) )
 			{
@@ -1370,7 +1370,7 @@ public function assign_region( $structure_id, $vassal_id )
 	if ( !$_POST )
 	{
 
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		// controllo permessi
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'assign_region' ) )
@@ -1385,7 +1385,7 @@ public function assign_region( $structure_id, $vassal_id )
 	else
 	{
 
-		$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+		$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 		// controllo permessi
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'assign_region' ) )
 		{
@@ -1398,7 +1398,7 @@ public function assign_region( $structure_id, $vassal_id )
 		$par[2] = ORM::factory( 'character', $this->request->post( 'sourcevassal_id' ) );
 		$par[3] = ORM::factory( 'character', $this->request->post( 'destvassal_id' ) );
 
-		$ca = Character_Action_Model::factory("assignregion");
+		$ca = Model_CharacterAction::factory("assignregion");
 		//var_dump( $this -> request -> post ( 'structure_id' ) ); exit;
 
 		if ( $ca -> do_action( $par,  $message ) )
@@ -1476,14 +1476,14 @@ public function assign_region( $structure_id, $vassal_id )
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 		}
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
-			$ca = Character_Action_Model::factory("declarerevolt");
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
+			$ca = Model_CharacterAction::factory("declarerevolt");
 
 			$par[0] = $char;
 			$par[1] = $structure;
@@ -1519,7 +1519,7 @@ function basicresourcereport( $structure_id )
 
 	$view = View::factory('royalpalace/basicresourcereport' );
 	$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
-	$structure = StructureFactory_Model::create( null, $structure_id );
+	$structure = Model_StructureFactory::create( null, $structure_id );
 
 	$character = Model_Character::get_info( Session::instance()->get('char_id') );
 	$role = $character -> get_current_role();
@@ -1576,7 +1576,7 @@ function basicresourcereport( $structure_id )
 
 		$view = View::factory('royalpalace/viewlaws');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 
 		$limit = 5	;
@@ -1621,7 +1621,7 @@ function basicresourcereport( $structure_id )
 	public function deletelaw( $structure_id, $law_id )
 	{
 
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'deletelaw' ) )
@@ -1631,7 +1631,7 @@ function basicresourcereport( $structure_id )
 			HTTP::redirect( 'region/view' );
 		}
 
-		$ca = Character_Action_Model::factory("deletelaw");
+		$ca = Model_CharacterAction::factory("deletelaw");
 		$par[0] = ORM::factory("character", Session::instance()->get("char_id") );
 		$par[1] = $structure;
 		$par[2] = ORM::factory("law", $law_id );
@@ -1666,7 +1666,7 @@ function basicresourcereport( $structure_id )
 		{
 
 			// controllo permessi
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'addlaw' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -1681,10 +1681,10 @@ function basicresourcereport( $structure_id )
 		{
 
 			$form = array( 'law_name' => '', 'law_desc' => '');
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 			// controllo permessi
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'addlaw' ) )
 			{
@@ -1703,7 +1703,7 @@ function basicresourcereport( $structure_id )
 				$par[2] = $this->request->post( 'law_name');
 				$par[3] = $this->request->post( 'law_desc');
 
-				$ca = Character_Action_Model::factory("addlaw");
+				$ca = Model_CharacterAction::factory("addlaw");
 				if ( $ca -> do_action( $par,  $message ) )
 				{
 					Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
@@ -1757,7 +1757,7 @@ function basicresourcereport( $structure_id )
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,	'private', 'editlaw') )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -1783,7 +1783,7 @@ function basicresourcereport( $structure_id )
 		{
 
 			$form = array( 'law_name' => '', 'law_desc' => '');
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,	'private', 'editlaw') )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -1804,7 +1804,7 @@ function basicresourcereport( $structure_id )
 				$par[3] = $this->request->post( 'law_name');
 				$par[4] = $this->request->post( 'law_desc');
 
-				$ca = Character_Action_Model::factory("editlaw");
+				$ca = Model_CharacterAction::factory("editlaw");
 				if ( $ca -> do_action( $par,  $message ) )
 				{
 					Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
@@ -1896,7 +1896,7 @@ function basicresourcereport( $structure_id )
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			// controllo permessi
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'assign_rolerp' ) )
@@ -1907,7 +1907,7 @@ function basicresourcereport( $structure_id )
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 			// controllo permessi
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
@@ -1917,7 +1917,7 @@ function basicresourcereport( $structure_id )
 				HTTP::redirect('region/view/');
 			}
 
-			$ca = Character_Action_Model::factory("assignrolerp");
+			$ca = Model_CharacterAction::factory("assignrolerp");
 			//var_dump( $_POST ); exit;
 			// Characther che nomina
 			$par[0] = $character;
@@ -1971,7 +1971,7 @@ function basicresourcereport( $structure_id )
 
 		$view   = View::factory ( 'royalpalace/diplomacy' );
 		$sheets = array('gamelayout'=>'screen', 'submenu'=>'screen');
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 
 		// controllo permessi
@@ -1991,7 +1991,7 @@ function basicresourcereport( $structure_id )
 			-> find_all();
 
 		$kingdoms = Database::instance() -> query(Database::SELECT, "select * from kingdoms_v");
-		$relations = Configuration_Model::get_cfg_diplomacyrelations();
+		$relations = Model_Configuration::get_cfg_diplomacyrelations();
 		$submenu = View::factory( 'structure/' . $structure -> getSubmenu() );
 		$submenu -> id = $structure -> id;
 		$submenu -> action = 'diplomacy';
@@ -2023,7 +2023,7 @@ function basicresourcereport( $structure_id )
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 			// controllo permessi
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'modifydiplomacystatus' ) )
@@ -2034,7 +2034,7 @@ function basicresourcereport( $structure_id )
 
 			// controllo stato relazione
 
-			$diplomacystatusinfo = Diplomacy_Relation_Model::get_info( $diplomacystatus_id );
+			$diplomacystatusinfo = Model_DiplomacyRelation::get_info( $diplomacystatus_id );
 
 			if ( is_null( $diplomacystatusinfo ) )
 			{
@@ -2046,8 +2046,8 @@ function basicresourcereport( $structure_id )
 		else
 		{
 
-			$diplomacystatusinfo = Diplomacy_Relation_Model::get_info( $this -> request -> post('diplomacystatus_id') );
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$diplomacystatusinfo = Model_DiplomacyRelation::get_info( $this -> request -> post('diplomacystatus_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'modifydiplomacystatus' ) )
 			{
@@ -2062,7 +2062,7 @@ function basicresourcereport( $structure_id )
 			$par[4] = $this -> request -> post('description');
 			$par[5] = false;
 
-			$ca = Character_Action_Model::factory("modifydiplomacystatus");
+			$ca = Model_CharacterAction::factory("modifydiplomacystatus");
 
 			if ( $ca->do_action( $par, $message ) )
 			{
@@ -2104,7 +2104,7 @@ function basicresourcereport( $structure_id )
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$structure = $character -> region -> kingdom -> get_structure('royalpalace');
 		$proposal = ORM::factory('diplomacy_proposal', $proposal_id);
-		$diplomacystatusinfo = Diplomacy_Relation_Model::get_info( $proposal -> diplomacy_relation_id );
+		$diplomacystatusinfo = Model_DiplomacyRelation::get_info( $proposal -> diplomacy_relation_id );
 
 
 		if ( !$proposal -> loaded )
@@ -2123,7 +2123,7 @@ function basicresourcereport( $structure_id )
 			$par[4] = $feedback;
 			$par[5] = true;
 
-			$ca = Character_Action_Model::factory("modifydiplomacystatus");
+			$ca = Model_CharacterAction::factory("modifydiplomacystatus");
 
 			if ( $ca->do_action( $par, $message ) )
 			{
@@ -2144,7 +2144,7 @@ function basicresourcereport( $structure_id )
 			$sourceking = $sourcekingdom -> get_king();
 
 			if (!is_null($sourceking))
-				Character_Event_Model::addrecord(
+				Model_CharacterEvent::addrecord(
 					$sourceking -> id,
 					'normal',
 					'__events.diplomacyproposalrefused'.
@@ -2200,7 +2200,7 @@ function basicresourcereport( $structure_id )
 
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 			// controllo permessi
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,	'private', 'giveaccesspermit' ) )
@@ -2214,7 +2214,7 @@ function basicresourcereport( $structure_id )
 		{
 
 			//var_dump( $_POST ); exit;
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			// controllo permessi
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,	'private', 'giveaccesspermit' ) )
 			{
@@ -2224,7 +2224,7 @@ function basicresourcereport( $structure_id )
 			$par[0] = $this -> request -> post('character');
 			$par[1] = $structure;
 
-			$ca = Character_Action_Model::factory("giveaccesspermit");
+			$ca = Model_CharacterAction::factory("giveaccesspermit");
 
 			if ( $ca->do_action( $par, $message ) )
 			{
@@ -2262,7 +2262,7 @@ function basicresourcereport( $structure_id )
 	{
 		// Carico la struttura
 
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		// Carico il character
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
@@ -2300,7 +2300,7 @@ function basicresourcereport( $structure_id )
 
 			// Prelevo dal database gli eventuali titoli nobiliari
 			// che sono stati modificati
-			$modifiedtitles = Kingdom_Nobletitle_Model::get_customisedtitles($structure->region->kingdom_id);
+			$modifiedtitles = Model_KingdomNobletitle::get_customisedtitles($structure->region->kingdom_id);
 			// Passo i titoli alla vista
 			$view -> modifiedtitles = $modifiedtitles;
 			$submenu = View::factory( 'structure/' . $structure -> getSubmenu() );
@@ -2319,7 +2319,7 @@ function basicresourcereport( $structure_id )
 		else
 		{
 			// Inizializzo la char action per customizzare i titoli
-			$ca = Character_Action_Model::factory("customizenobletitles");
+			$ca = Model_CharacterAction::factory("customizenobletitles");
 			// Characther che compie l'azione
 			$par[0] = $character;
 			// Struttura da cui viene lanciata la customize

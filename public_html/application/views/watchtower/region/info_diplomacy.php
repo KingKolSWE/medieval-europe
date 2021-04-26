@@ -23,7 +23,7 @@
 
 		<tr class='<?= $class; ?>'>
 			<td class='center'><?php echo kohana::lang($region -> kingdom -> get_name() ) ?></td>
-			<td class='center'><?php echo kohana::lang( Kingdom_Model::get_name2($kingdom->id) ) ?></td>
+			<td class='center'><?php echo kohana::lang( Model_Kingdom::get_name2($kingdom->id) ) ?></td>
 			<td class='center <?php echo 'diplomacy'.$relations[$region -> kingdom_id][$kingdom -> id]['type']?>'>
 				<?php echo kohana::lang('diplomacy.' . $relations[$region -> kingdom_id][$kingdom -> id]['type'])?></td>
 			<td class='center'><?php echo Model_Utility::format_datetime($relations[$region -> kingdom_id][$kingdom -> id]['timestamp'])?></td>

@@ -8,7 +8,7 @@ class Controller_Well extends Controller_Template
 	function collect_water( $structure_id, $qta = 1 )
 	{
 		// Carico la struttura "Pozzo"
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		// Controllo che la struttura sia effettivamente un pozzo
 		if ($structure->structure_type->type <> 'well_1' ) 
@@ -29,7 +29,7 @@ class Controller_Well extends Controller_Template
 		// inizializzo l'azione collectwater
 		$message = "";
 		$char = ORM::factory( "character" )->find( Session::instance()->get("char_id") );
-		$ca_cwater = Character_Action_Model::factory("collectwater");
+		$ca_cwater = Model_CharacterAction::factory("collectwater");
 		if ( $ca_cwater->do_action( array( $structure, $char, $qta ),  $message ) )
 			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");		
 		else		

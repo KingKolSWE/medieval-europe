@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Model_CAApply extends Character_Action_Model
+class Model_CharacterAction_CAApply extends Model_CharacterAction
 {
 	protected $immediate_action = true;
 	protected $item = null;
@@ -87,7 +87,7 @@ class Model_CAApply extends Character_Action_Model
 			$char_church_id = $par[1]->church_id;
 			
 			// Conto quanti malus ci sono verso la mia chiesa
-			$num_malus = Church_Model::get_num_malus_against_my_church($char_church_id, 'curseinfidels');
+			$num_malus = Model_Church::get_num_malus_against_my_church($char_church_id, 'curseinfidels');
 			
 			// Calcolo la glut residua dopo applicazione di tutti i malus trovati
 			$malus_to_apply = (1 - $num_malus * 0.25);
@@ -122,7 +122,7 @@ class Model_CAApply extends Character_Action_Model
 			$char_church_id = $par[1]->church_id;
 			
 			// Conto quanti malus ci sono verso la mia chiesa
-			$num_malus = Church_Model::get_num_malus_against_my_church($char_church_id, 'curseinfidels');
+			$num_malus = Model_Church::get_num_malus_against_my_church($char_church_id, 'curseinfidels');
 			
 			// Calcolo l'energia residua dopo applicazione di tutti i malus trovati
 			$malus_to_apply = (1 - $num_malus * 0.25);
@@ -150,7 +150,7 @@ class Model_CAApply extends Character_Action_Model
 			if ( $new_il >= 50 and !$par[1] -> has_disease( 'tipsyness' ) )
 			{
 				kohana::log('info', '-> drink: char: ' . $par[1] -> name . ' got drunk.');
-				$obj = DiseaseFactory_Model::createDisease('tipsyness');
+				$obj = Model_DiseaseFactory::createDisease('tipsyness');
 				$obj -> injectDisease( $par[1] -> id );
 				$message = 'ca_apply.info-drinkeffect_gottipsy';
 				
@@ -162,7 +162,7 @@ class Model_CAApply extends Character_Action_Model
 				// se il >= 100, azione blocking
 			
 				kohana::log('info', '-> drink: char: ' . $par[1] -> name . ' passed out.');
-				$obj = DiseaseFactory_Model::createDisease('drunkness');
+				$obj = Model_DiseaseFactory::createDisease('drunkness');
 				$obj -> injectDisease( $par[1] -> id );					
 				$message = 'ca_apply.info-drinkeffect_gotdrunk';
 			}
@@ -246,7 +246,7 @@ class Model_CAApply extends Character_Action_Model
 			foreach ((array) $diseases as $disease )
 			{
 				$hasdiseases = true;
-				$instance = DiseaseFactory_Model::createDisease($disease -> param1);				
+				$instance = Model_DiseaseFactory::createDisease($disease -> param1);
 				kohana::log('debug', "-> Curing disease {$disease -> param1} for char: {$par[1] -> name}");
 				$instance -> cure_disease( $par[1] );
 				if (in_array($disease -> param1, array('tipsyness')))
@@ -273,7 +273,7 @@ class Model_CAApply extends Character_Action_Model
 		// evento per quest		
 		
 		$_par[0] = $this -> item; // item
-		GameEvent_Model::process_event( $par[1], 'eatfood', $_par );	
+		Model_GameEvent::process_event( $par[1], 'eatfood', $_par );
 
 		// se era legato ad un prestito, il prestito va cancellato
 		
@@ -290,7 +290,7 @@ class Model_CAApply extends Character_Action_Model
 		
 		// event
 		
-		Character_Event_Model::addrecord( 
+		Model_CharacterEvent::addrecord(
 			$par[1] -> id,
 			'normal',
 			'__events.eatdrinkitem' . ";{$par[2]}" . '

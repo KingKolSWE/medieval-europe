@@ -43,17 +43,17 @@ class Controller_Map extends Controller_Template
 		// tiro su tutte le informazioni delle regioni 
 		//////////////////////////////////////////////////
 		Database::instance() -> query(Database::SELECT, "select '--regions_byid--'");
-		$regions = Configuration_Model::get_cfg_regions_byid();		
+		$regions = Model_Configuration::get_cfg_regions_byid();
 		Database::instance() -> query(Database::SELECT, "select '--regions_withstructures--'");
-		$regions_with_structures = Configuration_model::get_regions_structures();
+		$regions_with_structures = Model_Configuration::get_regions_structures();
 		Database::instance() -> query(Database::SELECT, "select '--regions_resources--'");
-		$resources = Configuration_Model::get_resources_all_regions();
+		$resources = Model_Configuration::get_resources_all_regions();
 		Database::instance() -> query(Database::SELECT, "select '--diplomaticrelations--'");
-		$diplomacy = Configuration_Model::get_cfg_diplomacyrelations();		
+		$diplomacy = Model_Configuration::get_cfg_diplomacyrelations();
 		Database::instance() -> query(Database::SELECT, "select '--kingdoms--'");
-		$kingdoms = Configuration_Model::getcfg_kingdoms();
+		$kingdoms = Model_Configuration::getcfg_kingdoms();
 		Database::instance() -> query(Database::SELECT, "select '--regionpaths--'");
-		$region_paths = Configuration_Model::get_cfg_regions_paths2();		
+		$region_paths = Model_Configuration::get_cfg_regions_paths2();
 
 		//$regions_str = print_r($regions, true);
 		//KO7::$log->add(KO7_Log::INFO, $regions_str);
@@ -61,7 +61,7 @@ class Controller_Map extends Controller_Template
 		// La chiesa del char ha il dogma per vedere le risorse?
 		
 		$hasdogma_resourceextractionblessing = 
-			Church_Model::has_dogma_bonus( $char -> church_id, 'resourceextractionblessing');
+			Model_Church::has_dogma_bonus( $char -> church_id, 'resourceextractionblessing');
 		
 		$afpachievement = 
 			Model_Character::get_achievement( $char -> id, 'stat_fpcontribution' );
@@ -148,7 +148,7 @@ class Controller_Map extends Controller_Template
 			$par['time'] = $info['data'] -> time;
 			$par['sourcename'] = $info['data'] -> name1;
 			$par['destname'] = $info['data'] -> name2;			
-			$travelinfo  = Region_Path_Model::get_travelinfo( $par );
+			$travelinfo  = Model_RegionPath::get_travelinfo( $par );
 			$linktravel = false;
 			$linktraveltext = __('global.travel');
 			$linktravelaction = 'notset';

@@ -85,35 +85,35 @@
 	
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('basicpackage');				
+				$bp = Model_PremiumBonusFactory::create('basicpackage');
 				echo $bp -> displaybonus(); 
 			?>				
 		</div>
 		
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('workerpackage');				
+				$bp = Model_PremiumBonusFactory::create('workerpackage');
 				echo $bp -> displaybonus(); 
 			?>	
 		</div>
 		
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('travelerpackage');				
+				$bp = Model_PremiumBonusFactory::create('travelerpackage');
 				echo $bp -> displaybonus(); 
 			?>	
 		</div>
 		
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('rosary');				
+				$bp = Model_PremiumBonusFactory::create('rosary');
 				echo $bp -> displaybonus(); 
 			?>	
 		</div>
 				
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('ipcheckshield');				
+				$bp = Model_PremiumBonusFactory::create('ipcheckshield');
 				echo $bp -> displaybonus(); 
 			?>	
 		</div>
@@ -124,50 +124,35 @@
 		
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('armory');				
+				$bp = Model_PremiumBonusFactory::create('armory');
 				echo $bp -> displaybonus(); 
 			?>
 		</div>
 		
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('diamondring');				
+				$bp = Model_PremiumBonusFactory::create('diamondring');
 				echo $bp -> displaybonus(); 
 			?>
 		</div>
 		
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('elixirofdexterity');				
+				$bp = Model_PremiumBonusFactory::create('elixirofdexterity');
 				echo $bp -> displaybonus(); 
 			?>
 		</div>
 			
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('elixirofhealth');				
-				echo $bp -> displaybonus(); 
-			?>
-		</div>
-		
-		<div class='bonus alternaterow_1'>		
-			<?php
-				$bp = PremiumBonus_Factory_Model::create('elixirofstrength');				
-				echo $bp -> displaybonus(); 
-			?>
-		</div>
-			
-			
-		<div class='bonus alternaterow_1'>		
-			<?php
-				$bp = PremiumBonus_Factory_Model::create('elixirofintelligence');				
+				$bp = Model_PremiumBonusFactory::create('elixirofhealth');
 				echo $bp -> displaybonus(); 
 			?>
 		</div>
 		
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('elixirofconstitution');				
+				$bp = Model_PremiumBonusFactory::create('elixirofstrength');
 				echo $bp -> displaybonus(); 
 			?>
 		</div>
@@ -175,7 +160,14 @@
 			
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('elixirofstamina');				
+				$bp = Model_PremiumBonusFactory::create('elixirofintelligence');
+				echo $bp -> displaybonus(); 
+			?>
+		</div>
+		
+		<div class='bonus alternaterow_1'>		
+			<?php
+				$bp = Model_PremiumBonusFactory::create('elixirofconstitution');
 				echo $bp -> displaybonus(); 
 			?>
 		</div>
@@ -183,7 +175,15 @@
 			
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('elixirofcuredisease');				
+				$bp = Model_PremiumBonusFactory::create('elixirofstamina');
+				echo $bp -> displaybonus(); 
+			?>
+		</div>
+			
+			
+		<div class='bonus alternaterow_1'>		
+			<?php
+				$bp = Model_PremiumBonusFactory::create('elixirofcuredisease');
 				echo $bp -> displaybonus(); 
 			?>
 		</div>
@@ -195,28 +195,28 @@
 		
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('automatedsleep');				
+				$bp = Model_PremiumBonusFactory::create('automatedsleep');
 				echo $bp -> displaybonus(); 
 			?>	
 		</div>
 		
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('supercart');				
+				$bp = Model_PremiumBonusFactory::create('supercart');
 				echo $bp -> displaybonus(); 
 			?>	
 		</div>
 		
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('professionaldesk');				
+				$bp = Model_PremiumBonusFactory::create('professionaldesk');
 				echo $bp -> displaybonus(); 
 			?>	
 		</div>
 		
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('professionaldeskslot');				
+				$bp = Model_PremiumBonusFactory::create('professionaldeskslot');
 				echo $bp -> displaybonus(); 
 			?>
 		</div>
@@ -227,7 +227,7 @@
 	
 		<div class='bonus alternaterow_1'>		
 			<?php
-				$bp = PremiumBonus_Factory_Model::create('wardrobe');				
+				$bp = Model_PremiumBonusFactory::create('wardrobe');
 				echo $bp -> displaybonus(); 
 			?>	
 		</div>

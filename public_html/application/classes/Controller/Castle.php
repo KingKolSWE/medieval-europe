@@ -18,7 +18,7 @@ class Controller_Castle extends Controller_Template
 		$view = View::factory('castle/valueaddedtax');
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id);
+		$structure = Model_StructureFactory::create( null, $structure_id);
 		$this -> template -> sheets = $sheets;
 		
 		if ( ! $_POST )
@@ -33,7 +33,7 @@ class Controller_Castle extends Controller_Template
 		else
 		{
 		
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			
 			//controllo accesso			
 		
@@ -76,7 +76,7 @@ class Controller_Castle extends Controller_Template
 				
 				
 				
-				Character_Event_Model::addrecord(
+				Model_CharacterEvent::addrecord(
 					$structure -> character_id, 
 					'normal', 
 					'__events.valueaddedtaxchange' . 				
@@ -91,7 +91,7 @@ class Controller_Castle extends Controller_Template
 					';__diplomacy.citizen' . 
 					';' . $citizen );
 					
-				Character_Event_Model::addrecord(
+				Model_CharacterEvent::addrecord(
 					null, 
 					'announcement', 
 					'__events.valueaddedtaxchange' . 				
@@ -142,8 +142,8 @@ class Controller_Castle extends Controller_Template
 		$roleowner = ORM::factory("character", $character_id );		
 		$role = $roleowner -> get_current_role();
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$ca = Character_Action_Model::factory("revokerole");
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$ca = Model_CharacterAction::factory("revokerole");
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		
 		
 		//controllo accesso			
@@ -212,7 +212,7 @@ class Controller_Castle extends Controller_Template
 		
 		if ( !$_POST ) 
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id);			
+			$structure = Model_StructureFactory::create( null, $structure_id);
 			
 			// controllo permessi		
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message,
@@ -225,7 +225,7 @@ class Controller_Castle extends Controller_Template
 		}		
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id'));			
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id'));
 			
 			// controllo permessi		
 			
@@ -236,7 +236,7 @@ class Controller_Castle extends Controller_Template
 				HTTP::redirect('region/view/');
 			}
 				
-			$ca = Character_Action_Model::factory("assignrole");					
+			$ca = Model_CharacterAction::factory("assignrole");
 			$par[0] = $character;
 			$par[1] = ORM::factory('character' ) -> where ( array( 
 				'name' => $this -> request -> post('nominated')) ) -> find(); 
@@ -285,7 +285,7 @@ class Controller_Castle extends Controller_Template
 
 		$view = View::factory ( 'castle/list_subordinates' );
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
-		$structure = StructureFactory_Model::create( null, $structure_id);
+		$structure = Model_StructureFactory::create( null, $structure_id);
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 	
 		// controllo permessi				
@@ -360,7 +360,7 @@ class Controller_Castle extends Controller_Template
 		
 		$view = View::factory('castle/propertyreport' );
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
-		$structure = StructureFactory_Model::create( null, $structure_id);$structure = StructureFactory_Model::create( null, $structure_id);
+		$structure = Model_StructureFactory::create( null, $structure_id);$structure = Model_StructureFactory::create( null, $structure_id);
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$role = $character -> get_current_role();
 		
@@ -419,7 +419,7 @@ function basicresourcereport( $structure_id )
 	$view = View::factory('castle/basicresourcereport' );
 	$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 	$subm    = View::factory ('template/submenu');
-	$structure = StructureFactory_Model::create( null, $structure_id);
+	$structure = Model_StructureFactory::create( null, $structure_id);
 	$character = Model_Character::get_info( Session::instance()->get('char_id') );
 	$role = $character -> get_current_role();
 		
@@ -513,7 +513,7 @@ function basicresourcereport( $structure_id )
 
 		if ( !$_POST ) 
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id);
+			$structure = Model_StructureFactory::create( null, $structure_id);
 			// controllo permessi		
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
@@ -525,7 +525,7 @@ function basicresourcereport( $structure_id )
 		else
 		{	
 			
-			$structure = StructureFactory_Model::create( null, $this->request->post('structure_id'));
+			$structure = Model_StructureFactory::create( null, $this->request->post('structure_id'));
 			
 			// controllo permessi		
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
@@ -535,7 +535,7 @@ function basicresourcereport( $structure_id )
 				HTTP::redirect('region/view/');
 			}
 			
-			$ca = Character_Action_Model::factory("assignrolerp");		
+			$ca = Model_CharacterAction::factory("assignrolerp");
 			//var_dump( $_POST ); exit;
 			// Characther che nomina
 			$par[0] = $character;

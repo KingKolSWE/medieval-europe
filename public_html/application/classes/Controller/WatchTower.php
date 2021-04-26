@@ -16,7 +16,7 @@ class Controller_WatchTower extends Controller_Template
 		
 		if (!$_POST)
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id);
+			$structure = Model_StructureFactory::create( null, $structure_id);
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
 				'private', 'watch') )
 			{
@@ -27,14 +27,14 @@ class Controller_WatchTower extends Controller_Template
 			
 			$currentwatchedregion_id = 0;
 			$adjacentregions[$structure -> region_id ] = __($structure -> region -> name );		
-			$_adjacentregions = Region_Model::find_adjacentregions( $structure -> region );
+			$_adjacentregions = Model_Region::find_adjacentregions( $structure -> region );
 			$adjacentregions = $adjacentregions + $_adjacentregions ;			
 			
 		}
 		else
 		{
 			
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'watch') )
 			{
@@ -43,20 +43,20 @@ class Controller_WatchTower extends Controller_Template
 			}			
 			
 			$adjacentregions[$structure -> region_id ] = __($structure -> region -> name );		
-			$_adjacentregions = Region_Model::find_adjacentregions( $structure -> region );
+			$_adjacentregions = Model_Region::find_adjacentregions( $structure -> region );
 			$adjacentregions = $adjacentregions + $_adjacentregions ;
 			
 			if ( $this -> request -> post('startwatch') ) 
 			{							
 				$currentwatchedregion_id = $structure -> region_id;
 				
-				$ca = Character_Action_Model::factory("watcharea");				
+				$ca = Model_CharacterAction::factory("watcharea");
 				$par[0] = $character;
 				$par[1] = ORM::factory('region', $currentwatchedregion_id ); 
 			
 				if ( $ca -> do_action( $par,  $message ) )
 				{
-					$presentchars = Region_Model::get_characteractivity( $currentwatchedregion_id  );			
+					$presentchars = Model_Region::get_characteractivity( $currentwatchedregion_id  );
 					Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); 					
 				}	
 				else	
@@ -75,7 +75,7 @@ class Controller_WatchTower extends Controller_Template
 					HTTP::redirect('watchtower/watch/');
 				}
 			
-				$presentchars = Region_Model::get_characteractivity( $this -> request -> post('region_id')  );			
+				$presentchars = Model_Region::get_characteractivity( $this -> request -> post('region_id')  );
 				
 			}
 		

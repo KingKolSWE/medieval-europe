@@ -31,7 +31,7 @@ class Controller_Item extends Controller_Template
 	{
 		
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
-		$action = Character_Action_Model::factory("recuperateiron");
+		$action = Model_CharacterAction::factory("recuperateiron");
 		
 		$par[0] = $char;
 		$par[1] = $item_id;	
@@ -58,7 +58,7 @@ class Controller_Item extends Controller_Template
 		$this -> auto_render = false;	
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
-		$ca = Character_Action_Model::factory("takefromground");
+		$ca = Model_CharacterAction::factory("takefromground");
 			
 		$par[0] = $char;
 		$par[1] = $item_id;
@@ -85,7 +85,7 @@ class Controller_Item extends Controller_Template
 		$message = '';				
 		
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
-		$ca_apply = Character_Action_Model::factory("apply");
+		$ca_apply = Model_CharacterAction::factory("apply");
 		
 		$par[0] = $item_id;
 		$par[1] = $char;
@@ -111,7 +111,7 @@ class Controller_Item extends Controller_Template
 		$message = "";		
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
-		$ca_wear = Character_Action_Model::factory("wear");		
+		$ca_wear = Model_CharacterAction::factory("wear");
 		$par[0] = $item_id;
 		$par[1] = $char;
 		
@@ -137,7 +137,7 @@ class Controller_Item extends Controller_Template
 		$message = "";				
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 
-		$ca_undress = Character_Action_Model::factory("undress");
+		$ca_undress = Model_CharacterAction::factory("undress");
 		
 		$par[0] = $item_id;
 		$par[1] = $char -> id;
@@ -185,7 +185,7 @@ class Controller_Item extends Controller_Template
 			
 		    KO7::$log->add(KO7_Log::INFO, 'Saving payment data ...');
         
-			$payment                     = new Electronicpayment_Model();
+			$payment                     = new Model_Electronicpayment();
 			$payment -> item_name        = 'ADR';
 			$payment -> currency		 = 'USD';
 			$payment -> quantity         = $this -> input -> post('quantity');
@@ -206,7 +206,7 @@ class Controller_Item extends Controller_Template
 			$par[4] = $char -> name;
 			$par[5] = $char;
 				
-			$ca = Character_Action_Model::factory("givedoubloons");
+			$ca = Model_CharacterAction::factory("givedoubloons");
 				
 			if ( $ca -> do_action( $par, $message ) )
 			{ 								
@@ -280,7 +280,7 @@ class Controller_Item extends Controller_Template
 			$par[3] = $item;
 			$par[4] = 'send';
 			
-			$ca = Character_Action_Model::factory("senditem");		
+			$ca = Model_CharacterAction::factory("senditem");
 			if ( $ca -> do_action( $par, $message ) )
 			{ 								
 				Session::set_flash('user_message', "<div class=\"info_msg\">". $message . "</div>");
@@ -328,7 +328,7 @@ class Controller_Item extends Controller_Template
 						
 			
 			// istanzia la classe corretta tramite la factory
-			$s = Item_Model::factory( 
+			$s = Model_Item::factory(
 				null, $item -> cfgitem -> tag ) -> find ( $item_id ); 			
 			$bodycontent = $s -> expandcontent ( );
 
@@ -407,7 +407,7 @@ class Controller_Item extends Controller_Template
 					// param2 = testo del documento
 					// param3 = firma del documento
 					
-					$o = Item_Model::factory( null, 'scroll_generic' );
+					$o = Model_Item::factory( null, 'scroll_generic' );
 					$o -> param1 = htmlspecialchars($post -> subject, ENT_QUOTES);
 					$o -> param3 = $post -> body;
 					$o -> param2 = $char -> signature;
@@ -420,7 +420,7 @@ class Controller_Item extends Controller_Template
 					
 					// Cero e rimuovo un sigillo
 					
-					$waxseal = Item_Model::factory( null, 'waxseal');		
+					$waxseal = Model_Item::factory( null, 'waxseal');
 					$waxseal -> removeitem( 'character', $char -> id, 1 );
 									
 					// Torno all'inventario del char
@@ -510,7 +510,7 @@ class Controller_Item extends Controller_Template
 								
 				// Invia evento notifica al ricevente
 				
-				Character_Event_Model::addrecord( 
+				Model_CharacterEvent::addrecord(
 				$targetchar->id, 
 				'normal', 
 				'__events.exhibit_scroll'.
@@ -523,7 +523,7 @@ class Controller_Item extends Controller_Template
 
 				// Invia evento notifica al ricevente
 				
-				Character_Event_Model::addrecord( 
+				Model_CharacterEvent::addrecord(
 				$sender->id, 
 				'normal', 
 				'__events.exhibit_scroll_sender'.
@@ -667,7 +667,7 @@ class Controller_Item extends Controller_Template
 				
 				// Rimuovo la tinozza del colore
 				
-				$dyebowl = Item_Model::factory( null, 'dyebowl' ); 
+				$dyebowl = Model_Item::factory( null, 'dyebowl' );
 				$dyebowl -> removeitem('character', $char -> id, 1 );				
 
 				// Torno all'inventario del char
@@ -705,7 +705,7 @@ class Controller_Item extends Controller_Template
 		$par[1] = NULL;
 		$par[2] = true;
 		
-		$ca = Character_Action_Model::factory("rest");		
+		$ca = Model_CharacterAction::factory("rest");
 
 		if ( $ca -> do_action( $par,  $message ) )
 		{ 				
@@ -736,7 +736,7 @@ class Controller_Item extends Controller_Template
 		$par[0] = $character;
 		$par[1] = $item;
 		
-		$ca = Character_Action_Model::factory("returnlentitem");		
+		$ca = Model_CharacterAction::factory("returnlentitem");
 
 		if ( $ca->do_action( $par,  $message ) )
 		{ 				
@@ -773,7 +773,7 @@ class Controller_Item extends Controller_Template
 		
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		
-		$info = Item_Model::computesenddata( 
+		$info = Model_Item::computesenddata(
 			$this -> input -> post('quantity'),
 			$this -> input -> post('item_id'),
 			$character,
@@ -817,7 +817,7 @@ class Controller_Item extends Controller_Template
 		$message = "";		
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		
-		$ca_open = Character_Action_Model::factory("opencontainer");		
+		$ca_open = Model_CharacterAction::factory("opencontainer");
 		
 		$par[0] = $item_id;
 		$par[1] = $char;

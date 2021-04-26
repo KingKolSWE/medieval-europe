@@ -58,7 +58,7 @@ foreach ($subordinates as $subordinate )
 {
 	$class = ( $k % 2 == 0 ) ? 'alternaterow_1' : 'alternaterow_2';	
 	$costforremoval = 
-		Character_Role_Model::get_requiredcoins( $subordinate -> character, 
+		Model_CharacterRole::get_requiredcoins( $subordinate -> character,
 			'revoke', $subordinate -> tag );
 	echo "<tr class='$class'>";
 	echo "<td class='center'>" . html::anchor('character/publicprofile/' . $subordinate -> character_id, $subordinate->character -> name) . "</td>";	

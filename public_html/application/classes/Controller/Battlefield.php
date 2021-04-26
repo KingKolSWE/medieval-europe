@@ -20,10 +20,10 @@ class Controller_Battlefield extends Controller_Template
 		$structure = $region -> get_structure( 'battlefield' );
 		
 		$hasdogma_meditateanddefend =
-			Church_Model::has_dogma_bonus( $char -> church_id, 'meditateanddefend');		
+			Model_Church::has_dogma_bonus( $char -> church_id, 'meditateanddefend');
 		
 		$hasdogma_killtheinfidels = 
-			Church_Model::has_dogma_bonus( $char -> church_id, 'killtheinfidels');		
+			Model_Church::has_dogma_bonus( $char -> church_id, 'killtheinfidels');
 		
 		if ($_POST)
 		{			
@@ -104,7 +104,7 @@ class Controller_Battlefield extends Controller_Template
 				null,
 				true );
 			
-			Character_Event_Model::addrecord( $char -> id , 'normal', '__events.battlefield_enter');
+			Model_CharacterEvent::addrecord( $char -> id , 'normal', '__events.battlefield_enter');
 			
 		}
 		
@@ -160,9 +160,9 @@ class Controller_Battlefield extends Controller_Template
 				
 		// I load the structure "Battlefield"
 		
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
-		$ca = Character_Action_Model::factory("joinfaction");		
+		$ca = Model_CharacterAction::factory("joinfaction");
 		
 		// I pass the battlefield as a parameter
 		
@@ -191,9 +191,9 @@ class Controller_Battlefield extends Controller_Template
 	function entercity( $structure_id = null)
 	{
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		
-		$ca = Character_Action_Model::factory("entercity");		
+		$ca = Model_CharacterAction::factory("entercity");
 		
 		$par[0] = $char;
 		$par[1] = $structure;
@@ -229,7 +229,7 @@ class Controller_Battlefield extends Controller_Template
 	{
 	
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$battle = ORM::factory( 'battle', $structure -> attribute1 );			
 		
 		//////////////////////////////////////

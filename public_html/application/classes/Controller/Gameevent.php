@@ -50,7 +50,7 @@ class Controller_Gameevent extends Controller_Template
 		else
 			$par[2] = 'silvercoins';
 		
-		$ca = Character_Action_Model::factory("gameeventsubscribe");		
+		$ca = Model_CharacterAction::factory("gameeventsubscribe");
 		
 		if ( $ca -> do_action( $par,  $message ) )
 		{ 				

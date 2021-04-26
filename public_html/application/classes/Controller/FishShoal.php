@@ -6,7 +6,7 @@ class Controller_FishShoal extends Controller_Template
 	function fish( $structure_id, $qty = 1)
 	{
 		// Carico la struttura "Salina"
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		// Controllo che la struttura sia effettivamente un branco di pesci
 		if ($structure->structure_type->type <> 'fish_shoal' ) 
@@ -31,7 +31,7 @@ class Controller_FishShoal extends Controller_Template
 		$par[1] = $char;		
 		$par[2] = $qty;
 				
-		$ca = Character_Action_Model::factory("fish");
+		$ca = Model_CharacterAction::factory("fish");
 		if ( $ca->do_action( $par,  $message ) )
 			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");		
 		else		

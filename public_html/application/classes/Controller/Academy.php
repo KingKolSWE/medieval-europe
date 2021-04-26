@@ -24,7 +24,7 @@ class Controller_Academy extends Controller_Template
 			// carico la struttura da db dopodich� instanzio il corretto modello
 			// (structure -> st_academy -> st_academy_level_x)
 			
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'public', 'study' ) )
@@ -37,7 +37,7 @@ class Controller_Academy extends Controller_Template
 		else
 		{
 
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'public', 'study' ) )
@@ -46,7 +46,7 @@ class Controller_Academy extends Controller_Template
 				HTTP::redirect('region/view/');
 			}	
 			
-			$o = Character_Action_Model::factory("study");
+			$o = Model_CharacterAction::factory("study");
 			$par[0] = $character;
 			$par[1] = $structure;				
 			$par[2] = $this->request->post('hours');			
@@ -72,7 +72,7 @@ class Controller_Academy extends Controller_Template
 		$view -> availablecourses = $availablecourses;
 		$view -> structure = $structure ;
 		$view -> char = $character ;			
-		$view -> appliabletax = Region_Model::get_appliable_tax( $structure -> region, 'valueaddedtax', $character ); 		
+		$view -> appliabletax = Model_Region::get_appliable_tax( $structure -> region, 'valueaddedtax', $character );
 		$this -> template -> content = $view ;
 		$this -> template -> sheets = $sheets;
 	
@@ -111,7 +111,7 @@ class Controller_Academy extends Controller_Template
 
 		if ( !$_POST ) 
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			// controllo permessi		
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
@@ -122,7 +122,7 @@ class Controller_Academy extends Controller_Template
 		}
 		else
 		{	
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
@@ -131,7 +131,7 @@ class Controller_Academy extends Controller_Template
 				HTTP::redirect('region/view/');
 			}
 			
-			$ca = Character_Action_Model::factory("assignrolerp");		
+			$ca = Model_CharacterAction::factory("assignrolerp");
 			$par[0] = $character;
 			$par[1] = ORM::factory( 'character' )->where( array('name' => $this->request->post('nominated')) )->find(); 
 			$par[2] = $this->request->post( 'role' );

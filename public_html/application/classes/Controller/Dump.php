@@ -10,11 +10,11 @@ class Controller_Dump extends Controller_Template
 	{
 		
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		
 		$par[0] = $char;
 		$par[1] = $structure;
-		$ca = Character_Action_Model::factory("searchdump");
+		$ca = Model_CharacterAction::factory("searchdump");
 		
 		if ( $ca->do_action( $par,  $message ) )
 		 	{ Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>"); }	

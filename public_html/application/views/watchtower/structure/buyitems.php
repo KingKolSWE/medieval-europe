@@ -52,7 +52,7 @@ echo form::hidden( 'structure_id', $structure -> id );
 </td>
 <td class='center'><?php echo kohana::lang($buyableitem -> name) ?> </td>
 <td class='right'><?php echo $buyableitem -> quantity ?> </td>
-<?php $price = Item_Model::compute_realprice( $buyableitem, $char, $vat ) ?>	
+<?php $price = Model_Item::compute_realprice( $buyableitem, $char, $vat ) ?>
 <td class='right'><div id='sellingprice_<?php echo $buyableitem -> id ?>'><?php echo $price ?></div></td>
 <td class='center'>
 <?php echo form::input( 

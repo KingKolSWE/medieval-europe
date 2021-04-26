@@ -47,7 +47,7 @@ class Controller_Bonus extends Controller_Template
 	//	var_dump($this -> request -> post());exit;
 		
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
-		$pb = PremiumBonus_Factory_Model::create( $this -> request -> post ('name') );
+		$pb = Model_PremiumBonusFactory::create( $this -> request -> post ('name') );
 		$message = '';
 		$par = array();
 		$structure = null;

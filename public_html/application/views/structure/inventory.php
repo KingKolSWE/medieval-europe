@@ -334,75 +334,75 @@ $(document).ready(function()
 
 	<td valign='top'>
 		<div id='c-tab-all' class='itemdata'>	
-			<?= Item_Model::helper_structurelistitems($structure, $char_items, 'character', 'all');?>
+			<?= Model_Item::helper_structurelistitems($structure, $char_items, 'character', 'all');?>
 		</div>
 		
 		<div id='c-tab-currencies' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $char_items, 'character', 'currencies');?>
+			<?= Model_Item::helper_structurelistitems($structure, $char_items, 'character', 'currencies');?>
 		</div>
 		<div id='c-tab-consumables' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $char_items, 'character', 'consumables');?>
+			<?= Model_Item::helper_structurelistitems($structure, $char_items, 'character', 'consumables');?>
 		</div>
 		<div id='c-tab-resources' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $char_items, 'character', 'resources');?>
+			<?= Model_Item::helper_structurelistitems($structure, $char_items, 'character', 'resources');?>
 		</div>
 		<div id='c-tab-tools' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $char_items, 'character', 'tools');?>
+			<?= Model_Item::helper_structurelistitems($structure, $char_items, 'character', 'tools');?>
 		</div>
 		<div id='c-tab-structuretool' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $char_items, 'character', 'structuretool');?>
+			<?= Model_Item::helper_structurelistitems($structure, $char_items, 'character', 'structuretool');?>
 		</div>
 		<div id='c-tab-weapons' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $char_items, 'character', 'weapons');?>
+			<?= Model_Item::helper_structurelistitems($structure, $char_items, 'character', 'weapons');?>
 		</div>
 		<div id='c-tab-armors' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $char_items, 'character', 'armors');?>
+			<?= Model_Item::helper_structurelistitems($structure, $char_items, 'character', 'armors');?>
 		</div>
 		<div id='c-tab-clothes' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $char_items, 'character', 'clothes');?>
+			<?= Model_Item::helper_structurelistitems($structure, $char_items, 'character', 'clothes');?>
 		</div>
 		<div id='c-tab-scrolls' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $char_items, 'character', 'scrolls');?>
+			<?= Model_Item::helper_structurelistitems($structure, $char_items, 'character', 'scrolls');?>
 		</div>
 		<div id='c-tab-others' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $char_items, 'character', 'others');?>
+			<?= Model_Item::helper_structurelistitems($structure, $char_items, 'character', 'others');?>
 		</div>
 	</td>
 	
 	<td valign='top'>
 		<div id='s-tab-all' class='itemdata'>	
-			<?= Item_Model::helper_structurelistitems($structure, $structure_items, 'structure', 'all');?>
+			<?= Model_Item::helper_structurelistitems($structure, $structure_items, 'structure', 'all');?>
 		</div>
 		
 		<div id='s-tab-currencies' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $structure_items, 'structure', 'currencies');?>
+			<?= Model_Item::helper_structurelistitems($structure, $structure_items, 'structure', 'currencies');?>
 		</div>
 		<div id='s-tab-consumables' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $structure_items, 'structure', 'consumables');?>
+			<?= Model_Item::helper_structurelistitems($structure, $structure_items, 'structure', 'consumables');?>
 		</div>
 		<div id='s-tab-resources' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $structure_items, 'structure', 'resources');?>
+			<?= Model_Item::helper_structurelistitems($structure, $structure_items, 'structure', 'resources');?>
 		</div>
 		<div id='s-tab-tools' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $structure_items, 'structure', 'tools');?>
+			<?= Model_Item::helper_structurelistitems($structure, $structure_items, 'structure', 'tools');?>
 		</div>
 		<div id='s-tab-structuretool' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $structure_items, 'structure', 'structuretool');?>
+			<?= Model_Item::helper_structurelistitems($structure, $structure_items, 'structure', 'structuretool');?>
 		</div>
 		<div id='s-tab-weapons' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $structure_items, 'structure', 'weapons');?>
+			<?= Model_Item::helper_structurelistitems($structure, $structure_items, 'structure', 'weapons');?>
 		</div>
 		<div id='s-tab-armors' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $structure_items, 'structure', 'armors');?>
+			<?= Model_Item::helper_structurelistitems($structure, $structure_items, 'structure', 'armors');?>
 		</div>
 		<div id='s-tab-clothes' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $structure_items, 'structure', 'clothes');?>
+			<?= Model_Item::helper_structurelistitems($structure, $structure_items, 'structure', 'clothes');?>
 		</div>
 		<div id='s-tab-scrolls' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $structure_items, 'structure', 'scrolls');?>
+			<?= Model_Item::helper_structurelistitems($structure, $structure_items, 'structure', 'scrolls');?>
 		</div>
 		<div id='s-tab-others' class='itemdata'>
-			<?= Item_Model::helper_structurelistitems($structure, $structure_items, 'structure', 'others');?>
+			<?= Model_Item::helper_structurelistitems($structure, $structure_items, 'structure', 'others');?>
 		</div>
 	</td>
 </tr>	

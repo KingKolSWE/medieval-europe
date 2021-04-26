@@ -28,13 +28,13 @@ $(document).ready(function()
 	<? foreach ($availablecourses as $installedcourse) { ?>
 	<div id='tab-<?=$installedcourse;?>'>	
 		<? 			
-			$obj  = CourseFactory_Model::create($installedcourse); 		
+			$obj  = Model_CourseFactory::create($installedcourse);
 			echo $obj -> helper_show( $char, $structure ); 
 			// Processa evento study
 			if ( $obj -> getLevel( $char ) == 21 )
 			{
 				$_par[0] = $obj -> getTag();
-				GameEvent_Model::process_event( $char, 'study', $_par );	
+				Model_GameEvent::process_event( $char, 'study', $_par );
 			}
 			
 		?>	

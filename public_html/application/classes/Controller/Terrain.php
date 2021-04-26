@@ -25,10 +25,10 @@ class Controller_Terrain extends Controller_Template
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$region = ORM::factory('region', $character -> position_id ); 
 		
-		$structureinstance = StructureFactory_Model::create('terrain_1');		
+		$structureinstance = Model_StructureFactory::create('terrain_1');
 		$view -> price = $structureinstance -> getPrice( $character, $region);
 				
-		$terrains_info = Region_Model::get_terrains_info( $region );
+		$terrains_info = Model_Region::get_terrains_info( $region );
 
 		$view -> region = $region;
 		$view -> terrains_info = $terrains_info;
@@ -50,7 +50,7 @@ class Controller_Terrain extends Controller_Template
 		$section_description = View::factory('structure/section_description');		
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');		
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id);
+		$structure = Model_StructureFactory::create( null, $structure_id);
 		$info = '';
 		
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType() , $message, 'private', 'manage' ) )
@@ -108,7 +108,7 @@ class Controller_Terrain extends Controller_Template
 		
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id);
+			$structure = Model_StructureFactory::create( null, $structure_id);
 
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType() , $message, 'private', 'seed' ) )
 			{
@@ -118,7 +118,7 @@ class Controller_Terrain extends Controller_Template
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> request -> post( 'structure_id' ) ); 
+			$structure = Model_StructureFactory::create( null, $this -> request -> post( 'structure_id' ) );
 
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType() , $message, 'private', 'seed' ) )
 			{
@@ -126,7 +126,7 @@ class Controller_Terrain extends Controller_Template
 				HTTP::redirect('region/view/');
 			}
 			
-			$ca = Character_Action_Model::factory("seed");
+			$ca = Model_CharacterAction::factory("seed");
 			
 			$par[0] = $structure;
 			$par[1] = ORM::factory( "item", $this -> request -> post('item_id' )); 
@@ -168,7 +168,7 @@ class Controller_Terrain extends Controller_Template
 	public function harvest( $structure_id )
 	{
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id);
+		$structure = Model_StructureFactory::create( null, $structure_id);
 		
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType() , $message, 'private', 'harvest' ) )
 		{
@@ -176,7 +176,7 @@ class Controller_Terrain extends Controller_Template
 			HTTP::redirect('region/view/');
 		}
 		
-		$ca = Character_Action_Model::factory("harvest");
+		$ca = Model_CharacterAction::factory("harvest");
 		
 		$par[0] = $character;
 		$par[1] = $structure; 

@@ -15,7 +15,7 @@ class Controller_Religion4 extends Controller_Template
 	
 		$view = View::factory ( 'religion_4/manage' );
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$subm    = View::factory ('template/submenu');		
 		$religiousstructureheader = View::factory('template/religiousstructureheader');
@@ -38,13 +38,13 @@ class Controller_Religion4 extends Controller_Template
 		else
 		{
 			
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			
 			// trasferisci FP
 			
 			if ( $this -> request -> post('transfer' ) )
 			{
-				$ca = Character_Action_Model::factory("transferfppoints");				
+				$ca = Model_CharacterAction::factory("transferfppoints");
 				$par[0] = $character;		
 				$par[1] = $structure;
 				$par[2] = ORM::factory('structure', $this -> request -> post('targetstructure_id' ) );
@@ -86,11 +86,11 @@ class Controller_Religion4 extends Controller_Template
 		// carichiamo tutte le strutture della chiesa
 		// e costruiamo il dropdown
 		
-		$churchstructures = Church_Model::helper_allchurchstructuresdropdown( $structure->structure_type->church_id, $structure->id);		
+		$churchstructures = Model_Church::helper_allchurchstructuresdropdown( $structure->structure_type->church_id, $structure->id);
 		
 		$lnkmenu = $structure -> get_horizontalmenu( 'manage' );
 		
-		$info = Church_Model::get_info($structure -> structure_type -> church_id);					
+		$info = Model_Church::get_info($structure -> structure_type -> church_id);
 		$structureinfo = $structure -> get_info();
 		$rfavailability = $structure -> get_option('rfavailability');		
 		$view -> info = $info;
@@ -119,7 +119,7 @@ class Controller_Religion4 extends Controller_Template
 		
 		if (!$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'celebratemarriage' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -134,7 +134,7 @@ class Controller_Religion4 extends Controller_Template
 		{
 		
 			
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'celebratemarriage' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -149,7 +149,7 @@ class Controller_Religion4 extends Controller_Template
 				$par[2] = ORM::factory('character') -> where ('name', $this -> request -> post('celebratehusband')) -> find();
 				$par[3] = ORM::factory('character') -> where ('name', $this -> request -> post('celebratewife')) -> find();
 				
-				$ca = Character_Action_Model::factory("celebratemarriage");		
+				$ca = Model_CharacterAction::factory("celebratemarriage");
 				$view -> celebratewife = $this -> request -> post('celebratewife');
 				$view -> celebratehusband = $this -> request -> post('celebratehusband');
 				$view -> annulmentchar = '';
@@ -159,7 +159,7 @@ class Controller_Religion4 extends Controller_Template
 				$par[0] = $character;
 				$par[1] = $structure;
 				$par[2] = ORM::factory('character') -> where ('name', $this -> request -> post('annulmentchar')) -> find();				
-				$ca = Character_Action_Model::factory("cancelmarriage");		
+				$ca = Model_CharacterAction::factory("cancelmarriage");
 				$view -> annulmentchar = $this -> request -> post('annulmentchar');
 				$view -> celebratehusband = '';
 				$view -> celebratewife = '';
@@ -202,7 +202,7 @@ class Controller_Religion4 extends Controller_Template
 	{
 		
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		
 		// controllo permessi
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'public', 'donatecoins' ) )
@@ -214,7 +214,7 @@ class Controller_Religion4 extends Controller_Template
 		$par[0] = $character;
 		$par[1] = $structure;
 		
-		$ca = Character_Action_Model::factory("donatecoins");		
+		$ca = Model_CharacterAction::factory("donatecoins");
 		if ( $ca -> do_action( $par,  $message ) )
 		{ 				
 			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");
@@ -258,7 +258,7 @@ class Controller_Religion4 extends Controller_Template
 
 		if ( !$_POST ) 
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			// controllo permessi		
 			
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
@@ -270,9 +270,9 @@ class Controller_Religion4 extends Controller_Template
 		}
 		else
 		{	
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
-			$ca = Character_Action_Model::factory("assignrolerp");		
+			$ca = Model_CharacterAction::factory("assignrolerp");
 			//var_dump( $_POST ); exit;
 			// Characther che nomina
 			$par[0] = $character;

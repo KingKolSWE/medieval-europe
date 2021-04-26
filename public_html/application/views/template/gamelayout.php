@@ -96,7 +96,7 @@
 		$character = Model_Character::get_data( $char_id );
 		$activequest = Model_Character::get_active_quest($char_id);
 
-		$promo = Configuration_Model::get_valid_promo();
+		$promo = Model_Configuration::get_valid_promo();
 
 		if (!empty($promo))
 			$promoenddate = date( $promo -> enddate );
@@ -462,7 +462,7 @@ function forceCompleteAction() {
 						if ( $currentpendingaction != 'NOACTION')
 							$message = kohana::lang('regionview.' . $currentpendingaction['action'] . '_longmessage' );
 						if ( $message != '' )
-							$tooltip_text = My_I18n_Model::translate( $message );
+							$tooltip_text = Model_MyI18n::translate( $message );
 						else
 							$tooltip_text = kohana::lang('page.no_action');
 					?>

@@ -22,7 +22,7 @@ class Controller_Religion3 extends Controller_Template
 		
 		if ( !$_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 
 			// controllo permessi
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message,
@@ -34,12 +34,12 @@ class Controller_Religion3 extends Controller_Template
 		}
 		else
 		{
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			
 			if ( $this -> request -> post('revoke') )
-				$ca = Character_Action_Model::factory("revokerole");		
+				$ca = Model_CharacterAction::factory("revokerole");
 			else
-				$ca = Character_Action_Model::factory("assignrole");		
+				$ca = Model_CharacterAction::factory("assignrole");
 			
 			$childstructure = ORM::factory('structure', $this -> request -> post('childstructure_id'));
 			$par[0] = $character;
@@ -48,13 +48,13 @@ class Controller_Religion3 extends Controller_Template
 			
 			if ( $this -> request -> post('revoke') )
 			{
-				$ca = Character_Action_Model::factory("revokerole");		
+				$ca = Model_CharacterAction::factory("revokerole");
 				$par[3] = $structure;
 				$par[4] = null;
 			}
 			else
 			{
-				$ca = Character_Action_Model::factory("assignrole");		
+				$ca = Model_CharacterAction::factory("assignrole");
 				$par[3] = $childstructure -> region;
 				$par[4] = $structure;
 			}			
@@ -119,7 +119,7 @@ class Controller_Religion3 extends Controller_Template
 
 		if ( !$_POST ) 
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			// controllo permessi		
 			
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
@@ -131,9 +131,9 @@ class Controller_Religion3 extends Controller_Template
 		}
 		else
 		{	
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 
-			$ca = Character_Action_Model::factory("assignrolerp");		
+			$ca = Model_CharacterAction::factory("assignrolerp");
 			//var_dump( $_POST ); exit;
 			// Characther che nomina
 			$par[0] = $character;

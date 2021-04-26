@@ -18,7 +18,7 @@ class Controller_Quests extends Controller_Template
 		}
 		
 		$character = ORM::factory("character", Session::instance()->get('char_id'));
-		$quest = QuestFactory_Model::createQuest($name);		
+		$quest = Model_QuestFactory::createQuest($name);
 		$rc = $quest -> activate( $character, $message );
 		
 		if ( $rc == false )
@@ -45,7 +45,7 @@ class Controller_Quests extends Controller_Template
 			HTTP::redirect( 'boardmessage/index/europecrier');		
 		}
 		
-		$quest = QuestFactory_Model::createQuest('accountconfiguration');		
+		$quest = Model_QuestFactory::createQuest('accountconfiguration');
 		$quest -> activate( $character );
 		
 		HTTP::redirect('quests/tutorialentry');	
@@ -61,7 +61,7 @@ class Controller_Quests extends Controller_Template
 		}
 		
 		$par = array();
-		GameEvent_Model::process_event( $character, 'endtutorial', $par );
+		Model_GameEvent::process_event( $character, 'endtutorial', $par );
 		HTTP::redirect('region/view');
 	}	
 	
@@ -164,7 +164,7 @@ class Controller_Quests extends Controller_Template
 		$character = ORM::factory("character", Session::instance()->get('char_id'));
 		$cfgquest = ORM::factory('cfgquest') ->	where ( 'name', $questname ) -> find();
 		
-		$info = CfgQuest_Model::get_info( $questname, $character->id );		
+		$info = Model_Cfgquest::get_info( $questname, $character->id );
 		
 		if ( $info['status'] != 'active' )
 		{

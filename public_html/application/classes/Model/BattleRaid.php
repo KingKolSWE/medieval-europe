@@ -180,7 +180,7 @@ class Model_BattleRaidBattleType extends Model_BattleType
 				
 				//var_dump($raidablestructure);exit;
 				
-				$structure = StructureFactory_Model::create( null, $raidablestructure -> id );				
+				$structure = Model_StructureFactory::create( null, $raidablestructure -> id );
 				
 				kohana::log( 'info', '===== Structure: ' . $structure -> structure_type -> type . 	' owner: ' . $structure -> character -> name . '=====' ); 
 						
@@ -225,7 +225,7 @@ class Model_BattleRaidBattleType extends Model_BattleType
 								$targetstructure = $king -> region -> get_controllingroyalpalace();
 							else
 							{
-								$info = Church_Model::get_info($king -> church_id);								
+								$info = Model_Church::get_info($king -> church_id);
 								$headquarter = current($info['structures']['religion_1']);
 								reset($info['structures']['religion_1']);
 								$targetstructure = ORM::factory('structure', $headquarter -> id );
@@ -234,7 +234,7 @@ class Model_BattleRaidBattleType extends Model_BattleType
 							$i -> removeitem( 'structure', $structure->id, $raidedquantity );
 							$i -> additem( 'structure', $targetstructure -> id, $raidedquantity );	
 							
-							Character_Event_Model::addrecord(			
+							Model_CharacterEvent::addrecord(
 								null,
 								'announcement', 
 								'__events.raidedreliq'.';' .
@@ -266,7 +266,7 @@ class Model_BattleRaidBattleType extends Model_BattleType
 						if ( !is_null( $structure -> character_id ) )
 						{
 							
-							Character_Event_Model::addrecord( 
+							Model_CharacterEvent::addrecord(
 							$structure->character_id,
 							'normal', 
 							'__events.structureraideditems'.';__' . $structure->get_structurearticle() . ';__' . $structure->structure_type->name . ';' . $i -> quantity  . ';' .
@@ -279,7 +279,7 @@ class Model_BattleRaidBattleType extends Model_BattleType
 						if ( $structure -> structure_type -> type == 'market' )
 						{
 							
-							Character_Event_Model::addrecord( 
+							Model_CharacterEvent::addrecord(
 							$i -> seller_id,
 							'normal', 
 							'__events.raidedmarketitem' .
@@ -291,7 +291,7 @@ class Model_BattleRaidBattleType extends Model_BattleType
 						
 						// evento struttura battlefield
 							
-						Structure_Event_Model::newadd( 
+						Model_StructureEvent::newadd(
 							$this -> battlefield -> id, 
 							'__events.itemraided;' .  $raidedquantity . 
 							';__' . $i -> cfgitem -> name .
@@ -333,10 +333,10 @@ class Model_BattleRaidBattleType extends Model_BattleType
 				
 				$totaldestroyedstructures ++;
 								
-				$structure = StructureFactory_Model::create( null, $destroyablestructure -> id );
+				$structure = Model_StructureFactory::create( null, $destroyablestructure -> id );
 
 			 
-				Character_Event_Model::addrecord( 
+				Model_CharacterEvent::addrecord(
 					$structure -> character_id,
 					'normal', 
 					'__events.structuredestroyed'.';__' . $structure->get_structurearticle() . ';__' . $structure->structure_type->name, 'evidence' );
@@ -414,7 +414,7 @@ class Model_BattleRaidBattleType extends Model_BattleType
 																
 							// evento struttura battlefield
 							
-							$e = new Structure_Event_Model();																
+							$e = new Model_StructureEvent();
 							$e -> add_model(
 								$this -> battlefield -> id, 									
 								'__events.itemmugged;' . $raidedquantity . 
@@ -423,7 +423,7 @@ class Model_BattleRaidBattleType extends Model_BattleType
 						
 							// evento al razziato
 							
-							Character_Event_Model::addrecord( 
+							Model_CharacterEvent::addrecord(
 							$c -> id,
 							'normal', 
 							'__events.charraided' . 
@@ -453,7 +453,7 @@ class Model_BattleRaidBattleType extends Model_BattleType
 			// crier's event
 			/////////////////////
 				
-			Character_Event_Model::addrecord(			
+			Model_CharacterEvent::addrecord(
 			null,
 			'announcement', 
 			'__events.battleendedwinner'.';' .
@@ -469,7 +469,7 @@ class Model_BattleRaidBattleType extends Model_BattleType
 		if  ($winners == 'defenders' )
 		{
 		
-			Character_Event_Model::addrecord( 
+			Model_CharacterEvent::addrecord(
 			null,
 			'announcement', 
 			'__events.battleendedwinner'.';' . 
@@ -483,7 +483,7 @@ class Model_BattleRaidBattleType extends Model_BattleType
 		
 		if ( $winners =='none' )
 		{
-			Character_Event_Model::addrecord( 
+			Model_CharacterEvent::addrecord(
 			null,
 			'announcement', 
 			'__events.battleendedtie'.';' . 

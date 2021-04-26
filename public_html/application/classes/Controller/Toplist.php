@@ -142,7 +142,7 @@ class Controller_Toplist extends Controller_Template
 			$par[1] = $toplist_id;
 			$par[2] = $this -> input -> ip_address();
 			$par[3] = null;
-			$ca = Character_Action_Model::factory("votegame");		
+			$ca = Model_CharacterAction::factory("votegame");
 			
 			if ( $ca -> do_action( $par,  $message ) )
 				;		
@@ -195,7 +195,7 @@ class Controller_Toplist extends Controller_Template
 		  if (in_array($at_refc, $whitelist)) 
 		  { 
 			$result = true; 
-			$t = new Toplistvote_Model;
+			$t = new Model_Toplistvote;
 			$rewardgiven = $t -> reward_char( $userId ); 
 		  } 
 		} 
@@ -251,7 +251,7 @@ class Controller_Toplist extends Controller_Template
 		}
 		
 	
-		$t = new Toplistvote_Model;
+		$t = new Model_Toplistvote;
 		$rewardgiven = $t -> reward_char( $key ); 
 						
 		if ( $rewardgiven )

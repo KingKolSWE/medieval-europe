@@ -47,7 +47,7 @@ class Controller_Shop extends Controller_Template
 
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');		
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id);
+		$structure = Model_StructureFactory::create( null, $structure_id);
 		
 		if ( ! $structure->allowedaccess( $character, $structure -> getParentType() , $message, 'private', 'manage' ) )
 		{
@@ -87,7 +87,7 @@ class Controller_Shop extends Controller_Template
 		
 		if ( ! $_POST ) 
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message ) )
 			{
@@ -99,12 +99,12 @@ class Controller_Shop extends Controller_Template
 		else
 		{
 			
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( $this -> request -> post('upgradeinventory' ) )
 			{
 				
 				$message = "";			
-				$ca = Character_Action_Model::factory("upgradestructureinventory");				
+				$ca = Model_CharacterAction::factory("upgradestructureinventory");
 				$par[0] = $structure;
 				$par[1] = $character; 
 		
@@ -123,7 +123,7 @@ class Controller_Shop extends Controller_Template
 			if ( $this -> request -> post('upgradelevel' ) )
 			{
 				$message = "";			
-				$ca = Character_Action_Model::factory("upgradestructurelevel");								
+				$ca = Model_CharacterAction::factory("upgradestructurelevel");
 				$par[0] = $structure;
 				$par[1] = $character; 
 				$par[2] = $this -> request -> post('hours'); 
@@ -144,7 +144,7 @@ class Controller_Shop extends Controller_Template
 	
 	}	
 	
-	$levelupgradeworkerhours = Structure_Model::get_stat_d( $structure -> id, 'levelupgradeworkerhours' );
+	$levelupgradeworkerhours = Model_Structure::get_stat_d( $structure -> id, 'levelupgradeworkerhours' );
 	$view -> levelupgradeworkerhours = is_null ( $levelupgradeworkerhours ) ? 0 : $levelupgradeworkerhours -> value;
 	$lnkmenu = $structure -> get_horizontalmenu( 'upgradeinventory' );
 	$subm -> submenu = $lnkmenu;

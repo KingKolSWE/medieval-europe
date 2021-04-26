@@ -1240,7 +1240,7 @@ class Controller_User extends Controller_Template
 				
 				$user -> save();			
 				$par[0] = $user -> nationality;
-				GameEvent_Model::process_event( $char, 'configurenationality', $par );
+				Model_GameEvent::process_event( $char, 'configurenationality', $par );
 			
 			}
 			

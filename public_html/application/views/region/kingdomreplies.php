@@ -41,7 +41,7 @@ foreach ( $rows as $row )
 	<tr>
 		<td colspan='2' class='right'>
 		<?php 
-			if (Kingdom_Forum_Topic_Model::haswriterights($char, $currenttopic -> kingdom_forum_board -> kingdom) )
+			if (Model_KingdomForumTopic::haswriterights($char, $currenttopic -> kingdom_forum_board -> kingdom) )
 			{
 				echo 
 				html::anchor('/region/editkingdomtopic/' . $row -> id, 

@@ -25,7 +25,7 @@ class Controller_Breeding extends Controller_Template
 			// check if the region has such resource
 						
 			$structure = $currentregion -> get_structure( $structuretype, 'type' );
-			$structureinstance = StructureFactory_Model::create( $structuretype );	
+			$structureinstance = Model_StructureFactory::create( $structuretype );
 			$price = $structureinstance -> getPrice( $character, $currentregion );
 			
 			if ( is_null( $structure ) )
@@ -38,7 +38,7 @@ class Controller_Breeding extends Controller_Template
 		else
 		{			
 			
-			$ca = Character_Action_Model::factory('buyanimals');				
+			$ca = Model_CharacterAction::factory('buyanimals');
 			
 			$par[0] = $character;
 			$par[1] = $this -> request -> post('type'); 
@@ -75,7 +75,7 @@ class Controller_Breeding extends Controller_Template
 		$message = "";
 		
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'gather' ) )
 		{
@@ -84,7 +84,7 @@ class Controller_Breeding extends Controller_Template
 		}
 		
 		// Istanzio l'azione "gather"		
-		$ca = Character_Action_Model::factory("gather");				
+		$ca = Model_CharacterAction::factory("gather");
 
 		$par[0] = $structure;
 		$par[1] = $character;
@@ -108,7 +108,7 @@ class Controller_Breeding extends Controller_Template
 	{
 	
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$message = "";
 	
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'butcher' ) )
@@ -118,7 +118,7 @@ class Controller_Breeding extends Controller_Template
 		}
 		
 		// Istanzio l'azione "butcher"		
-		$ca = Character_Action_Model::factory("butcher");		
+		$ca = Model_CharacterAction::factory("butcher");
 		
 		$par[0] = $structure;
 		$par[1] = $character;
@@ -148,7 +148,7 @@ class Controller_Breeding extends Controller_Template
 	{
 		
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
-		$structure = StructureFactory_Model::create( null, $structure_id );		
+		$structure = Model_StructureFactory::create( null, $structure_id );
 		$message = "";
 		
 		if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 'private', 'feed' ) )
@@ -158,7 +158,7 @@ class Controller_Breeding extends Controller_Template
 		}
 		
 		// Istanzio l'azione "feed"		
-		$ca = Character_Action_Model::factory("feed");		
+		$ca = Model_CharacterAction::factory("feed");
 		
 		$par[0] = $structure;
 		$par[1] = $character;

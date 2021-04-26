@@ -35,7 +35,7 @@ foreach ( $report as $key => $value )
 		{
 			
 			$class = ( $i % 2 == 0 ) ? 'alternaterow_1' : 'alternaterow_2';
-			$status = Structure_Model::get_descriptiveresourcestatus( $value3 );			
+			$status = Model_Structure::get_descriptiveresourcestatus( $value3 );
 			
 			echo "<tr class='$class'>
 				<td class='center'>".kohana::lang($key)."</td><td class='center'>" . kohana::lang($key2) . "</td>

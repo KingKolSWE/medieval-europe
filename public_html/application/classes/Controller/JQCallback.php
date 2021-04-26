@@ -17,7 +17,7 @@ class Controller_JQCallback extends Controller_Template
 				$targets = $this -> request -> post('to');
 				foreach ($targets as $key => $value)
 				{
-					$f = new Facebook_Inviterequest_Model();
+					$f = new Model_FacebookInviterequest();
 					$f -> request_id = $this -> request -> post('request');
 					$f -> user_id = $char -> user_id;
 					$f -> friend_id = $value;
@@ -47,7 +47,7 @@ class Controller_JQCallback extends Controller_Template
 				$newstatus = 'disabled';
 			
 			Database::instance()->query("update regions set status='{$newstatus}' where id = {$this -> request -> post('region_id')}");			
-			MY_Cache_Model::delete('-cfg-regions-byid');
+			Model_MyCache::delete('-cfg-regions-byid');
 			echo $newstatus;
 		}
 	}
@@ -431,7 +431,7 @@ class Controller_JQCallback extends Controller_Template
 				{
 					foreach ($diseases as $disease)
 					{
-						$dinstance = DiseaseFactory_Model::createDisease( $disease -> param1 );						
+						$dinstance = Model_DiseaseFactory::createDisease( $disease -> param1 );
 						if ( $dinstance -> get_iscurable() == true )
 						// Cura malattia		
 						$html .= "<br/>" . html::anchor
@@ -487,7 +487,7 @@ class Controller_JQCallback extends Controller_Template
 		
 		$structureid = $this -> request -> post( 'structureid' ); 		
 		
-		$structure = StructureFactory_Model::create( null, $structureid );
+		$structure = Model_StructureFactory::create( null, $structureid );
 		
 		//KO7::$log->add(KO7_Log::DEBUG, kohana::debug($structure));
 		
@@ -519,7 +519,7 @@ class Controller_JQCallback extends Controller_Template
 		if ( $structure -> getSuperType() == 'terrain' )
 		{	
 			
-			$a = Character_Action_Model::get_pending_action();
+			$a = Model_CharacterAction::get_pending_action();
 			$item_seeded = ORM::factory('cfgitem', $structure -> attribute2 );					
 			
 			switch ( $structure -> attribute1 ) 
@@ -558,7 +558,7 @@ class Controller_JQCallback extends Controller_Template
 			$html .= $structure -> build_special_links( $structure, $workerbonus );
 		else
 		{									
-			$cannotbemanaged = Structure_Grant_Model::get_chargrant( $structure, $char, 'none' );
+			$cannotbemanaged = Model_StructureGrant::get_chargrant( $structure, $char, 'none' );
 			if ( 
 				$cannotbemanaged == false 
 				and 
@@ -632,7 +632,7 @@ class Controller_JQCallback extends Controller_Template
 	{
 		$this -> auto_render = false;				
 				
-		$diplomacyrelations = Diplomacy_Relation_Model::get_diplomacyrelations( $this -> request -> post('kingdom_id') ); 
+		$diplomacyrelations = Model_DiplomacyRelation::get_diplomacyrelations( $this -> request -> post('kingdom_id') );
 		
 		$kingdoms = Database::instance() -> query(
 			'select k.id, r.name, coords 
@@ -673,7 +673,7 @@ class Controller_JQCallback extends Controller_Template
 	{
 		
 		$this -> auto_render = false;				
-		$pb = PremiumBonus_Factory_Model::create( $this -> request -> post('name') );		
+		$pb = Model_PremiumBonusFactory::create( $this -> request -> post('name') );
 		$info = $pb -> get_info();
 		$countdown = Model_Utility::secs2hmstostring($info['enddate']-time());
 		$data = array(

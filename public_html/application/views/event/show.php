@@ -29,7 +29,7 @@ else
 		echo "<tr class='$class'>";	
 		//echo '<td>'. form::checkbox('events['.$e->id.']', true, false) . '</td>';			
 		echo "<td>".Model_Utility::format_datetime($e->timestamp)."</td>";
-		echo "<td class='" . $e->eventclass . "'>".My_I18n_Model::translate( $e->description ) ."</td>";
+		echo "<td class='" . $e->eventclass . "'>".Model_MyI18n::translate( $e->description ) ."</td>";
 		echo "</tr>";
 		$r++;
 	}

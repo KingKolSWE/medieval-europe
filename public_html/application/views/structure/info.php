@@ -90,7 +90,7 @@ else
 <?
 
 	kohana::lang('kingdomprojects.projecthistory', 		 
-		My_I18n_Model::translate(   $info['kingdomproject']['project'] -> startedby ),
+		Model_MyI18n::translate(   $info['kingdomproject']['project'] -> startedby ),
 		Model_Utility::format_date( $info['kingdomproject']['project'] -> start ) );
 
 	$elapsed = $info['kingdomproject']['project'] -> end - $info['kingdomproject']['project'] -> start;	
@@ -143,7 +143,7 @@ if ( $info['resources']['structuresize'] != '' )
 if ( isset( $info['resources']['availability'] ) )
 	foreach (  $info['resources']['availability'] as $key => $value )
 	{
-	$status = Structure_Model::get_descriptiveresourcestatus ( $value );
+	$status = Model_Structure::get_descriptiveresourcestatus ( $value );
 	echo 	
 		kohana::lang('items.' . $key . '_name' ) . ' ' . 
 			kohana::lang('global.availability') . ": <span class='value'>" . kohana::lang( $status['desc'] ) . '</span><br/>';		

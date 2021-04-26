@@ -18,7 +18,7 @@ class Model_Achievement
 	{
 		
 		$character = ORM::factory( 'character', $character_id );
-		$cfgachievements = Configuration_Model::getcfg_achievements();
+		$cfgachievements = Model_Configuration::getcfg_achievements();
 		$position = 1;
 		
 		kohana::log('info', '-> Computing title for stats: [' . $name . '], char: [' . $character_id . '] value: [' . $value . '], param1: [' . $param1 . ']' );		
@@ -179,7 +179,7 @@ class Model_Achievement
 	static function add( $character, $name, $stars, $position )
 	{
 		
-		$cfgachievements = Configuration_Model::getcfg_achievements();
+		$cfgachievements = Model_Configuration::getcfg_achievements();
 		
 		kohana::log('info', "-> Adding title {$name}, Stars: {$stars} for Char: {$character->name}...");
 		kohana::log('info', '-> Checking for entry with name: ' .  $name  );
@@ -218,7 +218,7 @@ class Model_Achievement
 			where character_id = {$character -> id}
 			and   name = '{$name}'");
 		
-			$character_title = new Character_Title_Model();
+			$character_title = new Model_CharacterTitle();
 			$character_title -> character_id = $character -> id ;
 			$character_title -> cfgachievement_id = $cfgachievements[$name][$stars] -> id;
 			$character_title -> name = $name;
@@ -250,7 +250,7 @@ class Model_Achievement
 				
 				// event
 			
-				Character_Event_Model::addrecord( 
+				Model_CharacterEvent::addrecord(
 					$character -> id, 
 					'normal',  
 					'__events.gottitle' .
@@ -265,7 +265,7 @@ class Model_Achievement
 
 			}
 			else
-				Character_Event_Model::addrecord( 
+				Model_CharacterEvent::addrecord(
 					$character -> id, 
 					'normal',  
 					'__events.gottitleandpoints' .
@@ -276,8 +276,8 @@ class Model_Achievement
 		
 		}		
 		
-		My_Cache_Model::delete('-charactertitles');	
-		My_Cache_Model::delete('-achievement_' . $character -> id . '_' . $name); 	
+		Model_MyCache::delete('-charactertitles');
+		Model_MyCache::delete('-achievement_' . $character -> id . '_' . $name);
 	
 	}
 	
@@ -293,7 +293,7 @@ class Model_Achievement
 	public function remove( $character_id, $tag, $mode = 'single' )
 	{		
 			
-		$cfgachievements = Configuration_Model::getcfg_achievements();
+		$cfgachievements = Model_Configuration::getcfg_achievements();
 		
 		// find current achievement of char
 		
@@ -351,7 +351,7 @@ class Model_Achievement
 			
 				// event
 				
-				Character_Event_Model::addrecord( 
+				Model_CharacterEvent::addrecord(
 					$character_id,
 					'normal', 
 					'__events.lostachievement' . 

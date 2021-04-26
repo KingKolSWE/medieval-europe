@@ -6,7 +6,7 @@ class Controller_CaveWhiteSand extends Controller_Template
 	function shovel( $structure_id, $qta = 1 )
 	{
 		// Carico la struttura "Cava di sabbia bianca"
-		$structure = StructureFactory_Model::create( null, $structure_id );
+		$structure = Model_StructureFactory::create( null, $structure_id );
 
 		// Controllo che la struttura sia effettivamente una cava di sabbia bianca
 		if ($structure->structure_type->type <> 'cave_white_sand' ) 
@@ -27,7 +27,7 @@ class Controller_CaveWhiteSand extends Controller_Template
 		// inizializzo l'azione gather
 		$message = "";
 		$char = ORM::factory( "character" )->find( Session::instance()->get("char_id") );
-		$ca_dig = Character_Action_Model::factory("shovel");
+		$ca_dig = Model_CharacterAction::factory("shovel");
 		if ( $ca_dig->do_action( array( $structure, $char, $qta ),  $message ) )
 			Session::instance()->set('user_message', "<div class=\"info_msg\">". $message . "</div>");		
 		else		

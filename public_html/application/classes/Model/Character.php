@@ -91,7 +91,7 @@ class Model_Character extends ORM
 		if ( $reason == '' )
 			$reason = 'notspecified';
 		Model_Character::modify_stat_d( $this -> id, 'honorpoints', $delta, null, null, false );
-		Character_Event_Model::addrecord(
+		Model_CharacterEvent::addrecord(
 			$this -> id,
 			'normal',
 			'__events.honorpointsupdated;' . 
@@ -111,14 +111,14 @@ class Model_Character extends ORM
 	public function modify_doubloons( $delta, $category, $reason = 'Not Specified' ) 
 	{
 		
-		Character_Event_Model::addrecord(
+		Model_CharacterEvent::addrecord(
 			$this -> id,
 			'normal',
 			'__events.doubloonupdated;' . 
 			$delta . ';__' . 
 			'charactions.reason_' . $category );
 		
-		$doubloons = Item_Model::factory( null, 'doubloon' );						
+		$doubloons = Model_Item::factory( null, 'doubloon' );
 		
 		if ( $delta > 0 )
 		{
@@ -131,7 +131,7 @@ class Model_Character extends ORM
 			$this -> doubloons += $delta;
 		}
 		
-		Trace_Sink_Model::add_model( 'doubloon', $this -> id, $delta, $category) ;
+		Model_TraceSink::add_model( 'doubloon', $this -> id, $delta, $category) ;
 	
 	}
 	
@@ -145,7 +145,7 @@ class Model_Character extends ORM
 	{
 		
 		$this -> position_id = $location_id ;			
-		My_Cache_Model::delete( '-charinfo_' . $this -> id . '_currentposition');		
+		Model_MyCache::delete( '-charinfo_' . $this -> id . '_currentposition');
 	}
 	
 	/** 
@@ -164,7 +164,7 @@ class Model_Character extends ORM
 		
 		kohana::log( 'debug', '-> Modifying coins for Char: ' . $this -> name . ', reason: ' . $reason . ', delta: ' . $delta );
 		
-		Trace_Sink_Model::add_model( 'silvercoin', $this -> id, $delta, $reason );
+		Model_TraceSink::add_model( 'silvercoin', $this -> id, $delta, $reason );
 			
 		$delta *= 100;
 		
@@ -181,8 +181,8 @@ class Model_Character extends ORM
 		$deltasilvercoins = intval($delta/100);
 		$deltacoppercoins = $delta - ($deltasilvercoins * 100);
 				
-		$silvercoin_item = Item_Model::factory( null, 'silvercoin' );
-		$coppercoin_item = Item_Model::factory( null, 'coppercoin' );			
+		$silvercoin_item = Model_Item::factory( null, 'silvercoin' );
+		$coppercoin_item = Model_Item::factory( null, 'coppercoin' );
 
 		if ( $delta > 0 )
 		{
@@ -240,8 +240,8 @@ class Model_Character extends ORM
 		
 		$deltasilvercoins = intval( $amount / 100 );
 		$deltacoppercoins = $amount - ($deltasilvercoins * 100 );
-		$silvercoin_item = Item_Model::factory( null, 'silvercoin' );
-		$coppercoin_item = Item_Model::factory( null, 'coppercoin' );			
+		$silvercoin_item = Model_Item::factory( null, 'silvercoin' );
+		$coppercoin_item = Model_Item::factory( null, 'coppercoin' );
 		$silvercoin_item -> additem( "character", $this -> id, abs($deltasilvercoins) );		
 		$coppercoin_item -> removeitem( "character", $this -> id, abs($deltasilvercoins*100) );				
 	}
@@ -347,7 +347,7 @@ class Model_Character extends ORM
 		{			
 			
 			$item -> totalweight = $item -> weight * $item -> quantity;
-			$item -> actions = Item_Model::get_actions( $item );
+			$item -> actions = Model_Item::get_actions( $item );
 			$items['items'][$item->parentcategory][] = $item;	
 			$items['items']['all'][] = $item;
 			$items['totalitemsweight'] += $item -> totalweight;			
@@ -370,7 +370,7 @@ class Model_Character extends ORM
 		$equippeditems = Model_Character::get_equipment( $character_id );
 		foreach ((array) $equippeditems as $equippeditem)
 		{			
-			$ca_undress = Character_Action_Model::factory("undress");		
+			$ca_undress = Model_CharacterAction::factory("undress");
 			$par[0] = $equippeditem->id;
 			$par[1] = $character_id;		
 			$rc = $ca_undress -> do_action( $par,  $message);
@@ -516,7 +516,7 @@ class Model_Character extends ORM
 					if ( $item -> loaded )
 						$item -> destroy();
 						
-					Character_Event_Model::addrecord( 
+					Model_CharacterEvent::addrecord(
 					$this -> id,
 					'normal', 
 					'__events.procartbreaks',
@@ -678,7 +678,7 @@ class Model_Character extends ORM
 		// Verifico che non ci siano dei malus contro la chiesa del char
 		$char_church_id = $this->church_id;
 		// Conto quanti malus ci sono verso la chiesa del char
-		$num_malus = Church_Model::get_num_malus_against_my_church($char_church_id, 'curseinfidels');
+		$num_malus = Model_Church::get_num_malus_against_my_church($char_church_id, 'curseinfidels');
 		// Calcolo l'energia residua dopo applicazione di tutti i malus trovati
 		$malus_to_apply = (1 - $num_malus * 0.25);
 		$info['restfactor'] = ($info['restfactor'] * $malus_to_apply);
@@ -762,7 +762,7 @@ class Model_Character extends ORM
 		
 		kohana::log('debug', "Current Energy After delta: {$this -> energy}");
 		
-		Character_Event_Model::addrecord ( 
+		Model_CharacterEvent::addrecord (
 			$this -> id, 
 			'normal', 
 			'__events.energymodified' . 
@@ -808,7 +808,7 @@ class Model_Character extends ORM
 	{
 				
 		$cachetag = '-charinfo_' . $char_id . '_' . $tag; 				
-		$quantity = My_Cache_Model::get( $cachetag );
+		$quantity = Model_MyCache::get( $cachetag );
 				
 		if ( is_null( $quantity ) )		
 		{
@@ -825,7 +825,7 @@ class Model_Character extends ORM
 			
 			$quantity = $res[0] -> q;
 			
-			My_Cache_Model::set( $cachetag, $quantity );
+			Model_MyCache::set( $cachetag, $quantity );
 			
 		}
 		
@@ -848,7 +848,7 @@ class Model_Character extends ORM
 		//kohana::log('debug', "-> Getting $cachetag from CACHE.");		
 		
 		$quantity = null;		
-		$quantity = My_Cache_Model::get( $cachetag );		
+		$quantity = Model_MyCache::get( $cachetag );
 		
 		if ( is_null( $quantity ) )		
 		{
@@ -860,7 +860,7 @@ class Model_Character extends ORM
 			and   ci.tag = '$tag'";
 			$res = $db -> query( $sql ) -> as_array();		
 			$quantity = $res[0] -> quantity;
-			My_Cache_Model::set( $cachetag, $quantity );
+			Model_MyCache::set( $cachetag, $quantity );
 		}							
 		
 		return $quantity;
@@ -938,7 +938,7 @@ class Model_Character extends ORM
 						->where (
 							array(
 								'current' => true,
-								'region_id' => Kingdom_Model::get_capitalregion( $this -> region -> kingdom_id )))
+								'region_id' => Model_Kingdom::get_capitalregion( $this -> region -> kingdom_id )))
 						->in( 'tag'	, array( 'king') )->find();								
 					break;
 				case 'sheriff':
@@ -1063,7 +1063,7 @@ class Model_Character extends ORM
 		// permanent event
 		
 		$region = ORM::factory('region', $this -> position_id );		
-		Character_Permanentevent_Model::add_model(
+		Model_CharacterPermanentevent::add_model(
 					$this -> id, 
 					'__permanentevents.death' . ';' . 
 					'__' . $region -> name . ';' .
@@ -1074,7 +1074,7 @@ class Model_Character extends ORM
 		////////////////////////////////////////////////
 		
 		$silvercoins = Model_Character::get_item_quantity_d( $this -> id, 'silvercoin' );
-		Trace_Sink_Model::add_model( 'silvercoin', $this -> id, -( $silvercoins ), 'chardeath');
+		Model_TraceSink::add_model( 'silvercoin', $this -> id, -( $silvercoins ), 'chardeath');
 		
 		////////////////////////////////////////////////
 		// Cancella payments
@@ -1149,7 +1149,7 @@ class Model_Character extends ORM
 		if ( !is_null( $role) )
 		{					
 			
-			Character_Event_Model::addrecord( 
+			Model_CharacterEvent::addrecord(
 				null, 
 				'announcement', 
 				'__events.charinroledied_announcement'.
@@ -1203,7 +1203,7 @@ class Model_Character extends ORM
 
 		foreach ( $res as $row )
 		{
-			$structure = StructureFactory_Model::create( null, $row -> id );
+			$structure = Model_StructureFactory::create( null, $row -> id );
 			if ( $structure -> loaded )
 				$structure -> destroy();
 		}
@@ -1270,7 +1270,7 @@ class Model_Character extends ORM
 		////////////////////////////////////////////////
 		
 		if ( kohana::config('medeur.deleteforumaccount') )
-			ForumBridge_Model::delete_account( $this, 'forum' ); 
+			Model_ForumBridge::delete_account( $this, 'forum' );
 		
 		////////////////////////////////////////////////
 		// manda una email all' utente		
@@ -1450,8 +1450,8 @@ class Model_Character extends ORM
 	function invalidate_char_cache( $char_id )
 	{
 		kohana::log( 'debug', 'Invalidatingng char cache of char: ' . $char_id );
-		My_Cache_Model::delete( '-charinfo_' . $char_id . '_charobj' );
-		My_Cache_Model::delete( '-charinfo_' . $char_id . '_chararr' );	
+		Model_MyCache::delete( '-charinfo_' . $char_id . '_charobj' );
+		Model_MyCache::delete( '-charinfo_' . $char_id . '_chararr' );
 	}
 	
 	/** 
@@ -1748,7 +1748,7 @@ class Model_Character extends ORM
 	
 		$cachetag = '-charinfo_' . $char_id . '_premiumbonuses' ; 
 		$bonuses = null;
-		$bonuses = My_Cache_Model::get( $cachetag ); 			
+		$bonuses = Model_MyCache::get( $cachetag );
 		
 		if ( is_null( $bonuses ) )
 		{
@@ -1794,7 +1794,7 @@ class Model_Character extends ORM
 				$bonuses[$bonus -> name][] = $a;
 			}				
 			
-			My_Cache_Model::set( $cachetag, $bonuses ); 
+			Model_MyCache::set( $cachetag, $bonuses );
 		
 		}
 		
@@ -1892,7 +1892,7 @@ class Model_Character extends ORM
 		
 		if (true)
 		{
-			$image = Wardrobe_Model::get_correctimage( $this, 'background', $mode, 'background'	);
+			$image = Model_Wardrobe::get_correctimage( $this, 'background', $mode, 'background'	);
 			echo html::image ( array( 'src' => $image), array('class' => 'item_background') );
 		}
 		
@@ -1900,7 +1900,7 @@ class Model_Character extends ORM
 		
 		if (true)
 		{
-			$image = Wardrobe_Model::get_correctimage( $this, 'profile', $mode, 'profile'	);
+			$image = Model_Wardrobe::get_correctimage( $this, 'profile', $mode, 'profile'	);
 			echo html::image ( array( 'src' => $image), array('class' => 'item_profile') );
 		}
 		
@@ -1909,7 +1909,7 @@ class Model_Character extends ORM
 		if (true)
 		{
 			$hidehairsunderclothes = Model_Character::get_stat_d( $this -> id, 'hidehairsunderclothes');
-			$image = Wardrobe_Model::get_correctimage( $this, 'hair', $mode, 'hair'	);
+			$image = Model_Wardrobe::get_correctimage( $this, 'hair', $mode, 'hair'	);
 			if ( $hidehairsunderclothes -> loaded and $hidehairsunderclothes -> value == true )
 				echo html::image ( array( 'src' => $image), array('class' => 'item_hair_hidden') );
 			else
@@ -1920,7 +1920,7 @@ class Model_Character extends ORM
 		
 		if (true)
 		{
-			$image = Wardrobe_Model::get_correctimage( $this, 'face', $mode, 'face'	);
+			$image = Model_Wardrobe::get_correctimage( $this, 'face', $mode, 'face'	);
 			echo html::image ( array( 'src' => $image), array('class' => 'item_face') );
 		}
 		
@@ -1928,7 +1928,7 @@ class Model_Character extends ORM
 				
 		if (isset($equippeditems['head']))
 		{
-			$image = Wardrobe_Model::get_correctimage( $this, $equippeditems['head'], $mode);
+			$image = Model_Wardrobe::get_correctimage( $this, $equippeditems['head'], $mode);
 			echo html::image ( array( 'src' => $image), array('class' => 'item_head') );
 		}
 		
@@ -1936,14 +1936,14 @@ class Model_Character extends ORM
 		
 		if (isset($equippeditems['neck']))
 		{
-			$image = Wardrobe_Model::get_correctimage( $this, $equippeditems['neck'], $mode);
+			$image = Model_Wardrobe::get_correctimage( $this, $equippeditems['neck'], $mode);
 			echo html::image ( array( 'src' => $image), array('class' => 'item_neck') );
 		}	
 		
 		// BODY
 		if (isset($equippeditems['body']))
 		{
-			$image = Wardrobe_Model::get_correctimage( $this, $equippeditems['body'], $mode);
+			$image = Model_Wardrobe::get_correctimage( $this, $equippeditems['body'], $mode);
 			echo html::image ( array( 'src' => $image), array('class' => 'item_body') );
 		}
 		else
@@ -1951,56 +1951,56 @@ class Model_Character extends ORM
 			
 			if (isset($equippeditems['torso']))
 			{
-				$image = Wardrobe_Model::get_correctimage( $this, $equippeditems['torso'], $mode);
+				$image = Model_Wardrobe::get_correctimage( $this, $equippeditems['torso'], $mode);
 				echo html::image ( array( 'src' => $image), array('class' => 'item_torso') );
 			}
 			
 			if (isset($equippeditems['legs']))
 			{
-				$image = Wardrobe_Model::get_correctimage( $this, $equippeditems['legs'], $mode);
+				$image = Model_Wardrobe::get_correctimage( $this, $equippeditems['legs'], $mode);
 				echo html::image ( array( 'src' => $image), array('class' => 'item_legs') );
 			}
 		}
 		
 		if (isset($equippeditems['torso']))
 		{
-			$image = Wardrobe_Model::get_correctimage( $this, $equippeditems['torso'], $mode);
+			$image = Model_Wardrobe::get_correctimage( $this, $equippeditems['torso'], $mode);
 			echo html::image ( array( 'src' => $image), array('class' => 'item_armor') );
 		}
 
 		if (isset($equippeditems['feet']))
 		{
-			$image = Wardrobe_Model::get_correctimage( $this, $equippeditems['feet'], $mode);
+			$image = Model_Wardrobe::get_correctimage( $this, $equippeditems['feet'], $mode);
 			echo html::image ( array( 'src' => $image), array('class' => 'item_feet') );
 		}
 		
 		if (isset($equippeditems['shoulder']))
 		{
-			$image = Wardrobe_Model::get_correctimage( $this, $equippeditems['shoulder'], $mode);
+			$image = Model_Wardrobe::get_correctimage( $this, $equippeditems['shoulder'], $mode);
 			echo html::image ( array( 'src' => $image), array('class' => 'item_shoulder') );
 		}		
 		
 		if (isset($equippeditems['left_wrist']))
 		{
-			$image = Wardrobe_Model::get_correctimage( $this, $equippeditems['left_wrist'], $mode);
+			$image = Model_Wardrobe::get_correctimage( $this, $equippeditems['left_wrist'], $mode);
 			echo html::image ( array( 'src' => $image), array('class' => 'item_left_wrist') );
 		}
 		
 		if (isset($equippeditems['left_hand']))
 		{
-			$image = Wardrobe_Model::get_correctimage( $this, $equippeditems['left_hand'], $mode);
+			$image = Model_Wardrobe::get_correctimage( $this, $equippeditems['left_hand'], $mode);
 			echo html::image ( array( 'src' => $image), array('class' => 'item_left_hand') );
 		}
 		
 		if (isset($equippeditems['right_wrist']))
 		{
-			$image = Wardrobe_Model::get_correctimage( $this, $equippeditems['right_wrist'], $mode);
+			$image = Model_Wardrobe::get_correctimage( $this, $equippeditems['right_wrist'], $mode);
 			echo html::image ( array( 'src' => $image), array('class' => 'item_right_wrist') );
 		}
 		
 		if (isset($equippeditems['right_hand']))
 		{
-			$image = Wardrobe_Model::get_correctimage( $this, $equippeditems['right_hand'], $mode);
+			$image = Model_Wardrobe::get_correctimage( $this, $equippeditems['right_hand'], $mode);
 			echo html::image ( array( 'src' => $image), array('class' => 'item_right_hand') );
 		}		
 		
@@ -2009,7 +2009,7 @@ class Model_Character extends ORM
 		if (isset($equippeditems['ring']))
 		{
 			$hideringunderclothes = Model_Character::get_stat_d( $this -> id, 'hideringunderclothes');
-			$image = Wardrobe_Model::get_correctimage( $this, $equippeditems['ring'], $mode);
+			$image = Model_Wardrobe::get_correctimage( $this, $equippeditems['ring'], $mode);
 			if ( $hideringunderclothes -> loaded and $hideringunderclothes -> value == true )
 				echo html::image ( array( 'src' => $image), array('class' => 'item_ring_hidden') );
 			else
@@ -2191,7 +2191,7 @@ class Model_Character extends ORM
 						
 		Model_Achievement::compute_achievement( 'stat_' . $name, $stat -> value, $character_id, $stat -> stat1 );
 		
-		My_Cache_Model::delete ( '-charinfo_' . $character_id . '_stat_' . $stat -> name 
+		Model_MyCache::delete ( '-charinfo_' . $character_id . '_stat_' . $stat -> name
 			.'-'.$searchparam1.'-'.$searchparam2); 
 		
 		$stat -> save();		
@@ -2308,7 +2308,7 @@ class Model_Character extends ORM
 
 		Model_Achievement::compute_achievement( 'stat_' . $name, $stat -> value, $this -> id, $stat -> stat1 );
 		
-		My_Cache_Model::delete ( '-charinfo_' . $stat -> character_id . '_stat_' . $stat -> name 
+		Model_MyCache::delete ( '-charinfo_' . $stat -> character_id . '_stat_' . $stat -> name
 			.'-'.$searchparam1.'-'.$searchparam2); 
 		
 		$stat -> save();		
@@ -2321,7 +2321,7 @@ class Model_Character extends ORM
 	* @param str $name Nome della Statistica
 	* @param str $searchparam Parametro Ricerca
 	* @param str $searchaparam2 Parametro Ricerca
-	* @return Character_Stat_Model (se non esiste, la proprietà  loaded è false)
+	* @return Model_Characterstat (se non esiste, la proprietà  loaded è false)
 	*/
 
 	
@@ -2332,12 +2332,12 @@ class Model_Character extends ORM
 		
 		//kohana::log('debug', "--- get_stat_from_cache ---");		
 		
-		$stat = My_Cache_Model::get( $cachetag );
+		$stat = Model_MyCache::get( $cachetag );
 		
 		if ( is_null( $stat ) )
 		{			
 			$stat = Model_Character::get_stat_d( $character_id, $name, $searchparam1, $searchparam2 );
-			My_Cache_Model::set($cachetag, $stat);
+			Model_MyCache::set($cachetag, $stat);
 		}
 	
 		return $stat;
@@ -2351,7 +2351,7 @@ class Model_Character extends ORM
 	* @param  string $name stat name
 	* @param  string $param1 searchparam1
 	* @param  string $param2 searchparam2
-	* @return Character_Stat_Model (se non esiste, la proprietà  loaded è false)
+	* @return Model_Characterstat (se non esiste, la proprietà  loaded è false)
 	*/
 	
 	static function get_stat_d( $char_id, $name, $param1 = null, $param2 = null )
@@ -2440,14 +2440,14 @@ class Model_Character extends ORM
 		$cachetag = '-charinfo_' . $char_id . '_lastactiontime' ;
 		//kohana::log('debug', "-> Getting $cachetag from CACHE..." ); 
 		$lastactiontime = null;
-		$lastactiontime = My_Cache_Model::get( $cachetag );
+		$lastactiontime = Model_MyCache::get( $cachetag );
 		
 		if ( is_null( $lastactiontime ) )
 		{
 			//kohana::log('debug', "-> Getting $cachetag from DB."); 
 			$res = $db -> query( "select lastactiontime from characters where id = " . $char_id );
 			$lastactiontime = $res[0] -> lastactiontime; 
-			My_Cache_Model::set( $cachetag, $lastactiontime );
+			Model_MyCache::set( $cachetag, $lastactiontime );
 		}
 		
 		return $lastactiontime;
@@ -2812,7 +2812,7 @@ class Model_Character extends ORM
 	
 	function add_bonus( $name, $param1=null, $param2=null, $duration )
 	{	
-			$bonus = new character_premiumbonus_Model();
+			$bonus = new Model_characterpremiumbonus();
 			$bonus -> user_id	 = $this->user->id;
 			$bonus -> character_id = $this->id;
 			$bonus -> bonus = $name;
@@ -2827,7 +2827,7 @@ class Model_Character extends ORM
 			
 			switch ( $name ) 
 			{
-				case 'strength_boost' :	Character_Event_Model::addrecord ( $this -> id, 'normal', '__events.' . $name . '_event;', 'evidence' ) ; break;
+				case 'strength_boost' :	Model_CharacterEvent::addrecord ( $this -> id, 'normal', '__events.' . $name . '_event;', 'evidence' ) ; break;
 				default: break;
 			}	
 			
@@ -3208,7 +3208,7 @@ class Model_Character extends ORM
 	{	
 		
 		$cachetag = '-allrankings';	
-		$data = My_Cache_Model::get( $cachetag );		
+		$data = Model_MyCache::get( $cachetag );
 	
 		if ( is_null ( $data ) )
 		{	
@@ -3222,7 +3222,7 @@ class Model_Character extends ORM
 			foreach ( $res as $row )
 				$data[$row->target][$row -> stats_id][$row -> type] = $row;
 			
-			My_Cache_Model::set( $cachetag, $data );
+			Model_MyCache::set( $cachetag, $data );
 			//var_dump($data); exit;
 		}
 		
@@ -3356,14 +3356,14 @@ class Model_Character extends ORM
 		
 		$cachetag = '-charinfo_' . $char_id . '_unreadmessages' ;
 		//kohana::log('debug', "-> Getting $cachetag from CACHE..." ); 
-		$unreadmessages = My_Cache_Model::get( $cachetag );		
+		$unreadmessages = Model_MyCache::get( $cachetag );
 	
 		if ( is_null ( $unreadmessages ) )
 		{			
 			//kohana::log('debug', "-> Getting $cachetag from CACHE..." ); 
 			
-			$unreadmessages = count(Message_Model::get_unreadmessages( $char_id ) );
-			My_Cache_Model::set( $cachetag, $unreadmessages );
+			$unreadmessages = count(Model_Message::get_unreadmessages( $char_id ) );
+			Model_MyCache::set( $cachetag, $unreadmessages );
 			
 		}
 		
@@ -3377,7 +3377,7 @@ class Model_Character extends ORM
 		
 		$cachetag = '-charinfo_' . $this -> id . '_unreadmessages' ;
 		//kohana::log('debug', "-> Getting $cachetag from CACHE..." ); 
-		$unreadmessages = My_Cache_Model::get( $cachetag );		
+		$unreadmessages = Model_MyCache::get( $cachetag );
 	
 		if ( is_null ( $unreadmessages ) )
 		{			
@@ -3387,7 +3387,7 @@ class Model_Character extends ORM
 					'tochar_id' =>  $this -> id,
 					'isread' =>  false )) -> count_all();
 			
-			My_Cache_Model::set( $cachetag, $unreadmessages );
+			Model_MyCache::set( $cachetag, $unreadmessages );
 			
 		}
 		
@@ -3407,7 +3407,7 @@ class Model_Character extends ORM
 		
 		$cachetag = '-charinfo_' . $char_id . '_unreadevents' ;
 		//kohana::log('debug', "-> Getting $cachetag from CACHE..." ); 
-		$unreadevents = My_Cache_Model::get( $cachetag );		
+		$unreadevents = Model_MyCache::get( $cachetag );
 		
 		if ( is_null ( $unreadevents ) )
 		{
@@ -3425,7 +3425,7 @@ class Model_Character extends ORM
 					'character_id' =>  $char_id, 
 					'timestamp>' => $date) ) -> count_all();							
 		
-			My_Cache_Model::set( $cachetag, $unreadevents );
+			Model_MyCache::set( $cachetag, $unreadevents );
 			
 		}
 		
@@ -3439,7 +3439,7 @@ class Model_Character extends ORM
 		
 		$cachetag = '-charinfo_' . $this -> id . '_unreadevents' ;
 		//kohana::log('debug', "-> Getting $cachetag from CACHE..." ); 
-		$unreadevents = My_Cache_Model::get( $cachetag );		
+		$unreadevents = Model_MyCache::get( $cachetag );
 		
 		if ( is_null ( $unreadevents ) )
 		{
@@ -3458,7 +3458,7 @@ class Model_Character extends ORM
 					'character_id' =>  $this -> id,
 					'timestamp>' => $date) ) -> count_all();							
 		
-			My_Cache_Model::set( $cachetag, $unreadevents );
+			Model_MyCache::set( $cachetag, $unreadevents );
 			
 		}
 		
@@ -3504,7 +3504,7 @@ class Model_Character extends ORM
 	{
 		
 		$cachetag = '-charinfo_' . $char_id . '_currentposition' ;		
-		$currentposition = My_Cache_Model::get( $cachetag ); 
+		$currentposition = Model_MyCache::get( $cachetag );
 		
 		if ( is_null( $currentposition ) )
 		{
@@ -3526,12 +3526,12 @@ class Model_Character extends ORM
 				$currentposition = $res[0];
 				$currentposition -> backgroundclass = $currentposition -> type;
 				if ($currentposition -> type == 'land' )
-					if ( Region_Model::isadjacenttosea($currentposition -> id) )
+					if ( Model_Region::isadjacenttosea($currentposition -> id) )
 						$currentposition -> backgroundclass = 'landsea';
 				
 			}
 			
-			My_Cache_Model::set( $cachetag, $currentposition );
+			Model_MyCache::set( $cachetag, $currentposition );
 	
 		}
 		
@@ -3549,7 +3549,7 @@ class Model_Character extends ORM
 	{
 		
 		$cachetag = '-charinfo_' . $this -> id . '_currentposition' ;
-		$currentposition = My_Cache_Model::get( $cachetag ); 
+		$currentposition = Model_MyCache::get( $cachetag );
 		
 		if ( is_null( $currentposition ) )
 		{
@@ -3567,7 +3567,7 @@ class Model_Character extends ORM
 				$currentposition = $res[0] ;
 			}
 			
-			My_Cache_Model::set( $cachetag, $currentposition );
+			Model_MyCache::set( $cachetag, $currentposition );
 	
 		}
 		
@@ -3595,7 +3595,7 @@ class Model_Character extends ORM
 		// invalido la cache del numero di annunci non letti.
 		
 		$cachetag = '-global-boardmessagelastpost' ;
-		$boardmessagelastpost = My_Cache_Model::get( $cachetag );
+		$boardmessagelastpost = Model_MyCache::get( $cachetag );
 		
 		//kohana::log('debug', "-> Getting $cachetag from CACHE..." ); 
 		
@@ -3607,14 +3607,14 @@ class Model_Character extends ORM
 				
 			$boardmessagelastpost  = max( $boardmessagelastpost[0] -> created, $boardmessagelastpost[0] -> updated );
 			
-			My_Cache_Model::set	( $cachetag, $boardmessagelastpost );			
+			Model_MyCache::set	( $cachetag, $boardmessagelastpost );
 		}
 		
 		kohana::log('debug', 'lastpost: ' . date( $boardmessagelastpost ) ); 
 		
 		// ricavo la minima data in cui ho letto le board
 		$cachetag = '-charinfo_' . $char_id . '_boardmessagelastread' ;		
-		$boardmessagelastread = My_Cache_Model::get( $cachetag );
+		$boardmessagelastread = Model_MyCache::get( $cachetag );
 		kohana::log('debug', 'boardmessagelastread: ' . date( $boardmessagelastread ) ); 
 		
 		
@@ -3637,7 +3637,7 @@ class Model_Character extends ORM
 			kohana::log('debug', $date_suggestion );
 			
 			$boardmessagelastread  = min( $date_job, $date_other, $date_suggestion );
-			My_Cache_Model::set( $cachetag, $boardmessagelastread );
+			Model_MyCache::set( $cachetag, $boardmessagelastread );
 			
 		}
 		
@@ -3655,7 +3655,7 @@ class Model_Character extends ORM
 		$cachetag = '-charinfo_' . $this -> id . '_unreadboardmessage' ;
 		
 		//kohana::log('debug', "-> Getting $cachetag from CACHE..." ); 
-		$unreadboardmessages = My_Cache_Model::get( $cachetag );
+		$unreadboardmessages = Model_MyCache::get( $cachetag );
 		
 		if ( is_null ( $unreadboardmessages ) )
 		{
@@ -3684,7 +3684,7 @@ class Model_Character extends ORM
 			
 			$res = $db -> query ( $sql );		
 			$unreadboardmessages = count( $res ); 
-			My_Cache_Model::set( $cachetag, $unreadboardmessage ); 
+			Model_MyCache::set( $cachetag, $unreadboardmessage );
 		}
 		
 		return count( $unreadboardmessages );		
@@ -3705,7 +3705,7 @@ class Model_Character extends ORM
 		
 		kohana::log('debug', "--- get_data for ---");
 		$cachetag = '-charinfo_' . $char_id . '_chararr' ;
-		$char = My_Cache_Model::get( $cachetag );
+		$char = Model_MyCache::get( $cachetag );
 		
 		if ( is_null( $char ) )
 		{
@@ -3721,7 +3721,7 @@ class Model_Character extends ORM
 			else
 			{
 				$char = $rset[0];
-			My_Cache_Model::set( $cachetag, $char );
+			Model_MyCache::set( $cachetag, $char );
 		}
 		}
 		//var_dump($char);exit;
@@ -3741,7 +3741,7 @@ class Model_Character extends ORM
 		$cachetag = '-charinfo_' . $char_id . '_charobj' ;
 			//kohana::log('debug', "-> Getting $cachetag from CACHE..." ); 
 			$char = null;
-			$char = My_Cache_Model::get( $cachetag );
+			$char = Model_MyCache::get( $cachetag );
 			
 			if ( is_null( $char ) )
 			{
@@ -3751,7 +3751,7 @@ class Model_Character extends ORM
 				if ( ! $char -> loaded )
 					$char = null;
 				
-				My_Cache_Model::set( $cachetag, $char );
+				Model_MyCache::set( $cachetag, $char );
 				
 			}
 		
@@ -3771,7 +3771,7 @@ class Model_Character extends ORM
 		$cachetag = '-charinfo_' . $char_id . '_currentpendingaction' ;				
 		//kohana::log('debug', "-> Get current pending action for char: [" . $char_id . "]");
 		
-		$currentpendingaction = My_Cache_Model::get( $cachetag );
+		$currentpendingaction = Model_MyCache::get( $cachetag );
 		
 		//kohana::log('info', kohana::debug( $currentpendingaction ));
 		
@@ -3789,12 +3789,12 @@ class Model_Character extends ORM
 			if ( $currentpendingaction['id'] !== 0 )
 			{
 				//kohana::log('info', '-> Setting currentpendingaction in cache.');
-				My_Cache_Model::set( $cachetag, $currentpendingaction );
+				Model_MyCache::set( $cachetag, $currentpendingaction );
 			}
 			else
 			{		
 				$currentpendingaction = 'NOACTION';
-				My_Cache_Model::set( $cachetag, $currentpendingaction );
+				Model_MyCache::set( $cachetag, $currentpendingaction );
 				
 			}			
 		
@@ -3823,7 +3823,7 @@ class Model_Character extends ORM
 	{
 	
 		$cachetag = '-achievement_' . $char_id . '_' . $name; 				
-		$achievement = My_Cache_Model::get( $cachetag );
+		$achievement = Model_MyCache::get( $cachetag );
 				
 		if ( is_null( $achievement ) )		
 		{
@@ -3839,7 +3839,7 @@ class Model_Character extends ORM
 			else
 				$achievement = null;
 			
-			My_Cache_Model::set( $cachetag, $achievement );
+			Model_MyCache::set( $cachetag, $achievement );
 			
 		}
 	
@@ -4028,7 +4028,7 @@ class Model_Character extends ORM
 	{
 		kohana::log('debug', '--- get_active_quest ---');
 		$cachetag = "-activequest-{$char_id}" ;		
-		$cfg = My_Cache_Model::get( $cachetag );		
+		$cfg = Model_MyCache::get( $cachetag );
 		
 		if ( is_null( $cfg ) )		
 		{
@@ -4042,10 +4042,10 @@ class Model_Character extends ORM
 	
 			if ($activequest -> loaded)
 			{
-				$quest = QuestFactory_Model::createQuest($activequest -> param1);		
+				$quest = Model_QuestFactory::createQuest($activequest -> param1);
 				$cfg = $quest -> get_info($char_id);			
 	}
-			My_Cache_Model::set( $cachetag, $cfg );
+			Model_MyCache::set( $cachetag, $cfg );
 		}
 
 		return $cfg;
@@ -4194,7 +4194,7 @@ class Model_Character extends ORM
 							}
 							
 							kohana::log('info', '-> Eating 1 ' . $food['tag'] );
-							$a = Character_Action_Model::factory("apply");		
+							$a = Model_CharacterAction::factory("apply");
 							$par[0] = $food['id'];
 							$par[1] = $character;
 							$par[2] = 1;
@@ -4202,7 +4202,7 @@ class Model_Character extends ORM
 							$rc = $a -> do_action( $par,  $message );
 							if ( $rc == false )	
 							{
-								Character_Event_Model::addrecord(
+								Model_CharacterEvent::addrecord(
 									$character -> id,
 									'normal',
 									'__events.error-automaticsleep;__' . 
@@ -4298,7 +4298,7 @@ class Model_Character extends ORM
 				if ( count( $house ) > 0 ) 
 				{
 					
-					$structure = StructureFactory_Model::create( null, $house[0] -> id );
+					$structure = Model_StructureFactory::create( null, $house[0] -> id );
 					$restfactors[$i]['structure'] = $structure;
 					kohana::log('info', '-> Adding restfactor of house...');
 					$data = $character -> get_restfactor( $structure, false, false );
@@ -4366,7 +4366,7 @@ class Model_Character extends ORM
 				
 				if (count($restfactors) == 0 )
 				{
-					Character_Event_Model::addrecord(
+					Model_CharacterEvent::addrecord(
 							$character -> id,
 							'normal',
 							'__events.error-automaticsleep;__' . $message );
@@ -4388,7 +4388,7 @@ class Model_Character extends ORM
 				if ( is_null ($wheretorest['structure']) )
 				{
 					kohana::log('info', '-> Resting in cart.');
-					$a = Character_Action_Model::factory("rest");
+					$a = Model_CharacterAction::factory("rest");
 					$par[0] = $character;
 					$par[1] = null;
 					$par[2] = true;			
@@ -4403,7 +4403,7 @@ class Model_Character extends ORM
 				if	( $wheretorest['structure'] -> getSupertype() == 'tavern' )
 				{
 										
-					$a = Character_Action_Model::factory("resttavern");		
+					$a = Model_CharacterAction::factory("resttavern");
 					$par[0] = $character;
 					$par[1] = 0; // non usato
 					$par[2] = $wheretorest['structure'];
@@ -4415,7 +4415,7 @@ class Model_Character extends ORM
 					$rc = $a -> do_action( $par, $message );	
 					if ( $rc == false )
 					{
-						Character_Event_Model::addrecord(
+						Model_CharacterEvent::addrecord(
 							$character -> id,
 							'normal',
 							'__events.error-automaticsleep;__' . $message );
@@ -4426,14 +4426,14 @@ class Model_Character extends ORM
 				}				
 				else
 				{
-					$a = Character_Action_Model::factory("rest");
+					$a = Model_CharacterAction::factory("rest");
 					$par[0] = $character;
 					$par[1] = $wheretorest['structure'];
 					$par[2] = false;			
 					$rc = $a -> do_action( $par, $message );	
 					if ( $rc == false )
 					{
-						Character_Event_Model::addrecord(
+						Model_CharacterEvent::addrecord(
 							$character -> id,
 							'normal',
 							'__events.error-automaticsleep;__' . $message );
@@ -4460,7 +4460,7 @@ class Model_Character extends ORM
 	{
 		
 		$result = false;		
-		$kinrelations = Character_Relationship_Model::get_kinrelations( $source_id );  		
+		$kinrelations = Model_CharacterRelationship::get_kinrelations( $source_id );
 		
 		if (isset( $kinrelations['outgoingrelations']['husband'])
 			and $kinrelations['outgoingrelations']['husband']['id'] == $target_id )
@@ -4490,7 +4490,7 @@ class Model_Character extends ORM
 	
 		$data = null;
 		
-		$kinrelations = Character_Relationship_Model::get_kinrelations( $char_id );
+		$kinrelations = Model_CharacterRelationship::get_kinrelations( $char_id );
 		
 		if ( isset( $kinrelations['outgoingrelations']['wife'] ))
 			$data = $kinrelations['outgoingrelations']['wife'];
@@ -4597,12 +4597,12 @@ class Model_Character extends ORM
 			$tutorgroup = ORM::factory('group')
 				-> where('name', "Tutor " . $choosentutor -> character_name) -> find();
 			
-			Group_Model::add_member ($tutorgroup -> id, $character -> id, true);
+			Model_Group::add_member ($tutorgroup -> id, $character -> id, true);
 			
 			// mail
 			
 			$choosentutorchar = ORM::factory('character', $choosentutor -> character_id);
-			Message_Model::send(
+			Model_Message::send(
 				$choosentutorchar,
 				$character,
 				'Need Help?',			
@@ -4621,14 +4621,14 @@ class Model_Character extends ORM
 				time()
 			);
 			
-			Character_Event_Model::addrecord(
+			Model_CharacterEvent::addrecord(
 				$choosentutor -> character_id,
 				'normal',  
 				'__events.newbornassigned'.
 				';'. $character -> name			
 			);
 			
-			Character_Event_Model::addrecord(
+			Model_CharacterEvent::addrecord(
 				$character -> id,
 				'normal',  
 				'__events.tutorassigned'.

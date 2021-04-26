@@ -140,10 +140,10 @@ class Model_BattleType
 		
 		// diplom. relationship between char and attackingregion
 		
-		$dr_1 = Diplomacy_Relation_Model::get_diplomacy_relation( 
+		$dr_1 = Model_DiplomacyRelation::get_diplomacy_relation(
 			$char -> region -> kingdom_id, $attackingregion -> kingdom_id ) ;
 		// diplom. relationship between char and defendingregion
-		$dr_2 = Diplomacy_Relation_Model::get_diplomacy_relation( 
+		$dr_2 = Model_DiplomacyRelation::get_diplomacy_relation(
 			$char -> region -> kingdom_id, $attackedregion -> kingdom_id ) ;
 
 		kohana::log('info', '-> (Attack) Char: ' . $char -> name . ' Dipl. Rel. with Attacking Region: [' . $dr_1['type'] . '] Dipl. Rel. with Defending Region: [' . $dr_2['type'] . ']' );		
@@ -154,7 +154,7 @@ class Model_BattleType
 		
 		// guerre del regno del char
 		
-		$runningwars = Kingdom_Model::get_kingdomwars( $char -> region -> kingdom_id, 'running');		
+		$runningwars = Model_Kingdom::get_kingdomwars( $char -> region -> kingdom_id, 'running');
 		
 		// stabiliamo quale � la guerra corrente: � quella in cui sono coinvolti il regno del char e quello attaccato.
 		
@@ -193,9 +193,9 @@ class Model_BattleType
 		
 		// Verifichiamo controlli DIFESA
 		
-		$dr_1 = Diplomacy_Relation_Model::get_diplomacy_relation( 
+		$dr_1 = Model_DiplomacyRelation::get_diplomacy_relation(
 			$char -> region -> kingdom_id, $attackedregion -> kingdom_id ) ;
-		$dr_2 = Diplomacy_Relation_Model::get_diplomacy_relation( 
+		$dr_2 = Model_DiplomacyRelation::get_diplomacy_relation(
 			$char -> region -> kingdom_id, $attackingregion -> kingdom_id ) ;
 		
 		kohana::log('info', '-> (Defend) Char: ' . $char -> name . ' Dipl. Rel. with Defending Region: [' . $dr_1['type'] . '] Dipl. Rel. with Attacking Region: [' . $dr_2['type'] . ']');
@@ -432,7 +432,7 @@ class Model_BattleType
 			if ( !is_null ( $castle ) )
 			{
 				
-				$controlledregions = ST_Castle_1_Model::get_controlled_regions( $castle -> id, $castle -> region_id );
+				$controlledregions = Model_Structure_STCastle1::get_controlled_regions( $castle -> id, $castle -> region_id );
 				$malus += min( 0.15, 0.3 * count( $controlledregions ));
 				$this -> battlereport[]['bonuses'] = '__battle.castlepresencemalus' . ';' . $malus * 100 ;
 				kohana::log('info', '-> Controlled regions: ' . count( $controlledregions ) . ' - adding malus: +' . $malus . '%' );
@@ -519,7 +519,7 @@ class Model_BattleType
 											
 						kohana::log('debug', '-> defender ' . $defender['char']['name'] . ' has a jartar. ');
 						
-						$item = Item_Model::factory( null, 'jartar' ); 
+						$item = Model_Item::factory( null, 'jartar' );
 						$item -> removeitem( 'character', $defender['char']['obj'] -> id, 1 );											
 						$this -> battlereport[]['bonuses'] = '__battle.jartarused' ;
 											
@@ -594,12 +594,12 @@ class Model_BattleType
 			{				
 				// aggiorna skill parry
 				
-				if ( Skill_Model::character_has_skill( $defeated['char']['obj'] -> id, 'parry' ) )				
+				if ( Model_Skill::character_has_skill( $defeated['char']['obj'] -> id, 'parry' ) )
 				{
 					kohana::log('info', "-> Char {$defeated['char']['obj']->name} failed parry: {$defeated['char']['parryfails']}");
 					if ( $defeated['char']['parryfails'] > 0 )
 					{
-						$skillinstance = SkillFactory_Model::create('parry'); 
+						$skillinstance = Model_SkillFactory::create('parry');
 						$skillinstance -> increaseproficiency( 
 							$defeated['char']['obj'] -> id, 
 							round( 
@@ -615,7 +615,7 @@ class Model_BattleType
 				if (isset($defeated['char']['plagueinjected']))
 				{
 					kohana::log('info', 'Injecting plague.');
-					$plague = DiseaseFactory_Model::createDisease('plague');
+					$plague = Model_DiseaseFactory::createDisease('plague');
 					$plague -> injectdisease($defeated['char']['obj'] -> id );
 				}
 			
@@ -678,7 +678,7 @@ class Model_BattleType
 				
 				// invalida la cache.
 					
-				My_Cache_Model::delete(  '-charinfo_' . $character['char']['obj'] -> id . '_' . $destroyeditem['obj'] -> tag );
+				Model_MyCache::delete(  '-charinfo_' . $character['char']['obj'] -> id . '_' . $destroyeditem['obj'] -> tag );
 			}
 							
 		return;
@@ -718,7 +718,7 @@ class Model_BattleType
 			
 			// invalida la cache.
 							
-			My_Cache_Model::delete(  '-charinfo_' . $character['char']['obj'] -> id . '_' . 
+			Model_MyCache::delete(  '-charinfo_' . $character['char']['obj'] -> id . '_' .
 				$equippedweapon-> tag );							
 				
 		}
@@ -756,7 +756,7 @@ class Model_BattleType
 										
 							// invalida la cache.
 							
-							My_Cache_Model::delete(  '-charinfo_' . $character['char']['obj'] -> id . '_' .  $data['obj'] -> tag );	
+							Model_MyCache::delete(  '-charinfo_' . $character['char']['obj'] -> id . '_' .  $data['obj'] -> tag );
 							$processed[$data['obj'] -> tag] = true;
 							
 						}
@@ -792,12 +792,12 @@ class Model_BattleType
 			if ( $alivesoldier['char']['type'] == 'pc' )
 			{
 				
-				if ( Skill_Model::character_has_skill( $alivesoldier['char']['obj'] -> id, 'parry' ) )				
+				if ( Model_Skill::character_has_skill( $alivesoldier['char']['obj'] -> id, 'parry' ) )
 				{
 					kohana::log('info', "-> Char {$alivesoldier['char']['obj'] -> name} failed parry: {$alivesoldier['char']['parryfails']}");
 					if ( $alivesoldier['char']['parryfails'] > 0 )
 					{
-						$skillinstance = SkillFactory_Model::create('parry'); 
+						$skillinstance = Model_SkillFactory::create('parry');
 						$skillinstance -> increaseproficiency( 
 							$alivesoldier['char']['obj'] -> id, 
 							round( 
@@ -811,7 +811,7 @@ class Model_BattleType
 				if (isset($alivesoldier['char']['plagueinjected']))
 				{
 					kohana::log('info', 'Injecting plague...');
-					$plague = DiseaseFactory_Model::createDisease('plague');
+					$plague = Model_DiseaseFactory::createDisease('plague');
 					$plague -> injectdisease($alivesoldier['char']['obj'] -> id );
 				}
 			
@@ -876,13 +876,13 @@ class Model_BattleType
 		// refresh cache
 			
 		$cachetag = '-cfg-regions'; 				
-		My_Cache_Model::delete ( $cachetag );			
+		Model_MyCache::delete ( $cachetag );
 		
 		// schedula un destroy cdb 
 		
 		if (!is_null( $this -> battlefield ) )
 		{
-			$a = new Character_Action_Model();
+			$a = new Model_CharacterAction();
 			$a -> character_id = $this -> bm -> source_character_id ;
 			$a -> param1 = $this -> battlefield -> id ;
 			$a -> blocking_flag = false;

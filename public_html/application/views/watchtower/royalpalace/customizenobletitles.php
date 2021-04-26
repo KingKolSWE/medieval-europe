@@ -101,7 +101,7 @@
 		
 		<td align=center>
 			<?php 
-			$role = new Character_Role_Model;
+			$role = new Model_CharacterRole;
 			$role->tag = $originaltitle;
 			$role->kingdom_id = $structure->region->kingdom_id;
 			echo $role->get_title_image(array('style'=>'margin:5px 0 0 0; width:50px')); ?>

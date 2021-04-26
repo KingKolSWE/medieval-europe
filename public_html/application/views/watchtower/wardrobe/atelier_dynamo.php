@@ -42,7 +42,7 @@ html::anchor('https://support.medieval-europe.eu', kohana::lang('global.support'
 									
 				if ( !is_dir( $file ) )
 				{
-					echo Wardrobe_Model::helper_itemform ( 
+					echo Model_Wardrobe::helper_itemform (
 						$filenamewithoutextension,
 						$filename,
 						'avatars',
@@ -75,7 +75,7 @@ html::anchor('https://support.medieval-europe.eu', kohana::lang('global.support'
 				if ( !is_dir( $file ) )
 				{
 				
-					echo Wardrobe_Model::helper_itemform ( 
+					echo Model_Wardrobe::helper_itemform (
 						$filenamewithoutextension,
 						$filename,
 						'armors',
@@ -106,7 +106,7 @@ html::anchor('https://support.medieval-europe.eu', kohana::lang('global.support'
 				if ( !is_dir( $file ) )
 				{
 				
-					echo Wardrobe_Model::helper_itemform ( 
+					echo Model_Wardrobe::helper_itemform (
 						$filenamewithoutextension,
 						$filename,
 						'armors',
@@ -136,7 +136,7 @@ html::anchor('https://support.medieval-europe.eu', kohana::lang('global.support'
 				if ( !is_dir( $file ) )
 				{
 				
-					echo Wardrobe_Model::helper_itemform ( 
+					echo Model_Wardrobe::helper_itemform (
 						$filenamewithoutextension,
 						$filename,
 						'armors',
@@ -166,7 +166,7 @@ html::anchor('https://support.medieval-europe.eu', kohana::lang('global.support'
 				if ( !is_dir( $file ) )
 				{
 				
-					echo Wardrobe_Model::helper_itemform ( 
+					echo Model_Wardrobe::helper_itemform (
 						$filenamewithoutextension,
 						$filename,
 						'armors',
@@ -199,7 +199,7 @@ html::anchor('https://support.medieval-europe.eu', kohana::lang('global.support'
 				if ( !is_dir( $file ) )
 				{
 				
-					echo Wardrobe_Model::helper_itemform ( 
+					echo Model_Wardrobe::helper_itemform (
 						$filenamewithoutextension,
 						$filename,
 						'armors',
@@ -231,7 +231,7 @@ html::anchor('https://support.medieval-europe.eu', kohana::lang('global.support'
 				if ( !is_dir( $file ) )
 				{
 				
-					echo Wardrobe_Model::helper_itemform ( 
+					echo Model_Wardrobe::helper_itemform (
 						$filenamewithoutextension,
 						$filename,
 						'armors',
@@ -262,7 +262,7 @@ html::anchor('https://support.medieval-europe.eu', kohana::lang('global.support'
 				if ( !is_dir( $file ) )
 				{
 				
-					echo Wardrobe_Model::helper_itemform ( 
+					echo Model_Wardrobe::helper_itemform (
 						$filenamewithoutextension,
 						$filename,
 						'weapons',
@@ -296,7 +296,7 @@ html::anchor('https://support.medieval-europe.eu', kohana::lang('global.support'
 				if ( !is_dir( $file ) )
 				{
 				
-					echo Wardrobe_Model::helper_itemform ( 
+					echo Model_Wardrobe::helper_itemform (
 						$filenamewithoutextension,
 						$filename,
 						'clothes',
@@ -326,7 +326,7 @@ html::anchor('https://support.medieval-europe.eu', kohana::lang('global.support'
 				if ( !is_dir( $file ) )
 				{
 				
-					echo Wardrobe_Model::helper_itemform ( 
+					echo Model_Wardrobe::helper_itemform (
 						$filenamewithoutextension,
 						$filename,
 						'clothes',
@@ -357,7 +357,7 @@ html::anchor('https://support.medieval-europe.eu', kohana::lang('global.support'
 				if ( !is_dir( $file ) )
 				{
 				
-					echo Wardrobe_Model::helper_itemform ( 
+					echo Model_Wardrobe::helper_itemform (
 						$filenamewithoutextension,
 						$filename,
 						'clothes',
@@ -388,7 +388,7 @@ html::anchor('https://support.medieval-europe.eu', kohana::lang('global.support'
 				if ( !is_dir( $file ) )
 				{
 				
-					echo Wardrobe_Model::helper_itemform ( 
+					echo Model_Wardrobe::helper_itemform (
 						$filenamewithoutextension,
 						$filename,
 						'clothes',
@@ -420,7 +420,7 @@ html::anchor('https://support.medieval-europe.eu', kohana::lang('global.support'
 				if ( !is_dir( $file ) )
 				{
 				
-					echo Wardrobe_Model::helper_itemform ( 
+					echo Model_Wardrobe::helper_itemform (
 						$filenamewithoutextension,
 						$filename,
 						'clothes',
@@ -454,7 +454,7 @@ html::anchor('https://support.medieval-europe.eu', kohana::lang('global.support'
 				if ( !is_dir( $file ) )
 				{
 				
-					echo Wardrobe_Model::helper_itemform ( 
+					echo Model_Wardrobe::helper_itemform (
 						$filenamewithoutextension,
 						$filename,
 						'backgrounds',

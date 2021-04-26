@@ -32,7 +32,7 @@ function show()
 		null, 
 		true );
 		
-	My_Cache_Model::delete( '-charinfo_' . $char -> id . '_unreadevents' );	
+	Model_MyCache::delete( '-charinfo_' . $char -> id . '_unreadevents' );
 	
 	$events = ORM::factory("character_event")->
 		where( array( 
@@ -70,12 +70,12 @@ public function accept_invite ($group_id)
 		$char = Model_Character::get_info( Session::instance()->get('char_id') );
 		$group = ORM::factory('group', $group_id);
 	
-		Group_Model::accept_invite( $char -> id, $group_id );
+		Model_Group::accept_invite( $char -> id, $group_id );
 		
 		// Invio la notifica di accettazione al fondatore
 		// del gruppo
 		
-		Character_Event_Model::addrecord( 
+		Model_CharacterEvent::addrecord(
 				$group->character_id, 
 				'normal', 
 				'__events.invite_accepted'.

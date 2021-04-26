@@ -60,7 +60,7 @@ else
 ?>		
 	<tr class="<?=$class;?>">
 	<td width='15%'><?= Model_Utility::format_date( $permanentevent -> timestamp ); ?></td>
-	<td width='85%'><?= My_I18n_Model::translate($permanentevent -> description ) ?> </td>
+	<td width='85%'><?= Model_MyI18n::translate($permanentevent -> description ) ?> </td>
 	</tr>	
 <?	
 	$r++;

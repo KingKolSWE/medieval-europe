@@ -85,7 +85,7 @@ class Controller_Trainingground extends Controller_Template
 		
 		if ( ! $_POST )
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 'public', 'trainwithsparring' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -95,7 +95,7 @@ class Controller_Trainingground extends Controller_Template
 		else
 		{	
 			//var_dump($_POST);exit;
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 'public', 'trainwithsparring' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">". $message . "</div>");
@@ -151,7 +151,7 @@ class Controller_Trainingground extends Controller_Template
 
 			}			
 			
-			$data = ST_TrainingGround_1_Model::trainwithsparring( $this -> request -> post(), $debug );
+			$data = Model_Structure_STTrainingground1::trainwithsparring( $this -> request -> post(), $debug );
 			
 		}
 		
@@ -186,7 +186,7 @@ class Controller_Trainingground extends Controller_Template
 		{
 			// carico la struttura da db dopodich� instanzio il corretto modello			
 			
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			
 			
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
@@ -196,14 +196,14 @@ class Controller_Trainingground extends Controller_Template
 				HTTP::redirect('region/view/');
 			}				
 					
-			$model = StructureFactory_Model::create( $structure->structure_type->type, $structure_id );
+			$model = Model_StructureFactory::create( $structure->structure_type->type, $structure_id );
 			$dummies = $structure->get_item_quantity( 'wooden_dummies' );
 			
 		}
 		else
 		{
 		
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );			
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			
 			if ( ! $structure -> allowedaccess( $character, $structure -> getParentType(), $message, 
 				'public', 'train' ) )
@@ -212,10 +212,10 @@ class Controller_Trainingground extends Controller_Template
 				HTTP::redirect('region/view/');
 			}
 			
-			$model = StructureFactory_Model::create( $structure->structure_type->type, $structure_id );			
+			$model = Model_StructureFactory::create( $structure->structure_type->type, $structure_id );
 			$dummies = $structure -> get_item_quantity( 'wooden_dummies' );
 			
-			$o = Character_Action_Model::factory("study");
+			$o = Model_CharacterAction::factory("study");
 			$par[0] = $character;
 			$par[1] = $model;				
 			$par[2] = $this -> request -> post('hours');			
@@ -242,7 +242,7 @@ class Controller_Trainingground extends Controller_Template
 		$view -> dummies = $dummies;
 		$view -> structure = $structure;
 		$view -> char = $character;
-		$view -> appliabletax = Region_Model::get_appliable_tax( 
+		$view -> appliabletax = Model_Region::get_appliable_tax(
 			$structure -> region, 'valueaddedtax', 
 			$character ); 
 		$this -> template -> content = $view;
@@ -295,7 +295,7 @@ class Controller_Trainingground extends Controller_Template
 
 		if ( !$_POST ) 
 		{
-			$structure = StructureFactory_Model::create( null, $structure_id );
+			$structure = Model_StructureFactory::create( null, $structure_id );
 			// controllo permessi		
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
@@ -306,7 +306,7 @@ class Controller_Trainingground extends Controller_Template
 		}
 		else
 		{	
-			$structure = StructureFactory_Model::create( null, $this -> request -> post('structure_id') );
+			$structure = Model_StructureFactory::create( null, $this -> request -> post('structure_id') );
 			if ( ! $structure->allowedaccess( $character, $structure -> getParentType(), $message, 
 				'private', 'assign_rolerp' ) )
 			{
@@ -314,7 +314,7 @@ class Controller_Trainingground extends Controller_Template
 				HTTP::redirect('region/view/');
 			}
 
-			$ca = Character_Action_Model::factory("assignrolerp");		
+			$ca = Model_CharacterAction::factory("assignrolerp");
 			//var_dump( $_POST ); exit;
 			// Characther che nomina
 			$par[0] = $character;

@@ -35,7 +35,7 @@ foreach ( $report as $region => $structure )
 		{
 			
 			$class = ( $i % 2 == 0 ) ? 'alternaterow_1' : 'alternaterow_2';
-			$status = Structure_Model::get_descriptiveresourcestatus( $capacity );			
+			$status = Model_Structure::get_descriptiveresourcestatus( $capacity );
 			
 			echo "<tr class='$class'>
 				<td class='center'>".kohana::lang($region)."</td>

@@ -29,7 +29,7 @@
 	<tr>
 		<td class='center'>
 			<?
-			$sourcecapital = Kingdom_Model::get_capitalregion( $kingdomwar ['war'] -> source_kingdom_id );			
+			$sourcecapital = Model_Kingdom::get_capitalregion( $kingdomwar ['war'] -> source_kingdom_id );
 			echo html::anchor(
 			'region/info_diplomacy/' . $sourcecapital -> id,
 			kohana::lang($kingdomwar ['war'] -> sourcekingdomname),		
