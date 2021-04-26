@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Achievement_Model
+class Model_Achievement
 {
 
 	/**
@@ -161,7 +161,7 @@ class Achievement_Model
 		kohana::log('info', "-> Title {$name}, Stars: {$stars}");
 		
 		if ($stars > 0 )
-			Achievement_Model::add( $character, $name, $stars, $position);
+			Model_Achievement::add( $character, $name, $stars, $position);
 		
 	}
 	
@@ -260,8 +260,9 @@ class Achievement_Model
 				
 				// Recompute score
 				kohana::log('info', '-> Recomputing score...' );
-				Achievement_Model::computescore( $character -> id );
-				
+
+				Model_Achievement::computescore( $character -> id );
+
 			}
 			else
 				Character_Event_Model::addrecord( 
@@ -335,7 +336,7 @@ class Achievement_Model
 		
 				// recompute score
 				
-				Achievement_Model::computescore( $character_id );
+				Model_Achievement::computescore( $character_id );
 			
 				// update stat
 				

@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Battle_Conquer_IR_Model extends Battle_Type_Model
+class Battle_Conquer_IR_ModelBattleType extends Model_BattleType
 {
 	var $battletype = 'conquer_ir';
 	var $par = null;
@@ -29,7 +29,7 @@ class Battle_Conquer_IR_Model extends Battle_Type_Model
 		// the transactional part is omitted because this is the only battle
 		// which happens by action.
 		
-		$this -> be = new Battle_Engine_Model();		
+		$this -> be = new Model_BattleEngine();
 		kohana::log('debug', '-> Starting Conquer IR battle.' );
 		$this -> bm = $par[2];
 		$this -> test = $test;
@@ -209,7 +209,7 @@ class Battle_Conquer_IR_Model extends Battle_Type_Model
 			
 		kohana::log('debug', 'computing ... calling function with parameter: ' . ($nregions - 1) ); 
 		
-		$n = round( (Battle_Conquer_IR_Model::compute_native_numbers( $nregions - 1 ) + pow( $nregions , 0.3 )), 0 );
+		$n = round( (Model_BattleConquerIRBattleType::compute_native_numbers( $nregions - 1 ) + pow( $nregions , 0.3 )), 0 );
 		
 		kohana::log('debug', 'computed ... natives: ' . $n ); 
 		

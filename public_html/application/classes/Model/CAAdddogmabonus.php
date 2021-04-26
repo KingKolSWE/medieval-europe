@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class CA_Adddogmabonus_Model extends Character_Action_Model
+class Model_CAAdddogmabonus extends Character_Action_Model
 {
 	// Costanti
 	const MAX_DOGMA_BONUSES = 4;

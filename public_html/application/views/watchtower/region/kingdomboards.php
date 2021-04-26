@@ -3,7 +3,7 @@
 <div class='right'>
 <?php 
 
-if ( Kingdom_Forum_Board_Model::haswriterights($char, $kingdom) == true  )
+if ( Kingdom_Forum__ModelBoard::haswriterights($char, $kingdom) == true  )
 	echo html::anchor('region/addkingdomboard/' . $kingdom -> id, kohana::lang('kingdomforum.newboard'),
 		array('class' => 'button button-small')); ?>
 </div>
@@ -47,7 +47,7 @@ foreach ( $rows as $row )
 	<td class='center' width='20%'><?php echo Model_Character::create_publicprofilelink($row -> author, null);?></td>
 	<td class='center' width='20%'><?php echo Model_Utility::format_datetime(strtotime($row -> created));?></td>
 	<td class='center' width='10%'><?php 
-		if ( Kingdom_Forum_Board_Model::haswriterights($char, $kingdom) == true  )
+		if ( Kingdom_Forum__ModelBoard::haswriterights($char, $kingdom) == true  )
 		{
 			echo html::anchor('/region/editkingdomboard/' . $row -> id, kohana::lang('global.edit'));
 			echo '<br/>';

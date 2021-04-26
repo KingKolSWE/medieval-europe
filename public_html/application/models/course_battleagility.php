@@ -8,46 +8,46 @@ class Course_Battleagility_Model extends Course_Model
 	* @param obj $char Character_Model
 	* @return int Livello a cui si può studiare il corso
 	*/
-	
+
 	public function getLevel( $char )
 	{
-		return $char -> get_attribute( 'dex', false) + 1 ;		
+		return $char -> get_attribute( 'dex', false) + 1 ;
 	}
-		
+
 	/**
 	* Complete il corso
 	* @param obj $char Character_Model
 	* @return none
 	*/
-	
-	public function completeCourse( $char ) 
+
+	public function completeCourse( $char )
 	{
-		
+
 		$oldvalue = $char -> dex;
 		$newvalue = min (20, $char -> dex + 1) ;
 		$char -> dex = $newvalue;
 		$increasedattr = 'create_chardex';
 
-		if ( $char -> dex == 20 ) 
-			Achievement_Model::compute_achievement ( 'stat_dex', 20, $char -> id ); 				
-				
+		if ( $char -> dex == 20 )
+			Achievement_Model::compute_achievement ( 'stat_dex', 20, $char -> id );
+
 		Model_Character::modify_stat_d(
 			$char -> id,
-			'studiedhours', 
+			'studiedhours',
 			0,
 			$this -> getTag(),
-			null, 
+			null,
 			true,
 			0);
-			
-		Character_Event_Model::addrecord( 
+
+		Character_Event_Model::addrecord(
 			$char -> id,
-			'normal',  
-			'__events.coursecompleted'.';__' . 'structures.course_' . $this -> getTag() . '_name' . ';__character.' . $increasedattr . 
+			'normal',
+			'__events.coursecompleted'.';__' . 'structures.course_' . $this -> getTag() . '_name' . ';__character.' . $increasedattr .
 			';' . $oldvalue . ';' . $newvalue,
 			'evidence'
 			);
-			
+
 	}
-	
+
 }

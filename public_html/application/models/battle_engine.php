@@ -324,10 +324,10 @@ class Battle_Engine_Model
 			$this -> get_fightstats( $attacker, $this->debug, $this -> cfgarmors, $this -> cfgweapons );
 			$this -> get_fightstats( $defender, $this->debug, $this -> cfgarmors, $this -> cfgweapons );	
 			
-			Battle_Engine_Model::battledebug('<b> --- Attacker Info --- </b>', $this -> debug );
+			Model_BattleEngine::battledebug('<b> --- Attacker Info --- </b>', $this -> debug );
 			
 			if ( isset( $attacker['char']['weapons']['right_hand']['obj'] ) )
-				Battle_Engine_Model::battledebug(
+				Model_BattleEngine::battledebug(
 					$attacker['char']['name'] .
 					' Weapon: ' .  kohana::lang($attacker['char']['weapons']['right_hand']['obj'] -> name) . 
 					' Weapon weight: '  . ($attacker['char']['weapons']['right_hand']['obj'] -> weight / 1000) .
@@ -335,7 +335,7 @@ class Battle_Engine_Model
 					' Weapon Damage: ' . $attacker['char']['wpn_mindamage'] . '-' . $attacker['char']['wpn_maxdamage'] , $this -> debug );
 			else
 			{
-				Battle_Engine_Model::battledebug( $attacker['char']['name'] . ' is not using weapons. ' .
+				Model_BattleEngine::battledebug( $attacker['char']['name'] . ' is not using weapons. ' .
 				' Weapon Damage: ' . $attacker['char']['wpn_mindamage'] . '-' . $attacker['char']['wpn_maxdamage'] 
 				, $this -> debug );
 			}
@@ -343,13 +343,13 @@ class Battle_Engine_Model
 			foreach ( array( 'head', 'torso', 'left_hand', 'right_hand', 'legs', 'feet' ) as $part )
 				if ( isset( $attacker['char']['armors'][$part] ))
 					foreach ($attacker['char']['armors'][$part] as $tag => $data )			
-					Battle_Engine_Model::battledebug( 
+					Model_BattleEngine::battledebug(
 						$attacker['char']['name'] .
 						" has {$part} covered by : " .  kohana::lang($attacker['char']['armors'][$part][$tag]['obj'] -> name)
 					, $this -> debug );
 					
 			
-			Battle_Engine_Model::battledebug(
+			Model_BattleEngine::battledebug(
 					$attacker['char']['name'] . ' - ' .
 					' Health: ' .$attacker['char']['health'] .					
 					' Energy: ' .$attacker['char']['energy'] .
@@ -363,12 +363,12 @@ class Battle_Engine_Model
 					' Const: ' . $attacker['char']['cost'] , $this -> debug );
 			
 			
-			Battle_Engine_Model::battledebug('<b> --- Defender Info --- </b>', $this -> debug );
+			Model_BattleEngine::battledebug('<b> --- Defender Info --- </b>', $this -> debug );
 			
 			// weapons
 			
 			if ( isset( $defender['char']['weapons']['right_hand']['obj'] ) )
-				Battle_Engine_Model::battledebug(
+				Model_BattleEngine::battledebug(
 					$defender['char']['name'] .
 					' Weapon: ' .  kohana::lang($defender['char']['weapons']['right_hand']['obj'] -> name) . 
 					' Weapon weight: '  . ($defender['char']['weapons']['right_hand']['obj'] -> weight / 1000) .
@@ -376,7 +376,7 @@ class Battle_Engine_Model
 					' Weapon Damage: ' . $defender['char']['wpn_mindamage'] . '-' . $defender['char']['wpn_maxdamage'] , $this -> debug );
 			else
 			{
-				Battle_Engine_Model::battledebug( $defender['char']['name'] . ' is not using weapons. ' .
+				Model_BattleEngine::battledebug( $defender['char']['name'] . ' is not using weapons. ' .
 				' Weapon Damage: ' . $defender['char']['wpn_mindamage'] . '-' . $defender['char']['wpn_maxdamage'] 
 				, $this -> debug );
 			}
@@ -386,12 +386,12 @@ class Battle_Engine_Model
 			foreach ( array( 'head', 'torso', 'left_hand', 'right_hand', 'legs', 'feet' ) as $part )
 				if ( isset( $defender['char']['armors'][$part] ))
 					foreach ($defender['char']['armors'][$part] as $tag => $data )			
-					Battle_Engine_Model::battledebug( 
+					Model_BattleEngine::battledebug(
 						$defender['char']['name'] .
 						" has {$part} covered by : " .  kohana::lang($defender['char']['armors'][$part][$tag]['obj'] -> name)
 					, $this -> debug );
 			
-			Battle_Engine_Model::battledebug( 
+			Model_BattleEngine::battledebug(
 				$defender['char']['name'] . ' - ' .
 					' Health: ' .$defender['char']['health'] .										
 					' Energy: ' .$defender['char']['energy'] .					
@@ -404,7 +404,7 @@ class Battle_Engine_Model
 					' Const: ' . $defender['char']['cost'] , $this -> debug );
 			
 						
-			Battle_Engine_Model::battledebug('<b> --- Consecutive Attacks Info --- </b>', $this -> debug );
+			Model_BattleEngine::battledebug('<b> --- Consecutive Attacks Info --- </b>', $this -> debug );
 				
 			// We determine for this turn how many consecutive hits they have
 			// the attacker and the defender are available	
@@ -412,10 +412,10 @@ class Battle_Engine_Model
 			$att_cons_hits = $this -> get_consecutiveattacks( $attacker );
 			$def_cons_hits = $this -> get_consecutiveattacks( $defender );
 			
-			Battle_Engine_Model::battledebug( $attacker['char']['name'] . " Consecutive attacks: " . $att_cons_hits . 
+			Model_BattleEngine::battledebug( $attacker['char']['name'] . " Consecutive attacks: " . $att_cons_hits .
 				", " .  $defender['char']['name'] . " Consecutive attacks: " . $def_cons_hits , $this -> debug );
 			
-			Battle_Engine_Model::battledebug('<b> --- Initiative Info --- </b>', $this -> debug );
+			Model_BattleEngine::battledebug('<b> --- Initiative Info --- </b>', $this -> debug );
 			
 			// we establish the initiative based on the characteristic reach of the weapon						
 			// if one of the two chars is stun, the other always has the initiative
@@ -425,13 +425,13 @@ class Battle_Engine_Model
 				
 				if ($defender['char']['stunnedround'] > 0 )
 				{
-					Battle_Engine_Model::battledebug( $defender['char']['name'] . " is stunned, initiative given to " . 
+					Model_BattleEngine::battledebug( $defender['char']['name'] . " is stunned, initiative given to " .
 						$attacker['char']['name'] , $this -> debug );
 					$initiative = 'attacker' ;
 				}
 				elseif ($attacker['char']['stunnedround'] > 0 )
 				{
-					Battle_Engine_Model::battledebug( $attacker['char']['name'] . " is stunned, initiative given to  " . 
+					Model_BattleEngine::battledebug( $attacker['char']['name'] . " is stunned, initiative given to  " .
 						$defender['char']['name'], $this -> debug );
 					$initiative = 'defender' ;
 				}
@@ -457,7 +457,7 @@ class Battle_Engine_Model
 				else
 					$initiative = 'defender';			
 				
-				Battle_Engine_Model::battledebug( 'Initiative: Max chance: ' . $maxchance . 			                      
+				Model_BattleEngine::battledebug( 'Initiative: Max chance: ' . $maxchance .
 									  ', Attacker reach: ' . $attackerweaponreach . 
 									  ', Defender reach: ' . $defenderweaponreach .
 									  ', Roll: ' . $r .
@@ -562,7 +562,7 @@ class Battle_Engine_Model
 				while ( $hits <= $_attacker['char']['cons_hits'] and $_attacker['char']['health'] > 0 and $_defender['char']['health'] > 0 )
 				{			
 					
-					Battle_Engine_Model::battledebug( 'Hit n. '. $hits . '/' . $_attacker['char']['cons_hits'] , $this -> debug );
+					Model_BattleEngine::battledebug( 'Hit n. '. $hits . '/' . $_attacker['char']['cons_hits'] , $this -> debug );
 					
 					// We recalculate the statistics for the fight
 					
@@ -584,7 +584,7 @@ class Battle_Engine_Model
 					
 					if ( $_attacker['char']['stunnedround'] > 0 )
 					{ 
-						Battle_Engine_Model::battledebug ( '*** ' . $_attacker['char']['name'] . ' is stunned, MISS.', $this -> debug );
+						Model_BattleEngine::battledebug ( '*** ' . $_attacker['char']['name'] . ' is stunned, MISS.', $this -> debug );
 						$hit = false; 
 						$miss = true; 
 					}
@@ -595,7 +595,7 @@ class Battle_Engine_Model
 					}
 					else
 					{
-						Battle_Engine_Model::battledebug('Battleround: ' . $battleround , $this -> debug );
+						Model_BattleEngine::battledebug('Battleround: ' . $battleround , $this -> debug );
 						if ( $battleround == 1 )
 						{
 							if ( $_attacker['char']['name'] == $attacker['char']['name'] )		
@@ -616,20 +616,20 @@ class Battle_Engine_Model
 							{
 								
 								$actual_hitperc = ($att_successfulhits/max(1,$att_totalhits))*100;
-								Battle_Engine_Model::battledebug($attacker['char']['name'] . ', Hits ' . $att_successfulhits.'/'. $att_totalhits, $this -> debug );
-								Battle_Engine_Model::battledebug($attacker['char']['name'] . ' Actual Hitperc: ' . $actual_hitperc . '% (against ' . $att_expectedchancetohit . '%)', $this -> debug );
+								Model_BattleEngine::battledebug($attacker['char']['name'] . ', Hits ' . $att_successfulhits.'/'. $att_totalhits, $this -> debug );
+								Model_BattleEngine::battledebug($attacker['char']['name'] . ' Actual Hitperc: ' . $actual_hitperc . '% (against ' . $att_expectedchancetohit . '%)', $this -> debug );
 								$chancetohit = $att_expectedchancetohit + ( $att_expectedchancetohit - $actual_hitperc );
-								Battle_Engine_Model::battledebug( 'Corrected chancetohit from: ' . $att_expectedchancetohit . ' to: ' . $chancetohit , $this -> debug );
+								Model_BattleEngine::battledebug( 'Corrected chancetohit from: ' . $att_expectedchancetohit . ' to: ' . $chancetohit , $this -> debug );
 								$att_totalhits++;
 							}
 							else
 							{
 								
 								$actual_hitperc = ($def_successfulhits/max(1,$def_totalhits))*100;
-								Battle_Engine_Model::battledebug($defender['char']['name'] . ', Hits ' . $def_successfulhits.'/'.$def_totalhits, $this -> debug );
-								Battle_Engine_Model::battledebug($defender['char']['name'] . ' Actual Hitperc: ' . $actual_hitperc . '% (against ' . $def_expectedchancetohit . '%)', $this -> debug );
+								Model_BattleEngine::battledebug($defender['char']['name'] . ', Hits ' . $def_successfulhits.'/'.$def_totalhits, $this -> debug );
+								Model_BattleEngine::battledebug($defender['char']['name'] . ' Actual Hitperc: ' . $actual_hitperc . '% (against ' . $def_expectedchancetohit . '%)', $this -> debug );
 								$chancetohit = $def_expectedchancetohit + ( $def_expectedchancetohit - $actual_hitperc );
-								Battle_Engine_Model::battledebug( 'Corrected chancetohit from: ' . $def_expectedchancetohit . ' to: ' . $chancetohit, $this -> debug );
+								Model_BattleEngine::battledebug( 'Corrected chancetohit from: ' . $def_expectedchancetohit . ' to: ' . $chancetohit, $this -> debug );
 								$def_totalhits++;
 							}
 						}
@@ -639,11 +639,11 @@ class Battle_Engine_Model
 						
 						mt_srand();
 						$roll = mt_rand(1,100);
-						Battle_Engine_Model::battledebug( 'Chancetohit :' . $chancetohit . '% Roll: ' . $roll , $this -> debug );
+						Model_BattleEngine::battledebug( 'Chancetohit :' . $chancetohit . '% Roll: ' . $roll , $this -> debug );
 						
 						if ( $roll <= $chancetohit )						
 						{
-							Battle_Engine_Model::battledebug( '***HIT!***', $this -> debug );
+							Model_BattleEngine::battledebug( '***HIT!***', $this -> debug );
 							$hit = true;							
 							if ( $_attacker['char']['name'] == $attacker['char']['name'] )							
 								$att_successfulhits ++;								
@@ -653,7 +653,7 @@ class Battle_Engine_Model
 						}
 						else
 						{
-							Battle_Engine_Model::battledebug( '***MISS!***', $this -> debug );
+							Model_BattleEngine::battledebug( '***MISS!***', $this -> debug );
 							$hit = false;
 							$blockedwithparry = false;
 						}
@@ -670,9 +670,9 @@ class Battle_Engine_Model
 							if ( $_defender['char']['type'] != 'npc' )
 							{
 								
-								Battle_Engine_Model::battledebug( "Defender parry: " . isset( $_defender['char']['parry']) );
-								Battle_Engine_Model::battledebug( "Attacker right hand: ". isset($_attacker['char']['weapons']['right_hand']['obj']));
-								Battle_Engine_Model::battledebug( "Defender right hand: ". isset($_defender['char']['weapons']['right_hand']['obj']));
+								Model_BattleEngine::battledebug( "Defender parry: " . isset( $_defender['char']['parry']) );
+								Model_BattleEngine::battledebug( "Attacker right hand: ". isset($_attacker['char']['weapons']['right_hand']['obj']));
+								Model_BattleEngine::battledebug( "Defender right hand: ". isset($_defender['char']['weapons']['right_hand']['obj']));
 								
 								if (
 								
@@ -688,9 +688,9 @@ class Battle_Engine_Model
 							
 								{
 									
-									Battle_Engine_Model::battledebug( "Parry skill evaluation active.", $this -> debug );
+									Model_BattleEngine::battledebug( "Parry skill evaluation active.", $this -> debug );
 										
-									Battle_Engine_Model::battledebug( "Proficiency of parry skill: {$_defender['char']['parry']}, chance to parry a hit:" . ($_defender['char']['parry']*0.50) . "%", $this -> debug );
+									Model_BattleEngine::battledebug( "Proficiency of parry skill: {$_defender['char']['parry']}, chance to parry a hit:" . ($_defender['char']['parry']*0.50) . "%", $this -> debug );
 									
 									mt_srand();
 									
@@ -699,7 +699,7 @@ class Battle_Engine_Model
 									if ( $roll <= ( max(0, $_defender['char']['parry'] * 0.50)) )
 									{
 										
-										Battle_Engine_Model::battledebug( '***HIT BLOCKED BY PARRY SKILL!***', $this -> debug );
+										Model_BattleEngine::battledebug( '***HIT BLOCKED BY PARRY SKILL!***', $this -> debug );
 										$hit = false;
 										$blockedwithparry = true;
 										$_defender['char']['parrysuccess'] += 1;
@@ -709,16 +709,16 @@ class Battle_Engine_Model
 									{
 										$this -> battlereport[]['battleparryfail'] = '__battle.parryfail;' . $_defender['char']['name'];
 										kohana::log('debug', "roll: {$roll}: ***PARRY TENTATIVE FAILED!***");
-										Battle_Engine_Model::battledebug( '***PARRY TENTATIVE FAILED. ***', $this -> debug );
+										Model_BattleEngine::battledebug( '***PARRY TENTATIVE FAILED. ***', $this -> debug );
 										
 										// failed parry, we increase the skill.
 										$deltaproficiency = round((100 - $_defender['char']['parry'] ) / 130 + 0.2 , 2 );
 										
-										Battle_Engine_Model::battledebug( "-> Parry failed. current proficiency: {$_defender['char']['parry']}. Incrementing by {$deltaproficiency}.", $this -> debug );
+										Model_BattleEngine::battledebug( "-> Parry failed. current proficiency: {$_defender['char']['parry']}. Incrementing by {$deltaproficiency}.", $this -> debug );
 										
 										$_defender['char']['parry'] += $deltaproficiency;
 										
-										Battle_Engine_Model::battledebug( "-> New Parry proficiency: {$_defender['char']['parry']}", $this -> debug );																				
+										Model_BattleEngine::battledebug( "-> New Parry proficiency: {$_defender['char']['parry']}", $this -> debug );
 										$_defender['char']['parryfails'] += 1;
 									}
 								}
@@ -783,7 +783,7 @@ class Battle_Engine_Model
 						
 						$damage = $wpndamage + ($_attacker['char']['str'] / 5);
 						
-						Battle_Engine_Model::battledebug( 
+						Model_BattleEngine::battledebug(
 							' Wpn Damage: ' . $wpndamage .
 							' Total rolls: ' . $totalrolls . 
 							' Damage (including str bonus): ' . $damage , $this -> debug );
@@ -805,18 +805,18 @@ class Battle_Engine_Model
 							and 
 							$_attacker['char']['fightmode'] == 'attack' )
 						{
-							Battle_Engine_Model::battledebug ("Applying Kill Infidels Bonus.",$this->debug);	
+							Model_BattleEngine::battledebug ("Applying Kill Infidels Bonus.",$this->debug);
 							$attackbonus = 50;
 							$attackbonus *= $_attacker['char']['faithlevel']/100;
 						}
-						Battle_Engine_Model::battledebug( "--- Attack Bonus (dogma ---");
-						Battle_Engine_Model::battledebug( "Fight Mode: {$_attacker['char']['fightmode']}" , $this -> debug );
-						Battle_Engine_Model::battledebug( "Attack Bonus: {$attackbonus}%" , $this -> debug );
-						Battle_Engine_Model::battledebug( "Faith Level: {$_attacker['char']['faithlevel']}" , $this -> debug );
+						Model_BattleEngine::battledebug( "--- Attack Bonus (dogma ---");
+						Model_BattleEngine::battledebug( "Fight Mode: {$_attacker['char']['fightmode']}" , $this -> debug );
+						Model_BattleEngine::battledebug( "Attack Bonus: {$attackbonus}%" , $this -> debug );
+						Model_BattleEngine::battledebug( "Faith Level: {$_attacker['char']['faithlevel']}" , $this -> debug );
 					
-						Battle_Engine_Model::battledebug(" Damage Before: {$damage}", $this -> debug );
+						Model_BattleEngine::battledebug(" Damage Before: {$damage}", $this -> debug );
 						$damage	*= ((100 + $attackbonus)/100);
-						Battle_Engine_Model::battledebug("Damage After: {$damage}", $this -> debug );
+						Model_BattleEngine::battledebug("Damage After: {$damage}", $this -> debug );
 						
 						
 						// if the defender is stun, the damage is increased
@@ -825,7 +825,7 @@ class Battle_Engine_Model
 						{					
 						
 							$damage *= 1.5;
-							Battle_Engine_Model::battledebug( 
+							Model_BattleEngine::battledebug(
 							'Defender is stunned, damage multiplied. Damage now is: ' . $damage , $this -> debug );
 						}
 						
@@ -849,11 +849,11 @@ class Battle_Engine_Model
 						$critical = false;
 						mt_srand();
 						$roll = mt_rand(1, 20);
-						Battle_Engine_Model::battledebug( 'Minimum roll for critical for the weapon: ' . $critmin . '. Rolled: ' . $roll , $this -> debug );
+						Model_BattleEngine::battledebug( 'Minimum roll for critical for the weapon: ' . $critmin . '. Rolled: ' . $roll , $this -> debug );
 						
 						if ( $roll >= $critmin )
 						{
-							Battle_Engine_Model::battledebug( 'Attacker deals a Critic. Check if the Defender dodges it.', $this -> debug );
+							Model_BattleEngine::battledebug( 'Attacker deals a Critic. Check if the Defender dodges it.', $this -> debug );
 							
 							$chancetocrit = intval( 
 								10 + 
@@ -865,11 +865,11 @@ class Battle_Engine_Model
 								
 							mt_srand();
 							$roll = mt_rand(1,100);
-							Battle_Engine_Model::battledebug( 'Critical chance: ' . $chancetocrit . '%' . ' roll: ' . $roll, $this -> debug );
+							Model_BattleEngine::battledebug( 'Critical chance: ' . $chancetocrit . '%' . ' roll: ' . $roll, $this -> debug );
 							if ( $roll <= $chancetocrit )						
 							{
 								$critical = true;
-								Battle_Engine_Model::battledebug( 'Defender did not dodge, CRITICAL HIT.', $this -> debug );
+								Model_BattleEngine::battledebug( 'Defender did not dodge, CRITICAL HIT.', $this -> debug );
 							}
 						}	
 						
@@ -878,9 +878,9 @@ class Battle_Engine_Model
 						{
 							$battlestats['totalcriticalhits']['total']++;
 							$battlestats['totalcriticalhits'][$_attacker['char']['name']]++;
-							Battle_Engine_Model::battledebug("Damage before: $damage", $this -> debug );
+							Model_BattleEngine::battledebug("Damage before: $damage", $this -> debug );
 							$damage *= $critmult; $damage += 10;
-							Battle_Engine_Model::battledebug("Damage after Critical multiplier: $damage", $this -> debug );
+							Model_BattleEngine::battledebug("Damage after Critical multiplier: $damage", $this -> debug );
 							$this -> battlereport[]['battlecriticalhit'] = '__battle.battlecriticalhit' .';'  . $_attacker['char']['name'] ;
 						}
 						
@@ -899,7 +899,7 @@ class Battle_Engine_Model
 							$cuttingdamage = $damage * 0;
 						}
 						
-						Battle_Engine_Model::battledebug( $_attacker['char']['name'] . ' - ' .
+						Model_BattleEngine::battledebug( $_attacker['char']['name'] . ' - ' .
 							" Damage before defense: Bluntdamage: <b>" . round($bluntdamage,2) . "</b>, Cuttingdamage: <b>" . round($cuttingdamage,2)."</b>, Total Damage: <b>" . round($bluntdamage+$cuttingdamage,2) . "</b>"
 						, $this -> debug );
 						
@@ -941,9 +941,9 @@ class Battle_Engine_Model
 							) 								
 						{
 							
-							$hitpart_info = Battle_Engine_Model::get_part_info($part, $_defender);
+							$hitpart_info = Model_BattleEngine::get_part_info($part, $_defender);
 							
-							Battle_Engine_Model::battledebug( "Hit equipment is: <b>" . kohana::lang($hitpart_info['hitobj'] -> name) . "</b>, defense: <b>{$hitpart_info['hitobjdefense']}</b>, totaldefense: <b>{$hitpart_info['totaldefense']}</b>", $this -> debug );
+							Model_BattleEngine::battledebug( "Hit equipment is: <b>" . kohana::lang($hitpart_info['hitobj'] -> name) . "</b>, defense: <b>{$hitpart_info['hitobjdefense']}</b>, totaldefense: <b>{$hitpart_info['totaldefense']}</b>", $this -> debug );
 
 							// if hit part is left hand and player has a shield, some damage is absorbed
 							
@@ -978,7 +978,7 @@ class Battle_Engine_Model
 								'totaldefense' => 0,
 							);
 							
-							Battle_Engine_Model::battledebug(	'Hit landed on body part: ' . $part . 
+							Model_BattleEngine::battledebug(	'Hit landed on body part: ' . $part .
 								', Armor is: none' .
 								', Defense is: 0 ', $this -> debug );
 						
@@ -1004,11 +1004,11 @@ class Battle_Engine_Model
 							
 							$consumefactor *= 0.25;							
 							
-							Battle_Engine_Model::battledebug( $_attacker['char']['name'] . ' has a weapon. Its quality is: <b>' . round($_attacker['char']['weapons']['right_hand']['obj'] -> quality,2) . "%</b> and wearfactor is:" .$_attacker['char']['weapons']['right_hand']['obj'] -> wearfactor . " Will be consumed by a factor of <b>{$consumefactor}%</b>", $this -> debug );
+							Model_BattleEngine::battledebug( $_attacker['char']['name'] . ' has a weapon. Its quality is: <b>' . round($_attacker['char']['weapons']['right_hand']['obj'] -> quality,2) . "%</b> and wearfactor is:" .$_attacker['char']['weapons']['right_hand']['obj'] -> wearfactor . " Will be consumed by a factor of <b>{$consumefactor}%</b>", $this -> debug );
 							
 							$_attacker['char']['weapons']['right_hand']['obj'] -> quality -= $consumefactor;
 							
-							Battle_Engine_Model::battledebug( $_attacker['char']['name'] . " has a weapon, Its quality is NOW: <b>" . round($_attacker['char']['weapons']['right_hand']['obj'] -> quality,2) .'%</b>' , $this -> debug );
+							Model_BattleEngine::battledebug( $_attacker['char']['name'] . " has a weapon, Its quality is NOW: <b>" . round($_attacker['char']['weapons']['right_hand']['obj'] -> quality,2) .'%</b>' , $this -> debug );
 							
 							// recompute attack, defense
 							//$this -> get_fightstats( $_attacker ) ;	
@@ -1020,7 +1020,7 @@ class Battle_Engine_Model
 						
 						if ( !is_null ($hitpart_info['hitobj']) ) 								
 						{							
-							Battle_Engine_Model::battledebug( $_defender['char']['name'] . " has been hit equipment: <b>" . kohana::lang($hitpart_info['hitobj'] -> name) ." </b>. Its quality BEFORE HIT is: <b>" . round($hitpart_info['hitobj'] -> quality,2) . "%</b> and totaldefense is <b>" . round($hitpart_info['totaldefense'],2) ."</b>", $this -> debug );
+							Model_BattleEngine::battledebug( $_defender['char']['name'] . " has been hit equipment: <b>" . kohana::lang($hitpart_info['hitobj'] -> name) ." </b>. Its quality BEFORE HIT is: <b>" . round($hitpart_info['hitobj'] -> quality,2) . "%</b> and totaldefense is <b>" . round($hitpart_info['totaldefense'],2) ."</b>", $this -> debug );
 													
 							if ( $bluntdamage > 0 )
 							{
@@ -1031,7 +1031,7 @@ class Battle_Engine_Model
 								$_defender['char']['armors'][$hitpart_info['hitpart']][$hitpart_info['hitobj']->tag]['obj'] 
 										-> quality -= $consumefactor;
 								
-								Battle_Engine_Model::battledebug( $_defender['char']['name'] . " has been hit equipment: <b>" . 
+								Model_BattleEngine::battledebug( $_defender['char']['name'] . " has been hit equipment: <b>" .
 									kohana::lang($hitpart_info['hitobj'] -> name) ." </b>. Its quality AFTER HIT is: <b>" . round($_defender['char']['armors'][$hitpart_info['hitpart']][$hitpart_info['hitobj']->tag]['obj'] 
 									-> quality,2) . "%</b>.", $this -> debug );
 									
@@ -1044,7 +1044,7 @@ class Battle_Engine_Model
 						$stunchance =  max( 0, round (( $bluntdamage_afterarmor / 150 ) * 100 ) );	
 						$bleeddamage = $cuttingdamage_afterarmor * 0.05;
 						
-						Battle_Engine_Model::battledebug($_attacker['char']['name'] . 
+						Model_BattleEngine::battledebug($_attacker['char']['name'] .
 							", Damage after armor defense: Bluntdamage: <b>" . round($bluntdamage_afterarmor,2). "</b>, Cuttingdamage: <b>" . round($cuttingdamage_afterarmor,2). "</b>, Total Damage: <b>" . round($bluntdamage_afterarmor + $cuttingdamage_afterarmor,2) . "</b>, Stun chance: " . ($stunchance) . "%, Bleed damage: <b>" . round($bleeddamage,2) .  "</b>", $this -> debug );
 						
 						$_defender['char']['bleeddamage'] += $bleeddamage;
@@ -1112,7 +1112,7 @@ class Battle_Engine_Model
 							mt_srand();
 							$r = mt_rand( 1, 100 );
 							
-							Battle_Engine_Model::battledebug ( 'Roll for stun must be less or equal than: ' . $stunchance . ', Roll: ' . $r, $this -> debug );
+							Model_BattleEngine::battledebug ( 'Roll for stun must be less or equal than: ' . $stunchance . ', Roll: ' . $r, $this -> debug );
 							if ( $r <= $stunchance )
 							{		
 								
@@ -1126,7 +1126,7 @@ class Battle_Engine_Model
 								$battlestats['totalstunreceived'][$_defender['char']['name']] ++;
 								$battlestats['totalstunnedrounds'][$_defender['char']['name']] += $_defender['char']['stunnedround'];
 								
-								Battle_Engine_Model::battledebug ( 'Attacks stunned: ' . $_defender['char']['stunnedround'] , $this -> debug );
+								Model_BattleEngine::battledebug ( 'Attacks stunned: ' . $_defender['char']['stunnedround'] , $this -> debug );
 								
 								// the turns are increased by 1 because then this is subtracted.
 								
@@ -1172,7 +1172,7 @@ class Battle_Engine_Model
 							/3
 					);
 					
-					Battle_Engine_Model::battledebug("Drainrate: {$drainrate}", $this -> debug );
+					Model_BattleEngine::battledebug("Drainrate: {$drainrate}", $this -> debug );
 					
 					// If the character is impacted by the meditate bonus and the fight mode is defend,
 					// the drainrate is lowered by 75%.
@@ -1181,7 +1181,7 @@ class Battle_Engine_Model
 					
 					if (isset($_attacker['char']['dogmabonus']['meditateanddefend']) and $_attacker['char']['fightmode'] == 'defend')
 					{
-						Battle_Engine_Model::battledebug ("Applying Meditate And Defend Bonus.",$this->debug);							
+						Model_BattleEngine::battledebug ("Applying Meditate And Defend Bonus.",$this->debug);
 						$energybonus = 75;					
 						$energybonus *= $_attacker['char']['faithlevel']/100;					
 					}
@@ -1191,17 +1191,17 @@ class Battle_Engine_Model
 					
 					if (isset($_attacker['char']['dogmabonus']['killinfidels']) and $_attacker['char']['fightmode'] == 'attack')
 					{
-						Battle_Engine_Model::battledebug ("Applying Kill Infidels Bonus.",$this->debug);							
+						Model_BattleEngine::battledebug ("Applying Kill Infidels Bonus.",$this->debug);
 						$energybonus = -30;					
 						$energybonus *= (100 - ($_attacker['char']['faithlevel']*30	/100))/100;												
 					}
 
-					Battle_Engine_Model::battledebug("Fight Mode: {$_attacker['char']['fightmode']}", $this -> debug );
-					Battle_Engine_Model::battledebug("Faith Level: {$_attacker['char']['faithlevel']}", $this -> debug );
-					Battle_Engine_Model::battledebug("Energy Bonus: {$energybonus}", $this -> debug );
+					Model_BattleEngine::battledebug("Fight Mode: {$_attacker['char']['fightmode']}", $this -> debug );
+					Model_BattleEngine::battledebug("Faith Level: {$_attacker['char']['faithlevel']}", $this -> debug );
+					Model_BattleEngine::battledebug("Energy Bonus: {$energybonus}", $this -> debug );
 					
 					$drainrate *= (100 - $energybonus)/100;					
-					Battle_Engine_Model::battledebug("Drainrate After: {$drainrate}", $this -> debug );
+					Model_BattleEngine::battledebug("Drainrate After: {$drainrate}", $this -> debug );
 				
 					// if the attacker is stunned, no hits by default, but
 					// energy must not be removed.
@@ -1214,7 +1214,7 @@ class Battle_Engine_Model
 						else
 							$newenergy = max( 5, $_attacker['char']['energy'] - $drainrate) ;
 					
-					Battle_Engine_Model::battledebug( '*** ENERGY REPORT of ' . $_attacker['char']['name'] . '*** <br/>' .
+					Model_BattleEngine::battledebug( '*** ENERGY REPORT of ' . $_attacker['char']['name'] . '*** <br/>' .
 							' >>>>>> Current Energy: ' . $_attacker['char']['energy'] . '<br/>' .
 							' >>>>>> Weapon Weight: ' . $att_rightweaponweight . ' Kg ' . '<br/>' .
 							' >>>>>> Weapon Weight Normalized: ' .$weaponweight_normalized . '<br/>' .
@@ -1244,7 +1244,7 @@ class Battle_Engine_Model
 				
 				// swap attacker and defender
 				
-				Battle_Engine_Model::battledebug ('-> Swapping chars.' , $this -> debug );
+				Model_BattleEngine::battledebug ('-> Swapping chars.' , $this -> debug );
 				$_x = $_attacker;
 				$_attacker = $_defender;
 				$_defender = $_x;
@@ -1298,7 +1298,7 @@ class Battle_Engine_Model
 		
 		$battlestats['battlerounds'] = $battleround;
 		$winner = 'none';
-		Battle_Engine_Model::battledebug(	$attacker['char']['name'] . ' Health: ' . $attacker['char']['health'] .
+		Model_BattleEngine::battledebug(	$attacker['char']['name'] . ' Health: ' . $attacker['char']['health'] .
 			' Energy: ' . $attacker['char']['energy'] .
 			' - ' . $defender['char']['name'] . ' Health: ' . $defender['char']['health'] .
 			' Energy: ' . $defender['char']['energy'], $this -> debug );
@@ -1330,10 +1330,10 @@ class Battle_Engine_Model
 		//$attacker['char']['energy'] = $att_energy;
 		//$defender['char']['energy'] = $def_energy;
 		
-		Battle_Engine_Model::battledebug( $attacker['char']['name'] . ' health: ' . $attacker['char']['health'], $this -> debug );
-		Battle_Engine_Model::battledebug( $defender['char']['name'] . ' health: ' . $defender['char']['health'], $this -> debug );
-		Battle_Engine_Model::battledebug( $attacker['char']['name'] . ' energy: ' . $attacker['char']['energy'], $this -> debug );
-		Battle_Engine_Model::battledebug( $defender['char']['name'] . ' energy: ' . $defender['char']['energy'], $this -> debug );
+		Model_BattleEngine::battledebug( $attacker['char']['name'] . ' health: ' . $attacker['char']['health'], $this -> debug );
+		Model_BattleEngine::battledebug( $defender['char']['name'] . ' health: ' . $defender['char']['health'], $this -> debug );
+		Model_BattleEngine::battledebug( $attacker['char']['name'] . ' energy: ' . $attacker['char']['energy'], $this -> debug );
+		Model_BattleEngine::battledebug( $defender['char']['name'] . ' energy: ' . $defender['char']['energy'], $this -> debug );
 		
 		return;
 	}
@@ -1486,11 +1486,11 @@ class Battle_Engine_Model
 		if (is_null($cfgweapons))
 			$cfgweapons = Configuration_Model::get_weaponscfg();		
 			
-		Battle_Engine_Model::battledebug( "<b>--- Computing defense and damage of char: {$charcopy['char']['name']} ---</b>", $debug);
+		Model_BattleEngine::battledebug( "<b>--- Computing defense and damage of char: {$charcopy['char']['name']} ---</b>", $debug);
 		
 		//kohana::log('debug', kohana::debug($charcopy));
 		
-		Battle_Engine_Model::battledebug ("--- Evaluating Weapon ---",$debug);
+		Model_BattleEngine::battledebug ("--- Evaluating Weapon ---",$debug);
 		
 		$equippedarmorweight = 0;		
 		
@@ -1528,7 +1528,7 @@ class Battle_Engine_Model
 				$originalmindamage = $cfgweapons['weaponlist'][$weapon->tag]['obj'] -> mindmg;
 				$originalmaxdamage = $cfgweapons['weaponlist'][$weapon->tag]['obj'] -> maxdmg;
 				
-				Battle_Engine_Model::battledebug ("CURRENT {$weapon -> tag} Quality: {$weapon -> quality}%,
+				Model_BattleEngine::battledebug ("CURRENT {$weapon -> tag} Quality: {$weapon -> quality}%,
 					Min damage: {$weapon -> mindmg}, Max damage: {$weapon -> maxdmg} ", $debug);
 					
 				$wpn_mindamage = max(1,round($charcopy['char']['weapons']['right_hand']['obj'] -> mindmg 
@@ -1542,11 +1542,11 @@ class Battle_Engine_Model
 		$charcopy['char']['wpn_mindamage'] = $wpn_mindamage;
 		$charcopy['char']['wpn_maxdamage'] = $wpn_maxdamage;
 		
-		Battle_Engine_Model::battledebug("NEW Weapon Min-Max Damage: {$wpn_mindamage} - {$wpn_maxdamage}", $debug);
+		Model_BattleEngine::battledebug("NEW Weapon Min-Max Damage: {$wpn_mindamage} - {$wpn_maxdamage}", $debug);
 		
 		// armors
 		
-		Battle_Engine_Model::battledebug("---- Evalutating Armor ----", $debug);
+		Model_BattleEngine::battledebug("---- Evalutating Armor ----", $debug);
 		
 		if ( isset ($charcopy['char']['armors'] ) )
 		{
@@ -1554,7 +1554,7 @@ class Battle_Engine_Model
 		
 			foreach ( $charcopy['char']['armors'] as $part => $equipment )
 			{
-				Battle_Engine_Model::battledebug("---- Evaluating Part: [{$part}] ----", $debug);
+				Model_BattleEngine::battledebug("---- Evaluating Part: [{$part}] ----", $debug);
 				//kohana::log('debug', "-> Evaluating part {$part}");
 				
 				foreach ($equipment as $tag => $data )
@@ -1587,7 +1587,7 @@ class Battle_Engine_Model
 						
 						$data['obj'] -> defense = round( $originaldefense * $data['obj'] -> quality / 100,2);
 						
-						Battle_Engine_Model::battledebug("Defense of obj [{$data['obj']->tag}]: {$data['obj'] -> defense}", $debug);
+						Model_BattleEngine::battledebug("Defense of obj [{$data['obj']->tag}]: {$data['obj'] -> defense}", $debug);
 						
 						$defensebonus = 0;
 						
@@ -1595,8 +1595,8 @@ class Battle_Engine_Model
 						
 						if (isset($charcopy['char']['dogmabonus']['meditateanddefend']) and $charcopy['char']['fightmode'] == 'defend')
 						{
-							Battle_Engine_Model::battledebug("Applying meditateanddefend bonus", $debug);							
-							Battle_Engine_Model::battledebug("Faith Level: {$charcopy['char']['faithlevel']}", $debug);
+							Model_BattleEngine::battledebug("Applying meditateanddefend bonus", $debug);
+							Model_BattleEngine::battledebug("Faith Level: {$charcopy['char']['faithlevel']}", $debug);
 							$defensebonus = 100;
 							$defensebonus *= $charcopy['char']['faithlevel']/100;
 						
@@ -1605,19 +1605,19 @@ class Battle_Engine_Model
 						if (isset($charcopy['char']['dogmabonus']['killinfidels']) and $charcopy['char']['fightmode'] == 'attack')
 						{							
 							
-							Battle_Engine_Model::battledebug("Applying killinfidels bonus", $debug);							
-							Battle_Engine_Model::battledebug("Faith Level: {$charcopy['char']['faithlevel']}", $debug);
+							Model_BattleEngine::battledebug("Applying killinfidels bonus", $debug);
+							Model_BattleEngine::battledebug("Faith Level: {$charcopy['char']['faithlevel']}", $debug);
 							$defensebonus = -50;
 							$defensebonus *= (100 - ($charcopy['char']['faithlevel']*30/100))/100;							
 							
 						}
 						
-						Battle_Engine_Model::battledebug( "Fight Mode: [{$charcopy['char']['fightmode']}]", $debug);						
-						Battle_Engine_Model::battledebug( "Defense Bonus: [{$defensebonus}%]", $debug);												
+						Model_BattleEngine::battledebug( "Fight Mode: [{$charcopy['char']['fightmode']}]", $debug);
+						Model_BattleEngine::battledebug( "Defense Bonus: [{$defensebonus}%]", $debug);
 						
-						Battle_Engine_Model::battledebug("Defense of obj BEFORE bonus/malus: {$data['obj']->tag}: {$data['obj'] -> defense}", $debug);
+						Model_BattleEngine::battledebug("Defense of obj BEFORE bonus/malus: {$data['obj']->tag}: {$data['obj'] -> defense}", $debug);
 						$data['obj'] -> defense	*= ((100 + $defensebonus)/100);						
-						Battle_Engine_Model::battledebug("Defense of obj AFTER bonus/malus: {$data['obj']->tag}: {$data['obj'] -> defense}", $debug);
+						Model_BattleEngine::battledebug("Defense of obj AFTER bonus/malus: {$data['obj']->tag}: {$data['obj'] -> defense}", $debug);
 						
 						/*
 						Battle_Engine_Model::battledebug ("Part: {$part}, new {$tag} Quality: {$data['obj'] -> quality}, Defense: 	{$data['obj'] -> defense}");							
@@ -1637,9 +1637,9 @@ class Battle_Engine_Model
 			
 		$btw = Model_Character::get_basetransportableweight	( $charcopy['char']['str'] ) ;
 		
-		$charcopy['char']['armorencumbrance'] = Model_Character::get_armorencumbrance( $btw, $equippedarmorweight );
-		Battle_Engine_Model::battledebug("New Armor Encumberance: {$charcopy['char']['armorencumbrance']}%", $debug);
-		
+		$charcopy['char']['armorencumbrance'] = Character_Model::get_armorencumbrance( $btw, $equippedarmorweight );
+		Model_BattleEngine::battledebug("New Armor Encumberance: {$charcopy['char']['armorencumbrance']}%", $debug);
+
 	}
 	
 	/**
@@ -2258,13 +2258,13 @@ class Battle_Engine_Model
 		
 		if ( $char['char']['energy'] <= 0 )
 		{
-			Battle_Engine_Model::battledebug( $char['char']['name'] . ' has no more energy, 0 consecutive hits.', $this -> debug );
+			Model_BattleEngine::battledebug( $char['char']['name'] . ' has no more energy, 0 consecutive hits.', $this -> debug );
 			return 0;
 		}
 			
 		if ( isset( $char['char']['weapons']['right_hand']['obj'] ) )
 		{
-			Battle_Engine_Model::battledebug( "Weapon Weight:{$char['char']['weapons']['right_hand']['obj'] -> weight}", $this -> debug );
+			Model_BattleEngine::battledebug( "Weapon Weight:{$char['char']['weapons']['right_hand']['obj'] -> weight}", $this -> debug );
 			$weaponreach_normalized = ( $char['char']['weapons']['right_hand']['obj'] -> reach  - 1 )/ (5 - 1); 
 			$weaponweight_normalized = ($char['char']['weapons']['right_hand']['obj'] -> weight/1000 - 0)/($this-> cfgweapons['maxweight']/1000-0);
 		}
@@ -2273,7 +2273,7 @@ class Battle_Engine_Model
 			$weaponreach_normalized = ( 1 - 1 )/ (5 - 1);
 			$weaponweight_normalized = (0/1000 - 0)/($maxweaponweight/1000-0);
 		}
-		Battle_Engine_Model::battledebug( "Armor Encumbrance:{$char['char']['armorencumbrance']}", $this -> debug );
+		Model_BattleEngine::battledebug( "Armor Encumbrance:{$char['char']['armorencumbrance']}", $this -> debug );
 		$armorencumbrance_normalized = ( $char['char']['armorencumbrance'] - 0 )/($maxarmorencumbrance-0);		
 		$energy_normalized = ( $char['char']['energy'] - 1 )/ (50 - 1);
 		$constitution_normalized = ( $char['char']['cost'] - 1 )/ (Model_Character::get_attributelimit() - 1);
@@ -2284,7 +2284,7 @@ class Battle_Engine_Model
 		$negativefactors = $weaponweight_normalized + $armorencumbrance_normalized + $weaponreach_normalized;
 		$positivefactors = 1.5 * $energy_normalized + 1.5 * $constitution_normalized;
 				
-		Battle_Engine_Model::battledebug( 
+		Model_BattleEngine::battledebug(
 		"{$char['char']['name']} " . 
 		" Energy normalized: {$energy_normalized} " . 
 		" Const normalized: {$constitution_normalized}" .

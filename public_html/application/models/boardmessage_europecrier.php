@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Boardmessage_Europecrier_Model extends Boardmessage_Model
+class _Europecrier_ModelBoardmessage extends Model_Boardmessage
 {	
 	protected $sorting = array( 'starpoints' => 'desc', 'id' => 'asc');
 	

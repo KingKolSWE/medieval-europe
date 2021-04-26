@@ -31,9 +31,9 @@ class Course_Retorica_Model extends Course_Model
 		$increasedattr = 'create_charcar';				
 				
 		if ( $char -> car == 20 ) 
-			Achievement_Model::compute_achievement ( 'stat_car', 20, $char -> id ); 		
+			Model_Achievement::compute_achievement ( 'stat_car', 20, $char -> id );
 		
-		Model_Character::modify_stat_d(
+		Character_Model::modify_stat_d( 
 			$char -> id,
 			'studiedhours', 
 			0,

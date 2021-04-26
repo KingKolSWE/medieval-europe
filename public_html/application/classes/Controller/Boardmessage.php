@@ -24,7 +24,7 @@ class Controller_Boardmessage extends Controller_Template
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$currentposition = ORM::factory('region', $character -> position_id );
 		
-		$c = BoardMessage_Model::factory( $category );	
+		$c = Model_Boardmessage::factory( $category );
 		$params[0] = $currentposition -> kingdom_id ;
 		$params[1] = $category;	
 		$params[2] = $character; 
@@ -75,7 +75,7 @@ class Controller_Boardmessage extends Controller_Template
 		$currentposition = ORM::factory('region', $character -> position_id );
 		$auth = Auth::instance();	
 		$db = Database::instance(); 
-		$c = BoardMessage_Model::factory( $category );
+		$c = Model_Boardmessage::factory( $category );
 		$view = $c -> get_view( 'add' );			
 		
 		if ( Model_Character::is_traveling( $character -> id ))
@@ -189,7 +189,7 @@ class Controller_Boardmessage extends Controller_Template
 					HTTP::redirect( 'boardmessage/index/' . $message -> category );
 			}	
 			
-			$c = BoardMessage_Model::factory( $message -> category );
+			$c = Model_Boardmessage::factory( $message -> category );
 			if ( ! $c -> is_commandallowed( 'edit' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
@@ -220,7 +220,7 @@ class Controller_Boardmessage extends Controller_Template
 					HTTP::redirect( 'boardmessage/index/' . $category );
 			}	
 			
-			$c = BoardMessage_Model::factory( $message -> category );
+			$c = Model_Boardmessage::factory( $message -> category );
 			if ( ! $c -> is_commandallowed( 'edit' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
@@ -289,7 +289,7 @@ class Controller_Boardmessage extends Controller_Template
 			HTTP::redirect( 'boardmessage/index/' );
 		}
 		
-		$c = BoardMessage_Model::factory( $message -> category );
+		$c = Model_Boardmessage::factory( $message -> category );
 		if ( ! $c -> is_commandallowed( 'give_globalvisibility' ) )
 		{
 			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
@@ -344,7 +344,7 @@ class Controller_Boardmessage extends Controller_Template
 			HTTP::redirect( 'boardmessage/index/');
 		}
 	
-		$c = BoardMessage_Model::factory( $message -> category );
+		$c = Model_Boardmessage::factory( $message -> category );
 		if ( ! $c -> is_commandallowed( 'bump_up' ) )
 		{
 			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
@@ -399,7 +399,7 @@ class Controller_Boardmessage extends Controller_Template
 			HTTP::redirect( 'boardmessage/index' );
 		}
 		
-		$c = BoardMessage_Model::factory( $message -> category );
+		$c = Model_Boardmessage::factory( $message -> category );
 		if ( ! $c -> is_commandallowed( 'delete_message' ) )
 		{
 			Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
@@ -462,7 +462,7 @@ class Controller_Boardmessage extends Controller_Template
 				HTTP::redirect( 'boardmessage/index' );
 			}		
 			
-			$c = BoardMessage_Model::factory( $message -> category );
+			$c = Model_Boardmessage::factory( $message -> category );
 			if ( ! $c -> is_commandallowed( 'report' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
@@ -484,7 +484,7 @@ class Controller_Boardmessage extends Controller_Template
 				HTTP::redirect( 'boardmessage/index' );
 			}	
 			
-			$c = BoardMessage_Model::factory( $message -> category );
+			$c = Model_Boardmessage::factory( $message -> category );
 			if ( ! $c -> is_commandallowed( 'report' ) )
 			{
 				Session::instance()->set('user_message', "<div class=\"error_msg\">" . 
@@ -531,7 +531,7 @@ class Controller_Boardmessage extends Controller_Template
 		$message = ORM::factory('boardmessage', $message_id );
 		$character = Model_Character::get_info( Session::instance()->get('char_id') );
 		$currentposition = ORM::factory('region', $character -> position_id );
-		$c = BoardMessage_Model::factory( $message -> category );
+		$c = Model_Boardmessage::factory( $message -> category );
 		$view = $c -> get_view( 'view' );
 		$sheets  = array('gamelayout'=>'screen', 'submenu'=>'screen');
 		$auth = Auth::instance();			

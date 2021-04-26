@@ -122,7 +122,7 @@ class CA_Leavereligion_Model extends Character_Action_Model
 		// Cancello il badge relativo le religioni
 		// (stat_fpcontribution)
 		
-		Achievement_Model::remove($par[0] -> id, 'stat_fpcontribution', 'all');			
+		Model_Achievement::remove($par[0] -> id, 'stat_fpcontribution', 'all');
 
 		// Messaggio di informazione
 		$message = kohana::lang('ca_leavereligion.message_info_abandon');

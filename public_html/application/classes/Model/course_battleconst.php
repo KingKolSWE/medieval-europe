@@ -30,7 +30,7 @@ class Course_Battleconst_Model extends Course_Model
 		$increasedattr = 'create_charcost';				
 				
 		if ( $char -> cost == 20 ) 
-			Achievement_Model::compute_achievement ( 'stat_cost', 20, $char -> id ); 				
+			Model_Achievement::compute_achievement ( 'stat_cost', 20, $char -> id );
 		
 		Model_Character::modify_stat_d(
 			$char -> id,

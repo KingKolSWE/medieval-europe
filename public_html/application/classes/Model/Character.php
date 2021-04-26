@@ -2189,7 +2189,7 @@ class Model_Character extends ORM
 			spare3: [{$stat -> spare3}]
 			spare4: [{$stat -> spare4}]");
 						
-		Achievement_Model::compute_achievement( 'stat_' . $name, $stat -> value, $character_id, $stat -> stat1 ); 
+		Model_Achievement::compute_achievement( 'stat_' . $name, $stat -> value, $character_id, $stat -> stat1 );
 		
 		My_Cache_Model::delete ( '-charinfo_' . $character_id . '_stat_' . $stat -> name 
 			.'-'.$searchparam1.'-'.$searchparam2); 
@@ -2306,7 +2306,7 @@ class Model_Character extends ORM
 			
 		);
 
-		Achievement_Model::compute_achievement( 'stat_' . $name, $stat -> value, $this -> id, $stat -> stat1 ); 
+		Model_Achievement::compute_achievement( 'stat_' . $name, $stat -> value, $this -> id, $stat -> stat1 );
 		
 		My_Cache_Model::delete ( '-charinfo_' . $stat -> character_id . '_stat_' . $stat -> name 
 			.'-'.$searchparam1.'-'.$searchparam2); 

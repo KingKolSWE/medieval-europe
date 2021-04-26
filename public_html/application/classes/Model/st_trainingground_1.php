@@ -82,7 +82,7 @@ class ST_Trainingground_1_Model extends Structure_Model
 		$defeated = array();
 		$localbattlereport = array();
 		$winners = null;
-		$be = new Battle_Engine_Model();
+		$be = new Model_BattleEngine();
 		$fighter1 = $post[ 'fighter1' ]; 
 		$fighter2 = $post[ 'fighter2' ]; 
 		
@@ -217,7 +217,7 @@ class ST_Trainingground_1_Model extends Structure_Model
 		}		
 		
 		//var_dump($attacker['char']['armors']);exit;
-		$attacker_equipmentinfo = Battle_Engine_Model::get_fightstats( $attacker, $debug );		
+		$attacker_equipmentinfo = Model_BattleEngine::get_fightstats( $attacker, $debug );
 		
 		//var_dump($attacker_equipmentinfo);exit;
 		// set up defender
@@ -286,7 +286,7 @@ class ST_Trainingground_1_Model extends Structure_Model
 		
 		//var_dump($defender['char']['armors']);exit;
 		
-		$defender_equipmentinfo = Battle_Engine_Model::get_fightstats( $defender, $debug );		
+		$defender_equipmentinfo = Model_BattleEngine::get_fightstats( $defender, $debug );
 		
 		//var_dump($attacker);
 		//var_dump($defender);exit;
@@ -338,8 +338,8 @@ class ST_Trainingground_1_Model extends Structure_Model
 			
 			$be -> runfight( $attackers, $defenders, 'duel', $defeated, $winners, $localbattlereport, $battlestats, true, $debug);			
 			
-			$localbattlereport = Battle_Engine_Model::format_fightreport ( $localbattlereport, 'internal');	
-			$data['report'] = Battle_Engine_Model::format_fightreport ( $localbattlereport, 'html');
+			$localbattlereport = Model_BattleEngine::format_fightreport ( $localbattlereport, 'internal');
+			$data['report'] = Model_BattleEngine::format_fightreport ( $localbattlereport, 'html');
 			
 			if ( count($winners) != 1 )
 			{

@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Admin_Message_Model extends ORM
+class Model_AdminMessage extends ORM
 {
   protected $sorting = array('id' => 'desc');
 

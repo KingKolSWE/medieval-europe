@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Board_Factory_Model
+class Model_BoardFactory
 {
 	
 	public function create( $name )

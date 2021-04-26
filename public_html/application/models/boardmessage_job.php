@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
 
-class Boardmessage_Job_Model extends Boardmessage_Model
+class _Job_ModelBoardmessage extends Model_Boardmessage
 {
 	protected $table_name = 'boardmessages';
 	protected $belongs_to = array( 'character', 'kingdom' );
@@ -82,7 +82,7 @@ class Boardmessage_Job_Model extends Boardmessage_Model
 	
 	function systemadd( $character_id, $eventtype, $text, $eventclass )
 	{
-		$m = new Boardmessage_Model();
+		$m = new Model_Boardmessage();
 		$m -> category = $eventtype;
 		$m -> character_id = $character_id;
 		$m -> kingdom_id = null;

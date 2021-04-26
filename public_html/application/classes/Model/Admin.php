@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Admin_Model
+class Model_Admin
 {
 
 	

@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Battle_Nativerevolt_Model extends Battle_Type_Model
+class Battle_Nativerevolt_ModelBattleType extends Model_BattleType
 {
 	
 	protected $battletype = 'nativerevolt';
@@ -34,7 +34,7 @@ class Battle_Nativerevolt_Model extends Battle_Type_Model
 		$this -> attackingregion = ORM::factory('region', $this -> par[0] -> source_region_id ); 
 		$this -> attackedregion = ORM::factory('region', $this -> par[0] -> dest_region_id ); 			
 		$this -> battlefield = $this -> attackedregion -> get_structure('battlefield'); 
-		$this -> be = new Battle_Engine_Model();
+		$this -> be = new Model_BattleEngine();
 		$this -> bm = $par[0];
 		$this -> test = $test;		
 		$this -> loadteams();						
@@ -162,7 +162,7 @@ class Battle_Nativerevolt_Model extends Battle_Type_Model
 			// Distribuisci stats
 			/////////////////////////////////
 			
-			$stats = Battle_Conquer_IR_Model::distribute_stats( $points ); 
+			$stats = Model_BattleConquerIRBattleType::distribute_stats( $points );
 			
 			$native['char']['str'] = $stats['str'];
 			$native['char']['dex'] = $stats['dex'];

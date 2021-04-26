@@ -1,4 +1,4 @@
-	<?php defined('SYSPATH') OR die('No direct access allowed.');
+<?php defined('SYSPATH') OR die('No direct access allowed.');
 
 class Quest_Resourcesfromafar_Model extends Quest_Model
 {
@@ -37,7 +37,7 @@ class Quest_Resourcesfromafar_Model extends Quest_Model
 			$structure -> attribute1 = 0;					
 		$structure -> save();
 		
-		Model_Character::modify_stat_d(
+		Character_Model::modify_stat_d(
 			$character -> id,
 			'speedbonus',
 			10,
@@ -102,7 +102,7 @@ class Quest_Resourcesfromafar_Model extends Quest_Model
             $forest -> destroy();
 		
 		$char -> modify_coins( +320, 'questreward' );
-		Achievement_Model::add( $char, 'stat_tutorialcompleted', 1, 1 );
+		Model_Achievement::add( $char, 'stat_tutorialcompleted', 1, 1 );
 		
 	}
 	

@@ -489,7 +489,7 @@ function forceCompleteAction() {
 				<?php
 
 
-					$adminmessage = Admin_Message_Model::get_last_message();
+					$adminmessage = Model_AdminMessage::get_last_message();
 
 					if ( (time() - $adminmessage['timestamp'] ) / ( 24 * 3600 ) < 1 )
 					{

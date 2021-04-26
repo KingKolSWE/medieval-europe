@@ -22,7 +22,7 @@ class CA_Startnativerevolt_Model extends Character_Action_Model
 
 	// Viene eseguita nel caso in cui l'azione non si di tipo immediato
 	// La char_action viene collegata al character fino alla sua scadenza
-	// In questo caso l'azione è di tipo immediato e quindi la funzione non viene evocata
+	// In questo caso l'azione ï¿½ di tipo immediato e quindi la funzione non viene evocata
 	protected function append_action( $par, &$message )
 	{}
 	
@@ -73,7 +73,7 @@ class CA_Startnativerevolt_Model extends Character_Action_Model
 			CONTROLLI ESCLUSIONE DELLA REGIONE
 			******************************************/
 			
-			// Se il regno a cui appartiene la regione è stato attaccato
+			// Se il regno a cui appartiene la regione ï¿½ stato attaccato
 			// recentemente, allora la regione viene saltata
 			if ( $region -> lastattacked > ( time() - ( self::COOLDOWN * 24 * 3600 ) ) )
 			{
@@ -120,7 +120,7 @@ class CA_Startnativerevolt_Model extends Character_Action_Model
 			// LOG
 			kohana::log('info', '-> Computing Native Attacks for region: ' . $region -> region_name );			
 		
-			// Determiniamo se il regno è in guerra.
+			// Determiniamo se il regno ï¿½ in guerra.
 			// LOG
 			kohana::log('info', '-> Computing Native Attacks, is kingdom of region: ' . $region -> region_name . ' on war?');
 			
@@ -133,7 +133,7 @@ class CA_Startnativerevolt_Model extends Character_Action_Model
 				$data = array();
 				$iskingdomfighting = Kingdom_Model::is_fighting( $region -> kingdom_id, $data );
 				
-				// solo se è in guerra, non valutare piÃ¹ le altre regioni.
+				// solo se ï¿½ in guerra, non valutare piÃ¹ le altre regioni.
 				if ( $iskingdomfighting == true )
 				{
 					$kingdoms[$region -> kingdom_id]['isonwar'] = $iskingdomfighting;
@@ -144,7 +144,7 @@ class CA_Startnativerevolt_Model extends Character_Action_Model
 			// LOG
 			kohana::log('info', '-> Is Kingdom on war? [' . $iskingdomfighting . ']' );
 			
-			// Se il regno è in guerra e si sta difendendo, score negativo
+			// Se il regno ï¿½ in guerra e si sta difendendo, score negativo
 			if ( $iskingdomfighting == true and $kingdoms[$region -> kingdom_id]['data']['defending'] == true )
 			{
 				//LOG
@@ -152,7 +152,7 @@ class CA_Startnativerevolt_Model extends Character_Action_Model
 				$candidatedregions[$region -> region_name]['score_war'] = -9999;
 			}						
 			
-			// Se per la regione c'è qualche attacco in corso, score negativo
+			// Se per la regione c'ï¿½ qualche attacco in corso, score negativo
 			foreach ( (array) $data['battles'] as $battle )
 			{
 				if ( $battle -> dest_region_id == $candidatedregions[$region -> region_name]['region_id'] )
@@ -327,7 +327,7 @@ class CA_Startnativerevolt_Model extends Character_Action_Model
 		// Prima regione da attaccare
 		$apocalypse[0] = array_shift($_a);
 	
-		// Finchè la seconda regione appartiene al regno delle prima, scorro l'array
+		// Finchï¿½ la seconda regione appartiene al regno delle prima, scorro l'array
 		$second_region = array();
 		$second_region = array_shift($_a);
 		//var_dump($second_region['kingdom_name']); exit;
@@ -365,7 +365,7 @@ class CA_Startnativerevolt_Model extends Character_Action_Model
 			
 			$king = $region -> get_charinrole( 'king' );
 			
-			// Se è presente invio un evento di notifica al personaggio
+			// Se ï¿½ presente invio un evento di notifica al personaggio
 			if ( is_null( $king ) )
 			{
 				kohana::log('debug', '-> computenativeattack: King not found for Region: ' . $region -> name . ', message to the king not sent.' );
@@ -398,7 +398,7 @@ class CA_Startnativerevolt_Model extends Character_Action_Model
 			// ******************************************			
 			// Creo il campo di battaglia
 			
-			$wd = new Battle_Model();
+			$wd = new Model_Battle();
 			$wd -> source_character_id = -1;
 			$wd -> dest_character_id = $king -> id;
 			$wd -> dest_region_id = $region -> id;
@@ -409,19 +409,19 @@ class CA_Startnativerevolt_Model extends Character_Action_Model
 			$wd -> timestamp = time();
 			$wd -> save ();
 						
-			$br = new Battle_Report_Model();
+			$br = new Model_BattleReport();
 			$br -> battle_id = $wd -> id;
 			$br -> save();
 			
 			// Creo i ribelli NPC e li assegno al campo di battaglia
-			$natives = Battle_Conquer_IR_Model::compute_native_numbers(	count( $region -> kingdom -> regions ) );		
+			$natives = Model_BattleConquerIRBattleType::compute_native_numbers(	count( $region -> kingdom -> regions ) );
 			// LOG
 			kohana::log('debug', '-> Regions number: ' . count($region -> kingdom -> regions) ); 
 			kohana::log('debug', '-> Natives: ' . $natives );
 			
 			for ($i = 1; $i <= $natives; $i++ )
 			{
-				$bp = new Battle_Participant_Model();
+				$bp = new Model_Battleparticipant();
 				$bp -> id = null;
 				$bp -> battle_id = $wd -> id;
 				$bp -> character_id = -1;

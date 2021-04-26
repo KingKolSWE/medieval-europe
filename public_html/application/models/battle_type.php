@@ -634,9 +634,9 @@ class Battle_Type_Model
 				$db -> query ( $sql ); 
 					
 				kohana::log('info', 'Destroying items...' ); 				
-				Battle_Type_Model::destroyitems($defeated);
+				Model_BattleType::destroyitems($defeated);
 				kohana::log('info', 'Updating items...');
-				Battle_Type_Model::updateitems($defeated);
+				Model_BattleType::updateitems($defeated);
 			
 			}
 			
@@ -822,10 +822,10 @@ class Battle_Type_Model
 				$alivesoldier['char']['obj'] -> save();				
 				
 				kohana::log('info', 'Destroying items...' );
-				Battle_Type_Model::destroyitems( $alivesoldier );
+				Model_BattleType::destroyitems( $alivesoldier );
 				
 				kohana::log('info', 'Updating items...' ); 
-				Battle_Type_Model::updateitems( $alivesoldier );
+				Model_BattleType::updateitems( $alivesoldier );
 				
 			}
 		}

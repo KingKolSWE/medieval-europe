@@ -61,7 +61,7 @@ class CA_Attackchar_Model extends Character_Action_Model
 		
 		// add battle 
 		
-		$bm = new Battle_Model();
+		$bm = new Model_Battle();
 		$bm -> source_character_id = $par[0] -> id;
 		$bm -> source_region_id = $par[0] -> position_id;
 		$bm -> dest_character_id = $par[1] -> id;
@@ -71,13 +71,13 @@ class CA_Attackchar_Model extends Character_Action_Model
 		$bm -> timestamp = time();
 		$bm -> save();
 		
-		$bmr = new Battle_Report_Model();
+		$bmr = new Model_BattleReport();
 		$bmr -> battle_id = $bm -> id;
 		$bmr -> save();
 		
 		// call battle
 		
-		$battletype = Battle_TypeFactory_Model::create( $bm -> type );		
+		$battletype = Model_battletypefactoryBattle::create( $bm -> type );
 		$par[0] = $bm;		
 		if ( $battletype -> run ( $par, $battlereport ) == false )		
 		{ $message = kohana::lang('ca_attackchar.error-charisnothere'); return FALSE; }

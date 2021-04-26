@@ -1,5 +1,5 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
-class Batch_Model
+class Model_Batch
 {
 	const SECURITYKEY = '';
 	const ILREDUCTIONFACTOR = 3;

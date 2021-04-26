@@ -121,7 +121,7 @@ function save_stats( $data, $computetitle = false )
 	
 		if ( $computetitle  and $d['target'] == 'player' )
 		{			
-			Achievement_Model::compute_achievement(
+			Model_Achievement::compute_achievement(
 				'stat_' . $d['type'],
 				$d['valuefortitle'],
 				$d['stats_id'],

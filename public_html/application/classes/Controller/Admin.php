@@ -103,13 +103,13 @@ class Controller_Admin extends Controller_Template
 			
 			if ( $this -> request-> post('restorechar') != '' )
 			{
-				
-				$rc = Admin_Model::restorechar(
-					$this -> request -> post('charactername'), 
-					$this -> request -> post('ispaid'), 
-					$this -> request -> post('anonymize'), 
-					$this -> request -> post('newname'), 
-					$this -> request -> post('regionname'), 
+
+				$rc = Model_Admin::restorechar(
+					$this -> request -> post('charactername'),
+					$this -> request -> post('ispaid'),
+					$this -> request -> post('anonymize'),
+					$this -> request -> post('newname'),
+                    $this -> request-> post('regionname'),
 					$message );
 									
 				if ( $rc == false )
@@ -144,7 +144,7 @@ class Controller_Admin extends Controller_Template
 			
 		}
 		
-		$lnkmenu = Admin_Model::get_horizontalmenu('console');		
+		$lnkmenu = Model_Admin::get_horizontalmenu('console');
 		$subm->submenu = $lnkmenu;
 		$view->submenu = $subm;		
 		$this->template -> content = $view;
@@ -265,7 +265,7 @@ class Controller_Admin extends Controller_Template
 			}
 		}
 		
-		$lnkmenu = Admin_Model::get_horizontalmenu('multicheck');		
+		$lnkmenu = Model_Admin::get_horizontalmenu('multicheck');
 		$subm -> submenu = $lnkmenu;
 		$view -> characters = $characters;
 		$view -> submenu = $subm;		
@@ -509,7 +509,8 @@ class Controller_Admin extends Controller_Template
 			
 			if ($post->check())
 			{
-				$message = new Admin_Message_Model();					
+
+				$message = new Model_AdminMessage();
 				$message -> summary = $this -> request -> post('summary');
 				$message -> message = $this -> request -> post('message');
 				$message -> message = $this -> request -> post('message');
@@ -531,7 +532,7 @@ class Controller_Admin extends Controller_Template
 				$view -> bind('errors', $errors);				
 			}
 		}
-		$lnkmenu = Admin_Model::get_horizontalmenu('add_adminmessage');		
+		$lnkmenu = Model_Admin::get_horizontalmenu('add_adminmessage');
 		$view -> form = $form;
 		$subm -> submenu = $lnkmenu;		
 		$view -> submenu = $subm;
@@ -690,7 +691,7 @@ class Controller_Admin extends Controller_Template
 			$form = arr::overwrite($form, $post -> as_array());
 		}
 
-		$lnkmenu = Admin_Model::get_horizontalmenu('manage_npcs');
+		$lnkmenu = Model_Admin::get_horizontalmenu('manage_npcs');
 		$subm -> submenu = $lnkmenu;
 		$view -> form = $form;
 		$view -> submenu = $subm;
@@ -778,7 +779,7 @@ class Controller_Admin extends Controller_Template
 			
 		}
 		
-		$lnkmenu = Admin_Model::get_horizontalmenu('giveitems');		
+		$lnkmenu = Model_Admin::get_horizontalmenu('giveitems');
 		$subm -> submenu = $lnkmenu;		
 		$view -> form = $form;
 		$view -> submenu = $subm;		
@@ -805,7 +806,7 @@ class Controller_Admin extends Controller_Template
 		$subm    = View::factory ('template/submenu');
 		
 		$requests = ORM::factory('wardrobe_approvalrequest') -> where ( 'status', 'new' ) -> find_all();
-		$lnkmenu = Admin_Model::get_horizontalmenu('wardrobeapprovalrequests');		
+		$lnkmenu = Model_Admin::get_horizontalmenu('wardrobeapprovalrequests');
 		$subm -> submenu = $lnkmenu;
 		$view -> requests = $requests;
 		$view -> submenu = $subm;
@@ -949,7 +950,7 @@ class Controller_Admin extends Controller_Template
 										 '/admin/wardrobeapprovalrequests/' => 'Richieste Guardaroba'										 
 										 );
 
-		$lnkmenu = Admin_Model::get_horizontalmenu('wardrobeapprovalrequests');		
+		$lnkmenu = Model_Admin::get_horizontalmenu('wardrobeapprovalrequests');
 		$equippeditems = Model_Character::get_equipment( $request -> character -> id );
 		$subm -> submenu = $lnkmenu;
 		$view -> equippeditems = $equippeditems;

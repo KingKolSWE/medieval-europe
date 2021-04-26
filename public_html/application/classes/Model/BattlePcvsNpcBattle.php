@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Battle_PcvsNpc_Model extends Battle_Type_Model
+class Model_BattlePcvsNpcBattleType extends Model_BattleType
 {
 	protected $battletype = 'pcvsnpc';
 	protected $attackersnumber = 0;
@@ -23,7 +23,7 @@ class Battle_PcvsNpc_Model extends Battle_Type_Model
 		$this -> destchar = ORM::factory('character', $par[0] -> dest_character_id );
 		$this -> attackingregion = ORM::factory('region', $this -> par[0] -> source_region_id ); 
 		$this -> attackedregion = ORM::factory('region', $this -> par[0] -> dest_region_id ); 			
-		$this -> be = new Battle_Engine_Model();
+		$this -> be = new Model_BattleEngine();
 		$this -> bm = $par[0];
 		$this -> test = $test;		
 		

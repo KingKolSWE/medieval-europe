@@ -29,7 +29,7 @@ class Course_Battleagility_Model extends Course_Model
 		$increasedattr = 'create_chardex';
 
 		if ( $char -> dex == 20 ) 
-			Achievement_Model::compute_achievement ( 'stat_dex', 20, $char -> id ); 				
+			Model_Achievement::compute_achievement ( 'stat_dex', 20, $char -> id );
 				
 		Model_Character::modify_stat_d(
 			$char -> id,

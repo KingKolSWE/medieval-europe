@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class CA_Apply_Model extends Character_Action_Model
+class Model_CAApply extends Character_Action_Model
 {
 	protected $immediate_action = true;
 	protected $item = null;

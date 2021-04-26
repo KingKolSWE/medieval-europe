@@ -17,11 +17,11 @@ class Boardmessage_Model extends ORM
 	
 		switch ( $category ) 
 		{
-			case 'europecrier': $instance = new BoardMessage_Europecrier_Model(); break;
-			case 'other':	$instance = new BoardMessage_Other_Model(); break;						
-			case 'job':	$instance = new BoardMessage_Job_Model(); break;
+			case 'europecrier': $instance = new _Europecrier_ModelBoardmessage(); break;
+			case 'other':	$instance = new Model_OtherBoardmessage(); break;
+			case 'job':	$instance = new Model_JobBoardmessage(); break;
 			case 'suggestion':$instance = new BoardMessage_Suggestion_Model(); break;
-			default: $instance = new BoardMessage_Model(); break;				
+			default: $instance = new Model_Boardmessage(); break;
 		}
 		
 		return $instance;
@@ -124,7 +124,7 @@ class Boardmessage_Model extends ORM
 	
 	function systemadd( $character_id, $eventtype, $text, $eventclass )
 	{
-		$m = new Boardmessage_Model();
+		$m = new Model_Boardmessage();
 		$m -> category = $eventtype;
 		$m -> character_id = $character_id;
 		$m -> kingdom_id = null;

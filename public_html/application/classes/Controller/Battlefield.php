@@ -276,5 +276,3 @@ class Controller_Battlefield extends Controller_Template
 	}
 	
 }
-
-

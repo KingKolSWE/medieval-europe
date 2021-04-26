@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') OR die('No direct access allowed.');
 
-class Kingdom_Forum_Board_Model extends Board_Model
+class Kingdom_Forum__ModelBoard extends Model_Board
 {			
 	
 	protected $sorting = array('id' => 'asc');	
@@ -16,7 +16,7 @@ class Kingdom_Forum_Board_Model extends Board_Model
 			return false;						
 		}
 		
-		if ( Kingdom_Forum_Board_Model::haswriterights( $char, $board -> kingdom ) == false )
+		if ( Kingdom_Forum__ModelBoard::haswriterights( $char, $board -> kingdom ) == false )
 		{ 
 			$message = 'global.operation_not_allowed';
 			return false;
@@ -37,7 +37,7 @@ class Kingdom_Forum_Board_Model extends Board_Model
 			return false;			
 		}
 		
-		if ( Kingdom_Forum_Board_Model::haswriterights( $char, $kingdom ) == false )
+		if ( Kingdom_Forum__ModelBoard::haswriterights( $char, $kingdom ) == false )
 		{ 
 			$message = 'global.operation_not_allowed';
 			return false;
@@ -64,7 +64,7 @@ class Kingdom_Forum_Board_Model extends Board_Model
 			return false;						
 		}		
 		
-		if ( Kingdom_Forum_Board_Model::haswriterights( $char, $board -> kingdom ) == false )
+		if ( Kingdom_Forum__ModelBoard::haswriterights( $char, $board -> kingdom ) == false )
 		{ 
 			$message = 'global.operation_not_allowed';
 			return false;
@@ -88,7 +88,7 @@ class Kingdom_Forum_Board_Model extends Board_Model
 			return false;						
 		}
 		
-		if ( Kingdom_Forum_Board_Model::haswriterights( $char, $board -> kingdom ) == false )
+		if ( Kingdom_Forum__ModelBoard::haswriterights( $char, $board -> kingdom ) == false )
 		{ 
 			$message = 'global.operation_not_allowed';
 			return false;
